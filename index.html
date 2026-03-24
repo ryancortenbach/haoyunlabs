@@ -31,20 +31,15 @@ ul{list-style:none}
 .age-gate-box{text-align:center;max-width:400px;padding:40px 32px}
 .age-gate-box h1{font-size:2.4rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase}
 .age-gate-box .ag-cn{font-size:1.2rem;letter-spacing:0.15em;margin-top:4px;font-weight:300}
-.age-gate-box .ag-msg{font-size:0.82rem;margin-top:24px;line-height:1.6;color:#aaa;letter-spacing:0.04em}
-.age-gate-box .ag-dob-row{display:flex;gap:8px;margin-top:20px;justify-content:center}
-.age-gate-box .ag-dob-row select,.age-gate-box .ag-dob-row input{
-  padding:10px 12px;font-size:0.85rem;border:1px solid #333;background:#111;color:#fff;
-  font-family:var(--mono);text-align:center;
-}
-.age-gate-box .ag-dob-row select{width:120px;-webkit-appearance:none;appearance:none}
-.age-gate-box .ag-dob-row input{width:80px}
+.age-gate-box .ag-msg{font-size:0.88rem;margin-top:24px;line-height:1.6;color:#aaa;letter-spacing:0.04em}
+.ag-btns{display:flex;gap:12px;margin-top:24px;justify-content:center}
 .ag-btn{
-  margin-top:20px;padding:14px 48px;background:#fff;color:#000;border:none;
+  padding:14px 48px;background:#fff;color:#000;border:none;
   font-size:0.78rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;
 }
 .ag-btn:hover{opacity:0.8}
-.ag-btn:disabled{opacity:0.3;cursor:not-allowed}
+.ag-btn-no{background:transparent;color:#555;border:1px solid #333}
+.ag-btn-no:hover{color:#fff;border-color:#fff}
 .ag-error{color:#ef4444;font-size:0.75rem;margin-top:12px;min-height:1.2em}
 .ag-legal{font-size:0.65rem;color:#555;margin-top:20px;line-height:1.5}
 
@@ -386,14 +381,12 @@ body::before{
   <div class="age-gate-box">
     <h1>HAO YUN LABS</h1>
     <div class="ag-cn">好运</div>
-    <div class="ag-msg">This website sells research compounds restricted to individuals 21 years of age or older. Please verify your date of birth to continue.</div>
-    <div class="ag-dob-row">
-      <select id="ag-month"></select>
-      <input type="text" id="ag-day" placeholder="DD" maxlength="2" inputmode="numeric">
-      <input type="text" id="ag-year" placeholder="YYYY" maxlength="4" inputmode="numeric">
+    <div class="ag-msg">Are you 21 years of age or older?</div>
+    <div class="ag-btns">
+      <button class="ag-btn" onclick="verifyAge(true)">YES</button>
+      <button class="ag-btn ag-btn-no" onclick="verifyAge(false)">NO</button>
     </div>
     <div class="ag-error" id="ag-error"></div>
-    <button class="ag-btn" id="ag-btn" onclick="verifyAge()">VERIFY AGE</button>
     <div class="ag-legal">By entering, you confirm you are 21+ and agree to our terms. For research use only.</div>
   </div>
 </div>
@@ -1409,47 +1402,22 @@ function buildMarquee(){
 /* ═════════════════════════════════════════════════════
    AGE GATE
    ═════════════════════════════════════════════════════ */
-function initAgeGate(){
-  const sel = document.getElementById('ag-month');
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  sel.innerHTML = '<option value="">Month</option>' + months.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('');
-}
-
-async function verifyAge(){
-  const month = parseInt(document.getElementById('ag-month').value);
-  const day = parseInt(document.getElementById('ag-day').value);
-  const year = parseInt(document.getElementById('ag-year').value);
+async function verifyAge(isYes){
   const errEl = document.getElementById('ag-error');
-
-  if(!month||!day||!year||year<1900||year>2025||day<1||day>31){
-    errEl.textContent='Please enter a valid date of birth.';return;
+  if(!isYes){
+    errEl.textContent='You must be 21 or older to access this site.';
+    return;
   }
-  const dob = new Date(year, month-1, day);
-  const today = new Date();
-  let age = today.getFullYear()-dob.getFullYear();
-  const m = today.getMonth()-dob.getMonth();
-  if(m<0||(m===0&&today.getDate()<dob.getDate())) age--;
-
-  if(age<21){
-    errEl.textContent='You must be 21 or older to access this site.';return;
-  }
-
-  // Verified
   localStorage.setItem('hyl_age_verified','true');
   document.getElementById('age-gate').classList.add('hidden');
-
   // Log to Supabase (fire and forget)
-  const dobStr = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-  try { await sb.from('age_verifications').insert({dob:dobStr,verified:true,user_agent:navigator.userAgent}); } catch(e){}
+  try { await sb.from('age_verifications').insert({dob:'2000-01-01',verified:true,user_agent:navigator.userAgent}); } catch(e){}
 }
 
 function checkAgeGate(){
   if(localStorage.getItem('hyl_age_verified')==='true'){
     document.getElementById('age-gate').classList.add('hidden');
-    return true;
   }
-  initAgeGate();
-  return false;
 }
 
 /* ═════════════════════════════════════════════════════
