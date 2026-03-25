@@ -1341,6 +1341,7 @@ async function submitOrder(){
         body:JSON.stringify({
           orderNumber: orderNum,
           amount: total,
+          affiliateCode: getAffiliateCode(),
           draft: {
             email, fname, lname, street, apt, city, state, zip, phone,
             items, subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
@@ -1371,6 +1372,7 @@ async function submitOrder(){
         headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
         body:JSON.stringify({
           orderNumber:orderNum, items, total, shipping,
+          affiliateCode: getAffiliateCode(),
           payment:selectedPayMethod, email,
           customer:{fname,lname,street,apt,city,state,zip,phone},
           discountCode, discountPct, discountAmount:disc, subtotal:sub
@@ -1513,6 +1515,25 @@ async function loadProductsFromDB(){
 }
 
 /* ═════════════════════════════════════════════════════
+   AFFILIATE COOKIE TRACKING
+   ═════════════════════════════════════════════════════ */
+function checkAffiliateCookie(){
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  if(ref){
+    document.cookie = `hyl_ref=${encodeURIComponent(ref)};max-age=${30*24*60*60};path=/;SameSite=Lax`;
+    fetch(BILLING_SERVER + '/api/affiliate/click/' + encodeURIComponent(ref)).catch(()=>{});
+    const url = new URL(window.location);
+    url.searchParams.delete('ref');
+    window.history.replaceState({}, '', url.pathname + url.hash);
+  }
+}
+function getAffiliateCode(){
+  const match = document.cookie.match(/hyl_ref=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+/* ═════════════════════════════════════════════════════
    INTRO
    ═════════════════════════════════════════════════════ */
 function introFade(){
@@ -1527,6 +1548,7 @@ function introFade(){
    INIT
    ═════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', async ()=>{
+  checkAffiliateCookie();
   checkAgeGate();
   loadCart();
   updateBadge();
