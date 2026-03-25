@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HAO YUN LABS — Affiliate Portal</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--text:#000;--muted:#666;--stroke:#e5e5e5;
+  --brand:#000;--radius:0px;
+  --mono:'SF Mono','Fira Code','Courier New',monospace;
+  --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --transition:0.15s ease;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:inherit;border-radius:var(--radius);border:1px solid var(--stroke);outline:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;background:var(--bg);
+  border-bottom:1px solid var(--stroke);padding:0 24px;
+}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-weight:800;font-size:1rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer}
+.nav-brand span{font-weight:400;font-size:0.8rem;margin-left:6px;letter-spacing:0.05em}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;cursor:pointer;padding:4px 0}
+.nav-links a:hover{opacity:0.6}
+.nav-links a.active{border-bottom:2px solid var(--brand)}
+
+/* ── LAYOUT ── */
+.container{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:2rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase}
+h2{font-size:1.2rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px}
+h3{font-size:0.9rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px}
+.subtitle{font-size:0.85rem;color:var(--muted);margin-top:6px;letter-spacing:0.03em}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.form-group input,.form-group select{
+  width:100%;padding:12px 14px;font-size:0.88rem;background:var(--bg);color:var(--text);
+  border:1px solid var(--stroke);transition:border var(--transition);
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--brand)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:14px 32px;background:var(--brand);color:var(--bg);border:1px solid var(--brand);
+  font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:all var(--transition);
+}
+.btn:hover{background:var(--bg);color:var(--brand)}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--brand)}
+.btn-outline:hover{background:var(--brand);color:var(--bg)}
+.btn-sm{padding:8px 16px;font-size:0.7rem}
+.link{font-size:0.8rem;color:var(--muted);cursor:pointer;text-decoration:underline}
+.link:hover{color:var(--text)}
+
+/* ── STATS CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{border:1px solid var(--stroke);padding:20px}
+.stat-card .stat-label{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.stat-card .stat-value{font-size:1.8rem;font-weight:800;font-family:var(--mono);margin-top:4px}
+
+/* ── REFERRAL BOX ── */
+.ref-box{border:1px solid var(--stroke);padding:24px;margin-bottom:32px}
+.ref-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ref-row:last-child{margin-bottom:0}
+.ref-label{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);min-width:100px}
+.ref-value{font-family:var(--mono);font-size:0.88rem;background:#f5f5f5;padding:8px 14px;flex:1;user-select:all}
+.copy-btn{
+  padding:6px 14px;font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  background:var(--brand);color:var(--bg);border:1px solid var(--brand);cursor:pointer;
+  transition:all var(--transition);white-space:nowrap;
+}
+.copy-btn:hover{background:var(--bg);color:var(--brand)}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;border:1px solid var(--stroke)}
+table{width:100%;border-collapse:collapse;font-size:0.82rem}
+th{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);
+  text-align:left;padding:12px 16px;border-bottom:1px solid var(--stroke);background:#fafafa}
+td{padding:12px 16px;border-bottom:1px solid var(--stroke);font-family:var(--mono);font-size:0.8rem}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;padding:3px 10px;font-size:0.65rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.badge-pending{background:#f0f0f0;color:#666}
+.badge-approved{background:#e0e7ff;color:#3b5bdb}
+.badge-paid{background:#d3f9d8;color:#2b8a3e}
+.badge-cancelled{background:#ffe0e0;color:#c92a2a}
+.pagination{display:flex;gap:12px;margin-top:16px;justify-content:flex-end}
+
+/* ── DATE FILTER ── */
+.date-filter{display:flex;gap:12px;align-items:center;margin-bottom:24px;flex-wrap:wrap}
+.date-filter input{padding:8px 12px;font-size:0.82rem;border:1px solid var(--stroke)}
+.date-filter label{font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:60px 0 40px}
+.hero h1{font-size:2.4rem}
+.hero .tagline{font-size:1rem;color:var(--muted);margin-top:10px;letter-spacing:0.04em}
+.benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin:40px 0;text-align:center}
+.benefit{border:1px solid var(--stroke);padding:28px 20px}
+.benefit h3{margin-bottom:6px}
+.benefit p{font-size:0.82rem;color:var(--muted)}
+.form-card{max-width:480px;margin:0 auto;border:1px solid var(--stroke);padding:32px}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;right:24px;background:var(--brand);color:var(--bg);
+  padding:14px 24px;font-size:0.8rem;font-weight:600;letter-spacing:0.04em;
+  transform:translateY(100px);opacity:0;transition:all 0.3s ease;z-index:9999;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.error{background:#c92a2a}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty p{font-size:0.88rem}
+
+/* ── SCREEN VISIBILITY ── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .nav-links{gap:14px}
+  .nav-links a{font-size:0.7rem}
+  .hero h1{font-size:1.6rem}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .ref-row{flex-direction:column;align-items:flex-start}
+  .ref-label{min-width:auto}
+  .ref-value{width:100%}
+  .date-filter{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV (hidden when logged out) ── -->
+<nav class="nav" id="main-nav" style="display:none">
+  <div class="nav-inner">
+    <div class="nav-brand" onclick="go('dashboard')">HAO YUN LABS<span>Affiliates</span></div>
+    <div class="nav-links">
+      <a onclick="go('dashboard')" data-screen="dashboard">Dashboard</a>
+      <a onclick="go('commissions')" data-screen="commissions">Commissions</a>
+      <a onclick="go('payouts')" data-screen="payouts">Payouts</a>
+      <a onclick="go('settings')" data-screen="settings">Settings</a>
+      <a onclick="logout()">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ SCREEN: APPLY ══════════ -->
+<div class="screen" id="screen-apply">
+  <div class="container">
+    <div class="hero">
+      <h1>HAO YUN LABS</h1>
+      <p class="tagline">Affiliate Program</p>
+    </div>
+    <div class="benefits">
+      <div class="benefit"><h3>10% Commission</h3><p>Earn on every sale you refer, paid out monthly.</p></div>
+      <div class="benefit"><h3>Your Own Code</h3><p>Get a personalized discount code to share with your audience.</p></div>
+      <div class="benefit"><h3>Real-Time Dashboard</h3><p>Track clicks, orders, and earnings as they happen.</p></div>
+    </div>
+    <div class="form-card">
+      <h2>Apply Now</h2>
+      <form id="apply-form" onsubmit="submitApplication(event)">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="apply-name" required placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="apply-email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Desired Referral Code *</label>
+          <input type="text" id="apply-code" required placeholder="e.g. YOURNAME10" pattern="[A-Z0-9]+" title="Uppercase letters and numbers only"
+            oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="apply-payment-method">
+            <option value="paypal">PayPal</option>
+            <option value="zelle">Zelle</option>
+            <option value="cashapp">CashApp</option>
+            <option value="venmo">Venmo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Payment Details</label>
+          <input type="text" id="apply-payment-details" placeholder="Email or handle for payouts">
+        </div>
+        <button type="submit" class="btn" id="apply-btn" style="width:100%">Submit Application</button>
+      </form>
+      <div id="apply-success" style="display:none;text-align:center;padding:32px 0">
+        <h3>Application Submitted</h3>
+        <p class="subtitle" style="margin-top:8px">You'll receive an email when approved.</p>
+      </div>
+      <p style="text-align:center;margin-top:20px">
+        <a class="link" onclick="go('login')">Already have an account? Log in</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: LOGIN ══════════ -->
+<div class="screen" id="screen-login">
+  <div class="container">
+    <div class="hero">
+      <h1>HAO YUN LABS</h1>
+      <p class="tagline">Affiliate Login</p>
+    </div>
+    <div class="form-card">
+      <h2>Sign In</h2>
+      <form onsubmit="doLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" required placeholder="Your password">
+        </div>
+        <div id="login-error" style="color:#c92a2a;font-size:0.8rem;margin-bottom:12px;min-height:1.2em"></div>
+        <button type="submit" class="btn" id="login-btn" style="width:100%">Log In</button>
+      </form>
+      <p style="text-align:center;margin-top:16px">
+        <a class="link" onclick="forgotPassword()">Forgot password?</a>
+      </p>
+      <p style="text-align:center;margin-top:10px">
+        <a class="link" onclick="go('apply')">Apply for an account</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: DASHBOARD ══════════ -->
+<div class="screen" id="screen-dashboard">
+  <div class="container">
+    <h1 id="dash-welcome">Dashboard</h1>
+    <p class="subtitle" id="dash-subtitle"></p>
+
+    <div class="date-filter" style="margin-top:24px">
+      <label>From</label>
+      <input type="date" id="filter-from">
+      <label>To</label>
+      <input type="date" id="filter-to">
+      <button class="btn btn-sm" onclick="loadDashboard()">Filter</button>
+    </div>
+
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card"><div class="stat-label">Total Clicks</div><div class="stat-value" id="stat-clicks">--</div></div>
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="stat-orders">--</div></div>
+      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="stat-revenue">--</div></div>
+      <div class="stat-card"><div class="stat-label">Commission Earned</div><div class="stat-value" id="stat-commission">--</div></div>
+      <div class="stat-card"><div class="stat-label">Pending Payout</div><div class="stat-value" id="stat-pending">--</div></div>
+    </div>
+
+    <div class="ref-box" id="ref-box">
+      <h3>Your Referral Info</h3>
+      <div class="ref-row">
+        <span class="ref-label">Your Code</span>
+        <span class="ref-value" id="ref-code">--</span>
+        <button class="copy-btn" onclick="copyText('ref-code')">Copy</button>
+      </div>
+      <div class="ref-row">
+        <span class="ref-label">Your Link</span>
+        <span class="ref-value" id="ref-link">--</span>
+        <button class="copy-btn" onclick="copyText('ref-link')">Copy</button>
+      </div>
+      <div class="ref-row">
+        <span class="ref-label">Discount</span>
+        <span class="ref-value" id="ref-discount">--</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: COMMISSIONS ══════════ -->
+<div class="screen" id="screen-commissions">
+  <div class="container">
+    <h2>Commissions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Order #</th><th>Order Total</th><th>Rate</th><th>Commission</th><th>Status</th></tr>
+        </thead>
+        <tbody id="commissions-body"></tbody>
+      </table>
+    </div>
+    <div id="commissions-empty" class="empty" style="display:none"><p>No commissions yet.</p></div>
+    <div class="pagination">
+      <button class="btn btn-sm btn-outline" id="comm-prev" onclick="commPage(-1)">Prev</button>
+      <button class="btn btn-sm btn-outline" id="comm-next" onclick="commPage(1)">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: PAYOUTS ══════════ -->
+<div class="screen" id="screen-payouts">
+  <div class="container">
+    <h2>Payouts</h2>
+    <div class="stats-row" style="margin-bottom:24px">
+      <div class="stat-card"><div class="stat-label">Total Paid Out</div><div class="stat-value" id="payout-total">--</div></div>
+      <div class="stat-card"><div class="stat-label">Pending Balance</div><div class="stat-value" id="payout-pending">--</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Amount</th><th>Method</th><th>Reference</th><th>Notes</th></tr>
+        </thead>
+        <tbody id="payouts-body"></tbody>
+      </table>
+    </div>
+    <div id="payouts-empty" class="empty" style="display:none"><p>No payouts yet.</p></div>
+    <div class="pagination">
+      <button class="btn btn-sm btn-outline" id="pay-prev" onclick="payPage(-1)">Prev</button>
+      <button class="btn btn-sm btn-outline" id="pay-next" onclick="payPage(1)">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: SETTINGS ══════════ -->
+<div class="screen" id="screen-settings">
+  <div class="container">
+    <h2>Settings</h2>
+    <div class="form-card" style="margin:0">
+      <h3>Payment Information</h3>
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="settings-method">
+          <option value="paypal">PayPal</option>
+          <option value="zelle">Zelle</option>
+          <option value="cashapp">CashApp</option>
+          <option value="venmo">Venmo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Payment Details</label>
+        <input type="text" id="settings-details" placeholder="Email or handle">
+      </div>
+      <button class="btn" onclick="saveSettings()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://dicliathtgxtbraerphb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpY2xpYXRodGd4dGJyYWVycGhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMTgxMzIsImV4cCI6MjA4OTg5NDEzMn0.oB_iG-lC87b1iKz8oXxMwSntFRaxEzH5xJCPMqoZeso';
+const API_BASE = 'https://haoyunlabs-billing-production.up.railway.app';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let token = null;
+let affiliateData = null;
+let commissionPage = 0;
+let payoutPage = 0;
+const PAGE_SIZE = 20;
+
+// ── API helper ──
+async function api(method, path, body) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json' }
+  };
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API_BASE + path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || data.message || 'Request failed');
+  return data;
+}
+
+// ── Toast ──
+function toast(msg, isError) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => el.className = 'toast', 3000);
+}
+
+// ── Copy ──
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => toast('Copied!')).catch(() => toast('Copy failed', true));
+}
+
+// ── Routing ──
+function go(screen) {
+  location.hash = '#' + screen;
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + name);
+  if (el) el.classList.add('active');
+
+  // Nav visibility
+  const authed = ['dashboard', 'commissions', 'payouts', 'settings'];
+  document.getElementById('main-nav').style.display = authed.includes(name) ? '' : 'none';
+
+  // Active link
+  document.querySelectorAll('.nav-links a[data-screen]').forEach(a => {
+    a.classList.toggle('active', a.dataset.screen === name);
+  });
+
+  // Load data
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'commissions') { commissionPage = 0; loadCommissions(); }
+  if (name === 'payouts') { payoutPage = 0; loadPayouts(); }
+  if (name === 'settings') loadSettings();
+}
+
+function route() {
+  const hash = (location.hash || '#apply').slice(1);
+  const authed = ['dashboard', 'commissions', 'payouts', 'settings'];
+  if (authed.includes(hash) && !token) {
+    go('login');
+    return;
+  }
+  showScreen(hash);
+}
+
+// ── Auth ──
+async function initAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    token = session.access_token;
+    try {
+      affiliateData = await api('GET', '/api/affiliate/me');
+    } catch (e) {
+      token = null;
+    }
+  }
+  sb.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      token = session.access_token;
+    } else {
+      token = null;
+      affiliateData = null;
+    }
+  });
+  route();
+}
+
+async function doLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn');
+  errEl.textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    token = data.session.access_token;
+    affiliateData = await api('GET', '/api/affiliate/me');
+    go('dashboard');
+  } catch (err) {
+    errEl.textContent = err.message || 'Login failed';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Log In';
+  }
+}
+
+async function forgotPassword() {
+  const email = document.getElementById('login-email').value;
+  if (!email) { toast('Enter your email first', true); return; }
+  try {
+    await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname + '#login' });
+    toast('Password reset email sent');
+  } catch (err) {
+    toast(err.message || 'Failed to send reset email', true);
+  }
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  token = null;
+  affiliateData = null;
+  go('apply');
+}
+
+// ── Apply ──
+async function submitApplication(e) {
+  e.preventDefault();
+  const btn = document.getElementById('apply-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  try {
+    await api('POST', '/api/affiliate/signup', {
+      name: document.getElementById('apply-name').value,
+      email: document.getElementById('apply-email').value,
+      referral_code: document.getElementById('apply-code').value,
+      payment_method: document.getElementById('apply-payment-method').value,
+      payment_details: document.getElementById('apply-payment-details').value
+    });
+    document.getElementById('apply-form').style.display = 'none';
+    document.getElementById('apply-success').style.display = '';
+  } catch (err) {
+    toast(err.message || 'Submission failed', true);
+    btn.disabled = false;
+    btn.textContent = 'Submit Application';
+  }
+}
+
+// ── Dashboard ──
+async function loadDashboard() {
+  if (!token) return;
+  try {
+    if (!affiliateData) affiliateData = await api('GET', '/api/affiliate/me');
+    const name = affiliateData.name || affiliateData.email || 'Affiliate';
+    document.getElementById('dash-welcome').textContent = 'Welcome, ' + name;
+    document.getElementById('dash-subtitle').textContent = 'Here is your affiliate overview.';
+
+    // Referral info
+    const code = affiliateData.referral_code || '--';
+    document.getElementById('ref-code').textContent = code;
+    document.getElementById('ref-link').textContent = 'https://haoyunlabs.com?ref=' + code;
+    const disc = affiliateData.discount_percent || affiliateData.discount || 0;
+    document.getElementById('ref-discount').textContent = disc > 0
+      ? 'Customers using your code get ' + disc + '% off'
+      : 'No active discount';
+
+    // Stats
+    let statsUrl = '/api/affiliate/stats';
+    const from = document.getElementById('filter-from').value;
+    const to = document.getElementById('filter-to').value;
+    const params = [];
+    if (from) params.push('from=' + from);
+    if (to) params.push('to=' + to);
+    if (params.length) statsUrl += '?' + params.join('&');
+
+    const stats = await api('GET', statsUrl);
+    document.getElementById('stat-clicks').textContent = (stats.total_clicks ?? 0).toLocaleString();
+    document.getElementById('stat-orders').textContent = (stats.total_orders ?? 0).toLocaleString();
+    document.getElementById('stat-revenue').textContent = '$' + (stats.total_revenue ?? 0).toFixed(2);
+    document.getElementById('stat-commission').textContent = '$' + (stats.commission_earned ?? 0).toFixed(2);
+    document.getElementById('stat-pending').textContent = '$' + (stats.pending_payout ?? 0).toFixed(2);
+  } catch (err) {
+    toast('Failed to load dashboard: ' + err.message, true);
+  }
+}
+
+// ── Commissions ──
+async function loadCommissions() {
+  if (!token) return;
+  try {
+    const data = await api('GET', '/api/affiliate/commissions?limit=' + PAGE_SIZE + '&offset=' + (commissionPage * PAGE_SIZE));
+    const rows = data.commissions || data || [];
+    const tbody = document.getElementById('commissions-body');
+    const emptyEl = document.getElementById('commissions-empty');
+
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      emptyEl.style.display = '';
+      document.querySelector('#screen-commissions .table-wrap').style.display = 'none';
+    } else {
+      emptyEl.style.display = 'none';
+      document.querySelector('#screen-commissions .table-wrap').style.display = '';
+      tbody.innerHTML = rows.map(r => `<tr>
+        <td>${fmtDate(r.created_at || r.date)}</td>
+        <td>${r.order_number || r.order_id || '--'}</td>
+        <td>$${(r.order_total ?? 0).toFixed(2)}</td>
+        <td>${(r.commission_rate ?? 10)}%</td>
+        <td>$${(r.commission_amount ?? 0).toFixed(2)}</td>
+        <td><span class="badge badge-${r.status || 'pending'}">${r.status || 'pending'}</span></td>
+      </tr>`).join('');
+    }
+
+    document.getElementById('comm-prev').disabled = commissionPage === 0;
+    document.getElementById('comm-next').disabled = rows.length < PAGE_SIZE;
+  } catch (err) {
+    toast('Failed to load commissions: ' + err.message, true);
+  }
+}
+
+function commPage(dir) {
+  commissionPage = Math.max(0, commissionPage + dir);
+  loadCommissions();
+}
+
+// ── Payouts ──
+async function loadPayouts() {
+  if (!token) return;
+  try {
+    const data = await api('GET', '/api/affiliate/payouts?limit=' + PAGE_SIZE + '&offset=' + (payoutPage * PAGE_SIZE));
+    const rows = data.payouts || data || [];
+    const tbody = document.getElementById('payouts-body');
+    const emptyEl = document.getElementById('payouts-empty');
+
+    // Summary
+    document.getElementById('payout-total').textContent = '$' + (data.total_paid ?? 0).toFixed(2);
+    document.getElementById('payout-pending').textContent = '$' + (data.pending_balance ?? 0).toFixed(2);
+
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      emptyEl.style.display = '';
+      document.querySelector('#screen-payouts .table-wrap').style.display = 'none';
+    } else {
+      emptyEl.style.display = 'none';
+      document.querySelector('#screen-payouts .table-wrap').style.display = '';
+      tbody.innerHTML = rows.map(r => `<tr>
+        <td>${fmtDate(r.created_at || r.date)}</td>
+        <td>$${(r.amount ?? 0).toFixed(2)}</td>
+        <td>${r.payment_method || '--'}</td>
+        <td>${r.reference || '--'}</td>
+        <td style="font-family:var(--sans)">${r.notes || '--'}</td>
+      </tr>`).join('');
+    }
+
+    document.getElementById('pay-prev').disabled = payoutPage === 0;
+    document.getElementById('pay-next').disabled = rows.length < PAGE_SIZE;
+  } catch (err) {
+    toast('Failed to load payouts: ' + err.message, true);
+  }
+}
+
+function payPage(dir) {
+  payoutPage = Math.max(0, payoutPage + dir);
+  loadPayouts();
+}
+
+// ── Settings ──
+async function loadSettings() {
+  if (!token || !affiliateData) return;
+  document.getElementById('settings-method').value = affiliateData.payment_method || 'paypal';
+  document.getElementById('settings-details').value = affiliateData.payment_details || '';
+}
+
+async function saveSettings() {
+  try {
+    const body = {
+      payment_method: document.getElementById('settings-method').value,
+      payment_details: document.getElementById('settings-details').value
+    };
+    affiliateData = await api('PATCH', '/api/affiliate/me', body);
+    toast('Settings saved');
+  } catch (err) {
+    toast(err.message || 'Failed to save', true);
+  }
+}
+
+// ── Helpers ──
+function fmtDate(d) {
+  if (!d) return '--';
+  return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+// ── Init ──
+window.addEventListener('hashchange', route);
+initAuth();
+</script>
+</body>
+</html>
