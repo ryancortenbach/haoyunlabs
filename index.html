@@ -852,7 +852,7 @@ function getProductImageHTML(p) {
   const imgPath = PRODUCT_IMAGES[p.sku];
   if (imgPath) {
     return `<div class="prod-img">
-      <img src="${imgPath}" alt="${p.name}" style="width:100%;max-width:200px;height:auto;object-fit:contain;">
+      <img src="${imgPath}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;">
     </div>`;
   }
   // Fallback SVG for any unmapped products
