@@ -4,13 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HAO YUN LABS 好运 — Premium Research Peptides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#fff;--text:#000;--muted:#333;--stroke:#e5e5e5;
   --brand:#000;--radius:0px;
-  --mono:'SF Mono','Fira Code','Courier New',monospace;
-  --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mono:'Inter',sans-serif;
+  --sans:'Instrument Sans','Helvetica Neue',sans-serif;
+  --display:'Oswald','Helvetica Neue',sans-serif;
   --transition:0.15s ease;
 }
 html{scroll-behavior:smooth}
@@ -29,7 +33,7 @@ ul{list-style:none}
 }
 #age-gate.hidden{display:none}
 .age-gate-box{text-align:center;max-width:400px;padding:40px 32px}
-.age-gate-box h1{font-size:2.4rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase}
+.age-gate-box h1{font-family:var(--display);font-size:2.4rem;font-weight:900;letter-spacing:0.2em;text-transform:uppercase}
 .age-gate-box .ag-cn{font-size:1.2rem;letter-spacing:0.15em;margin-top:4px;font-weight:300}
 .age-gate-box .ag-msg{font-size:0.88rem;margin-top:24px;line-height:1.6;color:#aaa;letter-spacing:0.04em}
 .ag-btns{display:flex;gap:12px;margin-top:24px;justify-content:center}
@@ -50,7 +54,7 @@ ul{list-style:none}
   transition:opacity 0.8s ease;pointer-events:auto;
 }
 #intro-overlay.fade-out{opacity:0;pointer-events:none}
-#intro-overlay h1{font-size:3rem;font-weight:800;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
+#intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
 /* ── HUD GRID BG ── */
@@ -68,7 +72,7 @@ body::before{
   border-bottom:1px solid var(--stroke);padding:0 24px;
 }
 .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-brand{font-weight:800;font-size:1.1rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer}
+.nav-brand{font-family:var(--display);font-weight:900;font-size:1.1rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer}
 .nav-brand span{font-weight:400;font-size:0.85rem;margin-left:6px;letter-spacing:0.05em}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{font-size:0.82rem;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;cursor:pointer;position:relative;padding:4px 0}
@@ -101,12 +105,41 @@ body::before{
 .screen{display:none;opacity:0;transition:opacity 0.2s ease}
 .screen.active{display:block;opacity:1}
 
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes dividerGrow{from{width:0}to{width:60px}}
+.anim-fade-up{animation:fadeUp 0.6s ease forwards;opacity:0}
+.anim-fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
+.anim-scale-in{animation:scaleIn 0.5s ease forwards;opacity:0}
+.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}
+.anim-d4{animation-delay:0.4s}.anim-d5{animation-delay:0.5s}.anim-d6{animation-delay:0.6s}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
 /* ── HERO ── */
 .hero{text-align:center;padding:64px 0 40px}
-.hero-title{font-size:3.2rem;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;line-height:1.1}
+.hero-banner{
+  width:100%;max-width:700px;margin:0 auto 32px;border-radius:8px;overflow:hidden;
+}
+.hero-banner img{width:100%;height:auto;display:block;transition:transform 0.4s ease}
+.hero-banner:hover img{transform:scale(1.02)}
+.hero-title{font-family:var(--display);font-size:3.2rem;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;line-height:1.1}
 .hero-cn{font-size:1.6rem;letter-spacing:0.3em;margin-top:4px;font-weight:300}
 .hero-tag{font-size:0.82rem;letter-spacing:0.18em;text-transform:uppercase;margin-top:16px;color:var(--muted);font-weight:500}
-.hero-divider{width:60px;height:2px;background:var(--brand);margin:24px auto 0}
+.hero-divider{width:60px;height:2px;background:var(--brand);margin:24px auto 0;animation:dividerGrow 0.8s ease 0.5s forwards;width:0}
+
+/* ── PRODUCT CARD ANIMATIONS ── */
+.product-card{animation:fadeUp 0.4s ease forwards;opacity:0}
+.product-card:nth-child(1){animation-delay:0.05s}
+.product-card:nth-child(2){animation-delay:0.1s}
+.product-card:nth-child(3){animation-delay:0.15s}
+.product-card:nth-child(4){animation-delay:0.2s}
 
 /* ── TOOLBAR: CATEGORIES + SEARCH ── */
 .toolbar{padding:24px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
@@ -149,10 +182,10 @@ body::before{
 .product-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0}
-.card-sku{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.card-sku{font-family:var(--mono);font-size:0.68rem;font-weight:300;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
 .card-price{font-family:var(--mono);font-size:0.95rem;font-weight:700;letter-spacing:0.02em}
 .card-body{padding:20px 16px 12px;flex:1;display:flex;flex-direction:column}
-.card-name{font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;line-height:1.3}
+.card-name{font-family:var(--display);font-size:0.88rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;line-height:1.3}
 .card-desc{font-size:0.75rem;color:var(--muted);margin-top:6px;line-height:1.4}
 .card-components{font-size:0.7rem;color:var(--muted);margin-top:6px;font-family:var(--mono);line-height:1.4}
 .card-details-toggle{
@@ -356,11 +389,12 @@ body::before{
   padding: 16px;
   gap: 6px;
 }
-.product-card:hover .prod-img svg {
+.product-card:hover .prod-img svg,
+.product-card:hover .prod-img img {
   transform: scale(1.05);
   transition: transform 0.2s;
 }
-.prod-img svg { transition: transform 0.2s; }
+.prod-img svg, .prod-img img { transition: transform 0.2s; }
 .prod-img-label {
   font-family: var(--mono);
   font-size: 0.65rem;
@@ -421,9 +455,12 @@ body::before{
 <div class="screen" id="screen-home">
   <div class="container">
     <div class="hero">
-      <div class="hero-title">HAO YUN LABS</div>
-      <div class="hero-cn">好运</div>
-      <div class="hero-tag">Premium Research Peptides &amp; Supplies</div>
+      <div class="hero-banner anim-scale-in">
+        <img src="product-images/hero-group.png" alt="Hao Yun Labs Research Peptides">
+      </div>
+      <div class="hero-title anim-fade-up anim-d2">HAO YUN LABS</div>
+      <div class="hero-cn anim-fade-up anim-d3">好运</div>
+      <div class="hero-tag anim-fade-up anim-d4">Premium Research Peptides &amp; Supplies</div>
       <div class="hero-divider"></div>
     </div>
     <div class="toolbar">
@@ -633,132 +670,19 @@ function klIdentify(email) {
    ═════════════════════════════════════════════════════ */
 
 const CATALOG_INDIVIDUAL = [
-  { sku:"SM2SV", name:"Semaglutide 2mg", price:32.00 },
-  { sku:"SM5SV", name:"Semaglutide 5mg", price:55.00 },
-  { sku:"SM10SV", name:"Semaglutide 10mg", price:95.00 },
-  { sku:"SM15SV", name:"Semaglutide 15mg", price:140.00 },
-  { sku:"SM20SV", name:"Semaglutide 20mg", price:175.00 },
-  { sku:"TR5SV", name:"Tirzepatide 5mg", price:42.00 },
-  { sku:"TR10SV", name:"Tirzepatide 10mg", price:72.00 },
-  { sku:"TR15SV", name:"Tirzepatide 15mg", price:98.00 },
-  { sku:"TR20SV", name:"Tirzepatide 20mg", price:130.00 },
-  { sku:"TR30SV", name:"Tirzepatide 30mg", price:185.00 },
-  { sku:"RT5SV", name:"Retatrutide 5mg", price:38.00 },
-  { sku:"RT10SV", name:"Retatrutide 10mg", price:62.00 },
-  { sku:"RT15SV", name:"Retatrutide 15mg", price:88.00 },
-  { sku:"RT20SV", name:"Retatrutide 20mg", price:115.00 },
-  { sku:"RT30SV", name:"Retatrutide 30mg", price:145.00 },
-  { sku:"CS10SV", name:"CagriSema 10mg", price:105.00 },
-  { sku:"SUR10SV", name:"Survodutide 10mg", price:210.00 },
-  { sku:"MAZ5SV", name:"Mazdutide 5mg", price:52.00 },
-  { sku:"MAZ10SV", name:"Mazdutide 10mg", price:125.00 },
-  { sku:"H10SV", name:"HGH 191AA 10iu", price:10.00 },
-  { sku:"H12SV", name:"HGH 191AA 12iu", price:12.50 },
-  { sku:"H24SV", name:"HGH 191AA 24iu", price:25.00 },
-  { sku:"FR2SV", name:"HGH Fragment 176-191 2mg", price:28.00 },
-  { sku:"FR5SV", name:"HGH Fragment 176-191 5mg", price:48.00 },
-  { sku:"IPS5SV", name:"Ipamorelin 5mg", price:28.00 },
-  { sku:"IP10SV", name:"Ipamorelin 10mg", price:50.00 },
-  { sku:"TSM2SV", name:"Tesamorelin 2mg", price:55.00 },
-  { sku:"TSM5SV", name:"Tesamorelin 5mg", price:65.00 },
-  { sku:"TSM10SV", name:"Tesamorelin 10mg", price:120.00 },
-  { sku:"SMO5SV", name:"Sermorelin 5mg", price:45.00 },
-  { sku:"CND5SV", name:"CJC-1295 (No DAC) 5mg", price:55.00 },
-  { sku:"CD5SV", name:"CJC-1295 (w/ DAC) 5mg", price:90.00 },
-  { sku:"G25SV", name:"GHRP-2 5mg", price:18.00 },
-  { sku:"G65SV", name:"GHRP-6 5mg", price:22.00 },
-  { sku:"HX5SV", name:"Hexarelin 5mg", price:55.00 },
-  { sku:"G2KSV", name:"HCG 2000iu", price:22.00 },
-  { sku:"G5KSV", name:"HCG 5000iu", price:42.00 },
-  { sku:"BC2SV", name:"BPC-157 2mg", price:18.00 },
-  { sku:"BC5SV", name:"BPC-157 5mg", price:28.00 },
-  { sku:"BC10SV", name:"BPC-157 10mg", price:45.00 },
-  { sku:"BC20SV", name:"BPC-157 20mg", price:75.00 },
-  { sku:"BT5SV", name:"TB-500 5mg", price:50.00 },
-  { sku:"BT10SV", name:"TB-500 10mg", price:90.00 },
-  { sku:"WLV10SV", name:"Wolverine (BPC+TB) 10mg", price:65.00 },
-  { sku:"WLV20SV", name:"Wolverine (BPC+TB) 20mg", price:130.00 },
-  { sku:"LL5SV", name:"LL-37 5mg", price:45.00 },
-  { sku:"CU50SV", name:"GHK-Cu 50mg", price:22.00 },
-  { sku:"CU100SV", name:"GHK-Cu 100mg", price:45.00 },
-  { sku:"NP810SV", name:"Snap-8 10mg", price:38.00 },
-  { sku:"GTT1500SV", name:"Glutathione 1500mg", price:45.00 },
-  { sku:"LC600SV", name:"L-Carnitine 600mg", price:32.00 },
-  { sku:"LC1200SV", name:"L-Carnitine 1200mg", price:42.00 },
-  { sku:"ET10SV", name:"Epithalon 10mg", price:42.00 },
-  { sku:"ET50SV", name:"Epithalon 50mg", price:140.00 },
-  { sku:"XA5SV", name:"Semax 5mg", price:28.00 },
-  { sku:"XA10SV", name:"Semax 10mg", price:42.00 },
-  { sku:"SK5SV", name:"Selank 5mg", price:28.00 },
-  { sku:"SK10SV", name:"Selank 10mg", price:45.00 },
-  { sku:"ADX5SV", name:"Adamax 5mg", price:45.00 },
-  { sku:"ADX10SV", name:"Adamax 10mg", price:75.00 },
-  { sku:"DS2SV", name:"DSIP 2mg", price:18.00 },
-  { sku:"DS10SV", name:"DSIP 10mg", price:45.00 },
-  { sku:"KS5SV", name:"Kisspeptin-10 5mg", price:32.00 },
-  { sku:"MT1SV", name:"Melanotan-1 10mg", price:42.00 },
-  { sku:"MT2SV", name:"Melanotan-2 10mg", price:32.00 },
-  { sku:"P41SV", name:"PT-141 10mg", price:42.00 },
-  { sku:"OT10SV", name:"Oxytocin 10mg", price:45.00 },
-  { sku:"NJ100SV", name:"NAD+ 100mg", price:32.00 },
-  { sku:"NJ500SV", name:"NAD+ 500mg", price:65.00 },
-  { sku:"MS10SV", name:"MOTS-C 10mg", price:45.00 },
-  { sku:"2S10SV", name:"SS-31 10mg", price:65.00 },
-  { sku:"5AM5SV", name:"5-amino-1mq 5mg", price:45.00 },
-  { sku:"IGF1SV", name:"IGF-1 LR3 1mg", price:100.00 },
-  { sku:"FN1SV", name:"Follistatin 344 1mg", price:185.00 },
-  { sku:"BAC3SV", name:"BAC Water 3ml", price:5.00 },
-  { sku:"BAC10SV", name:"BAC Water 10ml", price:8.00 },
+  { sku:"RT10SV", name:"Retatrutide 10mg", price:60.00 },
+  { sku:"TSM2SV", name:"Tesamorelin 2mg", price:60.00 },
+  { sku:"XA5SV", name:"Semax 5mg", price:30.00 },
+  { sku:"CU50SV", name:"GHK-Cu 50mg", price:24.00 },
 ];
 
-const CATALOG_KITS = [
-  { sku:"SM5K", name:"Semaglutide 5mg (x10 vials)", price:78.00 },
-  { sku:"SM10K", name:"Semaglutide 10mg (x10 vials)", price:115.00 },
-  { sku:"TR10K", name:"Tirzepatide 10mg (x10 vials)", price:115.00 },
-  { sku:"TR20K", name:"Tirzepatide 20mg (x10 vials)", price:185.00 },
-  { sku:"RT5K", name:"Retatrutide 5mg (x10 vials)", price:125.00 },
-  { sku:"RT10K", name:"Retatrutide 10mg (x10 vials)", price:200.00 },
-  { sku:"RT20K", name:"Retatrutide 20mg (x10 vials)", price:375.00 },
-  { sku:"BC5K", name:"BPC-157 5mg (x10 vials)", price:80.00 },
-  { sku:"BC10K", name:"BPC-157 10mg (x10 vials)", price:130.00 },
-  { sku:"BT5K", name:"TB-500 5mg (x10 vials)", price:145.00 },
-  { sku:"H10K", name:"HGH 10iu (x10 vials)", price:95.00 },
-  { sku:"H24K", name:"HGH 24iu (x10 vials)", price:240.00 },
-  { sku:"IPS5K", name:"Ipamorelin 5mg (x10 vials)", price:70.00 },
-  { sku:"TSM5K", name:"Tesamorelin 5mg (x10 vials)", price:195.00 },
-  { sku:"MT2K", name:"Melanotan-2 10mg (x10 vials)", price:78.00 },
-  { sku:"NJ100K", name:"NAD+ 100mg (x10 vials)", price:78.00 },
-  { sku:"ET10K", name:"Epithalon 10mg (x10 vials)", price:110.00 },
-];
+const CATALOG_KITS = [];
 
-const CATALOG_BUNDLES = [
-  { sku:"BDL-GLP", name:"GLP-1 Starter Bundle", description:"Entry-level metabolic research stack", components:"Semaglutide 5mg + Retatrutide 5mg + BAC Water 10ml", price:95.00 },
-  { sku:"BDL-HEAL", name:"Healing Stack", description:"Recovery and tissue repair protocol", components:"BPC-157 5mg + TB-500 5mg + BAC Water 10ml", price:82.00 },
-  { sku:"BDL-SKIN", name:"Skin & Glow Bundle", description:"Anti-aging and complexion stack", components:"GHK-Cu 50mg + Glutathione 1500mg + MT-1 10mg + BAC Water", price:105.00 },
-  { sku:"BDL-GH", name:"Growth Hormone Stack", description:"GH secretagogue research protocol", components:"Ipamorelin 5mg + CJC-1295 5mg + Tesamorelin 5mg + BAC Water", price:135.00 },
-  { sku:"BDL-METAB", name:"Metabolic Overhaul", description:"Advanced fat loss + mitochondrial energy", components:"Retatrutide 10mg + MOTS-C 10mg + L-Carnitine 1200mg + BAC Water", price:148.00 },
-  { sku:"BDL-FOCUS", name:"Focus & Cognition Stack", description:"Nootropic peptide bundle", components:"Semax 10mg Spray + Selank 10mg Spray + Adamax 10mg Spray", price:155.00 },
-  { sku:"BDL-SLEEP", name:"Deep Sleep Protocol", description:"Nighttime recovery and REM optimization", components:"DSIP 10mg Spray + Epithalon 10mg + Oxytocin 10mg Spray", price:130.00 },
-  { sku:"BDL-ATHLETE", name:"Athlete Recovery Stack", description:"High-impact injury recovery", components:"BPC-157 10mg + TB-500 10mg + MOTS-C 10mg + SS-31 10mg + BAC Water x2", price:175.00 },
-  { sku:"BDL-YOUTH", name:"Cellular Youth Kit", description:"Longevity and cellular rejuvenation", components:"Epithalon 50mg + NAD+ 500mg + GHK-Cu 100mg + Glutathione 1500mg", price:265.00 },
-  { sku:"BDL-VARIETY", name:"GLP Variety Kit", description:"Compare the top 3 metabolic peptides", components:"Semaglutide 10mg + Tirzepatide 10mg + Retatrutide 10mg + BAC Water x3", price:195.00 },
-];
+const CATALOG_BUNDLES = [];
 
-const CATALOG_NOOTROPICS = [
-  { sku:"MODA200", name:"Modafinil 200mg (10 tabs)", price:38.00 },
-  { sku:"ARMO250", name:"Armodafinil 250mg (10 tabs)", price:38.00 },
-];
+const CATALOG_NOOTROPICS = [];
 
-const CATALOG_SPRAYS = [
-  { sku:"NS-SLK-10", name:"Selank 10mg Nasal Spray", price:70.00 },
-  { sku:"NS-SMX-10", name:"Semax 10mg Nasal Spray", price:72.00 },
-  { sku:"NS-ADX-10", name:"Adamax 10mg Nasal Spray", price:68.00 },
-  { sku:"NS-DSIP-10", name:"DSIP 10mg Nasal Spray", price:58.00 },
-  { sku:"NS-OXY-10", name:"Oxytocin 10mg Nasal Spray", price:68.00 },
-  { sku:"NS-PIN-10", name:"Pinealon 10mg Nasal Spray", price:55.00 },
-  { sku:"NS-MT2-10", name:"Melanotan II 10mg Nasal Spray", price:52.00 },
-  { sku:"NS-PE22-10", name:"PE-22-28 10mg Nasal Spray", price:65.00 },
-];
+const CATALOG_SPRAYS = [];
 
 const CATEGORIES = {
   singles: { label:'Singles', data:CATALOG_INDIVIDUAL },
@@ -917,26 +841,28 @@ const _REMOVED_IMAGE_MAP = {
   "NS-PE22-10": "pe2228_10mg.png",
 };
 
+const PRODUCT_IMAGES = {
+  "RT10SV":  "product-images/vials/retatrutide.png",
+  "TSM2SV":  "product-images/vials/tesamorelin.png",
+  "XA5SV":   "product-images/vials/semax.png",
+  "CU50SV":  "product-images/vials/ghkcu.png",
+};
+
 function getProductImageHTML(p) {
+  const imgPath = PRODUCT_IMAGES[p.sku];
+  if (imgPath) {
+    return `<div class="prod-img">
+      <img src="${imgPath}" alt="${p.name}" style="width:100%;max-width:200px;height:auto;object-fit:contain;">
+    </div>`;
+  }
+  // Fallback SVG for any unmapped products
   const dose = p.name.match(/(\d+\s*(?:mg|iu|ml|iu|tabs?))/i);
   const doseText = dose ? dose[1] : '';
   const compound = p.name.replace(/\s*\(.*?\)/g,'').replace(/\d+\s*(?:mg|iu|ml|tabs?)/i,'').replace(/x\d+\s*vials?/i,'').trim();
   const shortName = compound.length > 18 ? compound.slice(0,16) + '..' : compound;
-
-  // Color based on category
-  const colors = {
-    S: ['#1a1a1a','#333'],  // singles - dark
-    K: ['#1a3a1a','#2d5a2d'], // kits - dark green
-    B: ['#1a1a3a','#2d2d5a'], // bundles - dark blue
-    N: ['#3a1a3a','#5a2d5a'], // nootropics - purple
-    P: ['#1a2a3a','#2d4a5a'], // sprays - teal
-  };
-  const type = p.sku.startsWith('BDL') ? 'B' : p.sku.startsWith('NS-') ? 'P' : p.sku.includes('MODA') || p.sku.includes('ARMO') ? 'N' : p.sku.endsWith('K') && !p.sku.endsWith('SV') ? 'K' : 'S';
-  const [c1,c2] = colors[type] || colors.S;
-
   return `<div class="prod-img">
     <svg viewBox="0 0 120 160" width="80" height="107" xmlns="http://www.w3.org/2000/svg">
-      <defs><linearGradient id="vg${p.sku.replace(/[^a-zA-Z0-9]/g,'')}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs>
+      <defs><linearGradient id="vg${p.sku.replace(/[^a-zA-Z0-9]/g,'')}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#333"/></linearGradient></defs>
       <rect x="35" y="8" width="50" height="16" rx="2" fill="#ddd"/>
       <rect x="45" y="0" width="30" height="12" rx="1.5" fill="#ccc"/>
       <line x1="38" y1="24" x2="82" y2="24" stroke="#bbb" stroke-width="1.5"/>
@@ -946,8 +872,6 @@ function getProductImageHTML(p) {
       <text x="60" y="78" text-anchor="middle" font-size="8" font-weight="900" fill="rgba(255,255,255,0.95)" font-family="Helvetica,Arial,sans-serif">${doseText.toUpperCase()}</text>
       <text x="60" y="112" text-anchor="middle" font-size="4.5" fill="rgba(255,255,255,0.5)" font-family="Helvetica,Arial,sans-serif">HAO YUN LABS</text>
       <text x="60" y="120" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="Helvetica,Arial,sans-serif">好运</text>
-      <rect x="42" y="130" width="36" height="12" rx="1" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
-      <text x="60" y="138.5" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.45)" font-family="monospace">${p.sku}</text>
     </svg>
   </div>`;
 }
@@ -1341,7 +1265,6 @@ async function submitOrder(){
         body:JSON.stringify({
           orderNumber: orderNum,
           amount: total,
-          affiliateCode: getAffiliateCode(),
           draft: {
             email, fname, lname, street, apt, city, state, zip, phone,
             items, subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
@@ -1372,7 +1295,6 @@ async function submitOrder(){
         headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
         body:JSON.stringify({
           orderNumber:orderNum, items, total, shipping,
-          affiliateCode: getAffiliateCode(),
           payment:selectedPayMethod, email,
           customer:{fname,lname,street,apt,city,state,zip,phone},
           discountCode, discountPct, discountAmount:disc, subtotal:sub
@@ -1515,25 +1437,6 @@ async function loadProductsFromDB(){
 }
 
 /* ═════════════════════════════════════════════════════
-   AFFILIATE COOKIE TRACKING
-   ═════════════════════════════════════════════════════ */
-function checkAffiliateCookie(){
-  const params = new URLSearchParams(window.location.search);
-  const ref = params.get('ref');
-  if(ref){
-    document.cookie = `hyl_ref=${encodeURIComponent(ref)};max-age=${30*24*60*60};path=/;SameSite=Lax`;
-    fetch(BILLING_SERVER + '/api/affiliate/click/' + encodeURIComponent(ref)).catch(()=>{});
-    const url = new URL(window.location);
-    url.searchParams.delete('ref');
-    window.history.replaceState({}, '', url.pathname + url.hash);
-  }
-}
-function getAffiliateCode(){
-  const match = document.cookie.match(/hyl_ref=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-/* ═════════════════════════════════════════════════════
    INTRO
    ═════════════════════════════════════════════════════ */
 function introFade(){
@@ -1548,7 +1451,6 @@ function introFade(){
    INIT
    ═════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', async ()=>{
-  checkAffiliateCookie();
   checkAgeGate();
   loadCart();
   updateBadge();
@@ -1562,6 +1464,12 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   await loadProductsFromDB();
 
   handleRoute();
+
+  // Scroll reveal observer
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revealObserver.unobserve(e.target); }});
+  }, {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 });
 </script>
 </body>
