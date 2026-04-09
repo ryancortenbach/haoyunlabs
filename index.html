@@ -57,13 +57,10 @@ ul{list-style:none}
 #intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
-/* ── HUD GRID BG ── */
-body::before{
-  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px);
-  background-size:160px 160px;
+/* ── VANTA BG ── */
+#vanta-bg{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
+  pointer-events:none;background:#484848;
 }
 
 /* ── NAV ── */
@@ -409,6 +406,7 @@ body::before{
 </style>
 </head>
 <body>
+<div id="vanta-bg"></div>
 
 <!-- AGE GATE -->
 <div id="age-gate">
@@ -1670,6 +1668,24 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   }, {threshold:0.1});
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js"></script>
+<script>
+if(window.VANTA){
+  VANTA.TOPOLOGY({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    scale: 1.00,
+    scaleMobile: 1.00,
+    color: 0x0,
+    backgroundColor: 0x484848
+  });
+}
 </script>
 </body>
 </html>
