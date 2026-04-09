@@ -58,23 +58,33 @@ ul{list-style:none}
 #intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
-/* ── RIPPLE GRID BG ── */
+/* ── GRID BG + SHIMMER + RIPPLE ── */
 #vanta-bg{
   position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
   background:#fff;overflow:hidden;
 }
 #ripple-grid{
-  display:grid;width:100%;height:100%;
+  display:grid;width:100%;height:100%;position:relative;
   grid-template-columns:repeat(var(--cols),1fr);
   grid-template-rows:repeat(var(--rows),1fr);
 }
 .rp-cell{
-  border:0.5px solid rgba(0,0,0,0.06);
+  border:0.5px solid rgba(0,0,0,0.05);
   background:transparent;
 }
+/* Subtle shimmer across grid */
+#ripple-grid::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,transparent 30%,rgba(0,0,0,0.04) 50%,transparent 70%);
+  background-size:200% 100%;
+  animation:gridShimmer 8s ease-in-out infinite;
+}
+@keyframes gridShimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
 @keyframes cellRipple{
-  0%{background:rgba(0,0,0,0.10)}
-  50%{background:rgba(0,0,0,0.04)}
+  0%{background:rgba(0,0,0,0.05)}
   100%{background:transparent}
 }
 
@@ -87,16 +97,17 @@ ul{list-style:none}
   transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 .nav.shrunk{
-  top:6px;left:20px;right:20px;
+  top:8px;left:5%;right:5%;
   border-radius:16px;
   box-shadow:0 4px 20px rgba(0,0,0,0.08);
   border:1px solid rgba(0,0,0,0.06);
   padding:0 24px;
 }
-.nav.shrunk .nav-inner{height:56px}
-.nav.shrunk .nav-brand img{height:32px!important}
-.nav.shrunk .nav-search{font-size:0.75rem;padding:8px 10px 8px 32px}
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:80px}
+.nav.shrunk .nav-inner{height:52px}
+.nav.shrunk .nav-brand img{height:30px!important}
+.nav.shrunk .nav-search{font-size:0.75rem;padding:8px 10px 8px 32px;width:140px}
+.nav.shrunk .nav-search:focus{width:260px}
+.nav-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;height:80px;gap:16px;transition:height 0.4s cubic-bezier(0.4,0,0.2,1)}
 .nav-brand{cursor:pointer;justify-self:start}
 .nav-links{display:flex;gap:36px;align-items:center;justify-self:center}
 .nav-links a{font-size:0.88rem;text-transform:uppercase;letter-spacing:0.14em;font-weight:700;cursor:pointer;position:relative;padding:6px 0;transition:all 0.15s ease}
@@ -104,7 +115,7 @@ ul{list-style:none}
 .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--brand);transition:width 0.2s ease}
 .nav-links a:hover::after{width:100%}
 .nav-icons{display:flex;gap:16px;align-items:center}
-.nav-search-wrap{position:relative;margin:0 auto}
+.nav-search-wrap{position:relative;justify-self:center}
 .nav-search{
   width:180px;padding:10px 14px 10px 38px;font-size:0.82rem;
   border:1px solid var(--stroke);background:#f5f5f5;border-radius:24px;
@@ -1157,18 +1168,12 @@ window.addEventListener('hashchange', handleRoute);
    PRODUCT CARD HTML
    ═════════════════════════════════════════════════════ */
 function cardHTML(p){
-  const desc = p.description ? `<div class="card-desc">${p.description}</div>` : '';
-  const comp = p.components ? `<div class="card-components">${p.components}</div>` : '';
   const detailId = 'det-'+p.sku;
-  const specs = [
-    `Purity: >99%`,
-    `Form: Lyophilized Powder`,
-    `Storage: 2-8\u00B0C`,
-    `LOT: Verified`,
-  ];
+  const descText = p.description || '';
+  const specs = [`Purity: >99%`,`Form: Lyophilized Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
   if(p.cat==='sprays') specs[1] = 'Form: Nasal Spray (30ml)';
   if(p.cat==='bundles') specs.push('Includes: BAC water where noted');
-  const specHTML = specs.map(s=>`<div>${s}</div>`).join('');
+  const detailHTML = (descText ? `<div style="margin-bottom:6px;font-size:0.75rem;color:var(--muted);line-height:1.5">${descText}</div>` : '') + specs.map(s=>`<div>${s}</div>`).join('');
 
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer">
     ${getProductImageHTML(p)}
@@ -1178,9 +1183,8 @@ function cardHTML(p){
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
-      ${desc}${comp}
-      <button class="card-details-toggle" onclick="toggleDetails('${detailId}',this)">+ More Details</button>
-      <div class="card-details" id="${detailId}">${specHTML}</div>
+      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)">+ More Details</button>
+      <div class="card-details" id="${detailId}">${detailHTML}</div>
     </div>
     <div class="card-footer">
       <button class="btn-add" onclick="event.stopPropagation();addToCart('${p.sku}')">ADD TO CART</button>
@@ -1931,32 +1935,34 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const rows = Math.ceil(window.innerHeight / cellSize);
     grid.style.setProperty('--cols', cols);
     grid.style.setProperty('--rows', rows);
-    const cells = [];
-    for(let i = 0; i < cols * rows; i++){
+    const total = cols * rows;
+    const cells = new Array(total);
+    for(let i = 0; i < total; i++){
       const cell = document.createElement('div');
       cell.className = 'rp-cell';
       grid.appendChild(cell);
-      cells.push(cell);
+      cells[i] = cell;
     }
-    // Click ripple — multiple clicks stack
+    // Throttled ripple — no DOM cloning, just inline style animation
+    let lastRipple = 0;
     document.addEventListener('click', (e) => {
+      const now = Date.now();
+      if(now - lastRipple < 150) return; // throttle: 150ms between ripples
+      lastRipple = now;
       const clickCol = Math.floor(e.clientX / cellSize);
       const clickRow = Math.floor(e.clientY / cellSize);
-      const maxDist = Math.max(cols, rows) * 0.6;
-      cells.forEach((cell, i) => {
+      const maxDist = Math.max(cols, rows);
+      for(let i = 0; i < total; i++){
         const cCol = i % cols;
-        const cRow = Math.floor(i / cols);
+        const cRow = (i / cols) | 0;
         const dist = Math.sqrt((cCol-clickCol)**2 + (cRow-clickRow)**2);
-        if(dist > maxDist) return;
-        const delay = dist * 30;
-        const dur = 300 + dist * 10;
-        // Clone to allow stacking animations
-        const clone = cell.cloneNode(true);
-        clone.style.cssText = `animation:cellRipple ${dur}ms ease-out forwards;animation-delay:${delay}ms;position:absolute;inset:0;pointer-events:none;`;
-        cell.style.position = 'relative';
-        cell.appendChild(clone);
-        setTimeout(() => clone.remove(), delay + dur + 50);
-      });
+        if(dist > maxDist) continue;
+        const delay = dist * 50;
+        const dur = 600 + dist * 20;
+        cells[i].style.animation = 'none';
+        cells[i].offsetHeight; // force reflow
+        cells[i].style.animation = `cellRipple ${dur}ms ease-out ${delay}ms forwards`;
+      }
     });
   })();
   introFade();
