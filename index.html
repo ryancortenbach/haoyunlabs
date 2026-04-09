@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
+<link href="https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -666,6 +667,11 @@ ul{list-style:none}
 </style>
 </head>
 <body>
+<ol id="sonner-toast-container" position="bottom-right" max-toasts="5" rich-colors="true" theme="light" close-button="true"></ol>
+<script type="module">
+  import { toast } from 'https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.es.min.js';
+  window._sonnerToast = toast;
+</script>
 <div id="vanta-bg"><div id="ripple-grid"></div></div>
 
 <!-- AGE GATE -->
@@ -710,30 +716,6 @@ ul{list-style:none}
       <div class="hero-title anim-fade-up anim-d2">HAO YUN LABS</div>
       <div class="hero-tag anim-fade-up anim-d4">Premium Research Peptides &amp; Supplies</div>
       <div class="hero-divider"></div>
-    </div>
-
-    <!-- TRUST BADGES -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 0 32px;text-align:center">
-      <div style="padding:20px 12px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:8px">&#128300;</div>
-        <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em">99%+ Purity</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:4px">HPLC Verified</div>
-      </div>
-      <div style="padding:20px 12px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:8px">&#128274;</div>
-        <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em">Secure Payments</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:4px">Direct Crypto</div>
-      </div>
-      <div style="padding:20px 12px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:8px">&#128230;</div>
-        <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em">Discreet Shipping</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:4px">Plain Packaging</div>
-      </div>
-      <div style="padding:20px 12px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:8px">&#9989;</div>
-        <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em">Lot Verified</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:4px">COA Available</div>
-      </div>
     </div>
 
     <div class="toolbar">
@@ -1019,14 +1001,15 @@ ul{list-style:none}
 </div>
 
 <!-- EMAIL CAPTURE POPUP -->
-<div id="email-popup" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:var(--radius);padding:36px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
-    <button onclick="closeEmailPopup()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">&times;</button>
-    <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em">Get 10% Off</div>
-    <div style="font-size:0.82rem;color:var(--muted);margin:8px 0 20px;line-height:1.5">Join our mailing list for exclusive deals, new product drops, and your first-order discount code.</div>
-    <input type="email" id="popup-email" placeholder="Enter your email..." style="width:100%;padding:12px 14px;border:1px solid var(--stroke);border-radius:var(--radius);font-size:0.85rem;margin-bottom:12px">
-    <button onclick="submitPopupEmail()" style="width:100%;padding:14px;background:var(--brand);color:var(--bg);border:none;border-radius:var(--radius);font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer">GET MY CODE</button>
-    <div style="font-size:0.65rem;color:var(--muted);margin-top:12px">No spam. Unsubscribe anytime.</div>
+<div id="email-popup" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9000;max-width:360px;width:calc(100% - 48px)">
+  <div style="background:#fff;border-radius:12px;padding:24px 28px;text-align:left;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.12);border:1px solid var(--stroke)">
+    <button onclick="closeEmailPopup()" style="position:absolute;top:10px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);line-height:1">&times;</button>
+    <div style="font-family:var(--display);font-size:1.1rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em">Get 10% Off</div>
+    <div style="font-size:0.78rem;color:var(--muted);margin:6px 0 14px;line-height:1.5">Join for exclusive deals and your first-order discount code.</div>
+    <div style="display:flex;gap:8px">
+      <input type="email" id="popup-email" placeholder="Enter your email..." style="flex:1;padding:10px 12px;border:1px solid var(--stroke);border-radius:6px;font-size:0.82rem">
+      <button onclick="submitPopupEmail()" style="padding:10px 16px;background:var(--brand);color:var(--bg);border:none;border-radius:6px;font-size:0.72rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap">GET CODE</button>
+    </div>
   </div>
 </div>
 
@@ -1088,20 +1071,64 @@ function klIdentify(email) {
    ═════════════════════════════════════════════════════ */
 
 const CATALOG_INDIVIDUAL = [
-  { sku:"RT10SV", name:"Retatrutide 10mg", price:59.99 },
-  { sku:"TSM2SV", name:"Tesamorelin 2mg", price:59.99 },
-  { sku:"XA5SV", name:"Semax 5mg", price:29.99 },
-  { sku:"CU50SV", name:"GHK-Cu 50mg", price:23.99 },
-  { sku:"BACSV", name:"Bacteriostatic Water 30ml", price:11.99 },
+  // GLP-1 / Metabolic
+  { sku:"RT10SV", name:"Retatrutide 10mg", price:59.99, description:"Triple-agonist peptide targeting GIP, GLP-1, and glucagon receptors. Researched for metabolic studies and body composition." },
+  { sku:"SM15SV", name:"Semaglutide 5mg", price:49.99, description:"GLP-1 receptor agonist. Widely studied for glucose regulation and metabolic research." },
+  { sku:"TZ15SV", name:"Tirzepatide 15mg", price:64.99, description:"Dual GIP/GLP-1 agonist. Advanced metabolic research compound." },
+  { sku:"SU3SV", name:"Survodutide 3mg", price:54.99, description:"Dual glucagon/GLP-1 agonist for metabolic and liver research." },
+  // GH Secretagogues
+  { sku:"TSM2SV", name:"Tesamorelin 2mg", price:59.99, description:"GHRH analog studied for growth hormone release and visceral adipose research." },
+  { sku:"IPA5SV", name:"Ipamorelin 5mg", price:29.99, description:"Selective GH secretagogue. Clean GH pulse without cortisol or prolactin elevation." },
+  { sku:"CJC2SV", name:"CJC-1295 DAC 2mg", price:34.99, description:"Long-acting GHRH analog with Drug Affinity Complex for sustained GH elevation." },
+  { sku:"MK10SV", name:"MK-677 (Ibutamoren) 25mg x30 tabs", price:44.99, description:"Oral GH secretagogue. Non-peptide ghrelin mimetic for extended GH research." },
+  // Recovery / Healing
+  { sku:"BPC5SV", name:"BPC-157 5mg", price:29.99, description:"Body Protection Compound. Studied for tissue repair and gut healing research." },
+  { sku:"TB5SV", name:"TB-500 5mg", price:34.99, description:"Thymosin Beta-4 fragment. Studied for tissue repair and inflammation research." },
+  // Anti-Aging / Skin
+  { sku:"CU50SV", name:"GHK-Cu 50mg", price:23.99, description:"Copper peptide researched for skin remodeling, collagen synthesis, and wound healing." },
+  { sku:"EP1SV", name:"Epitalon 10mg", price:39.99, description:"Epithalamin-derived tetrapeptide. Studied for telomerase activation and anti-aging research." },
+  // Cognitive / Neuroprotection
+  { sku:"XA5SV", name:"Semax 5mg", price:29.99, description:"Nootropic heptapeptide. ACTH analog studied for cognitive enhancement and neuroprotection." },
+  { sku:"SS10SV", name:"Selank 5mg", price:29.99, description:"Anxiolytic peptide derived from tuftsin. Studied for stress and cognitive research." },
+  { sku:"DS5SV", name:"Dihexa 5mg", price:49.99, description:"Potent cognitive peptide. Angiotensin IV analog studied for memory and synaptic repair." },
+  // Tanning / Aesthetic
+  { sku:"MT2SV", name:"Melanotan II 10mg", price:24.99, description:"Alpha-MSH analog. Studied for melanogenesis and photoprotection research." },
+  { sku:"PT14SV", name:"PT-141 10mg", price:29.99, description:"Melanocortin receptor agonist. Derived from MT-II, studied for sexual function research." },
+  // Hormones / Performance
+  { sku:"HCG5SV", name:"HCG 5000iu", price:34.99, description:"Human chorionic gonadotropin. Studied for LH receptor activation and fertility research." },
+  { sku:"AOD3SV", name:"AOD-9604 5mg", price:34.99, description:"Modified GH fragment (176-191). Studied for lipolysis and cartilage repair." },
+  { sku:"FOX5SV", name:"5-Amino-1MQ 50mg x30 caps", price:49.99, description:"NNMT inhibitor. Studied for NAD+ metabolism and fat cell research." },
+  // Supplies
+  { sku:"BACSV", name:"Bacteriostatic Water 30ml", price:11.99, description:"Sterile water with 0.9% benzyl alcohol. For reconstitution of lyophilized peptides." },
+  { sku:"SYRSV", name:"Insulin Syringes 100pk", price:19.99, description:"1ml insulin syringes with 29G x 1/2\" needles. For precise research dosing." },
 ];
 
-const CATALOG_KITS = [];
+const CATALOG_KITS = [
+  { sku:"RTKIT", name:"Retatrutide 10mg x10 Kit", price:399.99, description:"10 vials of Retatrutide 10mg. Bulk research supply with COA included." },
+  { sku:"SMKIT", name:"Semaglutide 5mg x10 Kit", price:349.99, description:"10 vials of Semaglutide 5mg. Extended metabolic research supply." },
+  { sku:"TZKIT", name:"Tirzepatide 15mg x10 Kit", price:449.99, description:"10 vials of Tirzepatide 15mg. Full research cycle supply." },
+  { sku:"BPCKIT", name:"BPC-157 5mg x10 Kit", price:219.99, description:"10 vials of BPC-157 5mg. Recovery research program supply." },
+  { sku:"TBKIT", name:"TB-500 5mg x10 Kit", price:249.99, description:"10 vials of TB-500 5mg. Tissue repair research supply." },
+  { sku:"IPAKIT", name:"Ipamorelin 5mg x10 Kit", price:219.99, description:"10 vials of Ipamorelin 5mg. GH secretagogue research supply." },
+];
 
-const CATALOG_BUNDLES = [];
+const CATALOG_BUNDLES = [
+  { sku:"METABN", name:"Metabolic Research Stack", price:149.99, description:"Retatrutide 10mg + Semaglutide 5mg + BAC Water. Complete metabolic research bundle." },
+  { sku:"HEALBN", name:"Recovery Stack", price:74.99, description:"BPC-157 5mg + TB-500 5mg + BAC Water. Tissue repair research bundle." },
+  { sku:"GHBN", name:"GH Secretagogue Stack", price:89.99, description:"Ipamorelin 5mg + CJC-1295 DAC 2mg + BAC Water. Growth hormone research bundle." },
+  { sku:"BRAINBN", name:"Cognitive Stack", price:79.99, description:"Semax 5mg + Selank 5mg + BAC Water. Nootropic research bundle." },
+  { sku:"ANTIBN", name:"Anti-Aging Stack", price:84.99, description:"GHK-Cu 50mg + Epitalon 10mg + BAC Water. Longevity research bundle." },
+  { sku:"FULLBN", name:"Complete Starter Kit", price:234.99, description:"Retatrutide + BPC-157 + GHK-Cu + Ipamorelin + BAC Water + Syringes. Everything to start." },
+];
 
 const CATALOG_NOOTROPICS = [];
 
-const CATALOG_SPRAYS = [];
+const CATALOG_SPRAYS = [
+  { sku:"SXSPRAY", name:"Semax Nasal Spray 30ml", price:49.99, description:"Pre-mixed Semax nasal spray. Ready-to-use for intranasal research." },
+  { sku:"SLSPRAY", name:"Selank Nasal Spray 30ml", price:49.99, description:"Pre-mixed Selank nasal spray. Ready-to-use anxiolytic research." },
+  { sku:"BPCSPRAY", name:"BPC-157 Nasal Spray 30ml", price:54.99, description:"Pre-mixed BPC-157 nasal spray. Intranasal delivery for systemic research." },
+  { sku:"OXSPRAY", name:"Oxytocin Nasal Spray 30ml", price:44.99, description:"Pre-mixed oxytocin nasal spray. Social bonding and behavioral research." },
+];
 
 const CATEGORIES = {
   singles: { label:'Singles', data:CATALOG_INDIVIDUAL },
@@ -1258,12 +1285,7 @@ const _REMOVED_IMAGE_MAP = {
   "NS-PE22-10": "pe2228_10mg.png",
 };
 
-const PRODUCT_IMAGES = {
-  "RT10SV":  "product-images/vials/retatrutide.png",
-  "TSM2SV":  "product-images/vials/tesamorelin.png",
-  "XA5SV":   "product-images/vials/semax.png",
-  "CU50SV":  "product-images/vials/ghkcu.png",
-};
+const PRODUCT_IMAGES = {};
 
 function getProductImageHTML(p) {
   const imgPath = PRODUCT_IMAGES[p.sku];
@@ -1358,6 +1380,15 @@ function getSubtotal(){
    TOAST
    ═════════════════════════════════════════════════════ */
 function showToast(msg, type){
+  const t = window._sonnerToast;
+  if(t){
+    if(type==='error') t.error(msg);
+    else if(type==='warning') t.warning(msg);
+    else if(type==='info') t.info(msg);
+    else t.success(msg);
+    return;
+  }
+  // Fallback if Sonner hasn't loaded yet
   const container = document.getElementById('toast-container') || (()=>{
     const c = document.createElement('div');
     c.id='toast-container';
@@ -1365,16 +1396,13 @@ function showToast(msg, type){
     document.body.appendChild(c);
     return c;
   })();
-  const t = document.createElement('div');
+  const el = document.createElement('div');
   const isError = type === 'error';
-  t.style.cssText=`background:${isError?'#dc2626':'#111'};color:#fff;padding:14px 20px;font-size:0.78rem;letter-spacing:0.06em;font-weight:600;border-radius:var(--radius);box-shadow:0 4px 12px rgba(0,0,0,0.15);transform:translateX(100%);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;border-left:4px solid ${isError?'#f87171':'#22c55e'}`;
-  t.textContent=msg;
-  container.appendChild(t);
-  requestAnimationFrame(()=>{t.style.transform='translateX(0)';t.style.opacity='1'});
-  setTimeout(()=>{
-    t.style.transform='translateX(100%)';t.style.opacity='0';
-    setTimeout(()=>t.remove(),300);
-  },3000);
+  el.style.cssText=`background:${isError?'#dc2626':'#111'};color:#fff;padding:14px 20px;font-size:0.78rem;letter-spacing:0.06em;font-weight:600;border-radius:var(--radius);box-shadow:0 4px 12px rgba(0,0,0,0.15);transform:translateX(100%);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;border-left:4px solid ${isError?'#f87171':'#22c55e'}`;
+  el.textContent=msg;
+  container.appendChild(el);
+  requestAnimationFrame(()=>{el.style.transform='translateX(0)';el.style.opacity='1'});
+  setTimeout(()=>{el.style.transform='translateX(100%)';el.style.opacity='0';setTimeout(()=>el.remove(),300);},3000);
 }
 
 /* ═════════════════════════════════════════════════════
