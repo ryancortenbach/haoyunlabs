@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409w';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409x';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1090,7 +1090,7 @@ ul{list-style:none}
 <div id="email-popup" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1)">
   <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:48px 40px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.3);line-height:1">&times;</button>
-    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span id="popup-flip-word" style="display:inline-block;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)">free</span> mystery vial with your first order</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span style="display:inline-block;width:4.5em;text-align:center;background:rgba(255,255,255,0.1);padding:2px 4px;border-radius:6px;overflow:hidden;vertical-align:bottom"><span id="popup-flip-word" style="display:inline-block;transition:opacity 0.35s ease">free</span></span> mystery vial with your first order</div>
     <div style="font-size:0.82rem;color:rgba(255,255,255,0.45);margin-bottom:28px;line-height:1.5">Sign up to receive a 5-character code for a free mystery vial. Valid 24 hours.</div>
     <div style="text-align:left">
       <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px">Name</div>
@@ -2457,13 +2457,12 @@ function showEmailPopup(){
     idx=(idx+1)%words.length;
     const el=document.getElementById('popup-flip-word');
     if(!el){clearInterval(_flipInterval);return;}
-    el.style.transform='translateY(-100%)';el.style.opacity='0';
+    el.style.opacity='0';
     setTimeout(()=>{
       el.textContent=words[idx];
-      el.style.transform='translateY(100%)';
-      requestAnimationFrame(()=>{el.style.transform='translateY(0)';el.style.opacity='1';});
-    },250);
-  },2000);
+      el.style.opacity='1';
+    },350);
+  },2200);
 }
 function closeEmailPopup(){
   if(_flipInterval){clearInterval(_flipInterval);_flipInterval=null;}
