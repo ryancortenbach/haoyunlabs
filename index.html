@@ -138,12 +138,36 @@ ul{list-style:none}
   border-radius:50%;font-family:var(--mono);
 }
 .nav-cart-badge:empty{display:none}
-@media(max-width:640px){
-  .nav{padding:0 16px}
-  .nav-inner{height:60px}
-  .nav-brand{font-size:1.1rem}
-  .nav-links{gap:20px}
-  .nav-links a{font-size:0.75rem}
+@media(max-width:768px){
+  .nav{padding:0 12px}
+  .nav-inner{height:56px;gap:10px}
+  .nav-brand img{height:32px!important}
+  .nav-search-wrap{max-width:none}
+  .nav-search{font-size:0.75rem;padding:8px 10px 8px 32px}
+  .nav-icon svg{width:20px;height:20px}
+  .hero-title{font-size:1.8rem!important;letter-spacing:0.1em!important}
+  .hero-tag{font-size:0.7rem!important}
+  .product-grid{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
+  .toolbar{flex-direction:column;align-items:stretch;gap:10px}
+  .cat-tabs{font-size:0.68rem}
+  .cat-tab{padding:6px 10px;font-size:0.68rem}
+  .search-sort{width:100%}
+  .search-input{flex:1}
+  .checkout-layout{grid-template-columns:1fr!important;gap:20px!important}
+  .checkout-layout>div{padding:16px!important}
+  .pdp-layout{grid-template-columns:1fr!important;gap:20px!important;padding-top:80px!important}
+  .pdp-name{font-size:1.4rem!important}
+  .pdp-price{font-size:1.5rem!important}
+  .container{padding:0 12px}
+  .hero{padding:90px 0 24px!important}
+  .footer{padding:24px 12px}
+}
+@media(max-width:400px){
+  .nav-brand img{height:26px!important}
+  .nav-search{font-size:0.7rem}
+  .product-grid{grid-template-columns:1fr!important}
+  .hero-title{font-size:1.4rem!important}
+  .cat-tabs{flex-wrap:wrap}
 }
 
 /* ── MARQUEE ── */
@@ -1156,7 +1180,7 @@ function cardHTML(p){
       <div class="card-details" id="${detailId}">${specHTML}</div>
     </div>
     <div class="card-footer">
-      <button class="btn-add" onclick="addToCart('${p.sku}')">ADD TO CART</button>
+      <button class="btn-add" onclick="event.stopPropagation();addToCart('${p.sku}')">ADD TO CART</button>
     </div>
   </div>`;
 }
@@ -1790,9 +1814,9 @@ async function submitOrder(){
    MARQUEE
    ═════════════════════════════════════════════════════ */
 function buildMarquee(){
-  const text = 'RESEARCH-GRADE PEPTIDES \u2014 99%+ PURITY \u2014 LOT-VERIFIED \u2014 FAST SHIPPING \u2014 HAO YUN LABS \u597D\u8FD0';
   const track = document.getElementById('marquee-track');
-  // Duplicate enough times for seamless loop
+  if(!track) return;
+  const text = 'RESEARCH-GRADE PEPTIDES \u2014 99%+ PURITY \u2014 LOT-VERIFIED \u2014 FAST SHIPPING \u2014 HAO YUN LABS';
   track.innerHTML = Array(8).fill(`<span>${text}</span>`).join('');
 }
 
