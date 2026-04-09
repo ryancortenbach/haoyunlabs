@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410z';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411a';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -230,7 +230,7 @@ ul{list-style:none}
 }
 .banner-track{
   display:flex;width:max-content;
-  animation:banner-scroll 60s linear infinite;
+  animation:banner-scroll 90s linear infinite;
 }
 .sticky-banner:hover .banner-track{animation-play-state:paused}
 .banner-track span{
@@ -689,7 +689,7 @@ ul{list-style:none}
 
 /* ── FOOTER ── */
 .footer{border-top:1px solid var(--stroke);padding:60px 24px 32px;background:#fafafa}
-.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr) 1.4fr;gap:40px}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr) 1.4fr;gap:40px}
 .footer-col-title{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px}
 .footer-col a{display:block;font-size:0.78rem;color:var(--muted);margin-bottom:10px;cursor:pointer;transition:color 0.15s}
 .footer-col a:hover{color:var(--brand)}
@@ -1339,6 +1339,20 @@ ul{list-style:none}
 
 <!-- FOOTER -->
 <footer class="footer">
+  <!-- EMAIL SIGNUP ROW -->
+  <div style="max-width:1200px;margin:0 auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+    <div>
+      <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Sign up for exclusive drops.</div>
+      <div style="display:flex;gap:8px">
+        <input type="email" id="footer-email-main" placeholder="Enter your email..." style="flex:1;padding:12px 16px;border:1px solid var(--stroke);border-radius:10px;font-size:0.85rem;background:#fff;font-family:var(--sans)">
+        <button onclick="subscribeFooterEmail()" style="padding:12px 24px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer">&rarr;</button>
+      </div>
+      <div id="footer-email-main-msg" style="font-size:0.72rem;margin-top:6px;min-height:1em"></div>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);line-height:1.6;padding-top:8px">
+      By signing up, you agree to receive marketing emails about new products, exclusive deals, and research updates. Unsubscribe anytime. View our <a onclick="navigate('terms')" style="text-decoration:underline;cursor:pointer">Privacy Policy</a>.
+    </div>
+  </div>
   <div class="footer-inner">
     <div class="footer-col">
       <div class="footer-col-title">Shop</div>
@@ -1360,14 +1374,6 @@ ul{list-style:none}
       <a onclick="navigate('terms')">Terms of Service</a>
       <a onclick="navigate('terms')">Privacy Policy</a>
       <a onclick="navigate('terms')">Refund Policy</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Stay Updated</div>
-      <div class="footer-subscribe-row">
-        <input type="email" id="footer-email" placeholder="Your email...">
-        <button onclick="subscribeEmail()">Join</button>
-      </div>
-      <div class="footer-subscribe-msg" id="footer-sub-msg"></div>
     </div>
     <div class="footer-brand-col">
       <div class="footer-brand-name">Hao Yun Labs</div>
@@ -2071,6 +2077,22 @@ function openProduct(sku){
       <div class="pdp-tab-content" id="pdp-tab-shipping">
         <p><span class="term-tip" data-tip="Freeze-dried for stability during transport">Lyophilized</span> products ship cold with ice packs. Orders over $200 ship free. Standard shipping: $15 flat rate. Ships within 1-3 business days via USPS Priority.</p>
         <p style="margin-top:8px">All packages include <span class="term-tip" data-tip="Certificate showing purity test results">COA documentation</span> and are sealed for integrity.</p>
+      </div>
+
+      <!-- TRUST BADGES -->
+      <div style="display:flex;gap:16px;margin-top:20px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)"><span style="color:#16a34a;font-size:1rem">&#10003;</span> 99%+ HPLC verified</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)"><span style="color:#16a34a;font-size:1rem">&#10003;</span> Third-party tested</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)"><span style="color:#16a34a;font-size:1rem">&#10003;</span> Free shipping $250+</div>
+      </div>
+
+      <!-- TESTING BADGE -->
+      <div style="display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px 16px;background:#f7f7f7;border-radius:10px;font-size:0.75rem">
+        <span style="font-size:1.2rem">&#128300;</span>
+        <div>
+          <div style="font-weight:700">Independently tested</div>
+          <div style="color:var(--muted);font-size:0.7rem">HPLC purity analysis on every lot</div>
+        </div>
       </div>
     </div>
   `;
@@ -2911,6 +2933,17 @@ async function submitSupport(){
   } catch(e){ showToast('Failed to send — please email us directly.'); }
 }
 
+async function subscribeFooterEmail(){
+  const input = document.getElementById('footer-email-main');
+  const msg = document.getElementById('footer-email-main-msg');
+  const email = input.value.trim().toLowerCase();
+  if(!email || !email.includes('@')){msg.textContent='Please enter a valid email.';msg.style.color='#dc2626';return;}
+  try {
+    await sb.from('email_subscribers').upsert({email, source:'footer'},{onConflict:'email'});
+    msg.textContent='You\'re in! Watch your inbox.';msg.style.color='#16a34a';
+    klIdentify(email);input.value='';
+  } catch(e){msg.textContent='Something went wrong.';msg.style.color='#dc2626';}
+}
 async function subscribeEmail(){
   const input = document.getElementById('footer-email');
   const msg = document.getElementById('footer-sub-msg');
