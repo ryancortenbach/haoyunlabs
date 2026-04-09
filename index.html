@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410h';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410j';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -633,17 +633,25 @@ ul{list-style:none}
 .confirmed-btns a.secondary:hover{background:var(--brand);color:var(--bg)}
 
 /* ── FOOTER ── */
-.footer{border-top:1px solid var(--stroke);padding:40px 24px;text-align:center}
-.footer-brand{font-size:1.1rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase}
-.footer-brand span{font-weight:400;margin-left:4px}
-.footer-legal{font-size:0.7rem;color:var(--muted);margin-top:10px;line-height:1.7;letter-spacing:0.04em}
-.footer-subscribe{margin:24px auto 0;max-width:420px}
-.footer-subscribe-title{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px}
+.footer{border-top:1px solid var(--stroke);padding:60px 24px 32px;background:#fafafa}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr) 1.4fr;gap:40px}
+.footer-col-title{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px}
+.footer-col a{display:block;font-size:0.78rem;color:var(--muted);margin-bottom:10px;cursor:pointer;transition:color 0.15s}
+.footer-col a:hover{color:var(--brand)}
+.footer-brand-col{display:flex;flex-direction:column;gap:12px}
+.footer-brand-name{font-family:'Instrument Serif',serif;font-size:1.3rem}
+.footer-brand-desc{font-size:0.75rem;color:var(--muted);line-height:1.6}
+.footer-social{display:flex;gap:12px;margin-top:4px}
+.footer-social a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--stroke);transition:background 0.15s}
+.footer-social a:hover{background:var(--brand)}
+.footer-social a:hover svg{stroke:#fff}
+.footer-social a svg{width:16px;height:16px;stroke:var(--muted)}
+.footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--stroke);display:flex;justify-content:space-between;align-items:center;font-size:0.7rem;color:var(--muted)}
 .footer-subscribe-row{display:flex;gap:8px}
-.footer-subscribe-row input{flex:1;padding:10px 14px;border:1px solid var(--stroke);font-size:0.82rem;background:var(--bg)}
-.footer-subscribe-row button{padding:10px 20px;background:var(--brand);color:var(--bg);border:none;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer}
-.footer-subscribe-row button:hover{opacity:0.8}
+.footer-subscribe-row input{flex:1;padding:10px 14px;border:1px solid var(--stroke);font-size:0.82rem;background:#fff;border-radius:8px}
+.footer-subscribe-row button{padding:10px 20px;background:var(--brand);color:var(--bg);border:none;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:8px}
 .footer-subscribe-msg{font-size:0.72rem;margin-top:6px;min-height:1em}
+@media(max-width:768px){.footer-inner{grid-template-columns:repeat(2,1fr);gap:24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
 
 /* ── RESPONSIVE ── */
 @media(max-width:1080px){
@@ -814,7 +822,7 @@ ul{list-style:none}
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
       <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">Hao Yun Labs</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Compounds your research<br>can trust.</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Peptides to <em style="font-style:italic">fuel</em> your research.</div>
       <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button onclick="navigate('catalog')" style="padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Shop Now</button>
@@ -1226,27 +1234,49 @@ ul{list-style:none}
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-brand">HAO YUN LABS</div>
-  <div style="display:flex;gap:24px;justify-content:center;margin:12px 0;flex-wrap:wrap">
-    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('faq')">FAQ</a>
-    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('support')">Support</a>
-    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('terms')">Terms</a>
-    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('coa')">Verify Purity</a>
-    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('tracking')">Track Order</a>
-    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" href="https://discord.gg/haoyunlabs" target="_blank">Discord</a>
-  </div>
-  <div class="footer-subscribe">
-    <div class="footer-subscribe-title">Stay Updated — New Products & Exclusive Deals</div>
-    <div class="footer-subscribe-row">
-      <input type="email" id="footer-email" placeholder="Enter your email...">
-      <button onclick="subscribeEmail()">SUBSCRIBE</button>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-col-title">Shop</div>
+      <a onclick="navigate('catalog');setHomeCat('peptides')">Peptides</a>
+      <a onclick="navigate('catalog');setHomeCat('kits')">Kits</a>
+      <a onclick="navigate('catalog');setHomeCat('stacks')">Stacks</a>
+      <a onclick="navigate('catalog');setHomeCat('sprays')">Sprays</a>
+      <a onclick="navigate('catalog');setHomeCat('supplies')">Supplies</a>
     </div>
-    <div class="footer-subscribe-msg" id="footer-sub-msg"></div>
+    <div class="footer-col">
+      <div class="footer-col-title">Support</div>
+      <a onclick="navigate('faq')">FAQ</a>
+      <a onclick="navigate('support')">Contact Us</a>
+      <a onclick="navigate('tracking')">Track Order</a>
+      <a onclick="navigate('coa')">Verify Purity</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Legal</div>
+      <a onclick="navigate('terms')">Terms of Service</a>
+      <a onclick="navigate('terms')">Privacy Policy</a>
+      <a onclick="navigate('terms')">Refund Policy</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Stay Updated</div>
+      <div class="footer-subscribe-row">
+        <input type="email" id="footer-email" placeholder="Your email...">
+        <button onclick="subscribeEmail()">Join</button>
+      </div>
+      <div class="footer-subscribe-msg" id="footer-sub-msg"></div>
+    </div>
+    <div class="footer-brand-col">
+      <div class="footer-brand-name">Hao Yun Labs</div>
+      <div class="footer-brand-desc">Research-grade peptides and supplies. Every compound is HPLC-tested, lot-verified, and ships with a Certificate of Analysis.</div>
+      <div class="footer-social">
+        <a href="https://discord.gg/haoyunlabs" target="_blank" aria-label="Discord"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg></a>
+        <a href="https://twitter.com/haoyunlabs" target="_blank" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg></a>
+        <a href="mailto:support@haoyunlabs.com" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></a>
+      </div>
+    </div>
   </div>
-  <div class="footer-legal">
-    For research use only. Not for human consumption.<br>
-    All products are research-grade compounds intended for laboratory use.<br>
-    &copy; 2026 Hao Yun Labs. All rights reserved.
+  <div class="footer-bottom">
+    <div>For research use only. Not for human consumption. All products are intended for laboratory use.</div>
+    <div>&copy; 2026 Hao Yun Labs. All rights reserved.</div>
   </div>
 </footer>
 
