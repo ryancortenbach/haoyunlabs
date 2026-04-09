@@ -6,6 +6,9 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<script>
+(function(){var B='20260409g';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+</script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.min.css" rel="stylesheet">
@@ -1430,11 +1433,11 @@ function addToCartQty(sku, qty){
   showToast(p ? `${p.name} x${qty} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
   const supplySkus = ['BACSV','SYRSV'];
-  if(!supplySkus.includes(sku) && !cart.has('BACSV') && !cart.has('SYRSV')){
-    const lastUpsell = parseInt(sessionStorage.getItem('hyl_upsell_shown')||'0');
-    if(Date.now() - lastUpsell > 60000){
+  if(!supplySkus.includes(sku)){
+    const shown = sessionStorage.getItem('hyl_upsell_shown');
+    if(!shown){
       setTimeout(()=>{ document.getElementById('upsell-overlay').classList.add('open'); }, 600);
-      sessionStorage.setItem('hyl_upsell_shown', Date.now().toString());
+      sessionStorage.setItem('hyl_upsell_shown','1');
     }
   }
 }
@@ -1448,11 +1451,11 @@ function addToCart(sku){
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   // Show supplies upsell if adding a peptide (not supplies themselves)
   const supplySkus = ['BACSV','SYRSV'];
-  if(!supplySkus.includes(sku) && !cart.has('BACSV') && !cart.has('SYRSV')){
-    const lastUpsell = parseInt(sessionStorage.getItem('hyl_upsell_shown')||'0');
-    if(Date.now() - lastUpsell > 60000){
+  if(!supplySkus.includes(sku)){
+    const shown = sessionStorage.getItem('hyl_upsell_shown');
+    if(!shown){
       setTimeout(()=>{ document.getElementById('upsell-overlay').classList.add('open'); }, 600);
-      sessionStorage.setItem('hyl_upsell_shown', Date.now().toString());
+      sessionStorage.setItem('hyl_upsell_shown','1');
     }
   }
 }
