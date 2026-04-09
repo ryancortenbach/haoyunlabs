@@ -102,7 +102,7 @@ ul{list-style:none}
   border-bottom:1px solid var(--stroke);
   box-shadow:0 1px 3px rgba(0,0,0,0.04);
 }
-.nav-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:80px}
+.nav-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;height:80px}
 .nav-brand{cursor:pointer;justify-self:start}
 .nav-links{display:flex;gap:36px;align-items:center;justify-self:center}
 .nav-links a{font-size:0.88rem;text-transform:uppercase;letter-spacing:0.14em;font-weight:700;cursor:pointer;position:relative;padding:6px 0;transition:all 0.15s ease}
@@ -112,11 +112,11 @@ ul{list-style:none}
 .nav-icons{display:flex;gap:16px;align-items:center;justify-self:end}
 .nav-search-wrap{position:relative}
 .nav-search{
-  width:200px;padding:9px 12px 9px 36px;font-size:0.8rem;
+  width:300px;padding:10px 14px 10px 38px;font-size:0.82rem;
   border:1px solid var(--stroke);background:var(--bg);border-radius:8px;
   font-family:var(--sans);transition:border-color 0.15s,width 0.2s ease;
 }
-.nav-search:focus{border-color:var(--brand);width:260px;outline:none}
+.nav-search:focus{border-color:var(--brand);width:360px;outline:none}
 .nav-search-results{
   position:absolute;top:100%;left:0;right:0;margin-top:4px;
   background:var(--bg);border:1px solid var(--stroke);border-radius:8px;
@@ -495,6 +495,47 @@ ul{list-style:none}
   transition: transform 0.2s;
 }
 .prod-img svg, .prod-img img { transition: transform 0.2s; }
+/* ── PRODUCT DETAIL PAGE ── */
+.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:100px 0 40px;align-items:start}
+.pdp-image{background:#f7f7f7;border-radius:var(--radius);overflow:hidden;border:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;padding:32px;aspect-ratio:1/1}
+.pdp-image img{width:100%;height:100%;object-fit:contain}
+.pdp-info{display:flex;flex-direction:column;gap:12px}
+.pdp-back{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;color:var(--muted);margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
+.pdp-back:hover{color:var(--brand)}
+.pdp-name{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;line-height:1.1}
+.pdp-dose{font-size:1rem;color:var(--muted);font-weight:500}
+.pdp-badges{display:flex;gap:8px;flex-wrap:wrap}
+.pdp-badge{padding:4px 12px;font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--stroke);border-radius:999px}
+.pdp-badge-seller{background:#000;color:#fff;border-color:#000}
+.pdp-badge-purity{background:var(--bg);color:var(--text)}
+.pdp-price-wrap{margin:8px 0}
+.pdp-price-old{font-family:var(--mono);font-size:0.88rem;color:#999;text-decoration:line-through}
+.pdp-price{font-family:var(--mono);font-size:2rem;font-weight:800}
+.pdp-meta{border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden}
+.pdp-meta-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;font-size:0.82rem;border-bottom:1px solid var(--stroke)}
+.pdp-meta-row:last-child{border-bottom:none}
+.pdp-meta-label{font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-size:0.75rem}
+.pdp-meta-value{font-family:var(--mono);font-size:0.82rem}
+.pdp-status{color:#16a34a;font-weight:700}
+.pdp-qty-row{display:flex;gap:12px;align-items:center;margin-top:8px}
+.pdp-qty{display:flex;align-items:center;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden}
+.pdp-qty button{width:44px;height:44px;border:none;background:var(--bg);font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.1s}
+.pdp-qty button:hover{background:#f0f0f0}
+.pdp-qty span{width:44px;text-align:center;font-family:var(--mono);font-size:0.88rem;font-weight:700}
+.pdp-add-btn{flex:1;padding:14px;background:var(--brand);color:var(--bg);border:none;font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:opacity 0.15s}
+.pdp-add-btn:hover{opacity:0.8}
+.pdp-details-toggle{font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--text)}
+.pdp-details-content{font-size:0.82rem;line-height:1.7;color:var(--muted);margin-top:8px;display:none}
+.pdp-details-content.open{display:block}
+.pdp-details-content strong{color:var(--text)}
+.pdp-commonly{padding:40px 0}
+.pdp-commonly h3{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.pdp-commonly h2{font-size:1.4rem;font-weight:800;margin-bottom:20px}
+@media(max-width:820px){
+  .pdp-layout{grid-template-columns:1fr;gap:24px}
+  .pdp-image{max-width:500px;margin:0 auto}
+}
+
 .prod-img-label {
   font-family: var(--mono);
   font-size: 0.65rem;
@@ -530,16 +571,12 @@ ul{list-style:none}
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-brand" onclick="navigate('home')"><img src="hylcompany.png" alt="Hao Yun Labs" style="height:44px;width:auto"></div>
-    <div class="nav-links">
-      <a onclick="navigate('home')">Home</a>
-      <a onclick="navigate('catalog')">Shop</a>
-    </div>
-    <div class="nav-icons">
-      <div class="nav-search-wrap">
+    <div class="nav-search-wrap" style="justify-self:center">
         <svg class="nav-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:18px;height:18px;position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.4;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
         <input class="nav-search" type="text" id="nav-search" placeholder="Search products..." oninput="navSearch(this.value)" onfocus="navSearchFocus(true)" onblur="setTimeout(()=>navSearchFocus(false),200)">
         <div class="nav-search-results" id="nav-search-results"></div>
       </div>
+    <div class="nav-icons">
       <div class="nav-icon nav-cart" onclick="navigate('order')">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
         <span class="nav-cart-badge" id="cart-badge"></span>
