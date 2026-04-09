@@ -333,11 +333,65 @@ ul{list-style:none}
 
 /* ── SKELETON LOADER ── */
 .skeleton-card{
-  border:1px solid var(--stroke);padding:16px;min-height:200px;
-  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
-  background-size:200% 100%;animation:shimmer 1.5s infinite;
+  border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;min-height:320px;
+  background:var(--bg);position:relative;
 }
+.skeleton-card::before{content:'';display:block;aspect-ratio:1/1;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skeleton-card::after{content:'';display:block;margin:16px;height:14px;width:60%;border-radius:4px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── QUICK VIEW OVERLAY ── */
+.product-card .prod-img{position:relative}
+.quick-view-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
+.product-card:hover .quick-view-overlay{opacity:1;pointer-events:auto}
+.quick-view-btn{background:#fff;color:#000;border:none;padding:10px 20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;border-radius:4px}
+.quick-view-btn:hover{background:#f0f0f0}
+
+/* ── BUTTON SPINNER ── */
+@keyframes btnSpin{to{transform:rotate(360deg)}}
+.btn-loading{pointer-events:none;opacity:0.7}
+.btn-loading .crypto-btn-text::before,.btn-loading::before{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:btnSpin 0.6s linear infinite;margin-right:8px;vertical-align:middle}
+
+/* ── PDP TABS ── */
+.pdp-tabs{display:flex;gap:0;border-bottom:2px solid var(--stroke);margin-top:16px}
+.pdp-tab{padding:10px 20px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;color:var(--muted);transition:all 0.2s}
+.pdp-tab:hover{color:var(--brand)}
+.pdp-tab.active{color:var(--brand);border-bottom-color:var(--brand)}
+.pdp-tab-content{display:none;padding:16px 0;font-size:0.82rem;line-height:1.6;color:var(--muted)}
+.pdp-tab-content.active{display:block}
+
+/* ── CHECKOUT PROGRESS ── */
+.checkout-progress{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:24px;padding:0 20px}
+.checkout-step{display:flex;align-items:center;gap:8px;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)}
+.checkout-step.active{color:var(--brand)}
+.checkout-step.done{color:#16a34a}
+.checkout-step-num{width:24px;height:24px;border-radius:50%;border:2px solid var(--stroke);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700}
+.checkout-step.active .checkout-step-num{border-color:var(--brand);background:var(--brand);color:#fff}
+.checkout-step.done .checkout-step-num{border-color:#16a34a;background:#16a34a;color:#fff}
+.checkout-step-line{width:32px;height:2px;background:var(--stroke);margin:0 4px}
+.checkout-step-line.done{background:#16a34a}
+
+/* ── TOOLTIPS ── */
+.term-tip{position:relative;cursor:help;border-bottom:1px dotted var(--muted);display:inline}
+.term-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:6px 10px;border-radius:4px;font-size:0.68rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;font-weight:400;letter-spacing:0}
+.term-tip:hover::after{opacity:1}
+
+/* ── ORDER TRACKING TIMELINE ── */
+.tracking-timeline{display:flex;justify-content:space-between;margin:24px 0;position:relative}
+.tracking-timeline::before{content:'';position:absolute;top:14px;left:12%;right:12%;height:2px;background:var(--stroke)}
+.tracking-step{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;flex:1}
+.tracking-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--stroke);background:#fff;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;margin-bottom:6px}
+.tracking-step.done .tracking-dot{background:#16a34a;border-color:#16a34a;color:#fff}
+.tracking-step.active .tracking-dot{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 0 0 4px rgba(0,0,0,0.08)}
+.tracking-label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted)}
+.tracking-step.done .tracking-label,.tracking-step.active .tracking-label{color:var(--brand)}
+
+/* ── DISCREET PACKAGING ── */
+.discreet-toggle{display:flex;align-items:center;gap:10px;margin:12px 0;padding:10px 14px;border:1px solid var(--stroke);border-radius:var(--radius);cursor:pointer;font-size:0.78rem}
+.discreet-toggle:hover{border-color:var(--muted)}
+.discreet-check{width:18px;height:18px;border:2px solid var(--stroke);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.discreet-check.checked{background:var(--brand);border-color:var(--brand)}
+.discreet-check.checked::after{content:'\2713';color:#fff;font-size:0.7rem;font-weight:700}
 
 /* ── SHOW MORE ── */
 .show-more-wrap{text-align:center;padding:0 0 48px}
@@ -403,6 +457,13 @@ ul{list-style:none}
 .discount-msg{font-size:0.72rem;margin-bottom:12px}
 .discount-msg.success{color:#16a34a}
 .discount-msg.error{color:#dc2626}
+.affiliate-toggle{margin:-8px 0 12px;font-size:0.72rem}
+.affiliate-toggle a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.affiliate-toggle a:hover{color:var(--brand)}
+.affiliate-row{display:flex;gap:8px;margin-bottom:8px}
+.affiliate-msg{font-size:0.72rem;margin-bottom:12px}
+.affiliate-msg.success{color:#16a34a}
+.affiliate-msg.error{color:#dc2626}
 
 /* ── PAYMENT METHODS ── */
 .pay-methods{display:flex;flex-direction:column;gap:8px;margin:20px 0 16px}
@@ -727,6 +788,15 @@ ul{list-style:none}
 <!-- ═══════════════ SCREEN: ORDER / CHECKOUT ═══════════════ -->
 <div class="screen" id="screen-order">
   <div class="container">
+    <div class="checkout-progress" id="checkout-progress">
+      <div class="checkout-step done"><span class="checkout-step-num">&#10003;</span><span>Cart</span></div>
+      <div class="checkout-step-line done"></div>
+      <div class="checkout-step active"><span class="checkout-step-num">2</span><span>Shipping</span></div>
+      <div class="checkout-step-line"></div>
+      <div class="checkout-step"><span class="checkout-step-num">3</span><span>Payment</span></div>
+      <div class="checkout-step-line"></div>
+      <div class="checkout-step"><span class="checkout-step-num">4</span><span>Confirm</span></div>
+    </div>
     <div class="hero" style="padding-bottom:16px">
       <div class="hero-title" style="font-size:2rem">CHECKOUT</div>
       <div class="hero-tag">Complete your order</div>
@@ -790,6 +860,10 @@ ul{list-style:none}
             </div>
           </div>
         </form>
+        <div class="discreet-toggle" id="discreet-toggle" onclick="toggleDiscreet()">
+          <div class="discreet-check" id="discreet-check"></div>
+          <div>Ship in plain packaging <span style="color:var(--muted);font-size:0.7rem">(no branding on box)</span></div>
+        </div>
 
         <div style="margin-top:32px">
           <div class="checkout-section-title">Order Summary</div>
@@ -813,6 +887,14 @@ ul{list-style:none}
             <button class="btn-discount" onclick="applyDiscount()">APPLY</button>
           </div>
           <div class="discount-msg" id="discount-msg"></div>
+          <div class="affiliate-toggle" id="affiliate-toggle">
+            <a href="#" onclick="event.preventDefault();document.getElementById('affiliate-row').style.display='flex';this.parentElement.style.display='none'">Are you an affiliate? Enter your code</a>
+          </div>
+          <div class="affiliate-row" id="affiliate-row" style="display:none">
+            <input class="discount-input" type="text" placeholder="AFFILIATE CODE" id="affiliate-input">
+            <button class="btn-discount" onclick="applyAffiliate()">APPLY</button>
+          </div>
+          <div class="affiliate-msg" id="affiliate-msg"></div>
 
           <div class="pay-method-title">Payment Method</div>
           <div class="pay-methods" id="pay-methods"></div>
@@ -921,6 +1003,21 @@ ul{list-style:none}
   </div>
 </div>
 
+<!-- ORDER TRACKING -->
+<div class="screen" id="screen-tracking">
+  <div class="container" style="padding-top:100px;max-width:600px;margin:0 auto">
+    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Track Your Order</h1>
+    <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Enter your order number to check the status.</p>
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px">
+      <div style="display:flex;gap:8px">
+        <input class="form-input" type="text" id="tracking-input" placeholder="e.g. HYL-M1234A-BC56" style="text-transform:uppercase;flex:1">
+        <button class="btn-add" style="padding:12px 24px;border-radius:var(--radius);white-space:nowrap" onclick="lookupOrder()">TRACK</button>
+      </div>
+      <div id="tracking-result" style="margin-top:20px"></div>
+    </div>
+  </div>
+</div>
+
 <!-- EMAIL CAPTURE POPUP -->
 <div id="email-popup" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:var(--radius);padding:36px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
@@ -941,6 +1038,7 @@ ul{list-style:none}
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('support')">Support</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('terms')">Terms</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('coa')">Verify Purity</a>
+    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('tracking')">Track Order</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" href="https://discord.gg/haoyunlabs" target="_blank">Discord</a>
   </div>
   <div class="footer-subscribe">
@@ -1172,6 +1270,7 @@ function getProductImageHTML(p) {
   if (imgPath) {
     return `<div class="prod-img">
       <img src="${imgPath}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;">
+      <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
   // Fallback SVG for any unmapped products
@@ -1192,6 +1291,7 @@ function getProductImageHTML(p) {
       <text x="60" y="112" text-anchor="middle" font-size="4.5" fill="rgba(255,255,255,0.5)" font-family="Helvetica,Arial,sans-serif">HAO YUN LABS</text>
       <text x="60" y="120" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="Helvetica,Arial,sans-serif">HYL</text>
     </svg>
+    <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
   </div>`;
 }
 
@@ -1286,7 +1386,7 @@ function navigate(screen){
 
 function handleRoute(){
   const hash = window.location.hash.replace('#','') || 'home';
-  const screens = ['home','catalog','product','order','payment-confirmed','faq','support','terms','coa'];
+  const screens = ['home','catalog','product','order','payment-confirmed','faq','support','terms','coa','tracking'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
     if(el) el.classList.toggle('active', s===hash);
@@ -1312,9 +1412,9 @@ window.addEventListener('hashchange', handleRoute);
 function cardHTML(p){
   const detailId = 'det-'+p.sku;
   const descText = p.description || '';
-  const specs = [`Purity: >99%`,`Form: Lyophilized Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
+  const specs = [`Purity: >99% <span class="term-tip" data-tip="High Performance Liquid Chromatography — gold standard purity test">(HPLC)</span>`,`Form: <span class="term-tip" data-tip="Freeze-dried powder for maximum stability and shelf life">Lyophilized</span> Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
   if(p.cat==='sprays') specs[1] = 'Form: Nasal Spray (30ml)';
-  if(p.cat==='bundles') specs.push('Includes: BAC water where noted');
+  if(p.cat==='bundles') specs.push('Includes: <span class="term-tip" data-tip="Bacteriostatic water — sterile solvent for reconstitution">BAC water</span> where noted');
   const detailHTML = (descText ? `<div style="margin-bottom:6px;font-size:0.75rem;color:var(--muted);line-height:1.5">${descText}</div>` : '') + specs.map(s=>`<div>${s}</div>`).join('');
 
   const purityMap = {RT10SV:'99.25',TSM2SV:'99.64',XA5SV:'99.22',CU50SV:'99.87'};
@@ -1438,10 +1538,20 @@ function openProduct(sku){
         </div>
         <button class="pdp-add-btn" onclick="for(let i=0;i<pdpQty;i++) addToCart('${p.sku}')">ADD TO CART</button>
       </div>
-      <div class="pdp-details-toggle" onclick="document.getElementById('pdp-details').classList.toggle('open');this.textContent=document.getElementById('pdp-details').classList.contains('open')?'Hide Details &#8593;':'More Details &#8595;'">More Details &#8595;</div>
-      <div class="pdp-details-content" id="pdp-details">
-        <p><strong>Description:</strong> ${desc}</p>
-        <p style="margin-top:8px;white-space:pre-line">${comp.replace(/\\n/g,'\n')}</p>
+      <div class="pdp-tabs">
+        <div class="pdp-tab active" onclick="switchPdpTab('desc',this)">Description</div>
+        <div class="pdp-tab" onclick="switchPdpTab('specs',this)">Specifications</div>
+        <div class="pdp-tab" onclick="switchPdpTab('shipping',this)">Shipping</div>
+      </div>
+      <div class="pdp-tab-content active" id="pdp-tab-desc">
+        <p>${desc}</p>
+      </div>
+      <div class="pdp-tab-content" id="pdp-tab-specs">
+        <p style="white-space:pre-line">${comp.replace(/\\n/g,'\n')}</p>
+      </div>
+      <div class="pdp-tab-content" id="pdp-tab-shipping">
+        <p><span class="term-tip" data-tip="Freeze-dried for stability during transport">Lyophilized</span> products ship cold with ice packs. Orders over $200 ship free. Standard shipping: $15 flat rate. Ships within 1-3 business days via USPS Priority.</p>
+        <p style="margin-top:8px">All packages include <span class="term-tip" data-tip="Certificate showing purity test results">COA documentation</span> and are sealed for integrity.</p>
       </div>
     </div>
   `;
@@ -1453,6 +1563,13 @@ function openProduct(sku){
   ` : '';
 
   navigate('product');
+}
+
+function switchPdpTab(tab, el){
+  document.querySelectorAll('.pdp-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pdp-tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pdp-tab-'+tab).classList.add('active');
 }
 
 function setHomeCat(cat){
@@ -1600,6 +1717,25 @@ async function applyDiscount(){
     else{discountCode=null;discountPct=0;msg.textContent='Invalid discount code.';msg.className='discount-msg error';}
   }
   renderReceipt();
+}
+
+async function applyAffiliate(){
+  const code = document.getElementById('affiliate-input').value.trim().toUpperCase();
+  const msg = document.getElementById('affiliate-msg');
+  if(!code){msg.textContent='';return;}
+  try {
+    const {data,error} = await sb.from('affiliates').select('code,name').eq('code',code).single();
+    if(error || !data){
+      window._affiliateCode=null;
+      msg.textContent='Invalid affiliate code.';msg.className='affiliate-msg error';
+    } else {
+      window._affiliateCode=data.code;
+      msg.textContent=`Affiliate ${data.name||data.code} linked!`;msg.className='affiliate-msg success';
+    }
+  } catch(e){
+    window._affiliateCode=code;
+    msg.textContent=`Affiliate code ${code} applied.`;msg.className='affiliate-msg success';
+  }
 }
 
 /* ── ORDER PRODUCT SEARCH (inline add) ── */
@@ -1877,7 +2013,8 @@ async function submitOrder(){
 
   const payBtn = document.getElementById('btn-pay');
   payBtn.disabled = true;
-  payBtn.textContent = 'PROCESSING...';
+  payBtn.classList.add('btn-loading');
+  payBtn.querySelector('.crypto-btn-text').textContent = 'PROCESSING...';
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
@@ -1918,6 +2055,7 @@ async function submitOrder(){
           items, subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
         },
         affiliateCode: window._affiliateCode || null,
+        discreetPackaging: discreetPackaging,
       })
     });
     const data = await resp.json();
@@ -1937,16 +2075,16 @@ async function submitOrder(){
 
       showCryptoPayment(data);
       cart.clear(); saveCart(); discountCode=null; discountPct=0;
-      payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
+      payBtn.disabled=false; payBtn.classList.remove('btn-loading'); payBtn.querySelector('.crypto-btn-text').textContent='COMPLETE ORDER';
       return;
     } else {
       showToast(data.error || 'Failed to create crypto invoice');
-      payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
+      payBtn.disabled=false; payBtn.classList.remove('btn-loading'); payBtn.querySelector('.crypto-btn-text').textContent='COMPLETE ORDER';
       return;
     }
   } catch(e){
     showToast('Server error — please try again');
-    payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
+    payBtn.disabled=false; payBtn.classList.remove('btn-loading'); payBtn.querySelector('.crypto-btn-text').textContent='COMPLETE ORDER';
     return;
   }
 
@@ -1990,7 +2128,7 @@ async function submitOrder(){
   });
 
   cart.clear(); saveCart(); discountCode=null; discountPct=0;
-  payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
+  payBtn.disabled=false; payBtn.classList.remove('btn-loading'); payBtn.querySelector('.crypto-btn-text').textContent='COMPLETE ORDER';
   navigate('payment-confirmed');
 }
 
@@ -2114,6 +2252,61 @@ async function subscribeEmail(){
   }
 }
 
+/* ── ORDER TRACKING ── */
+async function lookupOrder(){
+  const num = document.getElementById('tracking-input').value.trim().toUpperCase();
+  const el = document.getElementById('tracking-result');
+  if(!num){ showToast('Enter an order number','error'); return; }
+  try {
+    const {data,error} = await sb.from('orders').select('order_number,status,created_at,total,items').eq('order_number',num).maybeSingle();
+    if(error || !data){
+      el.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:0.85rem">No order found: ${num}</div>`;
+      return;
+    }
+    const steps = ['pending','paid','shipped','delivered'];
+    const idx = Math.max(0, steps.indexOf(data.status));
+    const timeline = steps.map((s,i) => {
+      const cls = i < idx ? 'done' : i === idx ? 'active' : '';
+      const icon = i < idx ? '&#10003;' : (i+1);
+      return `<div class="tracking-step ${cls}"><div class="tracking-dot">${icon}</div><div class="tracking-label">${s}</div></div>`;
+    }).join('');
+    el.innerHTML = `
+      <div style="border:1px solid var(--stroke);border-radius:var(--radius);padding:20px;margin-top:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+          <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:var(--muted)">Order</div><div style="font-family:var(--mono);font-weight:700;margin-top:2px">${data.order_number}</div></div>
+          <div style="text-align:right"><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:var(--muted)">Total</div><div style="font-weight:700;margin-top:2px">$${parseFloat(data.total).toFixed(2)}</div></div>
+        </div>
+        <div class="tracking-timeline">${timeline}</div>
+        <div style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:8px">Placed: ${new Date(data.created_at).toLocaleDateString()}</div>
+      </div>`;
+  } catch(e){ el.innerHTML = '<div style="color:#dc2626;font-size:0.85rem">Lookup failed. Try again.</div>'; }
+}
+
+/* ── DISCREET PACKAGING ── */
+let discreetPackaging = false;
+function toggleDiscreet(){
+  discreetPackaging = !discreetPackaging;
+  const check = document.getElementById('discreet-check');
+  check.classList.toggle('checked', discreetPackaging);
+}
+
+/* ── INTERNATIONAL SHIPPING NOTICE ── */
+function checkInternational(){
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if(tz && !tz.startsWith('America/') && !tz.startsWith('US/')){
+      const modal = document.createElement('div');
+      modal.style.cssText='position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center';
+      modal.innerHTML=`<div style="background:#fff;border-radius:var(--radius);padding:32px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+        <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">International Notice</div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:20px">International orders are limited to <strong>kit products only</strong>. Individual vials cannot ship outside the US due to customs restrictions.</div>
+        <button onclick="this.closest('div[style]').parentElement.remove()" style="padding:12px 28px;background:var(--brand);color:var(--bg);border:none;border-radius:var(--radius);font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">UNDERSTOOD</button>
+      </div>`;
+      document.body.appendChild(modal);
+    }
+  } catch(e){}
+}
+
 /* ═════════════════════════════════════════════════════
    LOAD PRODUCTS FROM SUPABASE
    ═════════════════════════════════════════════════════ */
@@ -2165,6 +2358,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   loadCart();
   updateBadge();
   buildMarquee();
+  checkInternational();
 
   // Nav: shrink on scroll
   const nav = document.querySelector('.nav');
