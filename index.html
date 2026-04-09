@@ -17,7 +17,7 @@
   --mono:'Inter',sans-serif;
   --sans:'Instrument Sans','Helvetica Neue',sans-serif;
   --display:'Oswald','Helvetica Neue',sans-serif;
-  --transition:0.15s ease;
+  --transition:0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -111,7 +111,7 @@ ul{list-style:none}
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--stroke);
-  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+  transition:all 0.7s cubic-bezier(0.34,1.56,0.64,1);
 }
 .nav.shrunk{
   top:8px;left:0;right:0;
@@ -221,7 +221,7 @@ ul{list-style:none}
 }
 .banner-track{
   display:flex;width:max-content;
-  animation:banner-scroll 25s linear infinite;
+  animation:banner-scroll 60s linear infinite;
 }
 .banner-track span{
   white-space:nowrap;padding:8px 48px;
@@ -233,24 +233,24 @@ ul{list-style:none}
 .container{max-width:1200px;margin:0 auto;padding:0 24px}
 
 /* ── SCREEN TRANSITIONS ── */
-.screen{display:none;opacity:0;transition:opacity 0.2s ease}
+.screen{display:none;opacity:0;transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1)}
 .screen.active{display:block;opacity:1}
 
 /* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
 @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes dividerGrow{from{width:0}to{width:60px}}
-.anim-fade-up{animation:fadeUp 0.6s ease forwards;opacity:0}
+.anim-fade-up{animation:fadeUp 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;opacity:0}
 .anim-fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
 .anim-scale-in{animation:scaleIn 0.5s ease forwards;opacity:0}
 .anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}
 .anim-d4{animation-delay:0.4s}.anim-d5{animation-delay:0.5s}.anim-d6{animation-delay:0.6s}
 
 /* ── SCROLL REVEAL ── */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal{opacity:0;transform:translateY(24px) scale(0.97);transition:opacity 0.8s cubic-bezier(0.34,1.56,0.64,1),transform 0.8s cubic-bezier(0.34,1.56,0.64,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* ── HERO ── */
@@ -266,7 +266,7 @@ ul{list-style:none}
 .hero-divider{width:60px;height:2px;background:var(--brand);margin:24px auto 0;animation:dividerGrow 0.8s ease 0.5s forwards;width:0}
 
 /* ── PRODUCT CARD ANIMATIONS ── */
-.product-card{animation:fadeUp 0.4s ease forwards;opacity:0}
+.product-card{animation:fadeUp 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;opacity:0}
 .product-card:nth-child(1){animation-delay:0.05s}
 .product-card:nth-child(2){animation-delay:0.1s}
 .product-card:nth-child(3){animation-delay:0.15s}
@@ -275,30 +275,33 @@ ul{list-style:none}
 /* ── TOOLBAR: CATEGORIES + SEARCH ── */
 .toolbar{padding:24px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .cat-tabs{
-  position:relative;display:flex;border-radius:0.5rem;background-color:#eee;
-  box-shadow:0 0 0 1px rgba(0,0,0,0.06);padding:0.25rem;font-size:0.78rem;
+  display:flex;gap:8px;font-size:0.78rem;position:relative;
 }
-.cat-tabs-slider{
-  position:absolute;top:0.25rem;left:0.25rem;height:calc(100% - 0.5rem);
-  background:#fff;border-radius:0.4rem;box-shadow:0 1px 3px rgba(0,0,0,0.1);
-  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), width 0.3s cubic-bezier(0.4,0,0.2,1);
-  z-index:0;
-}
+.cat-tabs-slider{display:none}
 .cat-tab{
-  flex:1 1 auto;text-align:center;white-space:nowrap;position:relative;z-index:1;
-  padding:8px 16px;font-size:0.75rem;letter-spacing:0.1em;
+  text-align:center;white-space:nowrap;position:relative;z-index:1;
+  padding:8px 18px;font-size:0.72rem;letter-spacing:0.1em;
   text-transform:uppercase;font-weight:600;cursor:pointer;
-  border:none;background:transparent;color:rgba(51,65,85,0.6);
-  border-radius:0.4rem;transition:color 0.2s ease, font-weight 0.2s ease;
+  border:1px solid var(--stroke);background:var(--bg);color:var(--muted);
+  border-radius:999px;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
 }
-.cat-tab:hover{color:rgba(51,65,85,1)}
-.cat-tab.active{font-weight:800;color:var(--brand)}
+.cat-tab:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
+.cat-tab.active{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:800;transform:scale(1.02)}
 .cat-tab .tab-count{font-family:var(--mono);font-size:0.65rem;margin-left:4px;opacity:0.7}
-.search-sort{display:flex;gap:8px;align-items:center}
-.search-input{
-  padding:8px 14px;font-size:0.82rem;border:1px solid var(--stroke);width:200px;
-  background:var(--bg);font-family:var(--sans);
-}
+
+/* ── DYNAMIC PRICING TOGGLE ── */
+.pricing-toggle{display:flex;align-items:center;gap:8px;font-size:0.72rem;font-weight:600;color:var(--muted);letter-spacing:0.04em}
+.pricing-switch{width:36px;height:20px;background:var(--stroke);border-radius:999px;position:relative;cursor:pointer;transition:background 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.pricing-switch::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.15);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.pricing-switch.on{background:var(--brand)}
+.pricing-switch.on::after{transform:translateX(16px)}
+.search-sort{display:flex;gap:10px;align-items:center}
+.toolbar-search-wrap{display:flex;align-items:center;position:relative}
+.toolbar-search-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--stroke);background:var(--bg);cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.toolbar-search-btn:hover{border-color:var(--brand);background:#f5f5f5}
+.toolbar-search-input{width:0;padding:0;border:none;font-size:0.78rem;font-family:var(--sans);overflow:hidden;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.toolbar-search-wrap.open .toolbar-search-input{width:160px;padding:7px 12px;border:1px solid var(--stroke);border-radius:999px;margin-left:6px}
+.toolbar-search-wrap.open .toolbar-search-input:focus{border-color:var(--brand);outline:none}
 .sort-select{
   padding:8px 12px;font-size:0.78rem;border:1px solid var(--stroke);
   background:var(--bg);cursor:pointer;text-transform:uppercase;letter-spacing:0.05em;
@@ -316,7 +319,7 @@ ul{list-style:none}
 .product-card{
   border:1px solid var(--stroke);background:var(--bg);
   border-radius:var(--radius);overflow:hidden;
-  transition:transform var(--transition),box-shadow var(--transition);
+  transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.5s cubic-bezier(0.34,1.56,0.64,1);
   display:flex;flex-direction:column;
 }
 .product-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08)}
@@ -408,6 +411,32 @@ ul{list-style:none}
 .discreet-check{width:18px;height:18px;border:2px solid var(--stroke);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
 .discreet-check.checked{background:var(--brand);border-color:var(--brand)}
 .discreet-check.checked::after{content:'\2713';color:#fff;font-size:0.7rem;font-weight:700}
+
+/* ── SUPPLIES UPSELL POPUP ── */
+.upsell-overlay{position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:flex-end;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1)}
+.upsell-overlay.open{opacity:1;pointer-events:auto}
+.upsell-card{background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;max-width:400px;width:100%;transform:translateY(30px) scale(0.95);transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.upsell-overlay.open .upsell-card{transform:translateY(0) scale(1)}
+.upsell-badge{display:inline-block;padding:4px 10px;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px;margin-bottom:12px}
+.upsell-title{font-family:var(--display);font-size:1.3rem;font-weight:800;margin-bottom:6px}
+.upsell-desc{font-size:0.78rem;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:20px}
+.upsell-items{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px;margin-bottom:20px}
+.upsell-items-title{font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px}
+.upsell-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);cursor:pointer}
+.upsell-item:first-child{border-top:none;padding-top:0}
+.upsell-check{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.upsell-check.checked{background:#fff;border-color:#fff}
+.upsell-check.checked::after{content:'\2713';color:#1a1a1a;font-size:0.7rem;font-weight:800}
+.upsell-item-name{font-size:0.82rem;font-weight:700}
+.upsell-item-detail{font-size:0.68rem;color:rgba(255,255,255,0.5)}
+.upsell-item-price{margin-left:auto;font-family:var(--mono);font-size:0.82rem;font-weight:700;flex-shrink:0}
+.upsell-actions{display:flex;flex-wrap:wrap;gap:8px}
+.upsell-btn{flex:1;padding:12px 16px;border:1px solid rgba(255,255,255,0.15);border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;text-align:center;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.upsell-btn:hover{background:rgba(255,255,255,0.15);transform:translateY(-1px)}
+.upsell-btn.primary{background:#fff;color:#1a1a1a;border-color:#fff}
+.upsell-btn.primary:hover{background:#eee}
+.upsell-skip{display:block;text-align:center;margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.upsell-skip:hover{color:rgba(255,255,255,0.7)}
 
 /* ── SHOW MORE ── */
 .show-more-wrap{text-align:center;padding:0 0 48px}
@@ -748,7 +777,16 @@ ul{list-style:none}
     <div class="toolbar">
       <div class="cat-tabs" id="home-cat-tabs"></div>
       <div class="search-sort">
-        <input class="search-input" type="text" placeholder="SEARCH..." id="home-search" oninput="renderHome()">
+        <div class="pricing-toggle">
+          <span>Dynamic Pricing</span>
+          <div class="pricing-switch" id="pricing-switch" onclick="toggleDynamicPricing()"></div>
+        </div>
+        <div class="toolbar-search-wrap" id="home-search-wrap">
+          <button class="toolbar-search-btn" onclick="toggleToolbarSearch('home-search-wrap','home-search')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          </button>
+          <input class="toolbar-search-input" type="text" placeholder="Search..." id="home-search" oninput="renderHome()">
+        </div>
         <select class="sort-select" id="home-sort" onchange="renderHome()">
           <option value="featured">FEATURED</option>
           <option value="low">PRICE LOW &rarr; HIGH</option>
@@ -774,7 +812,12 @@ ul{list-style:none}
     <div class="toolbar">
       <div class="cat-tabs" id="cat-cat-tabs"></div>
       <div class="search-sort">
-        <input class="search-input" type="text" placeholder="SEARCH..." id="cat-search" oninput="renderCatalog()">
+        <div class="toolbar-search-wrap" id="cat-search-wrap">
+          <button class="toolbar-search-btn" onclick="toggleToolbarSearch('cat-search-wrap','cat-search')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          </button>
+          <input class="toolbar-search-input" type="text" placeholder="Search..." id="cat-search" oninput="renderCatalog()">
+        </div>
         <select class="sort-select" id="cat-sort" onchange="renderCatalog()">
           <option value="featured">FEATURED</option>
           <option value="low">PRICE LOW &rarr; HIGH</option>
@@ -1037,6 +1080,35 @@ ul{list-style:none}
       <input type="email" id="popup-email" placeholder="Enter your email..." style="flex:1;padding:10px 12px;border:1px solid var(--stroke);border-radius:6px;font-size:0.82rem">
       <button onclick="submitPopupEmail()" style="padding:10px 16px;background:var(--brand);color:var(--bg);border:none;border-radius:6px;font-size:0.72rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap">GET CODE</button>
     </div>
+  </div>
+</div>
+
+<!-- SUPPLIES UPSELL -->
+<div class="upsell-overlay" id="upsell-overlay">
+  <div class="upsell-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div class="upsell-badge">Research Supplies</div>
+      <span onclick="closeUpsell()" style="cursor:pointer;font-size:1.2rem;opacity:0.4;line-height:1">&times;</span>
+    </div>
+    <div class="upsell-title">Add needles, swabs, or BAC.</div>
+    <div class="upsell-desc">Add the prep supplies you need now, then keep browsing.</div>
+    <div class="upsell-items">
+      <div class="upsell-items-title">Quick Add-ons</div>
+      <div class="upsell-item" onclick="toggleUpsellItem(this,'SYRSV')">
+        <div class="upsell-check" id="upsell-check-SYRSV"></div>
+        <div><div class="upsell-item-name">Insulin Syringes (100pk)</div><div class="upsell-item-detail">29G x 1/2" needles</div></div>
+        <div class="upsell-item-price">$19.99</div>
+      </div>
+      <div class="upsell-item" onclick="toggleUpsellItem(this,'BACSV')">
+        <div class="upsell-check" id="upsell-check-BACSV"></div>
+        <div><div class="upsell-item-name">BAC Water 30ml</div><div class="upsell-item-detail">Bacteriostatic water for reconstitution</div></div>
+        <div class="upsell-item-price">$11.99</div>
+      </div>
+    </div>
+    <div class="upsell-actions">
+      <button class="upsell-btn primary" onclick="addUpsellItems()">Add selected items</button>
+    </div>
+    <span class="upsell-skip" onclick="closeUpsell()">No thanks</span>
   </div>
 </div>
 
@@ -1369,9 +1441,36 @@ function addToCart(sku){
   else cart.set(sku, 1);
   saveCart();
   const p = getProduct(sku);
-  showToast(p ? `${p.name} added to cart — $${p.price.toFixed(2)}` : 'Added to cart');
+  showToast(p ? `${p.name} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
+  // Show supplies upsell if adding a peptide (not supplies themselves)
+  const supplySkus = ['BACSV','SYRSV'];
+  if(!supplySkus.includes(sku) && !cart.has('BACSV') && !cart.has('SYRSV')){
+    const lastUpsell = parseInt(sessionStorage.getItem('hyl_upsell_shown')||'0');
+    if(Date.now() - lastUpsell > 60000){
+      setTimeout(()=>{ document.getElementById('upsell-overlay').classList.add('open'); }, 600);
+      sessionStorage.setItem('hyl_upsell_shown', Date.now().toString());
+    }
+  }
 }
+/* ── SUPPLIES UPSELL ── */
+const _upsellSelected = new Set();
+function toggleUpsellItem(el, sku){
+  const check = document.getElementById('upsell-check-'+sku);
+  if(_upsellSelected.has(sku)){ _upsellSelected.delete(sku); check.classList.remove('checked'); }
+  else { _upsellSelected.add(sku); check.classList.add('checked'); }
+}
+function addUpsellItems(){
+  _upsellSelected.forEach(sku=>{ addToCart(sku); });
+  if(_upsellSelected.size > 0) showToast('Supplies added to cart');
+  closeUpsell();
+}
+function closeUpsell(){
+  document.getElementById('upsell-overlay').classList.remove('open');
+  _upsellSelected.clear();
+  document.querySelectorAll('.upsell-check').forEach(c=>c.classList.remove('checked'));
+}
+
 function removeFromCart(sku){
   cart.delete(sku);
   saveCart();
@@ -1853,6 +1952,20 @@ function selectCrypto(currency, ev){
 }
 
 /* ── NAV SEARCH ── */
+function toggleToolbarSearch(wrapId, inputId){
+  const wrap = document.getElementById(wrapId);
+  wrap.classList.toggle('open');
+  if(wrap.classList.contains('open')) document.getElementById(inputId).focus();
+  else { document.getElementById(inputId).value=''; renderHome(); }
+}
+
+let dynamicPricing = false;
+function toggleDynamicPricing(){
+  dynamicPricing = !dynamicPricing;
+  document.getElementById('pricing-switch').classList.toggle('on', dynamicPricing);
+  renderHome();
+}
+
 function toggleNavSearch(){
   const bar = document.getElementById('nav-search-bar');
   bar.classList.toggle('open');
