@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410x';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410y';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -394,7 +394,7 @@ ul{list-style:none}
 }
 
 /* ── COLOURFUL FLIP WORDS ── */
-.hero-colourful{display:inline;position:relative}
+.hero-colourful{display:inline-block;overflow:hidden;vertical-align:bottom;transition:width 0.6s cubic-bezier(0.22,1,0.36,1);white-space:nowrap}
 .hero-colourful .hc-char{
   display:inline-block;
   transition:color 0.5s ease,transform 0.4s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;
@@ -1414,6 +1414,27 @@ const CATALOG_INDIVIDUAL = [
   { sku:"HCG5SV", name:"HCG 5000iu", price:34.99, description:"Human chorionic gonadotropin. Studied for LH receptor activation and fertility research." },
   { sku:"AOD3SV", name:"AOD-9604 5mg", price:34.99, description:"Modified GH fragment (176-191). Studied for lipolysis and cartilage repair." },
   { sku:"FOX5SV", name:"5-Amino-1MQ 50mg x30 caps", price:49.99, description:"NNMT inhibitor. Studied for NAD+ metabolism and fat cell research." },
+  // Additional peptides from supplier
+  { sku:"MOTCSV", name:"MOTS-C 10mg", price:29.99, description:"Mitochondrial-derived peptide. Studied for metabolic regulation and exercise mimetics." },
+  { sku:"GHRP2SV", name:"GHRP-2 5mg", price:14.99, description:"Growth hormone releasing peptide. Studied for GH secretion and appetite regulation." },
+  { sku:"GHRP6SV", name:"GHRP-6 5mg", price:14.99, description:"Growth hormone releasing peptide. Studied for GH release and tissue repair." },
+  { sku:"SERMOSV", name:"Sermorelin 2mg", price:24.99, description:"GHRH analog (1-29). Studied for GH stimulation and anti-aging research." },
+  { sku:"HEXSV", name:"Hexarelin 2mg", price:19.99, description:"Hexapeptide GH secretagogue. Studied for GH release and cardiac function." },
+  { sku:"DSIPSV", name:"DSIP 5mg", price:19.99, description:"Delta sleep-inducing peptide. Studied for sleep regulation and stress response." },
+  { sku:"LL37SV", name:"LL-37 5mg", price:34.99, description:"Antimicrobial peptide. Studied for immune defense and wound healing." },
+  { sku:"KVPSV", name:"KPV 5mg", price:29.99, description:"Anti-inflammatory tripeptide derived from alpha-MSH. Studied for gut inflammation." },
+  { sku:"SNAP8SV", name:"Snap-8 50mg", price:29.99, description:"Octapeptide studied for wrinkle reduction and muscle contraction inhibition." },
+  { sku:"MT1SV", name:"Melanotan I 10mg", price:24.99, description:"Alpha-MSH analog. Studied for photoprotection and melanogenesis." },
+  { sku:"GONASV", name:"Gonadorelin 2mg", price:14.99, description:"GnRH analog. Studied for LH/FSH stimulation and fertility research." },
+  { sku:"KISS10SV", name:"Kisspeptin-10 5mg", price:29.99, description:"Neuropeptide studied for GnRH stimulation and reproductive research." },
+  { sku:"OXYSV", name:"Oxytocin 2mg", price:19.99, description:"Neuropeptide studied for social bonding, trust, and behavioral research." },
+  { sku:"THYASV", name:"Thymosin Alpha-1 5mg", price:24.99, description:"Immune-modulating peptide. Studied for immune function and viral defense." },
+  { sku:"THYMALSV", name:"Thymalin 10mg", price:24.99, description:"Thymic peptide. Studied for immune system regulation and anti-aging." },
+  { sku:"CAGRISV", name:"Cagrilintide 2mg", price:24.99, description:"Amylin analog. Studied in combination with semaglutide for metabolic research." },
+  { sku:"MAZSV", name:"Mazdutide 10mg", price:99.99, description:"GLP-1/glucagon dual agonist. Next-generation metabolic research compound." },
+  { sku:"IGFSV", name:"IGF-1 LR3 1mg", price:69.99, description:"Long-acting insulin-like growth factor. Studied for tissue growth and repair." },
+  { sku:"SS31SV", name:"SS-31 (Elamipretide) 5mg", price:34.99, description:"Mitochondria-targeted peptide. Studied for cellular energy and aging." },
+  { sku:"CAGSMSV", name:"CagriSema 5mg", price:49.99, description:"Cagrilintide 2.5mg + Semaglutide 2.5mg combination. Dual-action metabolic research." },
 ];
 
 const CATALOG_SUPPLIES = [
@@ -1932,18 +1953,24 @@ function slideCatTab(containerId){
 let pdpQty = 1;
 
 const PRODUCT_SIZES = {
-  'RT10SV': [{label:'5mg',price:34.99},{label:'10mg',price:59.99},{label:'15mg',price:79.99}],
-  'SM15SV': [{label:'2mg',price:29.99},{label:'5mg',price:49.99},{label:'10mg',price:69.99}],
-  'TZ15SV': [{label:'5mg',price:39.99},{label:'10mg',price:54.99},{label:'15mg',price:64.99}],
-  'SU3SV':  [{label:'3mg',price:54.99},{label:'5mg',price:74.99}],
-  'TSM2SV': [{label:'2mg',price:59.99},{label:'5mg',price:89.99}],
-  'BPC5SV': [{label:'5mg',price:29.99},{label:'10mg',price:49.99}],
-  'TB5SV':  [{label:'2mg',price:24.99},{label:'5mg',price:34.99}],
+  'RT10SV': [{label:'5mg',price:42.99},{label:'10mg',price:59.99}],
+  'SM15SV': [{label:'2mg',price:24.99},{label:'5mg',price:49.99},{label:'10mg',price:79.99}],
+  'TZ15SV': [{label:'5mg',price:34.99},{label:'10mg',price:49.99},{label:'15mg',price:64.99},{label:'20mg',price:79.99}],
+  'SU3SV':  [{label:'5mg',price:39.99},{label:'10mg',price:64.99}],
+  'TSM2SV': [{label:'2mg',price:39.99},{label:'5mg',price:59.99},{label:'10mg',price:99.99}],
+  'BPC5SV': [{label:'2mg',price:14.99},{label:'5mg',price:29.99},{label:'10mg',price:49.99}],
+  'TB5SV':  [{label:'2mg',price:14.99},{label:'5mg',price:24.99},{label:'10mg',price:39.99}],
   'IPA5SV': [{label:'5mg',price:29.99},{label:'10mg',price:44.99}],
+  'CJC2SV': [{label:'2mg',price:24.99},{label:'5mg',price:44.99}],
   'CU50SV': [{label:'50mg',price:23.99},{label:'100mg',price:39.99}],
   'MT2SV':  [{label:'5mg',price:19.99},{label:'10mg',price:24.99}],
   'PT14SV': [{label:'5mg',price:19.99},{label:'10mg',price:29.99}],
-  'EP1SV':  [{label:'10mg',price:39.99},{label:'20mg',price:64.99}],
+  'EP1SV':  [{label:'10mg',price:24.99},{label:'50mg',price:49.99}],
+  'XA5SV':  [{label:'5mg',price:29.99},{label:'10mg',price:44.99}],
+  'SS10SV': [{label:'5mg',price:29.99},{label:'10mg',price:44.99}],
+  'HCG5SV': [{label:'1000iu',price:14.99},{label:'2000iu',price:19.99},{label:'5000iu',price:34.99},{label:'10000iu',price:44.99}],
+  'AOD3SV': [{label:'5mg',price:24.99},{label:'10mg',price:39.99}],
+  'MK10SV': [{label:'25mg x30',price:44.99},{label:'25mg x60',price:74.99}],
 };
 let _pdpSelectedSize = null;
 
@@ -2920,19 +2947,23 @@ function toggleDiscreet(){
   if(!el)return;
   let idx=0;
   const colors=['#b91c1c','#dc2626','#c2410c','#ea580c','#d97706','#a16207','#4d7c0f','#15803d','#047857','#0d9488','#0e7490','#0369a1','#1d4ed8','#4338ca','#6d28d9','#7e22ce','#9333ea','#a21caf','#be185d','#e11d48'];
+  // Hidden measurer
+  var measurer=document.createElement('span');
+  measurer.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-family:Instrument Serif,serif;font-size:3.8rem;font-weight:400';
+  document.body.appendChild(measurer);
+  function measureWord(w){measurer.textContent=w;return measurer.offsetWidth;}
   function renderWord(word){
+    el.style.width=measureWord(word)+'px';
     el.innerHTML=word.split('').map(function(c,i){
-      const col=colors[i%colors.length];
+      var col=colors[i%colors.length];
       return '<span class="hc-char" style="color:'+col+';animation:hc-color 8s linear infinite;animation-delay:'+(-i*0.4)+'s;opacity:0;transform:translateY(10px)">'+c+'</span>';
     }).join('');
-    // Stagger in
     el.querySelectorAll('.hc-char').forEach(function(ch,i){
       setTimeout(function(){ch.style.opacity='1';ch.style.transform='translateY(0)';},i*40);
     });
   }
   renderWord(words[0]);
   setInterval(function(){
-    // Stagger out
     var chars=el.querySelectorAll('.hc-char');
     chars.forEach(function(ch,i){
       setTimeout(function(){ch.style.opacity='0';ch.style.transform='translateY(-10px)';},i*30);
