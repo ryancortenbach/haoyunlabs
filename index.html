@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411b';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411c';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -422,6 +422,15 @@ ul{list-style:none}
 .hero-btn-primary:hover{background:#fff;color:var(--brand)}
 .hero-btn-secondary{background:transparent;color:var(--brand)}
 .hero-btn-secondary:hover{background:var(--brand);color:#fff}
+
+/* ── SHOP YOUR WAY PILLS ── */
+.shop-pill{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#f0f0ee;border-radius:999px;cursor:pointer;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill:hover{background:#e8e8e5;transform:translateY(-2px)}
+.shop-pill-img{width:56px;height:56px;background:#000;border-radius:14px;flex-shrink:0;overflow:hidden;transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill:hover .shop-pill-img{transform:scale(0.9)}
+.shop-pill-name{font-size:1rem;font-weight:800;flex:1;letter-spacing:0.01em}
+.shop-pill-arrow{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.85rem;transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill:hover .shop-pill-arrow{transform:translateX(4px)}
 
 .tilt-card{transition:transform 0.15s ease;transform-style:preserve-3d;will-change:transform}
 
@@ -930,38 +939,38 @@ ul{list-style:none}
     </div>
 
     <!-- SHOP YOUR WAY -->
-    <div style="margin-bottom:48px">
-      <div style="font-family:'Instrument Serif',serif;font-size:2rem;margin-bottom:20px">Shop <em style="font-style:italic">your</em> way</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-        <a onclick="navigate('catalog');setHomeCat('all')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f5;border-radius:14px;cursor:pointer;transition:all 0.3s ease">
-          <div style="width:48px;height:48px;background:#000;border-radius:10px;flex-shrink:0"></div>
-          <div style="font-size:0.88rem;font-weight:700;flex:1">Bestsellers</div>
-          <div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem">&rarr;</div>
+    <div style="margin-bottom:48px;padding:40px 0">
+      <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;margin-bottom:28px">Shop <em style="font-style:italic">your</em> way</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('all')">
+          <div class="shop-pill-img"></div>
+          <div class="shop-pill-name">Bestsellers</div>
+          <div class="shop-pill-arrow">&rarr;</div>
         </a>
-        <a onclick="navigate('catalog');setHomeCat('peptides')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f5;border-radius:14px;cursor:pointer;transition:all 0.3s ease">
-          <div style="width:48px;height:48px;background:#000;border-radius:10px;flex-shrink:0"></div>
-          <div style="font-size:0.88rem;font-weight:700;flex:1">Peptides</div>
-          <div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem">&rarr;</div>
+        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('peptides')">
+          <div class="shop-pill-img"></div>
+          <div class="shop-pill-name">Peptides</div>
+          <div class="shop-pill-arrow">&rarr;</div>
         </a>
-        <a onclick="navigate('catalog');setHomeCat('kits')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f5;border-radius:14px;cursor:pointer;transition:all 0.3s ease">
-          <div style="width:48px;height:48px;background:#000;border-radius:10px;flex-shrink:0"></div>
-          <div style="font-size:0.88rem;font-weight:700;flex:1">Kits</div>
-          <div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem">&rarr;</div>
+        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('kits')">
+          <div class="shop-pill-img"></div>
+          <div class="shop-pill-name">Kits</div>
+          <div class="shop-pill-arrow">&rarr;</div>
         </a>
-        <a onclick="navigate('catalog');setHomeCat('stacks')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f5;border-radius:14px;cursor:pointer;transition:all 0.3s ease">
-          <div style="width:48px;height:48px;background:#000;border-radius:10px;flex-shrink:0"></div>
-          <div style="font-size:0.88rem;font-weight:700;flex:1">Stacks</div>
-          <div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem">&rarr;</div>
+        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('stacks')">
+          <div class="shop-pill-img"></div>
+          <div class="shop-pill-name">Stacks</div>
+          <div class="shop-pill-arrow">&rarr;</div>
         </a>
-        <a onclick="navigate('catalog');setHomeCat('sprays')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f5;border-radius:14px;cursor:pointer;transition:all 0.3s ease">
-          <div style="width:48px;height:48px;background:#000;border-radius:10px;flex-shrink:0"></div>
-          <div style="font-size:0.88rem;font-weight:700;flex:1">Sprays</div>
-          <div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem">&rarr;</div>
+        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('sprays')">
+          <div class="shop-pill-img"></div>
+          <div class="shop-pill-name">Sprays</div>
+          <div class="shop-pill-arrow">&rarr;</div>
         </a>
-        <a onclick="navigate('catalog');setHomeCat('supplies')" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#f5f5f5;border-radius:14px;cursor:pointer;transition:all 0.3s ease">
-          <div style="width:48px;height:48px;background:#000;border-radius:10px;flex-shrink:0"></div>
-          <div style="font-size:0.88rem;font-weight:700;flex:1">Supplies</div>
-          <div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem">&rarr;</div>
+        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('supplies')">
+          <div class="shop-pill-img"></div>
+          <div class="shop-pill-name">Supplies</div>
+          <div class="shop-pill-arrow">&rarr;</div>
         </a>
       </div>
     </div>
