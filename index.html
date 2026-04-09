@@ -906,6 +906,21 @@ ul{list-style:none}
   </div>
 </div>
 
+<!-- ═══════════════ SCREEN: COA VERIFICATION ═══════════════ -->
+<div class="screen" id="screen-coa">
+  <div class="container" style="padding-top:100px;max-width:600px;margin:0 auto">
+    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Purity Verification</h1>
+    <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Enter a product SKU to view its Certificate of Analysis.</p>
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px">
+      <div style="display:flex;gap:8px">
+        <input class="form-input" type="text" id="coa-sku" placeholder="e.g. RT10SV" style="text-transform:uppercase;flex:1">
+        <button class="btn-add" style="padding:12px 24px;border-radius:var(--radius);white-space:nowrap" onclick="lookupCOA()">VERIFY</button>
+      </div>
+      <div id="coa-result" style="margin-top:20px"></div>
+    </div>
+  </div>
+</div>
+
 <!-- EMAIL CAPTURE POPUP -->
 <div id="email-popup" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:var(--radius);padding:36px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
@@ -925,6 +940,7 @@ ul{list-style:none}
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('faq')">FAQ</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('support')">Support</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('terms')">Terms</a>
+    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('coa')">Verify Purity</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" href="https://discord.gg/haoyunlabs" target="_blank">Discord</a>
   </div>
   <div class="footer-subscribe">
@@ -1270,7 +1286,7 @@ function navigate(screen){
 
 function handleRoute(){
   const hash = window.location.hash.replace('#','') || 'home';
-  const screens = ['home','catalog','product','order','payment-confirmed','faq','support','terms'];
+  const screens = ['home','catalog','product','order','payment-confirmed','faq','support','terms','coa'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
     if(el) el.classList.toggle('active', s===hash);
@@ -2012,6 +2028,35 @@ function checkAgeGate(){
 /* ═════════════════════════════════════════════════════
    EMAIL SUBSCRIBE
    ═════════════════════════════════════════════════════ */
+/* ── COA LOOKUP ── */
+async function lookupCOA(){
+  const sku = document.getElementById('coa-sku').value.trim().toUpperCase();
+  const el = document.getElementById('coa-result');
+  if(!sku){ showToast('Enter a SKU','error'); return; }
+  try {
+    const {data, error} = await sb.from('products').select('sku,name,purity_pct,lot_number,coa_date').eq('sku',sku).maybeSingle();
+    if(error || !data || !data.purity_pct){
+      el.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:0.85rem">No COA found for SKU: ${sku}</div>`;
+      return;
+    }
+    el.innerHTML = `
+      <div style="border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden">
+        <div style="background:#000;color:#fff;padding:16px 20px;font-size:0.78rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase">Certificate of Analysis</div>
+        <div style="padding:20px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Product</div><div style="font-size:0.88rem;font-weight:700;margin-top:4px">${data.name}</div></div>
+            <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">SKU</div><div style="font-family:var(--mono);font-size:0.88rem;margin-top:4px">${data.sku}</div></div>
+            <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Purity</div><div style="font-size:1.2rem;font-weight:900;margin-top:4px;color:#16a34a">${data.purity_pct}%</div></div>
+            <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Lot Number</div><div style="font-family:var(--mono);font-size:0.88rem;margin-top:4px">${data.lot_number}</div></div>
+            <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Test Date</div><div style="font-size:0.88rem;margin-top:4px">${data.coa_date}</div></div>
+            <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Method</div><div style="font-size:0.88rem;margin-top:4px">HPLC</div></div>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--stroke);font-size:0.72rem;color:var(--muted);text-align:center">Hao Yun Labs — All compounds verified via High-Performance Liquid Chromatography</div>
+        </div>
+      </div>`;
+  } catch(e){ el.innerHTML = '<div style="color:#dc2626;font-size:0.85rem">Lookup failed. Try again.</div>'; }
+}
+
 /* ── EMAIL CAPTURE POPUP ── */
 function showEmailPopup(){
   const popup = document.getElementById('email-popup');
