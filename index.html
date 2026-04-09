@@ -925,6 +925,7 @@ ul{list-style:none}
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('faq')">FAQ</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('support')">Support</a>
     <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('terms')">Terms</a>
+    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" href="https://discord.gg/haoyunlabs" target="_blank">Discord</a>
   </div>
   <div class="footer-subscribe">
     <div class="footer-subscribe-title">Stay Updated — New Products & Exclusive Deals</div>
@@ -977,6 +978,7 @@ const CATALOG_INDIVIDUAL = [
   { sku:"TSM2SV", name:"Tesamorelin 2mg", price:59.99 },
   { sku:"XA5SV", name:"Semax 5mg", price:29.99 },
   { sku:"CU50SV", name:"GHK-Cu 50mg", price:23.99 },
+  { sku:"BACSV", name:"Bacteriostatic Water 30ml", price:11.99 },
 ];
 
 const CATALOG_KITS = [];
@@ -1489,8 +1491,34 @@ function renderCatalog(){
    ═════════════════════════════════════════════════════ */
 function renderOrder(){
   renderCartItems();
+  renderUpsell();
   renderReceipt();
   renderPayMethods();
+}
+
+function renderUpsell(){
+  let el = document.getElementById('upsell-suggestion');
+  if(!el){
+    const parent = document.getElementById('cart-items-list')?.parentElement;
+    if(!parent) return;
+    el = document.createElement('div');
+    el.id = 'upsell-suggestion';
+    parent.appendChild(el);
+  }
+  // Show BAC water suggestion if cart has peptides but no BAC water
+  const hasBAC = cart.has('BACSV');
+  const hasPeptides = cart.size > 0;
+  if(hasPeptides && !hasBAC){
+    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div>
+        <div style="font-size:0.78rem;font-weight:700">Don't forget: Bacteriostatic Water</div>
+        <div style="font-size:0.7rem;color:var(--muted)">Required for reconstituting peptides — $11.99</div>
+      </div>
+      <button onclick="addToCart('BACSV');renderOrder()" style="padding:8px 16px;background:var(--brand);color:var(--bg);border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD</button>
+    </div>`;
+  } else {
+    el.innerHTML = '';
+  }
 }
 
 function renderCartItems(){
