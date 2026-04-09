@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410w';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410x';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1931,6 +1931,22 @@ function slideCatTab(containerId){
 /* ── PRODUCT DETAIL PAGE ── */
 let pdpQty = 1;
 
+const PRODUCT_SIZES = {
+  'RT10SV': [{label:'5mg',price:34.99},{label:'10mg',price:59.99},{label:'15mg',price:79.99}],
+  'SM15SV': [{label:'2mg',price:29.99},{label:'5mg',price:49.99},{label:'10mg',price:69.99}],
+  'TZ15SV': [{label:'5mg',price:39.99},{label:'10mg',price:54.99},{label:'15mg',price:64.99}],
+  'SU3SV':  [{label:'3mg',price:54.99},{label:'5mg',price:74.99}],
+  'TSM2SV': [{label:'2mg',price:59.99},{label:'5mg',price:89.99}],
+  'BPC5SV': [{label:'5mg',price:29.99},{label:'10mg',price:49.99}],
+  'TB5SV':  [{label:'2mg',price:24.99},{label:'5mg',price:34.99}],
+  'IPA5SV': [{label:'5mg',price:29.99},{label:'10mg',price:44.99}],
+  'CU50SV': [{label:'50mg',price:23.99},{label:'100mg',price:39.99}],
+  'MT2SV':  [{label:'5mg',price:19.99},{label:'10mg',price:24.99}],
+  'PT14SV': [{label:'5mg',price:19.99},{label:'10mg',price:29.99}],
+  'EP1SV':  [{label:'10mg',price:39.99},{label:'20mg',price:64.99}],
+};
+let _pdpSelectedSize = null;
+
 function openProduct(sku){
   const p = getProduct(sku);
   if(!p) return;
@@ -1954,9 +1970,20 @@ function openProduct(sku){
       <div class="pdp-badges">
         <span class="pdp-badge pdp-badge-purity">99%+ PURITY</span>
       </div>
+      ${PRODUCT_SIZES[p.sku] ? `
+      <div style="margin:8px 0 4px">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px">Size</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${PRODUCT_SIZES[p.sku].map((s,i)=>{
+            const dose = (p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0];
+            const isActive = s.label.toLowerCase() === dose.toLowerCase();
+            return `<button onclick="selectPdpSize('${p.sku}',${i})" class="pdp-size-btn ${isActive?'active':''}" style="padding:8px 18px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);border:1.5px solid ${isActive?'var(--brand)':'var(--stroke)'};background:${isActive?'var(--brand)':'var(--bg)'};color:${isActive?'#fff':'var(--text)'}">${s.label} — $${s.price.toFixed(2)}</button>`;
+          }).join('')}
+        </div>
+      </div>` : ''}
       <div class="pdp-price-wrap">
         <div class="pdp-price-old">$${oldPrice}</div>
-        <div class="pdp-price">$${p.price.toFixed(2)}</div>
+        <div class="pdp-price" id="pdp-price-display">$${p.price.toFixed(2)}</div>
       </div>
       <div class="pdp-meta">
         <div class="pdp-meta-row"><span class="pdp-meta-label">SKU</span><span class="pdp-meta-value">${p.sku}</span></div>
@@ -1995,6 +2022,26 @@ function openProduct(sku){
   ` : '';
 
   navigate('product');
+}
+
+function selectPdpSize(sku, idx){
+  const sizes = PRODUCT_SIZES[sku];
+  if(!sizes||!sizes[idx]) return;
+  _pdpSelectedSize = sizes[idx];
+  // Update price display
+  const priceEl = document.getElementById('pdp-price-display');
+  if(priceEl) priceEl.textContent = '$' + sizes[idx].price.toFixed(2);
+  // Update dose display
+  const doseEl = document.querySelector('.pdp-dose');
+  if(doseEl) doseEl.textContent = sizes[idx].label;
+  // Update button styles
+  document.querySelectorAll('.pdp-size-btn').forEach(function(b,i){
+    const active = i===idx;
+    b.style.borderColor = active ? 'var(--brand)' : 'var(--stroke)';
+    b.style.background = active ? 'var(--brand)' : 'var(--bg)';
+    b.style.color = active ? '#fff' : 'var(--text)';
+    b.classList.toggle('active',active);
+  });
 }
 
 function switchPdpTab(tab, el){
