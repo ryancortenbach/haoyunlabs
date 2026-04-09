@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409y';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409z';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -232,6 +232,7 @@ ul{list-style:none}
   display:flex;width:max-content;
   animation:banner-scroll 60s linear infinite;
 }
+.sticky-banner:hover .banner-track{animation-play-state:paused}
 .banner-track span{
   white-space:nowrap;padding:8px 48px;
   font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;
@@ -1090,7 +1091,8 @@ ul{list-style:none}
 <div id="email-popup" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1)">
   <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:48px 40px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.3);line-height:1">&times;</button>
-    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span style="display:inline-block;width:4.5em;text-align:center;background:rgba(255,255,255,0.1);padding:2px 4px;border-radius:6px;overflow:hidden;vertical-align:bottom"><span id="popup-flip-word" style="display:inline-block;transition:opacity 0.35s ease">free</span></span> mystery vial with your first order</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery vial with your first order</div>
+    <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
     <div style="font-size:0.82rem;color:rgba(255,255,255,0.45);margin-bottom:28px;line-height:1.5">Sign up to receive a 5-character code for a free mystery vial. Valid 24 hours.</div>
     <div style="text-align:left">
       <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px">Name</div>
@@ -2449,20 +2451,35 @@ function showEmailPopup(){
   const card = document.getElementById('email-popup-card');
   if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
   if(card) setTimeout(()=>{ card.style.transform='translateY(0) scale(1)'; },50);
-  // Start word flip
+  // Start word flip (Aceternity container-text-flip style)
   const words=['free','exclusive','bonus','surprise'];
   let idx=0;
   if(_flipInterval) clearInterval(_flipInterval);
+  // Set initial width
+  const measure=document.getElementById('popup-flip-measure');
+  const container=document.getElementById('popup-flip-container');
+  if(measure&&container){measure.textContent=words[0];container.style.width=measure.offsetWidth+'px';}
   _flipInterval=setInterval(()=>{
     idx=(idx+1)%words.length;
     const el=document.getElementById('popup-flip-word');
-    if(!el){clearInterval(_flipInterval);return;}
-    el.style.opacity='0';
+    if(!el||!measure||!container){clearInterval(_flipInterval);return;}
+    // Slide out up + fade
+    el.style.transform='translateY(-110%)';el.style.opacity='0';
+    // Measure new word width
+    measure.textContent=words[idx];
+    const newW=measure.offsetWidth;
+    // Animate container width
+    container.style.width=newW+'px';
     setTimeout(()=>{
       el.textContent=words[idx];
-      el.style.opacity='1';
-    },350);
-  },2200);
+      el.style.transition='none';
+      el.style.transform='translateY(110%)';
+      requestAnimationFrame(()=>{
+        el.style.transition='transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease';
+        el.style.transform='translateY(0)';el.style.opacity='1';
+      });
+    },300);
+  },3000);
 }
 function closeEmailPopup(){
   if(_flipInterval){clearInterval(_flipInterval);_flipInterval=null;}
