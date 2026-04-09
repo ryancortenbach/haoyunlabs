@@ -774,10 +774,10 @@ function klIdentify(email) {
    ═════════════════════════════════════════════════════ */
 
 const CATALOG_INDIVIDUAL = [
-  { sku:"RT10SV", name:"Retatrutide 10mg", price:60.00 },
-  { sku:"TSM2SV", name:"Tesamorelin 2mg", price:60.00 },
-  { sku:"XA5SV", name:"Semax 5mg", price:30.00 },
-  { sku:"CU50SV", name:"GHK-Cu 50mg", price:24.00 },
+  { sku:"RT10SV", name:"Retatrutide 10mg", price:59.99 },
+  { sku:"TSM2SV", name:"Tesamorelin 2mg", price:59.99 },
+  { sku:"XA5SV", name:"Semax 5mg", price:29.99 },
+  { sku:"CU50SV", name:"GHK-Cu 50mg", price:23.99 },
 ];
 
 const CATALOG_KITS = [];
@@ -1104,7 +1104,7 @@ function cardHTML(p){
     ${getProductImageHTML(p)}
     <div class="card-header">
       <span class="card-sku">${p.sku}</span>
-      <span class="card-price"><span class="card-price-old">$${(p.price * 1.8).toFixed(2)}</span><br>$${p.price.toFixed(2)}</span>
+      <span class="card-price"><span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span><br>$${p.price.toFixed(2)}</span>
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
