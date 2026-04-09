@@ -208,16 +208,19 @@ ul{list-style:none}
 
 /* ── TOOLBAR: CATEGORIES + SEARCH ── */
 .toolbar{padding:24px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-.cat-tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex:1;min-width:0;padding-bottom:4px}
-.cat-tabs::-webkit-scrollbar{height:0}
-.cat-tab{
-  white-space:nowrap;padding:8px 16px;font-size:0.75rem;letter-spacing:0.1em;
-  text-transform:uppercase;font-weight:700;cursor:pointer;
-  border:1px solid var(--stroke);background:var(--bg);color:var(--text);
-  border-radius:var(--radius);transition:all var(--transition);
+.cat-tabs{
+  display:flex;flex-wrap:wrap;border-radius:0.5rem;background-color:#eee;
+  box-shadow:0 0 0 1px rgba(0,0,0,0.06);padding:0.25rem;font-size:0.78rem;
 }
-.cat-tab:hover{border-color:var(--brand)}
-.cat-tab.active{background:var(--brand);color:var(--bg);border-color:var(--brand)}
+.cat-tab{
+  flex:1 1 auto;text-align:center;white-space:nowrap;
+  padding:8px 16px;font-size:0.75rem;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;
+  border:none;background:transparent;color:rgba(51,65,85,1);
+  border-radius:0.5rem;transition:all 0.15s ease-in-out;
+}
+.cat-tab:hover{color:var(--brand)}
+.cat-tab.active{background:#fff;font-weight:800;color:var(--brand);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 .cat-tab .tab-count{font-family:var(--mono);font-size:0.65rem;margin-left:4px;opacity:0.7}
 .search-sort{display:flex;gap:8px;align-items:center}
 .search-input{
@@ -782,7 +785,6 @@ const CATEGORIES = {
   singles: { label:'Singles', data:CATALOG_INDIVIDUAL },
   kits:    { label:'Kits', data:CATALOG_KITS },
   bundles: { label:'Bundles', data:CATALOG_BUNDLES },
-  nootropics:{ label:'Nootropics', data:CATALOG_NOOTROPICS },
   sprays:  { label:'Sprays', data:CATALOG_SPRAYS },
 };
 
@@ -790,7 +792,6 @@ const ALL_PRODUCTS = [
   ...CATALOG_INDIVIDUAL.map(p=>({...p,cat:'singles'})),
   ...CATALOG_KITS.map(p=>({...p,cat:'kits'})),
   ...CATALOG_BUNDLES.map(p=>({...p,cat:'bundles'})),
-  ...CATALOG_NOOTROPICS.map(p=>({...p,cat:'nootropics'})),
   ...CATALOG_SPRAYS.map(p=>({...p,cat:'sprays'})),
 ];
 
@@ -1089,7 +1090,6 @@ function cardHTML(p){
     `LOT: Verified`,
   ];
   if(p.cat==='sprays') specs[1] = 'Form: Nasal Spray (30ml)';
-  if(p.cat==='nootropics'){ specs[1] = 'Form: Tablets'; specs[2] = 'Storage: Room temp'; }
   if(p.cat==='bundles') specs.push('Includes: BAC water where noted');
   const specHTML = specs.map(s=>`<div>${s}</div>`).join('');
 
@@ -1134,9 +1134,9 @@ let homeShown = 12;
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
   const allCount = ALL_PRODUCTS.length;
-  let html = `<button class="cat-tab ${activeVar==='all'?'active':''}" onclick="${clickFn}('all')">All<span class="tab-count">${allCount}</span></button>`;
+  let html = `<button class="cat-tab ${activeVar==='all'?'active':''}" onclick="${clickFn}('all')">All</button>`;
   for(const[key,val] of Object.entries(CATEGORIES)){
-    html += `<button class="cat-tab ${activeVar===key?'active':''}" onclick="${clickFn}('${key}')">${val.label}<span class="tab-count">${val.data.length}</span></button>`;
+    html += `<button class="cat-tab ${activeVar===key?'active':''}" onclick="${clickFn}('${key}')">${val.label}</button>`;
   }
   c.innerHTML = html;
 }
@@ -1721,7 +1721,7 @@ async function loadProductsFromDB(){
     // Clear and rebuild
     CATALOG_INDIVIDUAL.length=0; CATALOG_KITS.length=0; CATALOG_BUNDLES.length=0; CATALOG_NOOTROPICS.length=0; CATALOG_SPRAYS.length=0;
 
-    const catMap = {singles:CATALOG_INDIVIDUAL, kits:CATALOG_KITS, bundles:CATALOG_BUNDLES, nootropics:CATALOG_NOOTROPICS, sprays:CATALOG_SPRAYS};
+    const catMap = {singles:CATALOG_INDIVIDUAL, kits:CATALOG_KITS, bundles:CATALOG_BUNDLES, sprays:CATALOG_SPRAYS};
     data.forEach(row=>{
       const p = {sku:row.sku, name:row.name, price:parseFloat(row.price)};
       if(row.description) p.description = row.description;
@@ -1736,7 +1736,6 @@ async function loadProductsFromDB(){
       CATALOG_INDIVIDUAL.map(p=>Object.assign({},p,{cat:'singles'})),
       CATALOG_KITS.map(p=>Object.assign({},p,{cat:'kits'})),
       CATALOG_BUNDLES.map(p=>Object.assign({},p,{cat:'bundles'})),
-      CATALOG_NOOTROPICS.map(p=>Object.assign({},p,{cat:'nootropics'})),
       CATALOG_SPRAYS.map(p=>Object.assign({},p,{cat:'sprays'}))
     );
     for(let i=0;i<rebuilt.length;i++) ALL_PRODUCTS.push(rebuilt[i]);
