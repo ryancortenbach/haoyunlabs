@@ -58,6 +58,22 @@ ul{list-style:none}
 #intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
+/* ── FAQ ACCORDION ── */
+.faq-list{display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--stroke);background:#fff}
+.faq-item:first-child{border-top:1px solid var(--stroke);border-radius:var(--radius) var(--radius) 0 0}
+.faq-item:last-child{border-radius:0 0 var(--radius) var(--radius)}
+.faq-item summary{
+  padding:18px 20px;font-size:0.88rem;font-weight:700;cursor:pointer;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+  transition:background 0.15s;
+}
+.faq-item summary:hover{background:#f9f9f9}
+.faq-item summary::after{content:'+';font-size:1.2rem;font-weight:300;transition:transform 0.2s}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item p{padding:0 20px 18px;font-size:0.82rem;line-height:1.7;color:var(--muted)}
+
 /* ── GRID BG + SHIMMER + RIPPLE ── */
 #vanta-bg{
   position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
@@ -805,9 +821,70 @@ ul{list-style:none}
   </div>
 </div>
 
+<!-- ═══════════════ SCREEN: FAQ ═══════════════ -->
+<div class="screen" id="screen-faq">
+  <div class="container" style="padding-top:100px;max-width:800px;margin:0 auto">
+    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Frequently Asked Questions</h1>
+    <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Find answers to common questions about our products and services.</p>
+    <div class="faq-list">
+      <details class="faq-item"><summary>What are research peptides?</summary><p>Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</p></details>
+      <details class="faq-item"><summary>How do I place an order?</summary><p>Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</p></details>
+      <details class="faq-item"><summary>What payment methods do you accept?</summary><p>We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</p></details>
+      <details class="faq-item"><summary>How long does shipping take?</summary><p>Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</p></details>
+      <details class="faq-item"><summary>Do you ship internationally?</summary><p>Currently, we primarily serve customers within the United States. International shipping may be available for select kit orders. Contact us for details.</p></details>
+      <details class="faq-item"><summary>What is your purity guarantee?</summary><p>All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</p></details>
+      <details class="faq-item"><summary>Can I get a refund?</summary><p>Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</p></details>
+      <details class="faq-item"><summary>How do I store my peptides?</summary><p>Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</p></details>
+      <details class="faq-item"><summary>Do you offer discount codes?</summary><p>Yes! Join our mailing list for exclusive deals, or check our Discord community for active promo codes. Affiliate codes are also available for content creators.</p></details>
+      <details class="faq-item"><summary>Is my payment secure?</summary><p>Absolutely. Cryptocurrency payments are processed directly on the blockchain with no intermediaries. For wallet payments, transactions are signed locally in your browser wallet — we never have access to your private keys.</p></details>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN: SUPPORT ═══════════════ -->
+<div class="screen" id="screen-support">
+  <div class="container" style="padding-top:100px;max-width:600px;margin:0 auto">
+    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Contact Support</h1>
+    <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Need help? Fill out the form below and we'll get back to you within 24 hours.</p>
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px">
+      <div class="form-grid">
+        <div class="form-row"><div><label class="form-label">Order ID</label><input class="form-input" type="text" id="support-order" placeholder="e.g. HYL-ABC123"></div></div>
+        <div class="form-row"><div><label class="form-label">Email *</label><input class="form-input" type="email" id="support-email" required placeholder="your@email.com"></div></div>
+        <div class="form-row"><div><label class="form-label">Category</label><select class="form-input" id="support-category"><option>Order Issue</option><option>Shipping Question</option><option>Product Question</option><option>Payment Issue</option><option>Other</option></select></div></div>
+        <div class="form-row"><div><label class="form-label">Message *</label><textarea class="form-input" id="support-message" rows="5" required placeholder="Describe your issue..."></textarea></div></div>
+        <button class="btn-add" style="width:100%;padding:14px;border-radius:var(--radius)" onclick="submitSupport()">SEND MESSAGE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN: TERMS ═══════════════ -->
+<div class="screen" id="screen-terms">
+  <div class="container" style="padding-top:100px;max-width:800px;margin:0 auto">
+    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Terms of Service</h1>
+    <div style="margin-top:24px;font-size:0.85rem;line-height:1.8;color:var(--muted)">
+      <p><strong>Last updated:</strong> April 2026</p>
+      <p>By accessing haoyunlabs.com, you agree to these terms. All products sold on this website are intended for research and laboratory use only. Not for human consumption.</p>
+      <h3 style="margin:20px 0 8px;color:var(--text)">Orders & Payment</h3>
+      <p>All sales are final once payment is confirmed on the blockchain. Prices are in USD and converted to cryptocurrency at the time of checkout. We are not responsible for price fluctuations after invoice creation.</p>
+      <h3 style="margin:20px 0 8px;color:var(--text)">Shipping & Returns</h3>
+      <p>We ship within the United States. Handling time is 2-5 business days. Returns are accepted only for damaged or incorrect items within 48 hours of delivery. Contact support for resolution.</p>
+      <h3 style="margin:20px 0 8px;color:var(--text)">Research Use Only</h3>
+      <p>All compounds are sold strictly for research purposes. By purchasing, you confirm you are 21+ and that products will be used in a laboratory setting only. Hao Yun Labs is not liable for misuse.</p>
+      <h3 style="margin:20px 0 8px;color:var(--text)">Privacy</h3>
+      <p>We collect only the information necessary to process your order (name, address, email). We do not sell or share personal data with third parties. Payment is processed via blockchain — we never store financial credentials.</p>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand">HAO YUN LABS</div>
+  <div style="display:flex;gap:24px;justify-content:center;margin:12px 0;flex-wrap:wrap">
+    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('faq')">FAQ</a>
+    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('support')">Support</a>
+    <a style="font-size:0.75rem;color:var(--muted);cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;font-weight:600" onclick="navigate('terms')">Terms</a>
+  </div>
   <div class="footer-subscribe">
     <div class="footer-subscribe-title">Stay Updated — New Products & Exclusive Deals</div>
     <div class="footer-subscribe-row">
@@ -1144,7 +1221,7 @@ function navigate(screen){
 
 function handleRoute(){
   const hash = window.location.hash.replace('#','') || 'home';
-  const screens = ['home','catalog','product','order','payment-confirmed'];
+  const screens = ['home','catalog','product','order','payment-confirmed','faq','support','terms'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
     if(el) el.classList.toggle('active', s===hash);
@@ -1851,6 +1928,21 @@ function checkAgeGate(){
 /* ═════════════════════════════════════════════════════
    EMAIL SUBSCRIBE
    ═════════════════════════════════════════════════════ */
+async function submitSupport(){
+  const email = document.getElementById('support-email').value.trim();
+  const msg = document.getElementById('support-message').value.trim();
+  if(!email||!msg){showToast('Please fill in email and message');return;}
+  const orderId = document.getElementById('support-order').value.trim();
+  const category = document.getElementById('support-category').value;
+  try {
+    await sb.from('support_tickets').insert({email, order_id:orderId, category, message:msg});
+    showToast('Message sent! We will respond within 24 hours.');
+    document.getElementById('support-email').value='';
+    document.getElementById('support-message').value='';
+    document.getElementById('support-order').value='';
+  } catch(e){ showToast('Failed to send — please email us directly.'); }
+}
+
 async function subscribeEmail(){
   const input = document.getElementById('footer-email');
   const msg = document.getElementById('footer-sub-msg');
