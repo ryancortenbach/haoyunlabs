@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410b';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410c';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -378,6 +378,20 @@ ul{list-style:none}
 
 /* ── BUTTON SPINNER ── */
 @keyframes btnSpin{to{transform:rotate(360deg)}}
+
+/* ── 3x3 GRID LOADER ── */
+@keyframes loader_grid{from{opacity:0}to{opacity:1}}
+.grid-loader{position:relative;width:30px;height:30px;display:inline-block;vertical-align:middle}
+.grid-loader .sq{background:#fff;width:8px;height:8px;position:absolute;top:50%;left:50%;margin-top:-4px;margin-left:-4px;border-radius:1px}
+.grid-loader .sq:nth-child(1){margin-top:-14px;margin-left:-14px;animation:loader_grid 675ms ease-in-out 0s infinite alternate}
+.grid-loader .sq:nth-child(2){margin-top:-14px;animation:loader_grid 675ms ease-in-out 75ms infinite alternate}
+.grid-loader .sq:nth-child(3){margin-top:-14px;margin-left:6px;animation:loader_grid 675ms ease-in-out 150ms infinite alternate}
+.grid-loader .sq:nth-child(4){margin-left:-14px;animation:loader_grid 675ms ease-in-out 225ms infinite alternate}
+.grid-loader .sq:nth-child(5){animation:loader_grid 675ms ease-in-out 300ms infinite alternate}
+.grid-loader .sq:nth-child(6){margin-left:6px;animation:loader_grid 675ms ease-in-out 375ms infinite alternate}
+.grid-loader .sq:nth-child(7){margin-top:6px;margin-left:-14px;animation:loader_grid 675ms ease-in-out 450ms infinite alternate}
+.grid-loader .sq:nth-child(8){margin-top:6px;animation:loader_grid 675ms ease-in-out 525ms infinite alternate}
+.grid-loader .sq:nth-child(9){margin-top:6px;margin-left:6px;animation:loader_grid 675ms ease-in-out 600ms infinite alternate}
 .btn-loading{pointer-events:none;opacity:0.7}
 .btn-loading .crypto-btn-text::before,.btn-loading::before{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:btnSpin 0.6s linear infinite;margin-right:8px;vertical-align:middle}
 
@@ -762,6 +776,9 @@ ul{list-style:none}
       </div>
       <button class="nav-btn" onclick="toggleNavSearch()" aria-label="Search">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      </button>
+      <button class="nav-btn" onclick="showToast('Account coming soon','info')" aria-label="Account">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
       </button>
       <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
@@ -2326,7 +2343,7 @@ async function submitOrder(){
   const payBtn = document.getElementById('btn-pay');
   payBtn.disabled = true;
   payBtn.classList.add('btn-loading');
-  payBtn.querySelector('.crypto-btn-text').textContent = 'PROCESSING...';
+  payBtn.querySelector('.crypto-btn-text').innerHTML = '<div class="grid-loader"><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div></div>';
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
