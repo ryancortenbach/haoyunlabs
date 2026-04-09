@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410t';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410u';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -394,15 +394,15 @@ ul{list-style:none}
 }
 
 /* ── COLOURFUL FLIP WORDS ── */
-.hero-colourful{display:inline-block;position:relative;min-width:4em}
+.hero-colourful{display:inline;position:relative}
 .hero-colourful .hc-char{
   display:inline-block;
   transition:color 0.5s ease,transform 0.4s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;
 }
 @keyframes hc-color{
-  0%{color:#ff6b6b}10%{color:#ffa500}20%{color:#ffd700}30%{color:#4ecdc4}
-  40%{color:#45b7d1}50%{color:#96ceb4}60%{color:#a8e6cf}70%{color:#dda0dd}
-  80%{color:#c084fc}90%{color:#f472b6}100%{color:#ff6b6b}
+  0%{color:#b91c1c}10%{color:#c2410c}20%{color:#a16207}30%{color:#15803d}
+  40%{color:#0e7490}50%{color:#1d4ed8}60%{color:#6d28d9}70%{color:#9333ea}
+  80%{color:#be185d}90%{color:#047857}100%{color:#b91c1c}
 }
 .badge-purity{
   padding:4px 12px;font-size:0.58rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
@@ -874,8 +874,8 @@ ul{list-style:none}
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
       <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">Hao Yun Labs</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Peptides to <em style="font-style:italic">fuel</em> your <span id="hero-flip-word" class="hero-colourful"></span></div>
-      <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> your <span id="hero-flip-word" class="hero-colourful"></span></div>
+      <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and backed by third-party testing. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now</button>
         <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">Verify Purity</button>
@@ -941,11 +941,9 @@ ul{list-style:none}
           <div class="pricing-switch" id="kit-toggle" onclick="toggleKitView()"></div>
           <span>Kits</span>
         </div>
-        <div class="toolbar-search-wrap" id="home-search-wrap">
-          <button class="toolbar-search-btn" onclick="toggleToolbarSearch('home-search-wrap','home-search')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-          </button>
-          <input class="toolbar-search-input" type="text" placeholder="Search..." id="home-search" oninput="renderHome()">
+        <div style="position:relative">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.3;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          <input type="text" placeholder="Search..." id="home-search" oninput="renderHome()" style="padding:8px 12px 8px 32px;font-size:0.78rem;border:1px solid var(--stroke);border-radius:999px;width:160px;font-family:var(--sans);background:var(--bg)">
         </div>
         <select class="sort-select" id="home-sort" onchange="renderHome()">
           <option value="featured">FEATURED</option>
@@ -977,11 +975,9 @@ ul{list-style:none}
           <div class="pricing-switch" id="cat-kit-toggle" onclick="toggleCatKitView()"></div>
           <span>Kits</span>
         </div>
-        <div class="toolbar-search-wrap" id="cat-search-wrap">
-          <button class="toolbar-search-btn" onclick="toggleToolbarSearch('cat-search-wrap','cat-search')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-          </button>
-          <input class="toolbar-search-input" type="text" placeholder="Search..." id="cat-search" oninput="renderCatalog()">
+        <div style="position:relative">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.3;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          <input type="text" placeholder="Search..." id="cat-search" oninput="renderCatalog()" style="padding:8px 12px 8px 32px;font-size:0.78rem;border:1px solid var(--stroke);border-radius:999px;width:160px;font-family:var(--sans);background:var(--bg)">
         </div>
         <select class="sort-select" id="cat-sort" onchange="renderCatalog()">
           <option value="featured">FEATURED</option>
@@ -1857,7 +1853,7 @@ function cardHTML(p){
 
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative">
     ${getProductImageHTML(p)}
-    <div style="position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:4px;z-index:2">
+    <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:4px;z-index:2;align-items:flex-end">
       ${isBest ? '<span class="badge-bestseller">Best Seller</span>' : ''}
       <span class="badge-purity">${purity}% Purity</span>
     </div>
@@ -2869,11 +2865,11 @@ function toggleDiscreet(){
 /* ── INTERNATIONAL SHIPPING NOTICE ── */
 /* ── HERO COLOURFUL FLIP WORDS ── */
 (function(){
-  const words=['research.','recovery.','longevity.','performance.','breakthroughs.'];
+  const words=['research.','studies.','protocols.','trials.','analysis.'];
   const el=document.getElementById('hero-flip-word');
   if(!el)return;
   let idx=0;
-  const colors=['#ff6b6b','#ffa500','#ffd700','#4ecdc4','#45b7d1','#96ceb4','#dda0dd','#c084fc','#f472b6','#a78bfa','#34d399','#fb923c'];
+  const colors=['#b91c1c','#c2410c','#a16207','#15803d','#0e7490','#1d4ed8','#6d28d9','#9333ea','#be185d','#047857','#1e40af','#7e22ce'];
   function renderWord(word){
     el.innerHTML=word.split('').map(function(c,i){
       const col=colors[i%colors.length];
