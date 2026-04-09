@@ -122,8 +122,10 @@ ul{list-style:none}
 .nav.shrunk .nav-inner{height:52px}
 .nav.shrunk .nav-brand img{height:30px!important}
 .nav.shrunk .nav-search-wrap{max-width:300px}
-.nav-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;height:80px;gap:16px;transition:height 0.4s cubic-bezier(0.4,0,0.2,1)}
+.nav-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;height:80px;gap:16px;transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
 .nav-brand{cursor:pointer;justify-self:start}
+.nav-brand img{transition:height 0.4s cubic-bezier(0.4,0,0.2,1)}
+.nav-icon svg{transition:width 0.4s cubic-bezier(0.4,0,0.2,1),height 0.4s cubic-bezier(0.4,0,0.2,1)}
 .nav-links{display:flex;gap:36px;align-items:center;justify-self:center}
 .nav-links a{font-size:0.88rem;text-transform:uppercase;letter-spacing:0.14em;font-weight:700;cursor:pointer;position:relative;padding:6px 0;transition:all 0.15s ease}
 .nav-links a:hover{opacity:0.6}
