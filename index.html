@@ -92,22 +92,35 @@ ul{list-style:none}
 /* ── NAV ── */
 .nav{
   position:sticky;top:0;z-index:100;background:var(--bg);
-  border-bottom:1px solid var(--stroke);padding:0 24px;
+  border-bottom:1px solid var(--stroke);padding:0 40px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
 }
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-brand{font-family:var(--display);font-weight:900;font-size:1.1rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer}
-.nav-brand span{font-weight:400;font-size:0.85rem;margin-left:6px;letter-spacing:0.05em}
-.nav-links{display:flex;gap:28px;align-items:center}
-.nav-links a{font-size:0.82rem;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;cursor:pointer;position:relative;padding:4px 0}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:80px}
+.nav-brand{font-family:var(--display);font-weight:900;font-size:1.5rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer}
+.nav-links{display:flex;gap:36px;align-items:center}
+.nav-links a{font-size:0.88rem;text-transform:uppercase;letter-spacing:0.14em;font-weight:700;cursor:pointer;position:relative;padding:6px 0;transition:all 0.15s ease}
 .nav-links a:hover{opacity:0.6}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--brand);transition:width 0.2s ease}
+.nav-links a:hover::after{width:100%}
+.nav-icons{display:flex;gap:20px;align-items:center}
+.nav-icon{cursor:pointer;opacity:0.7;transition:opacity 0.15s}
+.nav-icon:hover{opacity:1}
+.nav-icon svg{width:22px;height:22px}
 .nav-cart{position:relative;cursor:pointer}
 .nav-cart-badge{
   position:absolute;top:-8px;right:-12px;background:var(--brand);color:var(--bg);
-  font-size:0.65rem;font-weight:700;min-width:18px;height:18px;
+  font-size:0.6rem;font-weight:700;min-width:18px;height:18px;
   display:flex;align-items:center;justify-content:center;
-  border-radius:var(--radius);font-family:var(--mono);
+  border-radius:50%;font-family:var(--mono);
 }
 .nav-cart-badge:empty{display:none}
+@media(max-width:640px){
+  .nav{padding:0 16px}
+  .nav-inner{height:60px}
+  .nav-brand{font-size:1.1rem}
+  .nav-links{gap:20px}
+  .nav-links a{font-size:0.75rem}
+}
 
 /* ── MARQUEE ── */
 .marquee-wrap{overflow:hidden;border-bottom:1px solid var(--stroke);background:#000;color:#fff}
@@ -455,11 +468,13 @@ ul{list-style:none}
     <div class="nav-brand" onclick="navigate('home')">HAO YUN LABS</div>
     <div class="nav-links">
       <a onclick="navigate('home')">Home</a>
-      <a onclick="navigate('catalog')">Catalog</a>
-      <a class="nav-cart" onclick="navigate('order')">
-        Cart
+      <a onclick="navigate('catalog')">Shop</a>
+    </div>
+    <div class="nav-icons">
+      <div class="nav-icon nav-cart" onclick="navigate('order')">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
         <span class="nav-cart-badge" id="cart-badge"></span>
-      </a>
+      </div>
     </div>
   </div>
 </nav>
