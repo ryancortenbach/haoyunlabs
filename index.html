@@ -1648,15 +1648,16 @@ async function loadProductsFromDB(){
       if(arr) arr.push(p);
     });
 
-    // Rebuild ALL_PRODUCTS
+    // Rebuild ALL_PRODUCTS (use concat to avoid call stack overflow with spread)
     ALL_PRODUCTS.length = 0;
-    ALL_PRODUCTS.push(
-      ...CATALOG_INDIVIDUAL.map(p=>({...p,cat:'singles'})),
-      ...CATALOG_KITS.map(p=>({...p,cat:'kits'})),
-      ...CATALOG_BUNDLES.map(p=>({...p,cat:'bundles'})),
-      ...CATALOG_NOOTROPICS.map(p=>({...p,cat:'nootropics'})),
-      ...CATALOG_SPRAYS.map(p=>({...p,cat:'sprays'})),
+    const rebuilt = [].concat(
+      CATALOG_INDIVIDUAL.map(p=>Object.assign({},p,{cat:'singles'})),
+      CATALOG_KITS.map(p=>Object.assign({},p,{cat:'kits'})),
+      CATALOG_BUNDLES.map(p=>Object.assign({},p,{cat:'bundles'})),
+      CATALOG_NOOTROPICS.map(p=>Object.assign({},p,{cat:'nootropics'})),
+      CATALOG_SPRAYS.map(p=>Object.assign({},p,{cat:'sprays'}))
     );
+    for(let i=0;i<rebuilt.length;i++) ALL_PRODUCTS.push(rebuilt[i]);
 
     console.log(`[DB] Loaded ${ALL_PRODUCTS.length} products from Supabase`);
     return true;
