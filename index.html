@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410p';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410q';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -893,10 +893,13 @@ ul{list-style:none}
     <!-- FEATURE CARDS -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px">
       <div class="tilt-card" style="background:#000 url('group319.png') center/cover no-repeat;color:#fff;border-radius:var(--radius);padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;min-height:280px;cursor:pointer;position:relative;overflow:hidden" onclick="navigate('catalog');setHomeCat('peptides')">
-        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px">Individual Vials</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Research Peptides</div>
-        <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
-        <div style="margin-top:16px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Browse Peptides &rarr;</div>
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:0"></div>
+        <div style="position:relative;z-index:1">
+        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:8px">Individual Vials</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px;color:#fff">Research Peptides</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
+        <div style="margin-top:16px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff">Browse Peptides &rarr;</div>
+        </div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
         <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('kits')">
@@ -1841,7 +1844,7 @@ function cardHTML(p){
   const isBest = bestSellers.includes(p.sku);
 
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer">
-    <div style="display:flex;gap:6px;padding:8px 12px 0;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:4px;padding:8px 12px 0;align-items:flex-start">
       ${isBest ? '<span class="badge-bestseller">Best Seller</span>' : ''}
       <span class="badge-purity">${purity}% Purity</span>
     </div>
