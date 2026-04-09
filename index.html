@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HAO YUN LABS 好运 — Premium Research Peptides</title>
+<title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -63,13 +63,13 @@ ul{list-style:none}
   pointer-events:none;
   background-color:#ffffff;
   background-image:
-    linear-gradient(rgba(0,0,0,0.10) 1.5px, transparent 1.5px),
-    linear-gradient(90deg, rgba(0,0,0,0.10) 1.5px, transparent 1.5px);
+    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
   background-size:48px 48px;
 }
 #vanta-bg::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.5) 50%,transparent 70%);
+  background:linear-gradient(120deg,transparent 30%,rgba(0,0,0,0.06) 50%,transparent 70%);
   background-size:200% 100%;
   animation:gridShimmer 6s ease-in-out infinite;
 }
@@ -427,7 +427,6 @@ ul{list-style:none}
 <div id="age-gate">
   <div class="age-gate-box">
     <h1>HAO YUN LABS</h1>
-    <div class="ag-cn">好运</div>
     <div class="ag-msg">Are you 21 years of age or older?</div>
     <div class="ag-btns">
       <button class="ag-btn" onclick="verifyAge(true)">YES</button>
@@ -441,13 +440,12 @@ ul{list-style:none}
 <!-- INTRO OVERLAY -->
 <div id="intro-overlay">
   <h1>HAO YUN LABS</h1>
-  <p>好运</p>
 </div>
 
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-brand" onclick="navigate('home')">HAO YUN LABS<span>好运</span></div>
+    <div class="nav-brand" onclick="navigate('home')">HAO YUN LABS</div>
     <div class="nav-links">
       <a onclick="navigate('home')">Home</a>
       <a onclick="navigate('catalog')">Catalog</a>
@@ -469,7 +467,6 @@ ul{list-style:none}
   <div class="container">
     <div class="hero">
       <div class="hero-title anim-fade-up anim-d2">HAO YUN LABS</div>
-      <div class="hero-cn anim-fade-up anim-d3">好运</div>
       <div class="hero-tag anim-fade-up anim-d4">Premium Research Peptides &amp; Supplies</div>
       <div class="hero-divider"></div>
     </div>
@@ -633,7 +630,7 @@ ul{list-style:none}
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-brand">HAO YUN LABS <span>好运</span></div>
+  <div class="footer-brand">HAO YUN LABS</div>
   <div class="footer-subscribe">
     <div class="footer-subscribe-title">Stay Updated — New Products & Exclusive Deals</div>
     <div class="footer-subscribe-row">
@@ -881,7 +878,7 @@ function getProductImageHTML(p) {
       <text x="60" y="64" text-anchor="middle" font-size="6" font-weight="800" fill="rgba(255,255,255,0.9)" font-family="Helvetica,Arial,sans-serif" letter-spacing="0.5">${shortName.toUpperCase().slice(0,14)}</text>
       <text x="60" y="78" text-anchor="middle" font-size="8" font-weight="900" fill="rgba(255,255,255,0.95)" font-family="Helvetica,Arial,sans-serif">${doseText.toUpperCase()}</text>
       <text x="60" y="112" text-anchor="middle" font-size="4.5" fill="rgba(255,255,255,0.5)" font-family="Helvetica,Arial,sans-serif">HAO YUN LABS</text>
-      <text x="60" y="120" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="Helvetica,Arial,sans-serif">好运</text>
+      <text x="60" y="120" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="Helvetica,Arial,sans-serif">HYL</text>
     </svg>
   </div>`;
 }
