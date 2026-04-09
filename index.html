@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409g';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409j';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -117,11 +117,13 @@ ul{list-style:none}
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--stroke);
-  transition:all 0.6s cubic-bezier(0.22,1,0.36,1);
+  margin:0 auto;
+  border-radius:0;
+  box-shadow:none;
+  transition:top 0.6s cubic-bezier(0.22,1,0.36,1),left 0.6s cubic-bezier(0.22,1,0.36,1),right 0.6s cubic-bezier(0.22,1,0.36,1),border-radius 0.6s cubic-bezier(0.22,1,0.36,1),box-shadow 0.6s cubic-bezier(0.22,1,0.36,1),background 0.6s cubic-bezier(0.22,1,0.36,1),border-color 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 .nav.shrunk{
-  top:8px;left:0;right:0;
-  max-width:900px;margin:0 auto;
+  top:8px;left:calc(50% - 450px);right:calc(50% - 450px);
   border-radius:999px;
   box-shadow:0 4px 24px rgba(0,0,0,0.08);
   border:1px solid rgba(0,0,0,0.06);
@@ -130,7 +132,7 @@ ul{list-style:none}
 .nav-inner{
   max-width:1200px;margin:0 auto;padding:0 32px;
   display:flex;align-items:center;height:64px;
-  transition:height 0.6s cubic-bezier(0.22,1,0.36,1);
+  transition:all 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 .nav.shrunk .nav-inner{height:48px;padding:0 24px}
 .nav-brand{cursor:pointer;flex-shrink:0;font-family:'Instrument Serif',serif;font-size:1.3rem;letter-spacing:-0.01em;color:var(--brand)}
@@ -188,6 +190,9 @@ ul{list-style:none}
   border-radius:50%;font-family:var(--mono);
 }
 .nav-cart-badge:empty{display:none}
+@media(max-width:960px){
+  .nav.shrunk{left:12px;right:12px}
+}
 @media(max-width:768px){
   .nav-inner{height:52px;padding:0 16px}
   .nav-brand{font-size:1.1rem}
@@ -952,18 +957,23 @@ ul{list-style:none}
           </div>
           <div class="discount-msg" id="discount-msg"></div>
 
-          <div class="pay-methods" id="pay-methods"></div>
-
-          <button class="crypto-pay-btn" id="btn-pay" onclick="submitOrder()">
-            <span class="crypto-icon-container">
-              <img src="crypto-icons/btc.svg" class="crypto-icon crypto-default-icon" alt="BTC">
-              <img src="crypto-icons/btc.svg" class="crypto-icon crypto-i1" alt="BTC">
-              <img src="crypto-icons/eth.svg" class="crypto-icon crypto-i2" alt="ETH">
-              <img src="crypto-icons/sol.svg" class="crypto-icon crypto-i3" alt="SOL">
-              <img src="crypto-icons/usdt.svg" class="crypto-icon crypto-i4" alt="USDT">
-            </span>
-            <span class="crypto-btn-text">COMPLETE ORDER</span>
+          <button class="crypto-pay-btn" id="btn-continue" onclick="showPaymentStep()" style="background:#000;color:#fff">
+            <span class="crypto-btn-text">CONTINUE TO PAYMENT</span>
           </button>
+
+          <div id="payment-step" style="display:none">
+            <div class="pay-methods" id="pay-methods"></div>
+            <button class="crypto-pay-btn" id="btn-pay" onclick="submitOrder()">
+              <span class="crypto-icon-container">
+                <img src="crypto-icons/btc.svg" class="crypto-icon crypto-default-icon" alt="BTC">
+                <img src="crypto-icons/btc.svg" class="crypto-icon crypto-i1" alt="BTC">
+                <img src="crypto-icons/eth.svg" class="crypto-icon crypto-i2" alt="ETH">
+                <img src="crypto-icons/sol.svg" class="crypto-icon crypto-i3" alt="SOL">
+                <img src="crypto-icons/usdt.svg" class="crypto-icon crypto-i4" alt="USDT">
+              </span>
+              <span class="crypto-btn-text">COMPLETE ORDER</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1803,13 +1813,19 @@ function renderUpsell(){
   // Show BAC water suggestion if cart has peptides but no BAC water
   const hasBAC = cart.has('BACSV');
   const hasPeptides = cart.size > 0;
-  if(hasPeptides && !hasBAC){
-    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px">
+  let peptideQty = 0;
+  cart.forEach((qty,sku)=>{ if(!['BACSV','SYRSV'].includes(sku) && !sku.endsWith('SPRAY')) peptideQty+=qty; });
+  const bacNeeded = Math.max(1, Math.ceil(peptideQty / 3));
+  const bacInCart = cart.get('BACSV') || 0;
+  if(peptideQty > 0 && bacInCart < bacNeeded){
+    const toAdd = bacNeeded - bacInCart;
+    const cost = (toAdd * 11.99).toFixed(2);
+    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px">
       <div>
-        <div style="font-size:0.78rem;font-weight:700">Don't forget: Bacteriostatic Water</div>
-        <div style="font-size:0.7rem;color:var(--muted)">Required for reconstituting peptides — $11.99</div>
+        <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Required</div>
+        <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x needed for ${peptideQty} vial${peptideQty>1?'s':''} — $${cost}</div>
       </div>
-      <button onclick="addToCart('BACSV');renderOrder()" style="padding:8px 16px;background:var(--brand);color:var(--bg);border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD</button>
+      <button type="button" onclick="event.preventDefault();event.stopPropagation();for(let i=0;i<${toAdd};i++)addToCart('BACSV');renderOrder()" style="padding:8px 16px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
     </div>`;
   } else {
     el.innerHTML = '';
@@ -1918,6 +1934,20 @@ let selectedPayMethod = 'crypto';
 let selectedCryptoCurrency = 'BTC';
 let cryptoPollInterval = null;
 
+function showPaymentStep(){
+  const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-email'];
+  for(const fid of fields){
+    const el = document.getElementById(fid);
+    if(!el.value.trim()){el.focus();showToast('Please fill in shipping info first','error');return;}
+  }
+  document.getElementById('btn-continue').style.display='none';
+  document.getElementById('payment-step').style.display='block';
+  renderPayMethods();
+  // Update checkout progress
+  document.querySelectorAll('.checkout-step')[2].classList.add('active');
+  document.querySelectorAll('.checkout-step-line')[1].classList.add('done');
+}
+
 function renderPayMethods(){
   const el = document.getElementById('pay-methods');
   selectedPayMethod = 'crypto';
@@ -1932,11 +1962,6 @@ function renderPayMethods(){
           <div style="font-size:0.65rem;margin-top:4px;opacity:0.7">${{BTC:'Bitcoin',ETH:'Ethereum',SOL:'Solana',USDT:'Tether'}[c]}</div>
         </div>
       `).join('')}
-    </div>
-    <div style="margin-top:12px;font-size:0.7rem;color:var(--muted);text-align:center;letter-spacing:0.04em">
-      Zero fees — pay directly from any wallet
-      ${window.ethereum ? '<br><span style="color:#16a34a;font-weight:700">MetaMask detected</span>' : ''}
-      ${window.solana?.isPhantom ? '<br><span style="color:#ab9ff2;font-weight:700">Phantom detected</span>' : ''}
     </div>
   `;
 }
@@ -1994,9 +2019,16 @@ function navSearchFocus(open){
   if(!open) el.classList.remove('open');
 }
 
-function copyAddr(addr, ev){
-  if(ev) ev.stopPropagation();
-  navigator.clipboard.writeText(addr).then(()=>showToast('Address copied'));
+function copyAddr(addr, el){
+  navigator.clipboard.writeText(addr).then(()=>{
+    showToast('Address copied');
+    const icon = el ? el.querySelector('.copy-icon') : null;
+    if(icon){
+      icon.textContent = '\u2705';
+      icon.style.transform = 'scale(1.3)';
+      setTimeout(()=>{ icon.textContent = '\uD83D\uDCCB'; icon.style.transform = ''; }, 1500);
+    }
+  });
 }
 
 /* ── BROWSER WALLET PAYMENT (MetaMask / Phantom) ── */
@@ -2114,8 +2146,10 @@ function showCryptoPayment(data){
       <div style="text-align:center;font-size:0.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em">— or send manually —</div>
     ` : ''}
     ${data.qr_code ? `<div style="text-align:center;padding:12px 0"><img src="${data.qr_code}" alt="QR" style="width:200px;height:200px;margin:0 auto;border:1px solid var(--stroke)"></div>` : ''}
-    <div style="background:#f5f5f5;padding:14px;margin:12px 0;font-family:var(--mono);font-size:0.72rem;word-break:break-all;text-align:center;line-height:1.6;user-select:all">${data.address}</div>
-    <div style="text-align:center"><button class="copy-addr" style="padding:8px 20px;font-size:0.72rem;background:var(--brand);color:var(--bg);border:1px solid var(--brand);cursor:pointer;font-weight:700;letter-spacing:0.1em" onclick="copyAddr('${data.address}')">COPY ADDRESS</button></div>
+    <div style="background:#f5f5f5;padding:14px;margin:12px 0;font-family:var(--mono);font-size:0.72rem;word-break:break-all;text-align:center;line-height:1.6;user-select:all;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:var(--radius);cursor:pointer" onclick="copyAddr('${data.address}',this)">
+      <span>${data.address}</span>
+      <span class="copy-icon" style="font-size:1.1rem;flex-shrink:0;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)">&#128203;</span>
+    </div>
     <div style="text-align:center;margin-top:16px">
       <div id="crypto-status-text" style="font-size:0.82rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase">Waiting for payment...</div>
       <div id="crypto-timer" style="font-family:var(--mono);font-size:0.78rem;color:var(--muted);margin-top:6px"></div>
