@@ -58,45 +58,44 @@ ul{list-style:none}
 #intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
-/* ── GRID BG + LINE SHIMMER ── */
+/* ── RIPPLE GRID BG ── */
 #vanta-bg{
   position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
-  pointer-events:none;
-  background-color:#ffffff;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
-  background-size:48px 48px;
+  background:#fff;overflow:hidden;
 }
-#vanta-bg::after{
-  content:'';position:absolute;inset:0;
-  background-color:transparent;
-  background-image:
-    linear-gradient(120deg, transparent 30%, rgba(0,0,0,0.18) 49.5%, rgba(0,0,0,0.18) 50.5%, transparent 70%);
-  background-size:200% 100%;
-  animation:gridShimmer 6s ease-in-out infinite;
-  mix-blend-mode:darken;
-  mask-image:
-    linear-gradient(rgba(0,0,0,1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px);
-  -webkit-mask-image:
-    linear-gradient(rgba(0,0,0,1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px);
-  mask-size:48px 48px;
-  -webkit-mask-size:48px 48px;
+#ripple-grid{
+  display:grid;width:100%;height:100%;
+  grid-template-columns:repeat(var(--cols),1fr);
+  grid-template-rows:repeat(var(--rows),1fr);
 }
-@keyframes gridShimmer{
-  0%{background-position:200% 0}
-  100%{background-position:-200% 0}
+.rp-cell{
+  border:0.5px solid rgba(0,0,0,0.06);
+  background:transparent;
+}
+@keyframes cellRipple{
+  0%{background:rgba(0,0,0,0.10)}
+  50%{background:rgba(0,0,0,0.04)}
+  100%{background:transparent}
 }
 
-/* ── NAV ── */
+/* ── NAV (resizable) ── */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:#fff;
   border-bottom:1px solid var(--stroke);padding:0 40px;
   box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
 }
+.nav.shrunk{
+  top:6px;left:20px;right:20px;
+  border-radius:16px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  border:1px solid rgba(0,0,0,0.06);
+  padding:0 24px;
+}
+.nav.shrunk .nav-inner{height:56px}
+.nav.shrunk .nav-brand img{height:32px!important}
+.nav.shrunk .nav-search{font-size:0.75rem;padding:8px 10px 8px 32px}
 .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:80px}
 .nav-brand{cursor:pointer;justify-self:start}
 .nav-links{display:flex;gap:36px;align-items:center;justify-self:center}
@@ -105,13 +104,17 @@ ul{list-style:none}
 .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--brand);transition:width 0.2s ease}
 .nav-links a:hover::after{width:100%}
 .nav-icons{display:flex;gap:16px;align-items:center}
-.nav-search-wrap{position:relative;flex:1;max-width:400px;margin:0 auto}
+.nav-search-wrap{position:relative;margin:0 auto}
 .nav-search{
-  width:100%;padding:10px 14px 10px 38px;font-size:0.82rem;
-  border:1px solid var(--stroke);background:#f8f8f8;border-radius:8px;
-  font-family:var(--sans);transition:border-color 0.15s,background 0.15s;
+  width:180px;padding:10px 14px 10px 38px;font-size:0.82rem;
+  border:1px solid var(--stroke);background:#f5f5f5;border-radius:24px;
+  font-family:var(--sans);
+  transition:width 0.4s cubic-bezier(0.4,0,0.2,1),background 0.2s,border-color 0.2s,box-shadow 0.3s;
 }
-.nav-search:focus{border-color:var(--brand);background:#fff;outline:none}
+.nav-search:focus{
+  width:340px;background:#fff;border-color:var(--brand);outline:none;
+  box-shadow:0 4px 16px rgba(0,0,0,0.08);
+}
 .nav-search-results{
   position:absolute;top:100%;left:0;right:0;margin-top:4px;
   background:var(--bg);border:1px solid var(--stroke);border-radius:8px;
@@ -571,7 +574,7 @@ ul{list-style:none}
 </style>
 </head>
 <body>
-<div id="vanta-bg"></div>
+<div id="vanta-bg"><div id="ripple-grid"></div></div>
 
 <!-- AGE GATE -->
 <div id="age-gate">
@@ -1913,11 +1916,49 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   updateBadge();
   buildMarquee();
 
-  // Nav: transparent at top, white on scroll
+  // Nav: shrink on scroll
   const nav = document.querySelector('.nav');
-  function updateNav(){ nav.classList.toggle('scrolled', window.scrollY > 10); }
+  function updateNav(){ nav.classList.toggle('shrunk', window.scrollY > 60); }
   window.addEventListener('scroll', updateNav, {passive:true});
   updateNav();
+
+  // Ripple grid background
+  (function initRippleGrid(){
+    const grid = document.getElementById('ripple-grid');
+    if(!grid) return;
+    const cellSize = 56;
+    const cols = Math.ceil(window.innerWidth / cellSize);
+    const rows = Math.ceil(window.innerHeight / cellSize);
+    grid.style.setProperty('--cols', cols);
+    grid.style.setProperty('--rows', rows);
+    const cells = [];
+    for(let i = 0; i < cols * rows; i++){
+      const cell = document.createElement('div');
+      cell.className = 'rp-cell';
+      grid.appendChild(cell);
+      cells.push(cell);
+    }
+    // Click ripple — multiple clicks stack
+    document.addEventListener('click', (e) => {
+      const clickCol = Math.floor(e.clientX / cellSize);
+      const clickRow = Math.floor(e.clientY / cellSize);
+      const maxDist = Math.max(cols, rows) * 0.6;
+      cells.forEach((cell, i) => {
+        const cCol = i % cols;
+        const cRow = Math.floor(i / cols);
+        const dist = Math.sqrt((cCol-clickCol)**2 + (cRow-clickRow)**2);
+        if(dist > maxDist) return;
+        const delay = dist * 30;
+        const dur = 300 + dist * 10;
+        // Clone to allow stacking animations
+        const clone = cell.cloneNode(true);
+        clone.style.cssText = `animation:cellRipple ${dur}ms ease-out forwards;animation-delay:${delay}ms;position:absolute;inset:0;pointer-events:none;`;
+        cell.style.position = 'relative';
+        cell.appendChild(clone);
+        setTimeout(() => clone.remove(), delay + dur + 50);
+      });
+    });
+  })();
   introFade();
 
   const grid = document.getElementById('home-grid');
