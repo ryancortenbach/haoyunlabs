@@ -69,7 +69,7 @@ ul{list-style:none}
 }
 #vanta-bg::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(120deg,transparent 30%,rgba(0,0,0,0.06) 50%,transparent 70%);
+  background:linear-gradient(120deg,transparent 30%,rgba(0,0,0,0.14) 50%,transparent 70%);
   background-size:200% 100%;
   animation:gridShimmer 6s ease-in-out infinite;
 }
@@ -437,10 +437,6 @@ ul{list-style:none}
   </div>
 </div>
 
-<!-- INTRO OVERLAY -->
-<div id="intro-overlay">
-  <h1>HAO YUN LABS</h1>
-</div>
 
 <!-- NAV -->
 <nav class="nav">
@@ -1645,13 +1641,7 @@ async function loadProductsFromDB(){
 /* ═════════════════════════════════════════════════════
    INTRO
    ═════════════════════════════════════════════════════ */
-function introFade(){
-  const overlay = document.getElementById('intro-overlay');
-  setTimeout(()=>{
-    overlay.classList.add('fade-out');
-    setTimeout(()=>overlay.remove(), 800);
-  }, 1200);
-}
+function introFade(){}
 
 /* ═════════════════════════════════════════════════════
    INIT
