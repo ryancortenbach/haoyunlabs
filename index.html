@@ -878,40 +878,44 @@ ul{list-style:none}
           <div class="form-row col-2">
             <div>
               <label class="form-label">Street Address *</label>
-              <input class="form-input" type="text" id="f-street" required>
+              <input class="form-input" type="text" id="f-street" required autocomplete="address-line1" placeholder="Start typing...">
             </div>
             <div>
               <label class="form-label">Apt / Suite</label>
-              <input class="form-input" type="text" id="f-apt">
+              <input class="form-input" type="text" id="f-apt" autocomplete="address-line2">
             </div>
           </div>
           <div class="form-row col-2">
             <div>
               <label class="form-label">City *</label>
-              <input class="form-input" type="text" id="f-city" required>
+              <input class="form-input" type="text" id="f-city" required autocomplete="address-level2">
             </div>
             <div>
               <label class="form-label">State *</label>
-              <input class="form-input" type="text" id="f-state" required maxlength="2" placeholder="e.g. NY" style="text-transform:uppercase">
+              <input class="form-input" type="text" id="f-state" required maxlength="2" placeholder="e.g. NY" style="text-transform:uppercase" autocomplete="address-level1">
             </div>
           </div>
           <div class="form-row col-2">
             <div>
               <label class="form-label">ZIP Code *</label>
-              <input class="form-input" type="text" id="f-zip" required maxlength="10">
+              <input class="form-input" type="text" id="f-zip" required maxlength="10" autocomplete="postal-code">
             </div>
             <div>
               <label class="form-label">Phone</label>
-              <input class="form-input" type="tel" id="f-phone">
+              <input class="form-input" type="tel" id="f-phone" autocomplete="tel">
             </div>
           </div>
           <div class="form-row">
             <div>
               <label class="form-label">Email for Receipt *</label>
-              <input class="form-input" type="email" id="f-email" required>
+              <input class="form-input" type="email" id="f-email" required autocomplete="email">
             </div>
           </div>
         </form>
+        <div class="discreet-toggle" id="billing-same-toggle" onclick="toggleBillingSame()" style="margin-top:8px">
+          <div class="discreet-check checked" id="billing-same-check"></div>
+          <div>Billing address same as shipping</div>
+        </div>
         <div class="discreet-toggle" id="discreet-toggle" onclick="toggleDiscreet()">
           <div class="discreet-check" id="discreet-check"></div>
           <div>Ship in plain packaging <span style="color:var(--muted);font-size:0.7rem">(no branding on box)</span></div>
@@ -948,7 +952,6 @@ ul{list-style:none}
           </div>
           <div class="affiliate-msg" id="affiliate-msg"></div>
 
-          <div class="pay-method-title">Payment Method</div>
           <div class="pay-methods" id="pay-methods"></div>
 
           <button class="crypto-pay-btn" id="btn-pay" onclick="submitOrder()">
@@ -1920,7 +1923,6 @@ function renderPayMethods(){
   selectedPayMethod = 'crypto';
   const coins = ['BTC','ETH','SOL','USDT'];
   el.innerHTML = `
-    <div class="pay-method-title" style="margin-bottom:8px">SELECT CRYPTOCURRENCY</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
       ${coins.map(c=>`
         <div class="pay-chip ${selectedCryptoCurrency===c?'selected':''}"
@@ -2458,6 +2460,12 @@ async function lookupOrder(){
 
 /* ── DISCREET PACKAGING ── */
 let discreetPackaging = false;
+let billingSameAsShipping = true;
+function toggleBillingSame(){
+  billingSameAsShipping = !billingSameAsShipping;
+  document.getElementById('billing-same-check').classList.toggle('checked', billingSameAsShipping);
+}
+
 function toggleDiscreet(){
   discreetPackaging = !discreetPackaging;
   const check = document.getElementById('discreet-check');
