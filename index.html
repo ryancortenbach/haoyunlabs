@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410c';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410d';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -378,6 +378,11 @@ ul{list-style:none}
 
 /* ── BUTTON SPINNER ── */
 @keyframes btnSpin{to{transform:rotate(360deg)}}
+
+/* ── SPINNER (shadcn-style) ── */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:btnSpin 0.7s linear infinite;vertical-align:middle}
+.spinner.dark{border-color:rgba(0,0,0,0.12);border-top-color:var(--brand)}
+.spinner.lg{width:24px;height:24px;border-width:2.5px}
 
 /* ── 3x3 GRID LOADER ── */
 @keyframes loader_grid{from{opacity:0}to{opacity:1}}
@@ -800,8 +805,8 @@ ul{list-style:none}
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
       <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">HAO YUN LABS</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1">Research-Grade Compounds.<br>Verified Purity.</div>
-      <div class="hero-tag anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6">Every compound is HPLC-tested, lot-verified, and ships with a Certificate of Analysis. No middlemen, no markups.</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1">Compounds Your Research<br>Can Trust</div>
+      <div class="hero-tag anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button onclick="navigate('catalog')" style="padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Shop Now</button>
         <button onclick="navigate('coa')" style="padding:14px 32px;background:transparent;color:var(--brand);border:1px solid var(--stroke);border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Verify Purity</button>
@@ -2343,7 +2348,7 @@ async function submitOrder(){
   const payBtn = document.getElementById('btn-pay');
   payBtn.disabled = true;
   payBtn.classList.add('btn-loading');
-  payBtn.querySelector('.crypto-btn-text').innerHTML = '<div class="grid-loader"><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div></div>';
+  payBtn.querySelector('.crypto-btn-text').innerHTML = '<span class="spinner" style="margin-right:10px"></span> Processing...';
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
