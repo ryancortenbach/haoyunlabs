@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409v';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409w';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -823,6 +823,11 @@ ul{list-style:none}
     <div class="toolbar">
       <div class="cat-tabs" id="cat-cat-tabs"></div>
       <div class="search-sort">
+        <div class="pricing-toggle">
+          <span>Singles</span>
+          <div class="pricing-switch" id="cat-kit-toggle" onclick="toggleCatKitView()"></div>
+          <span>Kits</span>
+        </div>
         <div class="toolbar-search-wrap" id="cat-search-wrap">
           <button class="toolbar-search-btn" onclick="toggleToolbarSearch('cat-search-wrap','cat-search')">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
@@ -2011,8 +2016,18 @@ let showKits = false;
 function toggleKitView(){
   showKits = !showKits;
   document.getElementById('kit-toggle').classList.toggle('on', showKits);
+  const catToggle = document.getElementById('cat-kit-toggle');
+  if(catToggle) catToggle.classList.toggle('on', showKits);
   if(showKits) setHomeCat('kits');
   else setHomeCat('peptides');
+}
+function toggleCatKitView(){
+  showKits = !showKits;
+  document.getElementById('cat-kit-toggle').classList.toggle('on', showKits);
+  const homeToggle = document.getElementById('kit-toggle');
+  if(homeToggle) homeToggle.classList.toggle('on', showKits);
+  if(showKits) setCatCat('kits');
+  else setCatCat('peptides');
 }
 
 function toggleNavSearch(){
