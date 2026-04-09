@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409j';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409k';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2581,10 +2581,13 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   // Nav: shrink on scroll
   const nav = document.querySelector('.nav');
   const banner = document.getElementById('sticky-banner');
+  let navShrunk = false;
   function updateNav(){
-    const shrunk = window.scrollY > 60;
-    nav.classList.toggle('shrunk', shrunk);
-    if(banner) banner.style.top = shrunk ? '64px' : '64px';
+    const y = window.scrollY;
+    if(!navShrunk && y > 80) navShrunk = true;
+    else if(navShrunk && y < 20) navShrunk = false;
+    nav.classList.toggle('shrunk', navShrunk);
+    if(banner) banner.style.top = '64px';
   }
   window.addEventListener('scroll', updateNav, {passive:true});
   updateNav();
