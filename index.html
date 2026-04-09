@@ -373,6 +373,31 @@ ul{list-style:none}
 .btn-pay:hover{opacity:0.8}
 .btn-pay:disabled{background:#bbb;cursor:not-allowed}
 
+/* ── CRYPTO PAY BUTTON (animated icons) ── */
+.crypto-pay-btn{
+  width:100%;padding:14px 24px;font-size:0.85rem;background:#1a1a1a;color:#fff;
+  border:none;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:12px;transition:all 0.3s ease;margin-top:8px;
+}
+.crypto-pay-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.4)}
+.crypto-pay-btn:disabled{background:#bbb;cursor:not-allowed;transform:none;box-shadow:none}
+.crypto-icon-container{position:relative;width:24px;height:24px;flex-shrink:0}
+.crypto-icon{position:absolute;top:0;left:0;width:24px;height:24px;opacity:0;visibility:hidden;filter:brightness(0) invert(1)}
+.crypto-default-icon{opacity:1;visibility:visible}
+.crypto-pay-btn:hover .crypto-default-icon{opacity:0;visibility:hidden}
+.crypto-pay-btn:hover .crypto-i1{animation:cryptoIconRotate 3s infinite;animation-delay:0s}
+.crypto-pay-btn:hover .crypto-i2{animation:cryptoIconRotate 3s infinite;animation-delay:0.75s}
+.crypto-pay-btn:hover .crypto-i3{animation:cryptoIconRotate 3s infinite;animation-delay:1.5s}
+.crypto-pay-btn:hover .crypto-i4{animation:cryptoIconRotate 3s infinite;animation-delay:2.25s}
+.crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
+@keyframes cryptoIconRotate{
+  0%{opacity:0;visibility:hidden;transform:translateY(10px) scale(0.5)}
+  5%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  20%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+  25%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}
+  100%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}
+}
+
 /* ── PAYMENT CONFIRMED ── */
 .confirmed-wrap{text-align:center;padding:80px 0}
 .confirmed-check{
@@ -657,7 +682,16 @@ ul{list-style:none}
           <div class="pay-method-title">Payment Method</div>
           <div class="pay-methods" id="pay-methods"></div>
 
-          <button class="btn-pay" id="btn-pay" onclick="submitOrder()">COMPLETE ORDER</button>
+          <button class="crypto-pay-btn" id="btn-pay" onclick="submitOrder()">
+            <span class="crypto-icon-container">
+              <img src="crypto-icons/btc.svg" class="crypto-icon crypto-default-icon" alt="BTC">
+              <img src="crypto-icons/btc.svg" class="crypto-icon crypto-i1" alt="BTC">
+              <img src="crypto-icons/eth.svg" class="crypto-icon crypto-i2" alt="ETH">
+              <img src="crypto-icons/sol.svg" class="crypto-icon crypto-i3" alt="SOL">
+              <img src="crypto-icons/usdt.svg" class="crypto-icon crypto-i4" alt="USDT">
+            </span>
+            <span class="crypto-btn-text">COMPLETE ORDER</span>
+          </button>
         </div>
       </div>
     </div>
