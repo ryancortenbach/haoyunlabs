@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410a';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410b';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -198,8 +198,8 @@ ul{list-style:none}
   .nav-brand{font-size:1.1rem}
   .nav-center{gap:16px}
   .nav-center a{font-size:0.62rem;letter-spacing:0.06em}
-  .hero-title{font-size:1.8rem!important;letter-spacing:0.1em!important}
-  .hero-tag{font-size:0.7rem!important}
+  .hero-title{font-size:2rem!important;letter-spacing:-0.01em!important}
+  .hero-tag{font-size:0.75rem!important}
   .product-grid{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
   .toolbar{flex-direction:column;align-items:stretch;gap:10px}
   .cat-tabs{font-size:0.68rem}
@@ -779,10 +779,64 @@ ul{list-style:none}
 <!-- ═══════════════ SCREEN: HOME ═══════════════ -->
 <div class="screen" id="screen-home">
   <div class="container">
-    <div class="hero">
-      <div class="hero-title anim-fade-up anim-d2">HAO YUN LABS</div>
-      <div class="hero-tag anim-fade-up anim-d4">Premium Research Peptides &amp; Supplies</div>
-      <div class="hero-divider"></div>
+
+    <!-- HERO -->
+    <div class="hero" style="padding:160px 0 60px">
+      <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">HAO YUN LABS</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1">Research-Grade Compounds.<br>Verified Purity.</div>
+      <div class="hero-tag anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6">Every compound is HPLC-tested, lot-verified, and ships with a Certificate of Analysis. No middlemen, no markups.</div>
+      <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
+        <button onclick="navigate('catalog')" style="padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Shop Now</button>
+        <button onclick="navigate('coa')" style="padding:14px 32px;background:transparent;color:var(--brand);border:1px solid var(--stroke);border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Verify Purity</button>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--stroke);border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;margin-bottom:48px" class="anim-fade-up anim-d8">
+      <div style="background:#fff;padding:28px 16px;text-align:center">
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem">99%+</div>
+        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">HPLC Purity</div>
+      </div>
+      <div style="background:#fff;padding:28px 16px;text-align:center">
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem">38+</div>
+        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Compounds</div>
+      </div>
+      <div style="background:#fff;padding:28px 16px;text-align:center">
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem">$250+</div>
+        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Free Shipping</div>
+      </div>
+      <div style="background:#fff;padding:28px 16px;text-align:center">
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem">COA</div>
+        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px">Every Lot</div>
+      </div>
+    </div>
+
+    <!-- FEATURE CARDS -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px">
+      <div style="background:#000;color:#fff;border-radius:var(--radius);padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;min-height:280px;cursor:pointer" onclick="navigate('catalog');setHomeCat('peptides')">
+        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px">Individual Vials</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Research Peptides</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
+        <div style="margin-top:16px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Browse Peptides &rarr;</div>
+      </div>
+      <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
+        <div style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('kits')">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">10-Vial Kits</div>
+          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk research kits. Same purity, better value.</div>
+        </div>
+        <div style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('stacks')">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Curated</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">Research Stacks</div>
+          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Pre-built compound bundles for metabolic, recovery, and cognitive research.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION DIVIDER -->
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)">Browse All Compounds</div>
+      <div style="width:40px;height:2px;background:var(--brand);margin:12px auto 0"></div>
     </div>
 
     <div class="toolbar">
