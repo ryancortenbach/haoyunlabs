@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410e';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410f';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -382,6 +382,9 @@ ul{list-style:none}
 /* ── SPINNER (shadcn-style) ── */
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:btnSpin 0.7s linear infinite;vertical-align:middle}
 .spinner.dark{border-color:rgba(0,0,0,0.12);border-top-color:var(--brand)}
+
+/* ── 3D TILT CARD ── */
+.tilt-card{transition:transform 0.15s ease;transform-style:preserve-3d;will-change:transform}
 .spinner.lg{width:24px;height:24px;border-width:2.5px}
 
 /* ── 3x3 GRID LOADER ── */
@@ -805,8 +808,8 @@ ul{list-style:none}
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
       <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">Hao Yun Labs</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1">Compounds your research<br>can trust.</div>
-      <div class="hero-tag anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Compounds your research<br>can trust.</div>
+      <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button onclick="navigate('catalog')" style="padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Shop Now</button>
         <button onclick="navigate('coa')" style="padding:14px 32px;background:transparent;color:var(--brand);border:1px solid var(--stroke);border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Verify Purity</button>
@@ -835,19 +838,19 @@ ul{list-style:none}
 
     <!-- FEATURE CARDS -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px">
-      <div style="background:#000;color:#fff;border-radius:var(--radius);padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;min-height:280px;cursor:pointer" onclick="navigate('catalog');setHomeCat('peptides')">
+      <div class="tilt-card" style="background:#000;color:#fff;border-radius:var(--radius);padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;min-height:280px;cursor:pointer" onclick="navigate('catalog');setHomeCat('peptides')">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px">Individual Vials</div>
         <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Research Peptides</div>
         <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
         <div style="margin-top:16px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Browse Peptides &rarr;</div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
-        <div style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('kits')">
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('kits')">
           <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
           <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">10-Vial Kits</div>
           <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk research kits. Same purity, better value.</div>
         </div>
-        <div style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('stacks')">
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('stacks')">
           <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Curated</div>
           <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">Research Stacks</div>
           <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Pre-built compound bundles for metabolic, recovery, and cognitive research.</div>
@@ -2691,6 +2694,22 @@ function toggleDiscreet(){
 }
 
 /* ── INTERNATIONAL SHIPPING NOTICE ── */
+/* ── 3D TILT CARDS ── */
+document.addEventListener('mousemove',function(e){
+  document.querySelectorAll('.tilt-card').forEach(function(card){
+    const rect=card.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    const y=e.clientY-rect.top;
+    if(x<0||x>rect.width||y<0||y>rect.height){card.style.transform='';return;}
+    const rotY=((x/rect.width)-0.5)*12;
+    const rotX=(0.5-(y/rect.height))*12;
+    card.style.transform='perspective(800px) rotateX('+rotX+'deg) rotateY('+rotY+'deg) scale(1.02)';
+  });
+});
+document.addEventListener('mouseleave',function(){
+  document.querySelectorAll('.tilt-card').forEach(function(c){c.style.transform='';});
+},true);
+
 /* ── TEST PANEL (Ctrl+P) ── */
 document.addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey) && e.key==='p'){
