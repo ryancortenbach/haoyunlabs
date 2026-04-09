@@ -93,30 +93,25 @@ ul{list-style:none}
 /* ── NAV ── */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(255,255,255,0);
-  border-bottom:1px solid transparent;padding:0 40px;
-  transition:background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.nav.scrolled{
-  background:rgba(255,255,255,1);
-  border-bottom:1px solid var(--stroke);
+  background:#fff;
+  border-bottom:1px solid var(--stroke);padding:0 40px;
   box-shadow:0 1px 3px rgba(0,0,0,0.04);
 }
-.nav-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;height:80px}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:80px}
 .nav-brand{cursor:pointer;justify-self:start}
 .nav-links{display:flex;gap:36px;align-items:center;justify-self:center}
 .nav-links a{font-size:0.88rem;text-transform:uppercase;letter-spacing:0.14em;font-weight:700;cursor:pointer;position:relative;padding:6px 0;transition:all 0.15s ease}
 .nav-links a:hover{opacity:0.6}
 .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--brand);transition:width 0.2s ease}
 .nav-links a:hover::after{width:100%}
-.nav-icons{display:flex;gap:16px;align-items:center;justify-self:end}
-.nav-search-wrap{position:relative}
+.nav-icons{display:flex;gap:16px;align-items:center}
+.nav-search-wrap{position:relative;flex:1;max-width:400px;margin:0 auto}
 .nav-search{
-  width:300px;padding:10px 14px 10px 38px;font-size:0.82rem;
-  border:1px solid var(--stroke);background:var(--bg);border-radius:8px;
-  font-family:var(--sans);transition:border-color 0.15s,width 0.2s ease;
+  width:100%;padding:10px 14px 10px 38px;font-size:0.82rem;
+  border:1px solid var(--stroke);background:#f8f8f8;border-radius:8px;
+  font-family:var(--sans);transition:border-color 0.15s,background 0.15s;
 }
-.nav-search:focus{border-color:var(--brand);width:360px;outline:none}
+.nav-search:focus{border-color:var(--brand);background:#fff;outline:none}
 .nav-search-results{
   position:absolute;top:100%;left:0;right:0;margin-top:4px;
   background:var(--bg);border:1px solid var(--stroke);border-radius:8px;
@@ -573,7 +568,7 @@ ul{list-style:none}
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-brand" onclick="navigate('home')"><img src="hylcompany.png" alt="Hao Yun Labs" style="height:44px;width:auto"></div>
-    <div class="nav-search-wrap" style="justify-self:center">
+    <div class="nav-search-wrap">
         <svg class="nav-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:18px;height:18px;position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.4;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
         <input class="nav-search" type="text" id="nav-search" placeholder="Search products..." oninput="navSearch(this.value)" onfocus="navSearchFocus(true)" onblur="setTimeout(()=>navSearchFocus(false),200)">
         <div class="nav-search-results" id="nav-search-results"></div>
@@ -635,6 +630,14 @@ ul{list-style:none}
       </div>
     </div>
     <div class="product-grid" id="cat-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN: PRODUCT DETAIL ═══════════════ -->
+<div class="screen" id="screen-product">
+  <div class="container">
+    <div class="pdp-layout" id="pdp-layout"></div>
+    <div class="pdp-commonly" id="pdp-commonly"></div>
   </div>
 </div>
 
@@ -1103,7 +1106,7 @@ function navigate(screen){
 
 function handleRoute(){
   const hash = window.location.hash.replace('#','') || 'home';
-  const screens = ['home','catalog','order','payment-confirmed'];
+  const screens = ['home','catalog','product','order','payment-confirmed'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
     if(el) el.classList.toggle('active', s===hash);
@@ -1140,7 +1143,7 @@ function cardHTML(p){
   if(p.cat==='bundles') specs.push('Includes: BAC water where noted');
   const specHTML = specs.map(s=>`<div>${s}</div>`).join('');
 
-  return `<div class="product-card">
+  return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer">
     ${getProductImageHTML(p)}
     <div class="card-header">
       <span class="card-sku">${p.sku}</span>
@@ -1180,16 +1183,16 @@ let homeShown = 12;
 
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
-  // Only build HTML once, then just update active state
   if(!c.querySelector('.cat-tabs-slider')){
     let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
     html += `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`;
-    for(const[key,val] of Object.entries(CATEGORIES)){
-      html += `<button class="cat-tab" data-cat="${key}" onclick="${clickFn}('${key}')">${val.label}</button>`;
-    }
+    html += `<button class="cat-tab" data-cat="singles" onclick="${clickFn}('singles')">Singles</button>`;
+    html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
+    html += `<span style="width:2px;background:var(--stroke);margin:4px 2px;border-radius:1px"></span>`;
+    html += `<button class="cat-tab" data-cat="bundles" onclick="${clickFn}('bundles')">Bundles</button>`;
+    html += `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`;
     c.innerHTML = html;
   }
-  // Update active class
   c.querySelectorAll('.cat-tab').forEach(t=>{
     t.classList.toggle('active', t.dataset.cat === activeVar);
   });
@@ -1209,6 +1212,65 @@ function slideCatTab(containerId){
   active.style.transform = 'scale(0.92)';
   setTimeout(()=>{ active.style.transform = 'scale(1)'; active.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)'; }, 80);
   setTimeout(()=>{ active.style.transition = ''; }, 300);
+}
+
+/* ── PRODUCT DETAIL PAGE ── */
+let pdpQty = 1;
+
+function openProduct(sku){
+  const p = getProduct(sku);
+  if(!p) return;
+  window._pdpSku = sku;
+  pdpQty = 1;
+  const oldPrice = (Math.floor(p.price * 1.8) - 0.01).toFixed(2);
+  const imgHTML = PRODUCT_IMAGES[p.sku]
+    ? `<img src="${PRODUCT_IMAGES[p.sku]}" alt="${p.name}">`
+    : getProductImageHTML(p);
+  const desc = p.description || 'Premium research-grade compound. Lyophilized powder. For laboratory use only.';
+  const comp = p.components || 'Purity: >99% (HPLC)\nStorage: -20°C (lyophilized, desiccated)\nAppearance: White Powder\nResearch Use Only.';
+
+  const others = ALL_PRODUCTS.filter(x=>x.sku!==sku).slice(0,3);
+
+  document.getElementById('pdp-layout').innerHTML = `
+    <div class="pdp-image">${imgHTML}</div>
+    <div class="pdp-info">
+      <div class="pdp-back" onclick="history.back()">&#8592; Back</div>
+      <div class="pdp-name">${p.name.replace(/\d+\s*mg/i,'').trim()}</div>
+      <div class="pdp-dose">${(p.name.match(/\d+\s*mg/i)||[''])[0]}</div>
+      <div class="pdp-badges">
+        <span class="pdp-badge pdp-badge-purity">99%+ PURITY</span>
+      </div>
+      <div class="pdp-price-wrap">
+        <div class="pdp-price-old">$${oldPrice}</div>
+        <div class="pdp-price">$${p.price.toFixed(2)}</div>
+      </div>
+      <div class="pdp-meta">
+        <div class="pdp-meta-row"><span class="pdp-meta-label">SKU</span><span class="pdp-meta-value">${p.sku}</span></div>
+        <div class="pdp-meta-row"><span class="pdp-meta-label">Status</span><span class="pdp-status">Available for order</span></div>
+      </div>
+      <div class="pdp-qty-row">
+        <div class="pdp-qty">
+          <button onclick="pdpQty=Math.max(1,pdpQty-1);document.getElementById('pdp-qty-val').textContent=pdpQty;event.stopPropagation()">-</button>
+          <span id="pdp-qty-val">1</span>
+          <button onclick="pdpQty++;document.getElementById('pdp-qty-val').textContent=pdpQty;event.stopPropagation()">+</button>
+        </div>
+        <button class="pdp-add-btn" onclick="for(let i=0;i<pdpQty;i++) addToCart('${p.sku}')">ADD TO CART</button>
+      </div>
+      <div class="pdp-details-toggle" onclick="document.getElementById('pdp-details').classList.toggle('open');this.textContent=document.getElementById('pdp-details').classList.contains('open')?'Hide Details &#8593;':'More Details &#8595;'">More Details &#8595;</div>
+      <div class="pdp-details-content" id="pdp-details">
+        <p><strong>Description:</strong> ${desc}</p>
+        <p style="margin-top:8px;white-space:pre-line">${comp.replace(/\\n/g,'\n')}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('pdp-commonly').innerHTML = others.length ? `
+    <h3>COMMONLY BOUGHT WITH</h3>
+    <h2>Commonly Bought With</h2>
+    <div class="product-grid">${others.map(cardHTML).join('')}</div>
+  ` : '';
+
+  navigate('product');
 }
 
 function setHomeCat(cat){
