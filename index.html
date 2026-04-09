@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409t';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409u';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1453,7 +1453,7 @@ function addToCartQty(sku, qty){
     }
   }
 }
-function addToCart(sku){
+function addToCart(sku, btn){
   const existing = cart.get(sku);
   if(existing) cart.set(sku, existing + 1);
   else cart.set(sku, 1);
@@ -1461,6 +1461,22 @@ function addToCart(sku){
   const p = getProduct(sku);
   showToast(p ? `${p.name} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
+  // Animate button: green checkmark then revert
+  if(btn && btn.tagName==='BUTTON'){
+    const origText = btn.textContent;
+    const origBg = btn.style.background || '';
+    btn.textContent = '\u2713';
+    btn.style.background = '#16a34a';
+    btn.style.color = '#fff';
+    btn.style.transition = 'all 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+    btn.style.transform = 'scale(1.05)';
+    setTimeout(()=>{
+      btn.textContent = origText;
+      btn.style.background = origBg || '';
+      btn.style.color = '';
+      btn.style.transform = '';
+    }, 1200);
+  }
   // Show supplies upsell if adding a peptide (not supplies themselves)
   const supplySkus = ['BACSV','SYRSV'];
   if(!supplySkus.includes(sku)){
@@ -1612,7 +1628,7 @@ function cardHTML(p){
       <div class="card-details" id="${detailId}">${detailHTML}</div>
     </div>
     <div class="card-footer">
-      <button class="btn-add" onclick="event.stopPropagation();addToCart('${p.sku}')">ADD TO CART</button>
+      <button class="btn-add" onclick="event.stopPropagation();addToCart('${p.sku}',this)">ADD TO CART</button>
     </div>
   </div>`;
 }
@@ -2544,28 +2560,28 @@ function toggleDiscreet(){
 /* ── INTERNATIONAL SHIPPING NOTICE ── */
 /* ── TEST PANEL (Ctrl+P) ── */
 document.addEventListener('keydown',function(e){
-  if(e.ctrlKey && e.key==='p'){
-    e.preventDefault();
-    let panel = document.getElementById('test-panel');
-    if(panel){ panel.remove(); return; }
-    panel = document.createElement('div');
-    panel.id='test-panel';
-    panel.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;min-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.4);font-family:var(--sans)';
-    panel.innerHTML=`
+  if((e.ctrlKey||e.metaKey) && e.key==='p'){
+    e.preventDefault();e.stopPropagation();
+    let wrap = document.getElementById('test-panel-wrap');
+    if(wrap){ wrap.remove(); return; }
+    wrap = document.createElement('div');
+    wrap.id='test-panel-wrap';
+    wrap.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;pointer-events:auto';
+    wrap.innerHTML=`<div style="background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;min-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.4);pointer-events:auto">
       <div style="font-weight:800;font-size:1rem;margin-bottom:16px;letter-spacing:0.06em">TEST PANEL</div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <button onclick="showEmailPopup();document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Mystery Vial Popup</button>
-        <button onclick="sessionStorage.removeItem('hyl_upsell_shown');addToCart('RT10SV');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Supplies Upsell</button>
-        <button onclick="showToast('Test success toast')" style="padding:10px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Toast (Success)</button>
-        <button onclick="showToast('Test error toast','error')" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Toast (Error)</button>
-        <button onclick="navigate('order');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Go to Checkout</button>
-        <button onclick="navigate('tracking');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Order Tracking</button>
-        <button onclick="navigate('coa');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">COA Lookup</button>
-        <button onclick="localStorage.clear();sessionStorage.clear();location.reload()" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Clear Cache + Reload</button>
+        <button onmousedown="showEmailPopup();document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Mystery Vial Popup</button>
+        <button onmousedown="sessionStorage.removeItem('hyl_upsell_shown');addToCart('RT10SV');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Supplies Upsell</button>
+        <button onmousedown="showToast('Test success toast')" style="padding:10px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Toast (Success)</button>
+        <button onmousedown="showToast('Test error toast','error')" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Toast (Error)</button>
+        <button onmousedown="navigate('order');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Go to Checkout</button>
+        <button onmousedown="navigate('tracking');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Order Tracking</button>
+        <button onmousedown="navigate('coa');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">COA Lookup</button>
+        <button onmousedown="localStorage.clear();sessionStorage.clear();location.reload()" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Clear Cache + Reload</button>
       </div>
-      <div onclick="document.getElementById('test-panel').remove()" style="text-align:center;margin-top:12px;font-size:0.68rem;color:rgba(255,255,255,0.4);cursor:pointer">Close (or Ctrl+P)</div>
-    `;
-    document.body.appendChild(panel);
+      <div onmousedown="document.getElementById('test-panel-wrap').remove()" style="text-align:center;margin-top:12px;font-size:0.68rem;color:rgba(255,255,255,0.4);cursor:pointer">Close (or Ctrl+P)</div>
+    </div>`;
+    document.body.appendChild(wrap);
   }
 });
 
