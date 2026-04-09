@@ -1139,12 +1139,19 @@ let homeShown = 12;
 
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
-  let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
-  html += `<button class="cat-tab ${activeVar==='all'?'active':''}" data-cat="all" onclick="${clickFn}('all')">All</button>`;
-  for(const[key,val] of Object.entries(CATEGORIES)){
-    html += `<button class="cat-tab ${activeVar===key?'active':''}" data-cat="${key}" onclick="${clickFn}('${key}')">${val.label}</button>`;
+  // Only build HTML once, then just update active state
+  if(!c.querySelector('.cat-tabs-slider')){
+    let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
+    html += `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`;
+    for(const[key,val] of Object.entries(CATEGORIES)){
+      html += `<button class="cat-tab" data-cat="${key}" onclick="${clickFn}('${key}')">${val.label}</button>`;
+    }
+    c.innerHTML = html;
   }
-  c.innerHTML = html;
+  // Update active class
+  c.querySelectorAll('.cat-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.cat === activeVar);
+  });
   requestAnimationFrame(()=>slideCatTab(containerId));
 }
 
