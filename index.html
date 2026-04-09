@@ -1846,7 +1846,7 @@ async function loadProductsFromDB(){
     if(error || !data || data.length === 0) return false;
 
     // Clear and rebuild
-    CATALOG_INDIVIDUAL.length=0; CATALOG_KITS.length=0; CATALOG_BUNDLES.length=0; CATALOG_NOOTROPICS.length=0; CATALOG_SPRAYS.length=0;
+    CATALOG_INDIVIDUAL.length=0; CATALOG_KITS.length=0; CATALOG_BUNDLES.length=0; CATALOG_SPRAYS.length=0;
 
     const catMap = {singles:CATALOG_INDIVIDUAL, kits:CATALOG_KITS, bundles:CATALOG_BUNDLES, sprays:CATALOG_SPRAYS};
     data.forEach(row=>{
@@ -1900,9 +1900,15 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   showSkeleton(grid, 8);
 
   // Try loading from DB, fall back to hardcoded
-  await loadProductsFromDB();
+  try { await loadProductsFromDB(); } catch(e){ console.warn('[INIT] DB load failed:', e); }
 
+  // ALWAYS activate the correct screen
   handleRoute();
+  // Force home screen if nothing is active
+  if(!document.querySelector('.screen.active')){
+    document.getElementById('screen-home').classList.add('active');
+    renderHome();
+  }
 
   // Scroll reveal observer
   const revealObserver = new IntersectionObserver((entries) => {
