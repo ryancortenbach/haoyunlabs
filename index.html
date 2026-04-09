@@ -57,7 +57,7 @@ ul{list-style:none}
 #intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
-/* ── GRID BG + SHIMMER ── */
+/* ── GRID BG + LINE SHIMMER ── */
 #vanta-bg{
   position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
   pointer-events:none;
@@ -69,9 +69,20 @@ ul{list-style:none}
 }
 #vanta-bg::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(120deg,transparent 30%,rgba(0,0,0,0.14) 50%,transparent 70%);
+  background-color:transparent;
+  background-image:
+    linear-gradient(120deg, transparent 30%, rgba(0,0,0,0.18) 49.5%, rgba(0,0,0,0.18) 50.5%, transparent 70%);
   background-size:200% 100%;
   animation:gridShimmer 6s ease-in-out infinite;
+  mix-blend-mode:darken;
+  mask-image:
+    linear-gradient(rgba(0,0,0,1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px);
+  -webkit-mask-image:
+    linear-gradient(rgba(0,0,0,1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px);
+  mask-size:48px 48px;
+  -webkit-mask-size:48px 48px;
 }
 @keyframes gridShimmer{
   0%{background-position:200% 0}
