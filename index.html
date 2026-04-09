@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410m';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410n';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -499,6 +499,22 @@ ul{list-style:none}
 .upsell-btn.primary:hover{background:#eee}
 .upsell-skip{display:block;text-align:center;margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .upsell-skip:hover{color:rgba(255,255,255,0.7)}
+
+/* ── ALERT DIALOG ── */
+.alert-overlay{position:fixed;inset:0;z-index:9200;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s ease}
+.alert-overlay.open{opacity:1;pointer-events:auto}
+.alert-card{background:#fff;border-radius:16px;padding:28px;max-width:400px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,0.15);transform:scale(0.95) translateY(10px);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.alert-overlay.open .alert-card{transform:scale(1) translateY(0)}
+.alert-title{font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px}
+.alert-desc{font-size:0.82rem;color:var(--muted);line-height:1.5;margin-bottom:20px}
+.alert-footer{display:flex;gap:8px;justify-content:flex-end}
+.alert-btn{padding:10px 20px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.alert-btn-cancel{background:#f5f5f5;color:var(--text);border:1px solid var(--stroke)}
+.alert-btn-cancel:hover{background:#eee}
+.alert-btn-action{background:#dc2626;color:#fff;border:none}
+.alert-btn-action:hover{background:#b91c1c}
+.alert-check{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:0.75rem;color:var(--muted);cursor:pointer}
+.alert-check input{accent-color:var(--brand)}
 
 /* ── SHOW MORE ── */
 .show-more-wrap{text-align:center;padding:0 0 48px}
@@ -1253,6 +1269,19 @@ ul{list-style:none}
   </div>
 </div>
 
+<!-- REMOVE ITEM ALERT DIALOG -->
+<div class="alert-overlay" id="remove-alert">
+  <div class="alert-card">
+    <div class="alert-title">Remove from cart?</div>
+    <div class="alert-desc" id="remove-alert-desc">This will remove the item from your cart.</div>
+    <label class="alert-check"><input type="checkbox" id="remove-alert-dontshow"> Don't show this again</label>
+    <div class="alert-footer">
+      <button class="alert-btn alert-btn-cancel" onclick="closeRemoveAlert()">Cancel</button>
+      <button class="alert-btn alert-btn-action" onclick="confirmRemoveItem()">Remove</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
@@ -1671,10 +1700,28 @@ function addBacWater(qty){
   }
 }
 
+let _removeAlertSku = null;
+let _removeAlertSkip = false;
 function removeFromCart(sku){
-  cart.delete(sku);
-  saveCart();
-  renderOrder();
+  if(_removeAlertSkip){
+    cart.delete(sku);saveCart();renderOrder();return;
+  }
+  _removeAlertSku = sku;
+  const p = getProduct(sku);
+  document.getElementById('remove-alert-desc').textContent = p ? `Remove ${p.name} from your cart?` : 'Remove this item from your cart?';
+  document.getElementById('remove-alert-dontshow').checked = false;
+  document.getElementById('remove-alert').classList.add('open');
+}
+function confirmRemoveItem(){
+  if(_removeAlertSku){
+    cart.delete(_removeAlertSku);saveCart();renderOrder();
+    if(document.getElementById('remove-alert-dontshow').checked) _removeAlertSkip = true;
+  }
+  closeRemoveAlert();
+}
+function closeRemoveAlert(){
+  document.getElementById('remove-alert').classList.remove('open');
+  _removeAlertSku = null;
 }
 function setQty(sku, delta){
   const cur = cart.get(sku) || 0;
@@ -1754,6 +1801,7 @@ function handleRoute(){
   if(hash==='home') renderHome();
   else if(hash==='catalog') renderCatalog();
   else if(hash==='order'){
+    _removeAlertSkip = false;
     if(cart.size===0){showToast('Your cart is empty','error');navigate('home');return;}
     renderOrder();
     if(cart.size > 0){
