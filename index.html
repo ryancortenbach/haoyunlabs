@@ -1682,9 +1682,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
   // Nav: transparent at top, white on scroll
   const nav = document.querySelector('.nav');
-  window.addEventListener('scroll', ()=>{
-    nav.classList.toggle('scrolled', window.scrollY > 10);
-  }, {passive:true});
+  function updateNav(){ nav.classList.toggle('scrolled', window.scrollY > 10); }
+  window.addEventListener('scroll', updateNav, {passive:true});
+  updateNav();
   introFade();
 
   const grid = document.getElementById('home-grid');
