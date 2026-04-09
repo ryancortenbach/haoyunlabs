@@ -57,15 +57,25 @@ ul{list-style:none}
 #intro-overlay h1{font-family:var(--display);font-size:3rem;font-weight:900;letter-spacing:0.2em;color:#fff;text-transform:uppercase}
 #intro-overlay p{font-size:1.4rem;color:#fff;margin-top:4px;letter-spacing:0.15em}
 
-/* ── GRID BG ── */
+/* ── GRID BG + SHIMMER ── */
 #vanta-bg{
   position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
   pointer-events:none;
   background-color:#ffffff;
   background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,0.10) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(0,0,0,0.10) 1.5px, transparent 1.5px);
   background-size:48px 48px;
+}
+#vanta-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.5) 50%,transparent 70%);
+  background-size:200% 100%;
+  animation:gridShimmer 6s ease-in-out infinite;
+}
+@keyframes gridShimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
 }
 
 /* ── NAV ── */
@@ -458,9 +468,6 @@ ul{list-style:none}
 <div class="screen" id="screen-home">
   <div class="container">
     <div class="hero">
-      <div class="hero-banner anim-scale-in">
-        <img src="product-images/hero-group.png" alt="Hao Yun Labs Research Peptides">
-      </div>
       <div class="hero-title anim-fade-up anim-d2">HAO YUN LABS</div>
       <div class="hero-cn anim-fade-up anim-d3">好运</div>
       <div class="hero-tag anim-fade-up anim-d4">Premium Research Peptides &amp; Supplies</div>
