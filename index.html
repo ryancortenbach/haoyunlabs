@@ -111,7 +111,7 @@ ul{list-style:none}
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--stroke);
-  transition:all 0.7s cubic-bezier(0.34,1.56,0.64,1);
+  transition:all 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 .nav.shrunk{
   top:8px;left:0;right:0;
@@ -124,7 +124,7 @@ ul{list-style:none}
 .nav-inner{
   max-width:1200px;margin:0 auto;padding:0 32px;
   display:flex;align-items:center;height:64px;
-  transition:height 0.4s cubic-bezier(0.4,0,0.2,1);
+  transition:height 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 .nav.shrunk .nav-inner{height:48px;padding:0 24px}
 .nav-brand{cursor:pointer;flex-shrink:0;font-family:'Instrument Serif',serif;font-size:1.3rem;letter-spacing:-0.01em;color:var(--brand)}
@@ -731,6 +731,7 @@ ul{list-style:none}
     <div class="ag-legal">By entering, you confirm you are 21+ and agree to our terms. For research use only.</div>
   </div>
 </div>
+<script>if(localStorage.getItem('hyl_age_verified')==='true')document.getElementById('age-gate').classList.add('hidden');</script>
 
 
 <!-- NAV -->
