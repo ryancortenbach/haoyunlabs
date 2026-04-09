@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410d';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410e';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -804,8 +804,8 @@ ul{list-style:none}
 
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
-      <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">HAO YUN LABS</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1">Compounds Your Research<br>Can Trust</div>
+      <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">Hao Yun Labs</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.6rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1">Compounds your research<br>can trust.</div>
       <div class="hero-tag anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button onclick="navigate('catalog')" style="padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Shop Now</button>
@@ -1677,6 +1677,7 @@ function handleRoute(){
   if(hash==='home') renderHome();
   else if(hash==='catalog') renderCatalog();
   else if(hash==='order'){
+    if(cart.size===0){showToast('Your cart is empty','error');navigate('home');return;}
     renderOrder();
     if(cart.size > 0){
       const items = []; cart.forEach((qty,sku)=>{ const p=getProduct(sku); if(p) items.push({ProductName:p.name,ProductID:p.sku,Price:p.price,Quantity:qty}); });
@@ -2338,7 +2339,7 @@ function showCryptoPayment(data){
    SUBMIT ORDER
    ═════════════════════════════════════════════════════ */
 async function submitOrder(){
-  if(cart.size===0){showToast('Cart is empty');return;}
+  if(cart.size===0){showToast('Your cart is empty','error');navigate('home');return;}
   const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-email'];
   for(const fid of fields){
     const el = document.getElementById(fid);
