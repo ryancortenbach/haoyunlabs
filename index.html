@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409u';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409v';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1085,7 +1085,7 @@ ul{list-style:none}
 <div id="email-popup" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1)">
   <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:48px 40px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.3);line-height:1">&times;</button>
-    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px">free mystery vial</span> with your first order</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span id="popup-flip-word" style="display:inline-block;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)">free</span> mystery vial with your first order</div>
     <div style="font-size:0.82rem;color:rgba(255,255,255,0.45);margin-bottom:28px;line-height:1.5">Sign up to receive a 5-character code for a free mystery vial. Valid 24 hours.</div>
     <div style="text-align:left">
       <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px">Name</div>
@@ -1462,21 +1462,18 @@ function addToCart(sku, btn){
   showToast(p ? `${p.name} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   // Animate button: green checkmark then revert
-  if(btn && btn.tagName==='BUTTON'){
-    const origText = btn.textContent;
-    const origBg = btn.style.background || '';
-    btn.textContent = '\u2713';
-    btn.style.background = '#16a34a';
-    btn.style.color = '#fff';
-    btn.style.transition = 'all 0.3s cubic-bezier(0.34,1.56,0.64,1)';
-    btn.style.transform = 'scale(1.05)';
-    setTimeout(()=>{
-      btn.textContent = origText;
-      btn.style.background = origBg || '';
-      btn.style.color = '';
-      btn.style.transform = '';
-    }, 1200);
-  }
+  try {
+    if(btn && btn.tagName==='BUTTON'){
+      const origText = btn.textContent;
+      btn.textContent = '\u2713';
+      btn.style.cssText += ';background:#16a34a !important;color:#fff !important;transform:scale(1.05);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+      setTimeout(()=>{
+        btn.textContent = origText;
+        btn.style.cssText = btn.style.cssText.replace(/background:#16a34a !important;color:#fff !important;transform:scale\(1\.05\);/g,'');
+        btn.style.transform = '';
+      }, 1200);
+    }
+  } catch(e){}
   // Show supplies upsell if adding a peptide (not supplies themselves)
   const supplySkus = ['BACSV','SYRSV'];
   if(!supplySkus.includes(sku)){
@@ -1540,16 +1537,18 @@ function getSubtotal(){
    TOAST
    ═════════════════════════════════════════════════════ */
 function showToast(msg, type){
-  const t = window._sonnerToast;
-  if(t){
-    t.dismiss();
-    const opts = {duration:3000};
-    if(type==='error') t.error(msg,opts);
-    else if(type==='warning') t.warning(msg,opts);
-    else if(type==='info') t.info(msg,opts);
-    else t.success(msg,opts);
-    return;
-  }
+  try {
+    const t = window._sonnerToast;
+    if(t){
+      try{t.dismiss();}catch(e){}
+      const opts = {duration:3000};
+      if(type==='error') t.error(msg,opts);
+      else if(type==='warning') t.warning(msg,opts);
+      else if(type==='info') t.info(msg,opts);
+      else t.success(msg,opts);
+      return;
+    }
+  } catch(e){ console.warn('[toast]',e); }
   // Fallback if Sonner hasn't loaded yet
   const container = document.getElementById('toast-container') || (()=>{
     const c = document.createElement('div');
@@ -2429,13 +2428,30 @@ async function lookupCOA(){
 }
 
 /* ── EMAIL CAPTURE POPUP ── */
+let _flipInterval=null;
 function showEmailPopup(){
   const popup = document.getElementById('email-popup');
   const card = document.getElementById('email-popup-card');
   if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
   if(card) setTimeout(()=>{ card.style.transform='translateY(0) scale(1)'; },50);
+  // Start word flip
+  const words=['free','exclusive','bonus','surprise'];
+  let idx=0;
+  if(_flipInterval) clearInterval(_flipInterval);
+  _flipInterval=setInterval(()=>{
+    idx=(idx+1)%words.length;
+    const el=document.getElementById('popup-flip-word');
+    if(!el){clearInterval(_flipInterval);return;}
+    el.style.transform='translateY(-100%)';el.style.opacity='0';
+    setTimeout(()=>{
+      el.textContent=words[idx];
+      el.style.transform='translateY(100%)';
+      requestAnimationFrame(()=>{el.style.transform='translateY(0)';el.style.opacity='1';});
+    },250);
+  },2000);
 }
 function closeEmailPopup(){
+  if(_flipInterval){clearInterval(_flipInterval);_flipInterval=null;}
   const popup = document.getElementById('email-popup');
   const card = document.getElementById('email-popup-card');
   if(card) card.style.transform='translateY(40px) scale(0.95)';
@@ -2566,21 +2582,37 @@ document.addEventListener('keydown',function(e){
     if(wrap){ wrap.remove(); return; }
     wrap = document.createElement('div');
     wrap.id='test-panel-wrap';
-    wrap.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;pointer-events:auto';
-    wrap.innerHTML=`<div style="background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;min-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.4);pointer-events:auto">
-      <div style="font-weight:800;font-size:1rem;margin-bottom:16px;letter-spacing:0.06em">TEST PANEL</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button onmousedown="showEmailPopup();document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Mystery Vial Popup</button>
-        <button onmousedown="sessionStorage.removeItem('hyl_upsell_shown');addToCart('RT10SV');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Supplies Upsell</button>
-        <button onmousedown="showToast('Test success toast')" style="padding:10px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Toast (Success)</button>
-        <button onmousedown="showToast('Test error toast','error')" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Toast (Error)</button>
-        <button onmousedown="navigate('order');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Go to Checkout</button>
-        <button onmousedown="navigate('tracking');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Order Tracking</button>
-        <button onmousedown="navigate('coa');document.getElementById('test-panel-wrap').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">COA Lookup</button>
-        <button onmousedown="localStorage.clear();sessionStorage.clear();location.reload()" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;pointer-events:auto">Clear Cache + Reload</button>
-      </div>
-      <div onmousedown="document.getElementById('test-panel-wrap').remove()" style="text-align:center;margin-top:12px;font-size:0.68rem;color:rgba(255,255,255,0.4);cursor:pointer">Close (or Ctrl+P)</div>
-    </div>`;
+    wrap.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center';
+    const panel = document.createElement('div');
+    panel.style.cssText='background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;min-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.4)';
+    panel.innerHTML='<div style="font-weight:800;font-size:1rem;margin-bottom:16px;letter-spacing:0.06em">TEST PANEL</div>';
+    const actions = [
+      {label:'Mystery Vial Popup',bg:'#fff',color:'#000',fn:function(){showEmailPopup();wrap.remove();}},
+      {label:'Supplies Upsell',bg:'#fff',color:'#000',fn:function(){sessionStorage.removeItem('hyl_upsell_shown');addToCart('RT10SV');wrap.remove();}},
+      {label:'Toast (Success)',bg:'#16a34a',color:'#fff',fn:function(){showToast('Test success toast');}},
+      {label:'Toast (Error)',bg:'#dc2626',color:'#fff',fn:function(){showToast('Test error toast','error');}},
+      {label:'Go to Checkout',bg:'#fff',color:'#000',fn:function(){navigate('order');wrap.remove();}},
+      {label:'Order Tracking',bg:'#fff',color:'#000',fn:function(){navigate('tracking');wrap.remove();}},
+      {label:'COA Lookup',bg:'#fff',color:'#000',fn:function(){navigate('coa');wrap.remove();}},
+      {label:'Clear Cache + Reload',bg:'#dc2626',color:'#fff',fn:function(){localStorage.clear();sessionStorage.clear();location.reload();}},
+    ];
+    const list = document.createElement('div');
+    list.style.cssText='display:flex;flex-direction:column;gap:8px';
+    actions.forEach(function(a){
+      const b = document.createElement('button');
+      b.textContent=a.label;
+      b.style.cssText='padding:10px 16px;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer;background:'+a.bg+';color:'+a.color;
+      b.addEventListener('click',a.fn);
+      list.appendChild(b);
+    });
+    panel.appendChild(list);
+    const close = document.createElement('div');
+    close.textContent='Close (or Ctrl+P)';
+    close.style.cssText='text-align:center;margin-top:12px;font-size:0.68rem;color:rgba(255,255,255,0.4);cursor:pointer';
+    close.addEventListener('click',function(){wrap.remove();});
+    panel.appendChild(close);
+    wrap.appendChild(panel);
+    wrap.addEventListener('click',function(ev){if(ev.target===wrap)wrap.remove();});
     document.body.appendChild(wrap);
   }
 });
