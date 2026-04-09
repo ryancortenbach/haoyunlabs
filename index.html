@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409s';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409t';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -114,7 +114,7 @@ ul{list-style:none}
 /* ── NAV (resizable) ── */
 /* ── NAV ── */
 .nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:32px;left:0;right:0;z-index:100;
   background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:none;border-bottom:1px solid rgba(0,0,0,0.04);
   margin:0 auto;
@@ -123,7 +123,7 @@ ul{list-style:none}
   transition:top 1s cubic-bezier(0.22,1,0.36,1),left 1s cubic-bezier(0.22,1,0.36,1),right 1s cubic-bezier(0.22,1,0.36,1),border-radius 1s cubic-bezier(0.22,1,0.36,1),box-shadow 1s cubic-bezier(0.22,1,0.36,1),background 1s cubic-bezier(0.22,1,0.36,1),border-color 1s cubic-bezier(0.22,1,0.36,1);
 }
 .nav.shrunk{
-  top:8px;left:calc(50% - 450px);right:calc(50% - 450px);
+  top:40px;left:calc(50% - 450px);right:calc(50% - 450px);
   border-radius:999px;
   box-shadow:0 4px 24px rgba(0,0,0,0.06);
   border:none;
@@ -225,10 +225,8 @@ ul{list-style:none}
 
 /* ── STICKY BANNER ── */
 .sticky-banner{
-  position:fixed;top:64px;left:0;right:0;z-index:99;
+  position:fixed;top:0;left:0;right:0;z-index:101;
   background:#000;color:#fff;overflow:hidden;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  transition:top 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 .banner-track{
   display:flex;width:max-content;
@@ -265,7 +263,7 @@ ul{list-style:none}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* ── HERO ── */
-.hero{text-align:center;padding:120px 0 40px}
+.hero{text-align:center;padding:140px 0 40px}
 .hero-banner{
   width:100%;max-width:700px;margin:0 auto 32px;border-radius:8px;overflow:hidden;
 }
@@ -2544,6 +2542,33 @@ function toggleDiscreet(){
 }
 
 /* ── INTERNATIONAL SHIPPING NOTICE ── */
+/* ── TEST PANEL (Ctrl+P) ── */
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey && e.key==='p'){
+    e.preventDefault();
+    let panel = document.getElementById('test-panel');
+    if(panel){ panel.remove(); return; }
+    panel = document.createElement('div');
+    panel.id='test-panel';
+    panel.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;min-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.4);font-family:var(--sans)';
+    panel.innerHTML=`
+      <div style="font-weight:800;font-size:1rem;margin-bottom:16px;letter-spacing:0.06em">TEST PANEL</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button onclick="showEmailPopup();document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Mystery Vial Popup</button>
+        <button onclick="sessionStorage.removeItem('hyl_upsell_shown');addToCart('RT10SV');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Supplies Upsell</button>
+        <button onclick="showToast('Test success toast')" style="padding:10px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Toast (Success)</button>
+        <button onclick="showToast('Test error toast','error')" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Toast (Error)</button>
+        <button onclick="navigate('order');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Go to Checkout</button>
+        <button onclick="navigate('tracking');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Order Tracking</button>
+        <button onclick="navigate('coa');document.getElementById('test-panel').remove()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">COA Lookup</button>
+        <button onclick="localStorage.clear();sessionStorage.clear();location.reload()" style="padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.78rem;cursor:pointer">Clear Cache + Reload</button>
+      </div>
+      <div onclick="document.getElementById('test-panel').remove()" style="text-align:center;margin-top:12px;font-size:0.68rem;color:rgba(255,255,255,0.4);cursor:pointer">Close (or Ctrl+P)</div>
+    `;
+    document.body.appendChild(panel);
+  }
+});
+
 function checkInternational(){
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -2623,7 +2648,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     if(!navShrunk && y > 80) navShrunk = true;
     else if(navShrunk && y < 20) navShrunk = false;
     nav.classList.toggle('shrunk', navShrunk);
-    if(banner) banner.style.top = '64px';
   }
   window.addEventListener('scroll', updateNav, {passive:true});
   updateNav();
