@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410j';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410k';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -384,6 +384,30 @@ ul{list-style:none}
 .spinner.dark{border-color:rgba(0,0,0,0.12);border-top-color:var(--brand)}
 
 /* ── 3D TILT CARD ── */
+/* ── BADGES ── */
+@keyframes badge-shine{0%{background-position:200% center}100%{background-position:-200% center}}
+.badge-bestseller{
+  padding:4px 12px;font-size:0.58rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;
+  background:linear-gradient(110deg,#b8860b 0%,#ffd700 25%,#b8860b 50%,#ffd700 75%,#b8860b 100%);
+  background-size:200% auto;animation:badge-shine 3s linear infinite;
+  color:#fff;border-radius:999px;text-shadow:0 1px 2px rgba(0,0,0,0.3);
+}
+.badge-purity{
+  padding:4px 12px;font-size:0.58rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
+  background:#fff;border:1px solid var(--stroke);border-radius:999px;
+}
+
+/* ── HERO BUTTONS ── */
+.hero-btn{
+  padding:14px 32px;border-radius:999px;font-size:0.78rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.3s cubic-bezier(0.22,1,0.36,1);border:2px solid var(--brand);
+}
+.hero-btn-primary{background:var(--brand);color:#fff}
+.hero-btn-primary:hover{background:#fff;color:var(--brand)}
+.hero-btn-secondary{background:transparent;color:var(--brand)}
+.hero-btn-secondary:hover{background:var(--brand);color:#fff}
+
 .tilt-card{transition:transform 0.15s ease;transform-style:preserve-3d;will-change:transform}
 
 /* ── DISCORD FLY BUTTON ── */
@@ -825,8 +849,8 @@ ul{list-style:none}
       <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Peptides to <em style="font-style:italic">fuel</em> your research.</div>
       <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
-        <button onclick="navigate('catalog')" style="padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Shop Now</button>
-        <button onclick="navigate('coa')" style="padding:14px 32px;background:transparent;color:var(--brand);border:1px solid var(--stroke);border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)">Verify Purity</button>
+        <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now</button>
+        <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">Verify Purity</button>
       </div>
     </div>
 
@@ -1201,10 +1225,7 @@ ul{list-style:none}
 <!-- SUPPLIES UPSELL -->
 <div class="upsell-overlay" id="upsell-overlay">
   <div class="upsell-card">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div class="upsell-badge">Research Supplies</div>
-      <span onclick="closeUpsell()" style="cursor:pointer;font-size:1.2rem;opacity:0.4;line-height:1">&times;</span>
-    </div>
+    <div class="upsell-badge">Research Supplies</div>
     <div class="upsell-title">Add needles, swabs, or BAC.</div>
     <div class="upsell-desc">Add the prep supplies you need now, then keep browsing.</div>
     <div class="upsell-items">
@@ -1633,6 +1654,23 @@ function closeUpsell(){
   if(syrCheck) syrCheck.classList.add('checked');
 }
 
+function addBacWater(qty){
+  for(let i=0;i<qty;i++) addToCart('BACSV');
+  const el = document.getElementById('upsell-suggestion');
+  if(el){
+    const inner = el.querySelector('div');
+    if(inner){
+      inner.style.background='#f0fdf4';inner.style.borderColor='#bbf7d0';
+      inner.innerHTML='<div style="text-align:center;padding:8px;font-size:0.82rem;font-weight:700;color:#16a34a">Nice choice!</div>';
+      inner.style.transition='all 0.5s cubic-bezier(0.22,1,0.36,1)';
+      setTimeout(()=>{
+        inner.style.opacity='0';inner.style.transform='translateY(-10px)';inner.style.maxHeight='0';inner.style.padding='0';inner.style.margin='0';inner.style.overflow='hidden';
+        setTimeout(()=>renderOrder(),500);
+      },1200);
+    }
+  }
+}
+
 function removeFromCart(sku){
   cart.delete(sku);
   saveCart();
@@ -1745,8 +1783,8 @@ function cardHTML(p){
 
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer">
     <div style="display:flex;gap:6px;padding:8px 12px 0;flex-wrap:wrap">
-      ${isBest ? '<span style="padding:3px 8px;font-size:0.6rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;background:#000;color:#fff;border-radius:4px">Best Seller</span>' : ''}
-      <span style="padding:3px 8px;font-size:0.6rem;font-weight:700;letter-spacing:0.04em;border:1px solid var(--stroke);border-radius:4px">${purity}% Purity</span>
+      ${isBest ? '<span class="badge-bestseller">Best Seller</span>' : ''}
+      <span class="badge-purity">${purity}% Purity</span>
     </div>
     ${getProductImageHTML(p)}
     <div class="card-header">
@@ -1973,12 +2011,12 @@ function renderUpsell(){
   if(peptideQty > 0 && bacInCart < bacNeeded){
     const toAdd = bacNeeded - bacInCart;
     const cost = (toAdd * 11.99).toFixed(2);
-    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fffbeb;border:1px solid #fde68a;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px">
+    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
       <div>
-        <div style="font-size:0.78rem;font-weight:700;color:#b45309">BAC Water Recommended</div>
+        <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Recommended</div>
         <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x suggested for ${peptideQty} vial${peptideQty>1?'s':''} — $${cost}</div>
       </div>
-      <button type="button" onclick="event.preventDefault();event.stopPropagation();for(let i=0;i<${toAdd};i++)addToCart('BACSV');renderOrder()" style="padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
+      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
     </div>`;
   } else {
     el.innerHTML = '';
