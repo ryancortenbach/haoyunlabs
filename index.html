@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409q';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409r';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1084,12 +1084,9 @@ ul{list-style:none}
 </div>
 
 <!-- EMAIL CAPTURE POPUP -->
-<div id="email-popup" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9000;max-width:400px;width:calc(100% - 48px)">
+<div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;max-width:400px;width:calc(100% - 48px);transform:translateY(120%);opacity:0;pointer-events:none;transition:transform 0.8s cubic-bezier(0.22,1,0.36,1),opacity 0.6s ease">
   <div style="background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;text-align:left;position:relative;box-shadow:0 12px 40px rgba(0,0,0,0.25)">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Exclusive Access</span>
-      <button onclick="closeEmailPopup()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.4);line-height:1">&times;</button>
-    </div>
+    <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Exclusive Access</span>
     <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;margin:14px 0 6px;line-height:1.2">Join the mailing list for a free mystery vial.</div>
     <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:16px">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
     <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px">Name</div>
@@ -2418,11 +2415,11 @@ async function lookupCOA(){
 /* ── EMAIL CAPTURE POPUP ── */
 function showEmailPopup(){
   const popup = document.getElementById('email-popup');
-  if(popup) popup.style.display = 'flex';
+  if(popup){ popup.style.transform='translateY(0)'; popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
 }
 function closeEmailPopup(){
   const popup = document.getElementById('email-popup');
-  if(popup) popup.style.display = 'none';
+  if(popup){ popup.style.transform='translateY(120%)'; popup.style.opacity='0'; popup.style.pointerEvents='none'; }
   localStorage.setItem('hyl_popup_dismissed', Date.now().toString());
 }
 async function submitPopupEmail(){
@@ -2437,10 +2434,7 @@ async function submitPopupEmail(){
   // Transform popup into success + Discord invite
   const popup = document.getElementById('email-popup').querySelector('div');
   popup.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Mystery Vial</span>
-      <button onclick="closeEmailPopup()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.4);line-height:1">&times;</button>
-    </div>
+    <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Mystery Vial</span>
     <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;margin:14px 0 6px;line-height:1.2">You're in, ${name.split(' ')[0]}!</div>
     <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:12px">Your mystery vial code:</div>
     <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px;text-align:center;font-family:var(--mono);font-size:1.4rem;font-weight:800;letter-spacing:0.2em;margin-bottom:16px">${code}</div>
