@@ -711,7 +711,7 @@ ul{list-style:none}
 </style>
 </head>
 <body>
-<ol id="sonner-toast-container" position="top-center" max-toasts="3" rich-colors="true" theme="light" close-button="true" style="--width:420px;font-size:0.9rem"></ol>
+<ol id="sonner-toast-container" position="top-center" max-toasts="1" rich-colors="true" theme="light" close-button="true" duration="3000" style="--width:420px;font-size:0.9rem"></ol>
 <script type="module">
   import { toast } from 'https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.es.min.js';
   window._sonnerToast = toast;
@@ -778,8 +778,9 @@ ul{list-style:none}
       <div class="cat-tabs" id="home-cat-tabs"></div>
       <div class="search-sort">
         <div class="pricing-toggle">
-          <span>Dynamic Pricing</span>
-          <div class="pricing-switch" id="pricing-switch" onclick="toggleDynamicPricing()"></div>
+          <span>Singles</span>
+          <div class="pricing-switch" id="kit-toggle" onclick="toggleKitView()"></div>
+          <span>Kits</span>
         </div>
         <div class="toolbar-search-wrap" id="home-search-wrap">
           <button class="toolbar-search-btn" onclick="toggleToolbarSearch('home-search-wrap','home-search')">
@@ -868,47 +869,47 @@ ul{list-style:none}
           <div class="form-row col-2">
             <div>
               <label class="form-label">First Name *</label>
-              <input class="form-input" type="text" id="f-fname" required>
+              <input class="form-input" type="text" id="f-fname" name="given-name" autocomplete="given-name" required>
             </div>
             <div>
               <label class="form-label">Last Name *</label>
-              <input class="form-input" type="text" id="f-lname" required>
+              <input class="form-input" type="text" id="f-lname" name="family-name" autocomplete="family-name" required>
             </div>
           </div>
           <div class="form-row col-2">
             <div>
               <label class="form-label">Street Address *</label>
-              <input class="form-input" type="text" id="f-street" required autocomplete="address-line1" placeholder="Start typing...">
+              <input class="form-input" type="text" id="f-street" name="address-line1" autocomplete="address-line1" required>
             </div>
             <div>
               <label class="form-label">Apt / Suite</label>
-              <input class="form-input" type="text" id="f-apt" autocomplete="address-line2">
+              <input class="form-input" type="text" id="f-apt" name="address-line2" autocomplete="address-line2">
             </div>
           </div>
           <div class="form-row col-2">
             <div>
               <label class="form-label">City *</label>
-              <input class="form-input" type="text" id="f-city" required autocomplete="address-level2">
+              <input class="form-input" type="text" id="f-city" name="address-level2" autocomplete="address-level2" required>
             </div>
             <div>
               <label class="form-label">State *</label>
-              <input class="form-input" type="text" id="f-state" required maxlength="2" placeholder="e.g. NY" style="text-transform:uppercase" autocomplete="address-level1">
+              <input class="form-input" type="text" id="f-state" name="address-level1" autocomplete="address-level1" required maxlength="2" placeholder="e.g. NY" style="text-transform:uppercase">
             </div>
           </div>
           <div class="form-row col-2">
             <div>
               <label class="form-label">ZIP Code *</label>
-              <input class="form-input" type="text" id="f-zip" required maxlength="10" autocomplete="postal-code">
+              <input class="form-input" type="text" id="f-zip" name="postal-code" autocomplete="postal-code" required maxlength="10">
             </div>
             <div>
               <label class="form-label">Phone</label>
-              <input class="form-input" type="tel" id="f-phone" autocomplete="tel">
+              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel">
             </div>
           </div>
           <div class="form-row">
             <div>
               <label class="form-label">Email for Receipt *</label>
-              <input class="form-input" type="email" id="f-email" required autocomplete="email">
+              <input class="form-input" type="email" id="f-email" name="email" autocomplete="email" required>
             </div>
           </div>
         </form>
@@ -939,18 +940,10 @@ ul{list-style:none}
           <table class="receipt-table" id="receipt-table"></table>
 
           <div class="discount-row">
-            <input class="discount-input" type="text" placeholder="DISCOUNT CODE" id="discount-input">
-            <button class="btn-discount" onclick="applyDiscount()">APPLY</button>
+            <input class="discount-input" type="text" placeholder="DISCOUNT / AFFILIATE CODE" id="discount-input">
+            <button class="btn-discount" onclick="applyCode()">APPLY</button>
           </div>
           <div class="discount-msg" id="discount-msg"></div>
-          <div class="affiliate-toggle" id="affiliate-toggle">
-            <a href="#" onclick="event.preventDefault();document.getElementById('affiliate-row').style.display='flex';this.parentElement.style.display='none'">Are you an affiliate? Enter your code</a>
-          </div>
-          <div class="affiliate-row" id="affiliate-row" style="display:none">
-            <input class="discount-input" type="text" placeholder="AFFILIATE CODE" id="affiliate-input">
-            <button class="btn-discount" onclick="applyAffiliate()">APPLY</button>
-          </div>
-          <div class="affiliate-msg" id="affiliate-msg"></div>
 
           <div class="pay-methods" id="pay-methods"></div>
 
@@ -1390,31 +1383,14 @@ const _REMOVED_IMAGE_MAP = {
 const PRODUCT_IMAGES = {};
 
 function getProductImageHTML(p) {
-  const imgPath = PRODUCT_IMAGES[p.sku];
-  if (imgPath) {
-    return `<div class="prod-img">
-      <img src="${imgPath}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;">
-      <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
-    </div>`;
-  }
-  // Fallback SVG for any unmapped products
-  const dose = p.name.match(/(\d+\s*(?:mg|iu|ml|iu|tabs?))/i);
-  const doseText = dose ? dose[1] : '';
-  const compound = p.name.replace(/\s*\(.*?\)/g,'').replace(/\d+\s*(?:mg|iu|ml|tabs?)/i,'').replace(/x\d+\s*vials?/i,'').trim();
-  const shortName = compound.length > 18 ? compound.slice(0,16) + '..' : compound;
-  return `<div class="prod-img">
-    <svg viewBox="0 0 120 160" width="80" height="107" xmlns="http://www.w3.org/2000/svg">
-      <defs><linearGradient id="vg${p.sku.replace(/[^a-zA-Z0-9]/g,'')}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#333"/></linearGradient></defs>
-      <rect x="35" y="8" width="50" height="16" rx="2" fill="#ddd"/>
-      <rect x="45" y="0" width="30" height="12" rx="1.5" fill="#ccc"/>
-      <line x1="38" y1="24" x2="82" y2="24" stroke="#bbb" stroke-width="1.5"/>
-      <rect x="28" y="24" width="64" height="128" rx="3" fill="url(#vg${p.sku.replace(/[^a-zA-Z0-9]/g,'')})" stroke="#555" stroke-width="0.8"/>
-      <rect x="34" y="50" width="52" height="36" rx="1" fill="rgba(255,255,255,0.12)"/>
-      <text x="60" y="64" text-anchor="middle" font-size="6" font-weight="800" fill="rgba(255,255,255,0.9)" font-family="Helvetica,Arial,sans-serif" letter-spacing="0.5">${shortName.toUpperCase().slice(0,14)}</text>
-      <text x="60" y="78" text-anchor="middle" font-size="8" font-weight="900" fill="rgba(255,255,255,0.95)" font-family="Helvetica,Arial,sans-serif">${doseText.toUpperCase()}</text>
-      <text x="60" y="112" text-anchor="middle" font-size="4.5" fill="rgba(255,255,255,0.5)" font-family="Helvetica,Arial,sans-serif">HAO YUN LABS</text>
-      <text x="60" y="120" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="Helvetica,Arial,sans-serif">HYL</text>
-    </svg>
+  const dose = p.name.match(/(\d+\s*(?:mg|iu|ml|tabs?|caps?|pk))/i);
+  const doseText = dose ? dose[1].toUpperCase() : '';
+  const compound = p.name.replace(/\s*\(.*?\)/g,'').replace(/\d+\s*(?:mg|iu|ml|tabs?|caps?|pk)/i,'').replace(/x\d+\s*(?:vials?|kit)/i,'').trim();
+  const shortName = compound.length > 20 ? compound.slice(0,18) + '..' : compound;
+  return `<div class="prod-img" style="background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+    <div style="font-family:'Instrument Serif',serif;font-size:0.68rem;color:rgba(255,255,255,0.35);letter-spacing:0.12em;text-transform:uppercase">Hao Yun Labs</div>
+    <div style="font-family:var(--display);font-size:1rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:0.08em;text-align:center;padding:0 12px;line-height:1.2">${shortName}</div>
+    <div style="font-family:var(--mono);font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.7);margin-top:2px">${doseText}</div>
     <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
   </div>`;
 }
@@ -1511,10 +1487,12 @@ function getSubtotal(){
 function showToast(msg, type){
   const t = window._sonnerToast;
   if(t){
-    if(type==='error') t.error(msg);
-    else if(type==='warning') t.warning(msg);
-    else if(type==='info') t.info(msg);
-    else t.success(msg);
+    t.dismiss();
+    const opts = {duration:3000};
+    if(type==='error') t.error(msg,opts);
+    else if(type==='warning') t.warning(msg,opts);
+    else if(type==='info') t.info(msg,opts);
+    else t.success(msg,opts);
     return;
   }
   // Fallback if Sonner hasn't loaded yet
@@ -1854,45 +1832,40 @@ function renderReceipt(){
   payBtn.disabled = cart.size === 0;
 }
 
-async function applyDiscount(){
+async function applyCode(){
   const code = document.getElementById('discount-input').value.trim().toUpperCase();
   const msg = document.getElementById('discount-msg');
   if(!code){msg.textContent='';return;}
+  // Try as discount code first
+  let foundDiscount = false;
   try {
     const {data,error} = await sb.from('discount_codes').select('code,percent_off').eq('code',code).single();
-    if(error || !data){
-      discountCode=null;discountPct=0;
-      msg.textContent='Invalid discount code.';msg.className='discount-msg error';
-    } else {
+    if(!error && data){
       discountCode=data.code;discountPct=data.percent_off;
       msg.textContent=`Code ${data.code} applied — ${data.percent_off}% off!`;msg.className='discount-msg success';
+      foundDiscount=true;
     }
   } catch(e){
-    // Fallback to hardcoded
-    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied — 10% off!';msg.className='discount-msg success';}
-    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied — 15% off!';msg.className='discount-msg success';}
-    else{discountCode=null;discountPct=0;msg.textContent='Invalid discount code.';msg.className='discount-msg error';}
+    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied — 10% off!';msg.className='discount-msg success';foundDiscount=true;}
+    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied — 15% off!';msg.className='discount-msg success';foundDiscount=true;}
+  }
+  // If not a discount code, try as affiliate code
+  if(!foundDiscount){
+    try {
+      const {data,error} = await sb.from('affiliates').select('code,name').eq('code',code).single();
+      if(!error && data){
+        window._affiliateCode=data.code;
+        msg.textContent=`Affiliate ${data.name||data.code} linked!`;msg.className='discount-msg success';
+      } else {
+        discountCode=null;discountPct=0;window._affiliateCode=null;
+        msg.textContent='Invalid code.';msg.className='discount-msg error';
+      }
+    } catch(e){
+      discountCode=null;discountPct=0;window._affiliateCode=null;
+      msg.textContent='Invalid code.';msg.className='discount-msg error';
+    }
   }
   renderReceipt();
-}
-
-async function applyAffiliate(){
-  const code = document.getElementById('affiliate-input').value.trim().toUpperCase();
-  const msg = document.getElementById('affiliate-msg');
-  if(!code){msg.textContent='';return;}
-  try {
-    const {data,error} = await sb.from('affiliates').select('code,name').eq('code',code).single();
-    if(error || !data){
-      window._affiliateCode=null;
-      msg.textContent='Invalid affiliate code.';msg.className='affiliate-msg error';
-    } else {
-      window._affiliateCode=data.code;
-      msg.textContent=`Affiliate ${data.name||data.code} linked!`;msg.className='affiliate-msg success';
-    }
-  } catch(e){
-    window._affiliateCode=code;
-    msg.textContent=`Affiliate code ${code} applied.`;msg.className='affiliate-msg success';
-  }
 }
 
 /* ── ORDER PRODUCT SEARCH (inline add) ── */
@@ -1961,11 +1934,12 @@ function toggleToolbarSearch(wrapId, inputId){
   else { document.getElementById(inputId).value=''; renderHome(); }
 }
 
-let dynamicPricing = false;
-function toggleDynamicPricing(){
-  dynamicPricing = !dynamicPricing;
-  document.getElementById('pricing-switch').classList.toggle('on', dynamicPricing);
-  renderHome();
+let showKits = false;
+function toggleKitView(){
+  showKits = !showKits;
+  document.getElementById('kit-toggle').classList.toggle('on', showKits);
+  if(showKits) setHomeCat('kits');
+  else setHomeCat('singles');
 }
 
 function toggleNavSearch(){
@@ -2184,7 +2158,7 @@ async function submitOrder(){
   const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-email'];
   for(const fid of fields){
     const el = document.getElementById(fid);
-    if(!el.value.trim()){el.focus();showToast('Please fill in all required fields');return;}
+    if(!el.value.trim()){el.focus();showToast('Please fill in all required fields','error');return;}
   }
 
   const payBtn = document.getElementById('btn-pay');
