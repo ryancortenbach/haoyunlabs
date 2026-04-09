@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410q';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410r';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2116,12 +2116,15 @@ function renderReceipt(){
   const sub = getSubtotal();
   const shipping = sub > 0 ? (sub >= 200 ? 0 : 15) : 0;
   const disc = sub * (discountPct / 100);
-  const total = sub - disc + shipping;
+  const afterDisc = sub - disc;
+  const processingFee = Math.round(afterDisc * 0.05 * 100) / 100;
+  const total = afterDisc + shipping + processingFee;
   const tbl = document.getElementById('receipt-table');
   tbl.innerHTML = `
     <tr><td>Subtotal</td><td>$${sub.toFixed(2)}</td></tr>
-    <tr><td>Shipping${sub>=200?' (FREE over $200)':''}</td><td>${shipping===0&&sub>0?'FREE':'$'+shipping.toFixed(2)}</td></tr>
     ${discountPct>0?`<tr><td>Discount (${discountPct}%)</td><td>-$${disc.toFixed(2)}</td></tr>`:''}
+    <tr><td>Processing Fee (5%)</td><td>$${processingFee.toFixed(2)}</td></tr>
+    <tr><td>Shipping${sub>=200?' (FREE over $200)':''}</td><td>${shipping===0&&sub>0?'FREE':'$'+shipping.toFixed(2)}</td></tr>
     <tr class="total-row"><td>TOTAL</td><td>$${total.toFixed(2)}</td></tr>
   `;
   const payBtn = document.getElementById('btn-pay');
@@ -2508,7 +2511,9 @@ async function submitOrder(){
   const sub = getSubtotal();
   const shipping = sub >= 200 ? 0 : 15;
   const disc = sub * (discountPct / 100);
-  const total = sub - disc + shipping;
+  const afterDisc = sub - disc;
+  const processingFee = Math.round(afterDisc * 0.05 * 100) / 100;
+  const total = afterDisc + shipping + processingFee;
 
   const fname = document.getElementById('f-fname').value.trim();
   const lname = document.getElementById('f-lname').value.trim();
@@ -2552,8 +2557,9 @@ async function submitOrder(){
       let detailHTML = '<h4>Order Summary</h4>';
       items.forEach(it=>{ detailHTML += `<div class="confirmed-detail-row"><span>${it.name} x${it.quantity}</span><span>$${it.lineTotal.toFixed(2)}</span></div>`; });
       detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
-      detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
       if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (5%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
       document.getElementById('conf-details').innerHTML = detailHTML;
@@ -2582,8 +2588,9 @@ async function submitOrder(){
     detailHTML += `<div class="confirmed-detail-row"><span>${it.name} x${it.quantity}</span><span>$${it.lineTotal.toFixed(2)}</span></div>`;
   });
   detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
-  detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
   if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
+  detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (5%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
+  detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
   detailHTML += `<div style="margin-top:12px;font-size:0.78rem;color:var(--muted)">Receipt will be sent to: ${email}</div>`;
