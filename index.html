@@ -1194,24 +1194,26 @@ let cryptoPollInterval = null;
 
 function renderPayMethods(){
   const el = document.getElementById('pay-methods');
-  const cryptoDetail = selectedPayMethod === 'crypto'
-    ? `<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-        ${['BTC','ETH','SOL','USDT'].map(c=>`<button class="copy-addr" style="padding:4px 10px;font-size:0.68rem;${selectedCryptoCurrency===c?'background:rgba(255,255,255,0.4);':''}cursor:pointer" onclick="selectCrypto('${c}',event)">${c}</button>`).join('')}
-       </div>`
-    : 'BTC / ETH / SOL / USDT — Zero fees';
-  const methods = [
-    { id:'card', label:'Card', cls:'pay-chip-card', detail:'Secure card payment via Square' },
-    { id:'zelle', label:'Zelle', cls:'pay-chip-zelle', detail:'Direct bank transfer' },
-    { id:'apple', label:'Apple Cash', cls:'pay-chip-apple', detail:'Send via iMessage' },
-    { id:'cashapp', label:'CashApp', cls:'pay-chip-cashapp', detail:'$HaoYunLabs' },
-    { id:'crypto', label:'Crypto', cls:'pay-chip-crypto', detail:cryptoDetail },
-  ];
-  el.innerHTML = methods.map(m=>`
-    <div class="pay-chip ${m.cls} ${selectedPayMethod===m.id?'selected':''}" onclick="selectPay('${m.id}')">
-      <div class="pay-chip-label">${m.label}</div>
-      <div class="pay-chip-detail">${m.detail}</div>
+  selectedPayMethod = 'crypto';
+  const coins = ['BTC','ETH','SOL','USDT'];
+  el.innerHTML = `
+    <div class="pay-method-title" style="margin-bottom:8px">SELECT CRYPTOCURRENCY</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      ${coins.map(c=>`
+        <div class="pay-chip ${selectedCryptoCurrency===c?'selected':''}"
+             style="padding:14px 8px;text-align:center;cursor:pointer;border:2px solid ${selectedCryptoCurrency===c?'var(--brand)':'var(--stroke)'};background:${selectedCryptoCurrency===c?'var(--brand)':'var(--bg)'};color:${selectedCryptoCurrency===c?'var(--bg)':'var(--text)'};transition:all 0.15s ease"
+             onclick="selectCrypto('${c}')">
+          <div style="font-weight:800;font-size:0.82rem;letter-spacing:0.08em">${c}</div>
+          <div style="font-size:0.65rem;margin-top:4px;opacity:0.7">${{BTC:'Bitcoin',ETH:'Ethereum',SOL:'Solana',USDT:'Tether'}[c]}</div>
+        </div>
+      `).join('')}
     </div>
-  `).join('');
+    <div style="margin-top:12px;font-size:0.7rem;color:var(--muted);text-align:center;letter-spacing:0.04em">
+      Zero fees — pay directly from any wallet
+      ${window.ethereum ? '<br><span style="color:#16a34a;font-weight:700">MetaMask detected</span>' : ''}
+      ${window.solana?.isPhantom ? '<br><span style="color:#ab9ff2;font-weight:700">Phantom detected</span>' : ''}
+    </div>
+  `;
 }
 
 function selectPay(id){
@@ -1220,7 +1222,7 @@ function selectPay(id){
 }
 
 function selectCrypto(currency, ev){
-  if(ev) ev.stopPropagation();
+  if(ev && ev.stopPropagation) ev.stopPropagation();
   selectedCryptoCurrency = currency;
   selectedPayMethod = 'crypto';
   renderPayMethods();
@@ -1231,9 +1233,107 @@ function copyAddr(addr, ev){
   navigator.clipboard.writeText(addr).then(()=>showToast('Address copied'));
 }
 
+/* ── BROWSER WALLET PAYMENT (MetaMask / Phantom) ── */
+async function payWithWallet(data){
+  const currency = data.currency;
+
+  if((currency === 'ETH' || currency === 'USDT') && window.ethereum){
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if(!accounts.length){ showToast('Wallet not connected'); return; }
+
+      if(currency === 'ETH'){
+        const weiHex = '0x' + BigInt(Math.round(data.amount_crypto * 1e18)).toString(16);
+        const txHash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [{ from: accounts[0], to: data.address, value: weiHex }],
+        });
+        showToast('Transaction sent! Waiting for confirmation...');
+        document.getElementById('crypto-status-text').textContent = 'Transaction sent! Confirming...';
+        document.getElementById('crypto-status-text').style.color = '#d97706';
+      } else {
+        // USDT ERC-20 transfer
+        const usdtContract = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+        const amount6dec = BigInt(Math.round(data.amount_crypto * 1e6));
+        const amountHex = amount6dec.toString(16).padStart(64,'0');
+        const toHex = data.address.slice(2).toLowerCase().padStart(64,'0');
+        const txData = '0xa9059cbb' + toHex + amountHex;
+        const txHash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [{ from: accounts[0], to: usdtContract, data: txData }],
+        });
+        showToast('USDT transfer sent! Waiting for confirmation...');
+        document.getElementById('crypto-status-text').textContent = 'Transaction sent! Confirming...';
+        document.getElementById('crypto-status-text').style.color = '#d97706';
+      }
+    } catch(e){
+      if(e.code === 4001) showToast('Transaction rejected by user');
+      else showToast('Wallet error: ' + (e.message || 'Unknown'));
+    }
+  }
+  else if(currency === 'SOL' && window.solana?.isPhantom){
+    try {
+      const resp = await window.solana.connect();
+      const { Connection, PublicKey, SystemProgram, Transaction } = await import('https://esm.sh/@solana/web3.js');
+      const connection = new Connection('https://api.mainnet-beta.solana.com');
+      const lamports = Math.round(data.amount_crypto * 1e9);
+      const tx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: resp.publicKey,
+          toPubkey: new PublicKey(data.address),
+          lamports,
+        })
+      );
+      tx.feePayer = resp.publicKey;
+      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+      const signed = await window.solana.signAndSendTransaction(tx);
+      showToast('SOL transfer sent! Waiting for confirmation...');
+      document.getElementById('crypto-status-text').textContent = 'Transaction sent! Confirming...';
+      document.getElementById('crypto-status-text').style.color = '#d97706';
+    } catch(e){
+      if(e.code === 4001) showToast('Transaction rejected by user');
+      else showToast('Wallet error: ' + (e.message || 'Unknown'));
+    }
+  }
+  else {
+    showToast('No compatible wallet detected — copy the address manually');
+  }
+}
+
 /* ── CRYPTO PAYMENT INLINE SCREEN ── */
+function detectWallets(){
+  const wallets = [];
+  // EVM wallets (all inject window.ethereum)
+  if(window.ethereum){
+    if(window.ethereum.isMetaMask) wallets.push({name:'MetaMask', type:'evm', icon:'🦊'});
+    else if(window.ethereum.isCoinbaseWallet) wallets.push({name:'Coinbase Wallet', type:'evm', icon:'🔵'});
+    else if(window.ethereum.isBraveWallet) wallets.push({name:'Brave Wallet', type:'evm', icon:'🦁'});
+    else if(window.ethereum.isRabby) wallets.push({name:'Rabby', type:'evm', icon:'🐰'});
+    else if(window.ethereum.isTrust) wallets.push({name:'Trust Wallet', type:'evm', icon:'🛡'});
+    else if(window.ethereum.isFrame) wallets.push({name:'Frame', type:'evm', icon:'🖼'});
+    else if(window.ethereum.isZerion) wallets.push({name:'Zerion', type:'evm', icon:'⚡'});
+    else wallets.push({name:'Browser Wallet', type:'evm', icon:'💎'});
+  }
+  // Solana wallets
+  if(window.solana?.isPhantom) wallets.push({name:'Phantom', type:'sol', icon:'👻'});
+  if(window.solflare) wallets.push({name:'Solflare', type:'sol', icon:'☀'});
+  if(window.backpack) wallets.push({name:'Backpack', type:'sol', icon:'🎒'});
+  if(window.glow) wallets.push({name:'Glow', type:'sol', icon:'✨'});
+  return wallets;
+}
+
 function showCryptoPayment(data){
   const payCard = document.querySelector('.payment-card');
+  const wallets = detectWallets();
+  const canPayWithWallet = (
+    (['ETH','USDT'].includes(data.currency) && wallets.some(w=>w.type==='evm')) ||
+    (data.currency === 'SOL' && wallets.some(w=>w.type==='sol'))
+  );
+  const relevantWallets = wallets.filter(w =>
+    (['ETH','USDT'].includes(data.currency) && w.type==='evm') ||
+    (data.currency === 'SOL' && w.type==='sol')
+  );
+
   payCard.innerHTML = `
     <div class="checkout-section-title" style="margin-top:0">CRYPTO PAYMENT</div>
     <div style="text-align:center;padding:16px 0">
@@ -1241,6 +1341,17 @@ function showCryptoPayment(data){
       <div style="font-family:var(--mono);font-size:1.6rem;font-weight:800;margin:8px 0">${data.amount_crypto} ${data.currency}</div>
       <div style="font-size:0.78rem;color:var(--muted)">($${Number(data.amount_usd).toFixed(2)} USD at $${Number(data.exchange_rate).toLocaleString()} / ${data.currency})</div>
     </div>
+    ${canPayWithWallet ? `
+      <div style="display:flex;flex-direction:column;gap:8px;margin:0 0 16px">
+        ${relevantWallets.map(w=>`
+          <button onclick="payWithWallet(window._cryptoInvoiceData)" style="width:100%;padding:14px;background:var(--brand);color:var(--bg);border:none;font-size:0.82rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s"
+            onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+            ${w.icon} PAY WITH ${w.name.toUpperCase()}
+          </button>
+        `).join('')}
+      </div>
+      <div style="text-align:center;font-size:0.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em">— or send manually —</div>
+    ` : ''}
     ${data.qr_code ? `<div style="text-align:center;padding:12px 0"><img src="${data.qr_code}" alt="QR" style="width:200px;height:200px;margin:0 auto;border:1px solid var(--stroke)"></div>` : ''}
     <div style="background:#f5f5f5;padding:14px;margin:12px 0;font-family:var(--mono);font-size:0.72rem;word-break:break-all;text-align:center;line-height:1.6;user-select:all">${data.address}</div>
     <div style="text-align:center"><button class="copy-addr" style="padding:8px 20px;font-size:0.72rem;background:var(--brand);color:var(--bg);border:1px solid var(--brand);cursor:pointer;font-weight:700;letter-spacing:0.1em" onclick="copyAddr('${data.address}')">COPY ADDRESS</button></div>
@@ -1253,6 +1364,7 @@ function showCryptoPayment(data){
       Payment auto-confirms once ${data.currency === 'BTC' ? '1 block confirmation' : data.currency === 'SOL' ? 'finalized' : '6 block confirmations'} received.
     </div>
   `;
+  window._cryptoInvoiceData = data;
 
   // Start polling
   if(cryptoPollInterval) clearInterval(cryptoPollInterval);
@@ -1344,99 +1456,50 @@ async function submitOrder(){
   // Auto-subscribe email at checkout
   try { await sb.from('email_subscribers').upsert({email, source:'checkout'},{onConflict:'email'}); } catch(e){}
 
-  if(selectedPayMethod === 'card'){
-    // Card → billing server → Square checkout
-    try {
-      const resp = await fetch(BILLING_SERVER + '/api/create-square-link', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
-        body:JSON.stringify({
-          orderNumber: orderNum,
-          amount: total,
-          draft: {
-            email, fname, lname, street, apt, city, state, zip, phone,
-            items, subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
-            redirectUrl: window.location.origin + window.location.pathname + '#payment-confirmed'
-          }
-        })
-      });
-      const data = await resp.json();
-      if(data.ok && data.checkoutUrl){
-        cart.clear(); saveCart(); discountCode=null; discountPct=0;
-        window.location.href = data.checkoutUrl;
-        return;
-      } else {
-        showToast(data.error || 'Failed to create checkout');
-        payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
-        return;
-      }
-    } catch(e){
-      showToast('Server error — try another payment method');
+  // Crypto only — billing server → get unique address + monitor
+  try {
+    const resp = await fetch(BILLING_SERVER + '/api/crypto-invoice', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
+      body:JSON.stringify({
+        orderNumber: orderNum,
+        amount: total,
+        currency: selectedCryptoCurrency,
+        draft: {
+          email, fname, lname, street, apt, city, state, zip, phone,
+          items, subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
+        },
+        affiliateCode: window._affiliateCode || null,
+      })
+    });
+    const data = await resp.json();
+    if(data.ok){
+      document.getElementById('conf-order-num').textContent = orderNum;
+      let detailHTML = '<h4>Order Summary</h4>';
+      items.forEach(it=>{ detailHTML += `<div class="confirmed-detail-row"><span>${it.name} x${it.quantity}</span><span>$${it.lineTotal.toFixed(2)}</span></div>`; });
+      detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
+      if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
+      document.getElementById('conf-details').innerHTML = detailHTML;
+
+      klIdentify(email);
+      kl('Placed Order', { OrderId:orderNum, Total:total, Items:items.map(i=>({ProductName:i.name,ProductID:i.sku,Price:i.unitPrice,Quantity:i.quantity})), PaymentMethod:'crypto_'+selectedCryptoCurrency, DiscountCode:discountCode||'', DiscountValue:disc });
+
+      showCryptoPayment(data);
+      cart.clear(); saveCart(); discountCode=null; discountPct=0;
+      payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
+      return;
+    } else {
+      showToast(data.error || 'Failed to create crypto invoice');
       payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
       return;
     }
-  } else if(selectedPayMethod === 'crypto'){
-    // Crypto → billing server → get unique address + monitor
-    try {
-      const resp = await fetch(BILLING_SERVER + '/api/crypto-invoice', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
-        body:JSON.stringify({
-          orderNumber: orderNum,
-          amount: total,
-          currency: selectedCryptoCurrency,
-          draft: {
-            email, fname, lname, street, apt, city, state, zip, phone,
-            items, subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
-          },
-          affiliateCode: window._affiliateCode || null,
-        })
-      });
-      const data = await resp.json();
-      if(data.ok){
-        // Build confirmation details for later
-        document.getElementById('conf-order-num').textContent = orderNum;
-        let detailHTML = '<h4>Order Summary</h4>';
-        items.forEach(it=>{ detailHTML += `<div class="confirmed-detail-row"><span>${it.name} x${it.quantity}</span><span>$${it.lineTotal.toFixed(2)}</span></div>`; });
-        detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
-        detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
-        if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
-        detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
-        detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
-        document.getElementById('conf-details').innerHTML = detailHTML;
-
-        klIdentify(email);
-        kl('Placed Order', { OrderId:orderNum, Total:total, Items:items.map(i=>({ProductName:i.name,ProductID:i.sku,Price:i.unitPrice,Quantity:i.quantity})), PaymentMethod:'crypto_'+selectedCryptoCurrency, DiscountCode:discountCode||'', DiscountValue:disc });
-
-        // Show crypto payment inline on checkout
-        showCryptoPayment(data);
-        cart.clear(); saveCart(); discountCode=null; discountPct=0;
-        payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
-        return;
-      } else {
-        showToast(data.error || 'Failed to create crypto invoice');
-        payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
-        return;
-      }
-    } catch(e){
-      showToast('Server error — try another payment method');
-      payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
-      return;
-    }
-  } else {
-    // Non-card manual (Zelle/CashApp/Apple) → log order
-    try {
-      await fetch(BILLING_SERVER + '/api/order-log', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
-        body:JSON.stringify({
-          orderNumber:orderNum, items, total, shipping,
-          payment:selectedPayMethod, email,
-          customer:{fname,lname,street,apt,city,state,zip,phone},
-          discountCode, discountPct, discountAmount:disc, subtotal:sub
-        })
-      });
-    } catch(e){ console.warn('Order log failed (server may be offline):', e); }
+  } catch(e){
+    showToast('Server error — please try again');
+    payBtn.disabled=false; payBtn.textContent='COMPLETE ORDER';
+    return;
   }
 
   // Build confirmation HTML
