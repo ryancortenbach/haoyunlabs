@@ -906,6 +906,18 @@ ul{list-style:none}
   </div>
 </div>
 
+<!-- EMAIL CAPTURE POPUP -->
+<div id="email-popup" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:var(--radius);padding:36px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+    <button onclick="closeEmailPopup()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">&times;</button>
+    <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em">Get 10% Off</div>
+    <div style="font-size:0.82rem;color:var(--muted);margin:8px 0 20px;line-height:1.5">Join our mailing list for exclusive deals, new product drops, and your first-order discount code.</div>
+    <input type="email" id="popup-email" placeholder="Enter your email..." style="width:100%;padding:12px 14px;border:1px solid var(--stroke);border-radius:var(--radius);font-size:0.85rem;margin-bottom:12px">
+    <button onclick="submitPopupEmail()" style="width:100%;padding:14px;background:var(--brand);color:var(--bg);border:none;border-radius:var(--radius);font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer">GET MY CODE</button>
+    <div style="font-size:0.65rem;color:var(--muted);margin-top:12px">No spam. Unsubscribe anytime.</div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand">HAO YUN LABS</div>
@@ -1972,6 +1984,31 @@ function checkAgeGate(){
 /* ═════════════════════════════════════════════════════
    EMAIL SUBSCRIBE
    ═════════════════════════════════════════════════════ */
+/* ── EMAIL CAPTURE POPUP ── */
+function showEmailPopup(){
+  const popup = document.getElementById('email-popup');
+  if(popup) popup.style.display = 'flex';
+}
+function closeEmailPopup(){
+  const popup = document.getElementById('email-popup');
+  if(popup) popup.style.display = 'none';
+  localStorage.setItem('hyl_popup_dismissed', Date.now().toString());
+}
+async function submitPopupEmail(){
+  const email = document.getElementById('popup-email').value.trim();
+  if(!email || !email.includes('@')){ showToast('Please enter a valid email','error'); return; }
+  try {
+    await sb.from('email_subscribers').upsert({email, source:'popup'},{onConflict:'email'});
+    showToast('Check your email for code WELCOME10!');
+    closeEmailPopup();
+  } catch(e){ showToast('Failed — try again','error'); }
+}
+function initEmailPopup(){
+  const dismissed = localStorage.getItem('hyl_popup_dismissed');
+  if(dismissed && Date.now() - parseInt(dismissed) < 7*24*60*60*1000) return; // 7 day cooldown
+  setTimeout(showEmailPopup, 8000); // show after 8 seconds
+}
+
 async function submitSupport(){
   const email = document.getElementById('support-email').value.trim();
   const msg = document.getElementById('support-message').value.trim();
@@ -2106,6 +2143,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     });
   })();
   introFade();
+  initEmailPopup();
 
   const grid = document.getElementById('home-grid');
   showSkeleton(grid, 8);
