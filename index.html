@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260409r';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260409s';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1084,17 +1084,19 @@ ul{list-style:none}
 </div>
 
 <!-- EMAIL CAPTURE POPUP -->
-<div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;max-width:400px;width:calc(100% - 48px);transform:translateY(120%);opacity:0;pointer-events:none;transition:transform 0.8s cubic-bezier(0.22,1,0.36,1),opacity 0.6s ease">
-  <div style="background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;text-align:left;position:relative;box-shadow:0 12px 40px rgba(0,0,0,0.25)">
-    <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Exclusive Access</span>
-    <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;margin:14px 0 6px;line-height:1.2">Join the mailing list for a free mystery vial.</div>
-    <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:16px">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
-    <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px">Name</div>
-    <input type="text" id="popup-name" placeholder="Your name" style="width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.82rem;margin-bottom:12px;background:rgba(255,255,255,0.06);color:#fff">
-    <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px">Email Address</div>
-    <input type="email" id="popup-email" placeholder="you@example.com" style="width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.82rem;margin-bottom:16px;background:rgba(255,255,255,0.06);color:#fff">
-    <button onclick="submitPopupEmail()" style="width:100%;padding:14px;background:#fff;color:#1a1a1a;border:none;border-radius:8px;font-size:0.82rem;font-weight:800;cursor:pointer">Claim My Free Mystery Vial</button>
-    <div onclick="closeEmailPopup()" style="text-align:center;margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;text-underline-offset:2px">No thanks</div>
+<div id="email-popup" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1)">
+  <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:48px 40px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
+    <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.3);line-height:1">&times;</button>
+    <div style="font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:8px">Get a <span style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px">free mystery vial</span> with your first order</div>
+    <div style="font-size:0.82rem;color:rgba(255,255,255,0.45);margin-bottom:28px;line-height:1.5">Sign up to receive a 5-character code for a free mystery vial. Valid 24 hours.</div>
+    <div style="text-align:left">
+      <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px">Name</div>
+      <input type="text" id="popup-name" placeholder="Your name" style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;font-size:0.88rem;margin-bottom:14px;background:rgba(255,255,255,0.05);color:#fff;font-family:var(--sans)">
+      <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px">Email</div>
+      <input type="email" id="popup-email" placeholder="you@example.com" style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;font-size:0.88rem;margin-bottom:20px;background:rgba(255,255,255,0.05);color:#fff;font-family:var(--sans)">
+    </div>
+    <button onclick="submitPopupEmail()" style="width:100%;padding:16px;background:#fff;color:#1a1a1a;border:none;border-radius:10px;font-size:0.88rem;font-weight:800;cursor:pointer;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)">Claim My Free Mystery Vial</button>
+    <div onclick="closeEmailPopup()" style="margin-top:14px;font-size:0.72rem;color:rgba(255,255,255,0.3);cursor:pointer">No thanks</div>
   </div>
 </div>
 
@@ -2415,11 +2417,15 @@ async function lookupCOA(){
 /* ── EMAIL CAPTURE POPUP ── */
 function showEmailPopup(){
   const popup = document.getElementById('email-popup');
-  if(popup){ popup.style.transform='translateY(0)'; popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
+  const card = document.getElementById('email-popup-card');
+  if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
+  if(card) setTimeout(()=>{ card.style.transform='translateY(0) scale(1)'; },50);
 }
 function closeEmailPopup(){
   const popup = document.getElementById('email-popup');
-  if(popup){ popup.style.transform='translateY(120%)'; popup.style.opacity='0'; popup.style.pointerEvents='none'; }
+  const card = document.getElementById('email-popup-card');
+  if(card) card.style.transform='translateY(40px) scale(0.95)';
+  if(popup){ popup.style.opacity='0'; popup.style.pointerEvents='none'; }
   localStorage.setItem('hyl_popup_dismissed', Date.now().toString());
 }
 async function submitPopupEmail(){
@@ -2449,8 +2455,16 @@ async function submitPopupEmail(){
 }
 function initEmailPopup(){
   const dismissed = localStorage.getItem('hyl_popup_dismissed');
-  if(dismissed && Date.now() - parseInt(dismissed) < 7*24*60*60*1000) return; // 7 day cooldown
-  setTimeout(showEmailPopup, 8000); // show after 8 seconds
+  if(dismissed && Date.now() - parseInt(dismissed) < 7*24*60*60*1000) return;
+  let popupTriggered = false;
+  window.addEventListener('scroll', function onScroll(){
+    if(popupTriggered) return;
+    if(window.scrollY > window.innerHeight * 0.5){
+      popupTriggered = true;
+      showEmailPopup();
+      window.removeEventListener('scroll', onScroll);
+    }
+  }, {passive:true});
 }
 
 async function submitSupport(){
