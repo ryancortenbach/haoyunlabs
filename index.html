@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411c';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411d';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -414,23 +414,28 @@ ul{list-style:none}
 
 /* ── HERO BUTTONS ── */
 .hero-btn{
-  padding:14px 32px;border-radius:999px;font-size:0.78rem;font-weight:700;
-  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
-  transition:all 0.3s cubic-bezier(0.22,1,0.36,1);border:2px solid var(--brand);
+  padding:12px 24px;border-radius:999px;font-size:0.78rem;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.2s;border:1px solid transparent;
+  display:inline-flex;align-items:center;gap:8px;
 }
-.hero-btn-primary{background:var(--brand);color:#fff}
-.hero-btn-primary:hover{background:#fff;color:var(--brand)}
-.hero-btn-secondary{background:transparent;color:var(--brand)}
-.hero-btn-secondary:hover{background:var(--brand);color:#fff}
+.hero-btn:active{transform:scale(0.95)}
+.hero-btn svg{width:20px;height:20px;transition:transform 0.3s ease-in-out}
+.hero-btn:hover svg{transform:translateX(4px)}
+.hero-btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.hero-btn-primary:hover{background:#222}
+.hero-btn-secondary{background:#fff;color:var(--brand);border-color:var(--stroke)}
+.hero-btn-secondary:hover{background:#f5f5f5}
 
 /* ── SHOP YOUR WAY PILLS ── */
 .shop-pill{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#f0f0ee;border-radius:999px;cursor:pointer;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
 .shop-pill:hover{background:#e8e8e5;transform:translateY(-2px)}
-.shop-pill-img{width:56px;height:56px;background:#000;border-radius:14px;flex-shrink:0;overflow:hidden;transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
-.shop-pill:hover .shop-pill-img{transform:scale(0.9)}
+.shop-pill-img{width:56px;height:56px;background:#000;border-radius:14px;flex-shrink:0;overflow:hidden;transform:scale(0.85);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill:hover .shop-pill-img{transform:scale(1)}
 .shop-pill-name{font-size:1rem;font-weight:800;flex:1;letter-spacing:0.01em}
-.shop-pill-arrow{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.85rem;transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
-.shop-pill:hover .shop-pill-arrow{transform:translateX(4px)}
+.shop-pill-arrow{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.3s ease-in-out}
+.shop-pill-arrow svg{width:18px;height:18px;stroke:#000;transition:transform 0.3s ease-in-out}
+.shop-pill:hover .shop-pill-arrow svg{transform:translateX(3px)}
 
 .tilt-card{transition:transform 0.15s ease;transform-style:preserve-3d;will-change:transform}
 
@@ -888,8 +893,8 @@ ul{list-style:none}
       <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> your <span id="hero-flip-word" class="hero-colourful"></span></div>
       <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and backed by third-party testing. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
-        <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now</button>
-        <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">Verify Purity</button>
+        <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
+        <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">Verify Purity <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
       </div>
     </div>
 
@@ -945,32 +950,32 @@ ul{list-style:none}
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('all')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Bestsellers</div>
-          <div class="shop-pill-arrow">&rarr;</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('peptides')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Peptides</div>
-          <div class="shop-pill-arrow">&rarr;</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('kits')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Kits</div>
-          <div class="shop-pill-arrow">&rarr;</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('stacks')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Stacks</div>
-          <div class="shop-pill-arrow">&rarr;</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('sprays')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Sprays</div>
-          <div class="shop-pill-arrow">&rarr;</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('supplies')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Supplies</div>
-          <div class="shop-pill-arrow">&rarr;</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
       </div>
     </div>
