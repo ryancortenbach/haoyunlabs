@@ -8,7 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -106,79 +106,87 @@ ul{list-style:none}
 }
 
 /* ── NAV (resizable) ── */
+/* ── NAV ── */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:#fff;
-  border-bottom:1px solid var(--stroke);padding:0 40px;
-  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--stroke);
   transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 .nav.shrunk{
-  top:8px;left:5%;right:5%;
-  border-radius:16px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  top:8px;left:0;right:0;
+  max-width:900px;margin:0 auto;
+  border-radius:999px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.08);
   border:1px solid rgba(0,0,0,0.06);
-  padding:0 24px;
+  background:rgba(255,255,255,0.95);
 }
-.nav.shrunk .nav-inner{height:52px}
-.nav.shrunk .nav-brand img{height:30px!important}
-.nav.shrunk .nav-links{gap:24px}
-.nav.shrunk .nav-links a{font-size:0.72rem}
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:80px;transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
-.nav-brand{cursor:pointer;flex-shrink:0}
-.nav-brand img{transition:height 0.4s cubic-bezier(0.4,0,0.2,1)}
-.nav-icon svg{transition:width 0.4s cubic-bezier(0.4,0,0.2,1),height 0.4s cubic-bezier(0.4,0,0.2,1)}
-.nav-links{display:flex;gap:32px;align-items:center}
-.nav-links a{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;cursor:pointer;position:relative;padding:6px 0;transition:all 0.15s ease;color:var(--muted)}
-.nav-links a:hover{color:var(--brand)}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--brand);transition:width 0.2s ease}
-.nav-links a:hover::after{width:100%}
-.nav-icons{display:flex;gap:16px;align-items:center;flex-shrink:0}
-.nav-search-dropdown{background:#fff;border-top:1px solid var(--stroke);padding:12px 24px}
-.nav-search-toggle{cursor:pointer}
-.nav-search{
-  width:100%;padding:10px 14px 10px 38px;font-size:0.82rem;
-  border:1px solid var(--stroke);background:#f5f5f5;border-radius:24px;
-  font-family:var(--sans);
-  transition:background 0.2s,border-color 0.2s,box-shadow 0.3s;
+.nav-inner{
+  max-width:1200px;margin:0 auto;padding:0 32px;
+  display:flex;align-items:center;height:64px;
+  transition:height 0.4s cubic-bezier(0.4,0,0.2,1);
 }
-.nav-search:focus{
-  background:#fff;border-color:var(--brand);outline:none;
-  box-shadow:0 4px 16px rgba(0,0,0,0.08);
+.nav.shrunk .nav-inner{height:48px;padding:0 24px}
+.nav-brand{cursor:pointer;flex-shrink:0;font-family:'Instrument Serif',serif;font-size:1.3rem;letter-spacing:-0.01em;color:var(--brand)}
+.nav.shrunk .nav-brand{font-size:1.1rem}
+.nav-center{flex:1;display:flex;align-items:center;justify-content:center;gap:28px}
+.nav-center a{
+  font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;
+  cursor:pointer;color:var(--muted);transition:color 0.15s;
+  padding:4px 0;position:relative;
 }
+.nav-center a:hover{color:var(--brand)}
+.nav-center a::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1.5px;background:var(--brand);transition:width 0.2s}
+.nav-center a:hover::after{width:100%}
+.nav.shrunk .nav-center a{font-size:0.68rem}
+.nav-right{flex-shrink:0;display:flex;align-items:center;gap:6px}
+.nav-search-bar{
+  position:relative;display:flex;align-items:center;
+  width:0;overflow:hidden;transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.nav-search-bar.open{width:200px}
+.nav-search-bar input{
+  width:100%;padding:7px 12px 7px 32px;font-size:0.78rem;
+  border:1px solid var(--stroke);background:#f7f7f7;border-radius:999px;
+  font-family:var(--sans);transition:border-color 0.2s,background 0.2s;
+}
+.nav-search-bar input:focus{background:#fff;border-color:var(--brand);outline:none}
+.nav-search-bar .search-icon{position:absolute;left:10px;width:14px;height:14px;opacity:0.4;pointer-events:none}
 .nav-search-results{
-  position:absolute;top:100%;left:0;right:0;margin-top:4px;
-  background:var(--bg);border:1px solid var(--stroke);border-radius:8px;
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--bg);border:1px solid var(--stroke);border-radius:10px;
   box-shadow:0 8px 24px rgba(0,0,0,0.1);display:none;overflow:hidden;z-index:200;
   max-height:320px;overflow-y:auto;
 }
 .nav-search-results.open{display:block}
 .nav-search-result{
-  padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
-  font-size:0.82rem;border-bottom:1px solid var(--stroke);transition:background 0.1s;
+  padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  font-size:0.78rem;border-bottom:1px solid var(--stroke);transition:background 0.1s;
 }
 .nav-search-result:last-child{border-bottom:none}
 .nav-search-result:hover{background:#f5f5f5}
 .nav-search-result .sr-name{font-weight:700;text-transform:uppercase;letter-spacing:0.04em}
 .nav-search-result .sr-price{font-family:var(--mono);font-weight:700}
-.nav-icon{cursor:pointer;opacity:0.7;transition:opacity 0.15s}
-.nav-icon:hover{opacity:1}
-.nav-icon svg{width:22px;height:22px}
-.nav-cart{position:relative;cursor:pointer}
+.nav-btn{
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;border:none;background:transparent;cursor:pointer;
+  transition:background 0.15s;
+}
+.nav-btn:hover{background:rgba(0,0,0,0.05)}
+.nav-btn svg{width:18px;height:18px;stroke:var(--text);opacity:0.7}
+.nav-cart-wrap{position:relative}
 .nav-cart-badge{
-  position:absolute;top:-8px;right:-12px;background:var(--brand);color:var(--bg);
-  font-size:0.6rem;font-weight:700;min-width:18px;height:18px;
+  position:absolute;top:-4px;right:-4px;background:var(--brand);color:var(--bg);
+  font-size:0.55rem;font-weight:700;min-width:16px;height:16px;
   display:flex;align-items:center;justify-content:center;
   border-radius:50%;font-family:var(--mono);
 }
 .nav-cart-badge:empty{display:none}
 @media(max-width:768px){
-  .nav{padding:0 12px}
-  .nav-inner{height:56px;gap:10px}
-  .nav-brand img{height:32px!important}
-  .nav-search-wrap{max-width:none}
-  .nav-search{font-size:0.75rem;padding:8px 10px 8px 32px}
-  .nav-icon svg{width:20px;height:20px}
+  .nav-inner{height:52px;padding:0 16px}
+  .nav-brand{font-size:1.1rem}
+  .nav-center{gap:16px}
+  .nav-center a{font-size:0.62rem;letter-spacing:0.06em}
   .hero-title{font-size:1.8rem!important;letter-spacing:0.1em!important}
   .hero-tag{font-size:0.7rem!important}
   .product-grid{grid-template-columns:repeat(2,1fr)!important;gap:12px!important}
@@ -206,12 +214,11 @@ ul{list-style:none}
 
 /* ── STICKY BANNER ── */
 .sticky-banner{
-  position:fixed;top:80px;left:0;right:0;z-index:99;
+  position:fixed;top:64px;left:0;right:0;z-index:99;
   background:#000;color:#fff;overflow:hidden;
   border-bottom:1px solid rgba(255,255,255,0.06);
   transition:top 0.4s cubic-bezier(0.4,0,0.2,1);
 }
-.nav.shrunk ~ .sticky-banner{top:68px}
 .banner-track{
   display:flex;width:max-content;
   animation:banner-scroll 25s linear infinite;
@@ -247,7 +254,7 @@ ul{list-style:none}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* ── HERO ── */
-.hero{text-align:center;padding:140px 0 40px}
+.hero{text-align:center;padding:120px 0 40px}
 .hero-banner{
   width:100%;max-width:700px;margin:0 auto 32px;border-radius:8px;overflow:hidden;
 }
@@ -675,7 +682,7 @@ ul{list-style:none}
 </style>
 </head>
 <body>
-<ol id="sonner-toast-container" position="bottom-right" max-toasts="5" rich-colors="true" theme="light" close-button="true"></ol>
+<ol id="sonner-toast-container" position="top-center" max-toasts="3" rich-colors="true" theme="light" close-button="true" style="--width:420px;font-size:0.9rem"></ol>
 <script type="module">
   import { toast } from 'https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.es.min.js';
   window._sonnerToast = toast;
@@ -700,28 +707,26 @@ ul{list-style:none}
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-brand" onclick="navigate('home')"><img src="hylcompany.png" alt="Hao Yun Labs" style="height:44px;width:auto"></div>
-    <div class="nav-links">
+    <div class="nav-brand" onclick="navigate('home')">Hao Yun Labs</div>
+    <div class="nav-center">
       <a onclick="navigate('catalog')">Shop</a>
       <a onclick="navigate('faq')">FAQ</a>
       <a onclick="navigate('support')">Support</a>
-      <a onclick="navigate('tracking')">Track Order</a>
+      <a onclick="navigate('tracking')">Track</a>
     </div>
-    <div class="nav-icons">
-      <div class="nav-icon nav-search-toggle" onclick="toggleNavSearch()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+    <div class="nav-right">
+      <div class="nav-search-bar" id="nav-search-bar">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+        <input type="text" id="nav-search" placeholder="Search..." oninput="navSearch(this.value)" onfocus="navSearchFocus(true)" onblur="setTimeout(()=>navSearchFocus(false),200)">
+        <div class="nav-search-results" id="nav-search-results"></div>
       </div>
-      <div class="nav-icon nav-cart" onclick="navigate('order')">
+      <button class="nav-btn" onclick="toggleNavSearch()" aria-label="Search">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      </button>
+      <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
         <span class="nav-cart-badge" id="cart-badge"></span>
-      </div>
-    </div>
-  </div>
-  <div class="nav-search-dropdown" id="nav-search-dropdown" style="display:none">
-    <div style="max-width:600px;margin:0 auto;position:relative">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:18px;height:18px;position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:0.4;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-      <input class="nav-search" type="text" id="nav-search" placeholder="Search products..." oninput="navSearch(this.value)" onfocus="navSearchFocus(true)" onblur="setTimeout(()=>navSearchFocus(false),200)" style="width:100%">
-      <div class="nav-search-results" id="nav-search-results"></div>
+      </button>
     </div>
   </div>
 </nav>
@@ -1363,8 +1368,8 @@ function addToCart(sku){
   if(existing) cart.set(sku, existing + 1);
   else cart.set(sku, 1);
   saveCart();
-  showToast('Added to cart');
   const p = getProduct(sku);
+  showToast(p ? `${p.name} added to cart — $${p.price.toFixed(2)}` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
 }
 function removeFromCart(sku){
@@ -1849,10 +1854,10 @@ function selectCrypto(currency, ev){
 
 /* ── NAV SEARCH ── */
 function toggleNavSearch(){
-  const dd = document.getElementById('nav-search-dropdown');
-  const open = dd.style.display === 'none';
-  dd.style.display = open ? 'block' : 'none';
-  if(open) document.getElementById('nav-search').focus();
+  const bar = document.getElementById('nav-search-bar');
+  bar.classList.toggle('open');
+  if(bar.classList.contains('open')) document.getElementById('nav-search').focus();
+  else { document.getElementById('nav-search').value=''; navSearch(''); }
 }
 function navSearch(q){
   const el = document.getElementById('nav-search-results');
@@ -2422,7 +2427,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   function updateNav(){
     const shrunk = window.scrollY > 60;
     nav.classList.toggle('shrunk', shrunk);
-    if(banner) banner.style.top = shrunk ? '68px' : '80px';
+    if(banner) banner.style.top = shrunk ? '64px' : '64px';
   }
   window.addEventListener('scroll', updateNav, {passive:true});
   updateNav();
