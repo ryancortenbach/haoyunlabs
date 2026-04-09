@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410v';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410w';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -400,9 +400,12 @@ ul{list-style:none}
   transition:color 0.5s ease,transform 0.4s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;
 }
 @keyframes hc-color{
-  0%{color:#b91c1c}10%{color:#c2410c}20%{color:#a16207}30%{color:#15803d}
-  40%{color:#0e7490}50%{color:#1d4ed8}60%{color:#6d28d9}70%{color:#9333ea}
-  80%{color:#be185d}90%{color:#047857}100%{color:#b91c1c}
+  0%{color:#b91c1c}5%{color:#dc2626}10%{color:#c2410c}15%{color:#ea580c}
+  20%{color:#d97706}25%{color:#a16207}30%{color:#4d7c0f}35%{color:#15803d}
+  40%{color:#047857}45%{color:#0d9488}50%{color:#0e7490}55%{color:#0369a1}
+  60%{color:#1d4ed8}65%{color:#4338ca}70%{color:#6d28d9}75%{color:#7e22ce}
+  80%{color:#9333ea}85%{color:#a21caf}90%{color:#be185d}95%{color:#e11d48}
+  100%{color:#b91c1c}
 }
 .badge-purity{
   padding:4px 12px;font-size:0.58rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
@@ -2869,7 +2872,7 @@ function toggleDiscreet(){
   const el=document.getElementById('hero-flip-word');
   if(!el)return;
   let idx=0;
-  const colors=['#b91c1c','#c2410c','#a16207','#15803d','#0e7490','#1d4ed8','#6d28d9','#9333ea','#be185d','#047857','#1e40af','#7e22ce'];
+  const colors=['#b91c1c','#dc2626','#c2410c','#ea580c','#d97706','#a16207','#4d7c0f','#15803d','#047857','#0d9488','#0e7490','#0369a1','#1d4ed8','#4338ca','#6d28d9','#7e22ce','#9333ea','#a21caf','#be185d','#e11d48'];
   function renderWord(word){
     el.innerHTML=word.split('').map(function(c,i){
       const col=colors[i%colors.length];
