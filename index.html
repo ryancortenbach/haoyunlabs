@@ -2036,26 +2036,30 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       grid.appendChild(cell);
       cells[i] = cell;
     }
-    // Throttled ripple — no DOM cloning, just inline style animation
-    let lastRipple = 0;
+    // Ripple — waits for full animation to finish before allowing another
+    let rippleActive = false;
     document.addEventListener('click', (e) => {
-      const now = Date.now();
-      if(now - lastRipple < 150) return; // throttle: 150ms between ripples
-      lastRipple = now;
+      if(rippleActive) return;
+      rippleActive = true;
       const clickCol = Math.floor(e.clientX / cellSize);
       const clickRow = Math.floor(e.clientY / cellSize);
       const maxDist = Math.max(cols, rows);
+      let longestTime = 0;
       for(let i = 0; i < total; i++){
         const cCol = i % cols;
         const cRow = (i / cols) | 0;
         const dist = Math.sqrt((cCol-clickCol)**2 + (cRow-clickRow)**2);
         if(dist > maxDist) continue;
         const delay = dist * 50;
-        const dur = 600 + dist * 20;
+        const dur = 800 + dist * 25;
+        const totalTime = delay + dur;
+        if(totalTime > longestTime) longestTime = totalTime;
         cells[i].style.animation = 'none';
-        cells[i].offsetHeight; // force reflow
+        cells[i].offsetHeight;
         cells[i].style.animation = `cellRipple ${dur}ms ease-out ${delay}ms forwards`;
       }
+      // Unlock after the last cell finishes
+      setTimeout(() => { rippleActive = false; }, longestTime + 50);
     });
   })();
   introFade();
