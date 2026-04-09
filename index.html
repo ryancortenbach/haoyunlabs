@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410f';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410g';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -385,6 +385,12 @@ ul{list-style:none}
 
 /* ── 3D TILT CARD ── */
 .tilt-card{transition:transform 0.15s ease;transform-style:preserve-3d;will-change:transform}
+
+/* ── DISCORD FLY BUTTON ── */
+@keyframes discord-fly{from{transform:translateY(0.1em)}to{transform:translateY(-0.1em)}}
+.discord-fly-btn:hover .discord-fly-svg{animation:discord-fly 0.6s ease-in-out infinite alternate;transform:translateX(1.2em) rotate(45deg) scale(1.1)}
+.discord-fly-btn:hover .discord-fly-text{transform:translateX(5em)}
+.discord-fly-btn:active{transform:scale(0.95)}
 .spinner.lg{width:24px;height:24px;border-width:2.5px}
 
 /* ── 3x3 GRID LOADER ── */
@@ -2595,9 +2601,11 @@ async function submitPopupEmail(){
     <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:12px">Your mystery vial code:</div>
     <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px;text-align:center;font-family:var(--mono);font-size:1.4rem;font-weight:800;letter-spacing:0.2em;margin-bottom:16px">${code}</div>
     <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-bottom:16px;line-height:1.5">Use this code at checkout. Valid for 24 hours. Now join the community:</div>
-    <a href="https://discord.gg/haoyunlabs" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;background:#5865F2;color:#fff;border:none;border-radius:8px;font-size:0.82rem;font-weight:800;cursor:pointer;text-decoration:none;letter-spacing:0.04em">
-      <svg width="20" height="15" viewBox="0 0 71 55" fill="white"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
-      Join HYL Discord
+    <a href="https://discord.gg/haoyunlabs" target="_blank" class="discord-fly-btn" style="display:inline-flex;align-items:center;padding:0.7em 1em 0.7em 0.9em;background:#5865F2;color:#fff;border:none;border-radius:16px;font-size:0.88rem;font-weight:700;cursor:pointer;text-decoration:none;overflow:hidden;transition:all 0.2s;margin:0 auto">
+      <span class="discord-fly-svg" style="display:block;transform-origin:center;transition:transform 0.3s ease-in-out">
+        <svg width="20" height="15" viewBox="0 0 71 55" fill="white"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
+      </span>
+      <span class="discord-fly-text" style="display:block;margin-left:0.4em;transition:all 0.3s ease-in-out">Join HYL Discord</span>
     </a>
     <div onclick="closeEmailPopup()" style="text-align:center;margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Close</div>
   `;
@@ -2730,6 +2738,22 @@ document.addEventListener('keydown',function(e){
       {label:'Go to Checkout',bg:'#fff',color:'#000',fn:function(){navigate('order');wrap.remove();}},
       {label:'Order Tracking',bg:'#fff',color:'#000',fn:function(){navigate('tracking');wrap.remove();}},
       {label:'COA Lookup',bg:'#fff',color:'#000',fn:function(){navigate('coa');wrap.remove();}},
+      {label:'3D Vial Models',bg:'#6366f1',color:'#fff',fn:function(){
+        var vials=[
+          {name:'Glass Vial Bottle (best)',id:'2e11c09a24194eefb0f83b7ddd0e33b0'},
+          {name:'Empty Vial (blank)',id:'2d396314c57743158fc33f8ec0dbd465'},
+          {name:'Injection Vial Medical',id:'6cc4f707c81344609866dd5981602e00'},
+          {name:'AZ Vaccine Vial',id:'a1bb302ae09645e78cbda7bd53fd9dff'},
+          {name:'Covid Vial (low poly)',id:'60a3c71c4d8b41e18321bdfc092f4863'},
+        ];
+        var html='<div style="font-weight:800;margin-bottom:12px">3D VIAL MODELS</div>';
+        vials.forEach(function(v){
+          html+='<div style="margin-bottom:16px"><div style="font-size:0.75rem;font-weight:700;margin-bottom:4px">'+v.name+'</div><div class="sketchfab-embed-wrapper"><iframe title="'+v.name+'" style="width:100%;height:200px;border:none;border-radius:8px" src="https://sketchfab.com/models/'+v.id+'/embed?autostart=1&ui_theme=dark&ui_infos=0&ui_controls=1&ui_stop=0" allow="autoplay;fullscreen;xr-spatial-tracking"></iframe></div></div>';
+        });
+        html+='<div style="font-size:0.65rem;color:rgba(255,255,255,0.4);margin-top:8px">Click one you like and tell me which to use</div>';
+        panel.querySelector('div').innerHTML=html;
+        panel.style.cssText+='max-height:80vh;overflow-y:auto;max-width:500px;width:90%';
+      }},
       {label:'Clear Cache + Reload',bg:'#dc2626',color:'#fff',fn:function(){localStorage.clear();sessionStorage.clear();location.reload();}},
     ];
     const list = document.createElement('div');
