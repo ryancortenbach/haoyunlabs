@@ -1194,7 +1194,9 @@ const CATALOG_INDIVIDUAL = [
   { sku:"HCG5SV", name:"HCG 5000iu", price:34.99, description:"Human chorionic gonadotropin. Studied for LH receptor activation and fertility research." },
   { sku:"AOD3SV", name:"AOD-9604 5mg", price:34.99, description:"Modified GH fragment (176-191). Studied for lipolysis and cartilage repair." },
   { sku:"FOX5SV", name:"5-Amino-1MQ 50mg x30 caps", price:49.99, description:"NNMT inhibitor. Studied for NAD+ metabolism and fat cell research." },
-  // Supplies
+];
+
+const CATALOG_SUPPLIES = [
   { sku:"BACSV", name:"Bacteriostatic Water 30ml", price:11.99, description:"Sterile water with 0.9% benzyl alcohol. For reconstitution of lyophilized peptides." },
   { sku:"SYRSV", name:"Insulin Syringes 100pk", price:19.99, description:"1ml insulin syringes with 29G x 1/2\" needles. For precise research dosing." },
 ];
@@ -1227,17 +1229,19 @@ const CATALOG_SPRAYS = [
 ];
 
 const CATEGORIES = {
-  singles: { label:'Singles', data:CATALOG_INDIVIDUAL },
-  kits:    { label:'Kits', data:CATALOG_KITS },
-  bundles: { label:'Bundles', data:CATALOG_BUNDLES },
-  sprays:  { label:'Sprays', data:CATALOG_SPRAYS },
+  peptides: { label:'Peptides', data:CATALOG_INDIVIDUAL },
+  kits:     { label:'Kits', data:CATALOG_KITS },
+  stacks:   { label:'Stacks', data:CATALOG_BUNDLES },
+  sprays:   { label:'Sprays', data:CATALOG_SPRAYS },
+  supplies: { label:'Supplies', data:CATALOG_SUPPLIES },
 };
 
 const ALL_PRODUCTS = [
-  ...CATALOG_INDIVIDUAL.map(p=>({...p,cat:'singles'})),
+  ...CATALOG_INDIVIDUAL.map(p=>({...p,cat:'peptides'})),
   ...CATALOG_KITS.map(p=>({...p,cat:'kits'})),
-  ...CATALOG_BUNDLES.map(p=>({...p,cat:'bundles'})),
+  ...CATALOG_BUNDLES.map(p=>({...p,cat:'stacks'})),
   ...CATALOG_SPRAYS.map(p=>({...p,cat:'sprays'})),
+  ...CATALOG_SUPPLIES.map(p=>({...p,cat:'supplies'})),
 ];
 
 /* ═════════════════════════════════════════════════════
@@ -1414,6 +1418,22 @@ function loadCart(){
 function saveCart(){
   localStorage.setItem('hyl_cart', JSON.stringify([...cart]));
   updateBadge();
+}
+function addToCartQty(sku, qty){
+  const existing = cart.get(sku) || 0;
+  cart.set(sku, existing + qty);
+  saveCart();
+  const p = getProduct(sku);
+  showToast(p ? `${p.name} x${qty} added to cart` : 'Added to cart');
+  if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
+  const supplySkus = ['BACSV','SYRSV'];
+  if(!supplySkus.includes(sku) && !cart.has('BACSV') && !cart.has('SYRSV')){
+    const lastUpsell = parseInt(sessionStorage.getItem('hyl_upsell_shown')||'0');
+    if(Date.now() - lastUpsell > 60000){
+      setTimeout(()=>{ document.getElementById('upsell-overlay').classList.add('open'); }, 600);
+      sessionStorage.setItem('hyl_upsell_shown', Date.now().toString());
+    }
+  }
 }
 function addToCart(sku){
   const existing = cart.get(sku);
@@ -1672,7 +1692,7 @@ function openProduct(sku){
           <span id="pdp-qty-val">1</span>
           <button onclick="pdpQty++;document.getElementById('pdp-qty-val').textContent=pdpQty;event.stopPropagation()">+</button>
         </div>
-        <button class="pdp-add-btn" onclick="for(let i=0;i<pdpQty;i++) addToCart('${p.sku}')">ADD TO CART</button>
+        <button class="pdp-add-btn" onclick="addToCartQty('${p.sku}',pdpQty)">ADD TO CART</button>
       </div>
       <div class="pdp-tabs">
         <div class="pdp-tab active" onclick="switchPdpTab('desc',this)">Description</div>
@@ -1940,7 +1960,7 @@ function toggleKitView(){
   showKits = !showKits;
   document.getElementById('kit-toggle').classList.toggle('on', showKits);
   if(showKits) setHomeCat('kits');
-  else setHomeCat('singles');
+  else setHomeCat('peptides');
 }
 
 function toggleNavSearch(){
@@ -2473,9 +2493,9 @@ async function loadProductsFromDB(){
     if(error || !data || data.length === 0) return false;
 
     // Clear and rebuild
-    CATALOG_INDIVIDUAL.length=0; CATALOG_KITS.length=0; CATALOG_BUNDLES.length=0; CATALOG_SPRAYS.length=0;
+    CATALOG_INDIVIDUAL.length=0; CATALOG_KITS.length=0; CATALOG_BUNDLES.length=0; CATALOG_SPRAYS.length=0; CATALOG_SUPPLIES.length=0;
 
-    const catMap = {singles:CATALOG_INDIVIDUAL, kits:CATALOG_KITS, bundles:CATALOG_BUNDLES, sprays:CATALOG_SPRAYS};
+    const catMap = {singles:CATALOG_INDIVIDUAL, kits:CATALOG_KITS, bundles:CATALOG_BUNDLES, sprays:CATALOG_SPRAYS, supplies:CATALOG_SUPPLIES};
     data.forEach(row=>{
       const p = {sku:row.sku, name:row.name, price:parseFloat(row.price)};
       if(row.description) p.description = row.description;
@@ -2484,13 +2504,14 @@ async function loadProductsFromDB(){
       if(arr) arr.push(p);
     });
 
-    // Rebuild ALL_PRODUCTS (use concat to avoid call stack overflow with spread)
+    // Rebuild ALL_PRODUCTS
     ALL_PRODUCTS.length = 0;
     const rebuilt = [].concat(
-      CATALOG_INDIVIDUAL.map(p=>Object.assign({},p,{cat:'singles'})),
+      CATALOG_INDIVIDUAL.map(p=>Object.assign({},p,{cat:'peptides'})),
       CATALOG_KITS.map(p=>Object.assign({},p,{cat:'kits'})),
-      CATALOG_BUNDLES.map(p=>Object.assign({},p,{cat:'bundles'})),
-      CATALOG_SPRAYS.map(p=>Object.assign({},p,{cat:'sprays'}))
+      CATALOG_BUNDLES.map(p=>Object.assign({},p,{cat:'stacks'})),
+      CATALOG_SPRAYS.map(p=>Object.assign({},p,{cat:'sprays'})),
+      CATALOG_SUPPLIES.map(p=>Object.assign({},p,{cat:'supplies'}))
     );
     for(let i=0;i<rebuilt.length;i++) ALL_PRODUCTS.push(rebuilt[i]);
 
