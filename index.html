@@ -1627,11 +1627,11 @@ function buildCatTabs(containerId, activeVar, clickFn){
   if(!c.querySelector('.cat-tabs-slider')){
     let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
     html += `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`;
-    html += `<button class="cat-tab" data-cat="singles" onclick="${clickFn}('singles')">Singles</button>`;
+    html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Peptides</button>`;
     html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
-    html += `<span style="width:2px;background:var(--stroke);margin:4px 2px;border-radius:1px"></span>`;
-    html += `<button class="cat-tab" data-cat="bundles" onclick="${clickFn}('bundles')">Bundles</button>`;
+    html += `<button class="cat-tab" data-cat="stacks" onclick="${clickFn}('stacks')">Stacks</button>`;
     html += `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`;
+    html += `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`;
     c.innerHTML = html;
   }
   c.querySelectorAll('.cat-tab').forEach(t=>{
