@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260410r';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260410s';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -385,12 +385,24 @@ ul{list-style:none}
 
 /* ── 3D TILT CARD ── */
 /* ── BADGES ── */
-@keyframes badge-shine{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes badge-shine{0%{background-position:-200% center}100%{background-position:200% center}}
 .badge-bestseller{
   padding:4px 12px;font-size:0.58rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;
-  background:linear-gradient(110deg,#b8860b 0%,#ffd700 25%,#b8860b 50%,#ffd700 75%,#b8860b 100%);
-  background-size:200% auto;animation:badge-shine 3s linear infinite;
+  background:linear-gradient(110deg,#b8860b 0%,#ffd700 30%,#b8860b 50%,#ffd700 70%,#b8860b 100%);
+  background-size:200% auto;animation:badge-shine 6s linear infinite;
   color:#fff;border-radius:999px;text-shadow:0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* ── COLOURFUL FLIP WORDS ── */
+.hero-colourful{display:inline-block;position:relative;min-width:4em}
+.hero-colourful .hc-char{
+  display:inline-block;
+  transition:color 0.5s ease,transform 0.4s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;
+}
+@keyframes hc-color{
+  0%{color:#ff6b6b}10%{color:#ffa500}20%{color:#ffd700}30%{color:#4ecdc4}
+  40%{color:#45b7d1}50%{color:#96ceb4}60%{color:#a8e6cf}70%{color:#dda0dd}
+  80%{color:#c084fc}90%{color:#f472b6}100%{color:#ff6b6b}
 }
 .badge-purity{
   padding:4px 12px;font-size:0.58rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
@@ -862,7 +874,7 @@ ul{list-style:none}
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
       <div class="hero-tag anim-fade-up" style="font-size:0.7rem;letter-spacing:0.2em;margin-bottom:16px;color:var(--muted)">Hao Yun Labs</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Peptides to <em style="font-style:italic">fuel</em> your research.</div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Peptides to <em style="font-style:italic">fuel</em> your <span id="hero-flip-word" class="hero-colourful"></span></div>
       <div class="anim-fade-up anim-d4" style="font-size:0.92rem;margin-top:16px;color:var(--muted);font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;text-align:center;letter-spacing:0">99%+ HPLC purity, lot-verified, and shipped with a Certificate of Analysis. No middlemen, no markups.</div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now</button>
@@ -898,7 +910,7 @@ ul{list-style:none}
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:8px">Individual Vials</div>
         <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px;color:#fff">Research Peptides</div>
         <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
-        <div style="margin-top:16px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff">Browse Peptides &rarr;</div>
+        <div style="margin-top:16px"><span style="display:inline-block;padding:8px 20px;border:1.5px solid rgba(255,255,255,0.5);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;transition:all 0.3s ease">Browse Peptides &rarr;</span></div>
         </div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
@@ -1843,12 +1855,12 @@ function cardHTML(p){
   const purity = purityMap[p.sku] || '99.00';
   const isBest = bestSellers.includes(p.sku);
 
-  return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer">
-    <div style="display:flex;flex-direction:column;gap:4px;padding:8px 12px 0;align-items:flex-start">
+  return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative">
+    ${getProductImageHTML(p)}
+    <div style="position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:4px;z-index:2">
       ${isBest ? '<span class="badge-bestseller">Best Seller</span>' : ''}
       <span class="badge-purity">${purity}% Purity</span>
     </div>
-    ${getProductImageHTML(p)}
     <div class="card-header">
       <span class="card-sku">${p.sku}</span>
       <span class="card-price"><span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span><br>$${p.price.toFixed(2)}</span>
@@ -2011,9 +2023,11 @@ function getFilteredProducts(cat, searchId, sortId){
   let items = cat==='all' ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p=>p.cat===cat);
   const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
   if(q) items = items.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q));
+  const bestSellers = ['RT10SV','CU50SV'];
   const sort = document.getElementById(sortId)?.value||'featured';
   if(sort==='low') items.sort((a,b)=>a.price-b.price);
   else if(sort==='high') items.sort((a,b)=>b.price-a.price);
+  else items.sort((a,b)=>(bestSellers.includes(b.sku)?1:0)-(bestSellers.includes(a.sku)?1:0));
   return items;
 }
 
@@ -2853,6 +2867,37 @@ function toggleDiscreet(){
 }
 
 /* ── INTERNATIONAL SHIPPING NOTICE ── */
+/* ── HERO COLOURFUL FLIP WORDS ── */
+(function(){
+  const words=['research.','recovery.','longevity.','performance.','breakthroughs.'];
+  const el=document.getElementById('hero-flip-word');
+  if(!el)return;
+  let idx=0;
+  const colors=['#ff6b6b','#ffa500','#ffd700','#4ecdc4','#45b7d1','#96ceb4','#dda0dd','#c084fc','#f472b6','#a78bfa','#34d399','#fb923c'];
+  function renderWord(word){
+    el.innerHTML=word.split('').map(function(c,i){
+      const col=colors[i%colors.length];
+      return '<span class="hc-char" style="color:'+col+';animation:hc-color 8s linear infinite;animation-delay:'+(-i*0.4)+'s;opacity:0;transform:translateY(10px)">'+c+'</span>';
+    }).join('');
+    // Stagger in
+    el.querySelectorAll('.hc-char').forEach(function(ch,i){
+      setTimeout(function(){ch.style.opacity='1';ch.style.transform='translateY(0)';},i*40);
+    });
+  }
+  renderWord(words[0]);
+  setInterval(function(){
+    // Stagger out
+    var chars=el.querySelectorAll('.hc-char');
+    chars.forEach(function(ch,i){
+      setTimeout(function(){ch.style.opacity='0';ch.style.transform='translateY(-10px)';},i*30);
+    });
+    setTimeout(function(){
+      idx=(idx+1)%words.length;
+      renderWord(words[idx]);
+    },chars.length*30+200);
+  },3500);
+})();
+
 /* ── 3D TILT CARDS ── */
 document.addEventListener('mousemove',function(e){
   document.querySelectorAll('.tilt-card').forEach(function(card){
