@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411e';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411f';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -332,7 +332,7 @@ ul{list-style:none}
   transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.5s cubic-bezier(0.34,1.56,0.64,1);
   display:flex;flex-direction:column;
 }
-.product-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0}
 .card-sku{font-family:var(--mono);font-size:0.68rem;font-weight:300;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
@@ -369,12 +369,9 @@ ul{list-style:none}
 .skeleton-card::after{content:'';display:block;margin:16px;height:14px;width:60%;border-radius:4px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ── QUICK VIEW OVERLAY ── */
+/* ── QUICK VIEW — removed, using card lift instead ── */
 .product-card .prod-img{position:relative}
-.quick-view-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
-.product-card:hover .quick-view-overlay{opacity:1;pointer-events:auto}
-.quick-view-btn{background:#fff;color:#000;border:none;padding:10px 20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;border-radius:4px}
-.quick-view-btn:hover{background:#f0f0f0}
+.quick-view-overlay{display:none}
 
 /* ── BUTTON SPINNER ── */
 @keyframes btnSpin{to{transform:rotate(360deg)}}
@@ -2178,7 +2175,11 @@ function renderHome(){
   const grid = document.getElementById('home-grid');
   const items = getFilteredProducts(homeCategory, 'home-search', 'home-sort');
   const visible = items.slice(0, homeShown);
-  grid.innerHTML = visible.map(cardHTML).join('');
+  if(visible.length === 0){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="font-size:2.4rem;margin-bottom:12px">&#128300;</div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
+  } else {
+    grid.innerHTML = visible.map(cardHTML).join('');
+  }
   const btn = document.getElementById('home-show-more-wrap');
   btn.style.display = homeShown < items.length ? '' : 'none';
 }
@@ -2197,7 +2198,11 @@ function renderCatalog(){
   buildCatTabs('cat-cat-tabs', catCategory, 'setCatCat');
   const grid = document.getElementById('cat-grid');
   const items = getFilteredProducts(catCategory, 'cat-search', 'cat-sort');
-  grid.innerHTML = items.map(cardHTML).join('');
+  if(items.length === 0){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="font-size:2.4rem;margin-bottom:12px">&#128300;</div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
+  } else {
+    grid.innerHTML = items.map(cardHTML).join('');
+  }
 }
 
 /* ═════════════════════════════════════════════════════
