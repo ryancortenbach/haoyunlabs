@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411q';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411r';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -368,6 +368,14 @@ ul{list-style:none}
 .skeleton-card::before{content:'';display:block;aspect-ratio:1/1;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 .skeleton-card::after{content:'';display:block;margin:16px;height:14px;width:60%;border-radius:4px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
+.skel-text{height:14px;width:60%;margin-bottom:8px}
+.skel-text.w40{width:40%}.skel-text.w80{width:80%}.skel-text.w100{width:100%}
+.skel-title{height:28px;width:50%;margin-bottom:12px}
+.skel-hero{height:200px;border-radius:var(--radius);margin-bottom:24px}
+.skel-stat{height:80px;border-radius:var(--radius)}
+.skel-pill{height:48px;border-radius:999px}
+.skel-img{aspect-ratio:1/1;border-radius:var(--radius)}
 
 /* ── QUICK VIEW — removed, using card lift instead ── */
 .product-card .prod-img{position:relative}
@@ -2432,7 +2440,17 @@ function toggleDetails(id, btn){
    SKELETON LOADER
    ═════════════════════════════════════════════════════ */
 function showSkeleton(gridEl, count){
-  gridEl.innerHTML = Array(count).fill('<div class="skeleton-card"></div>').join('');
+  gridEl.innerHTML = Array(count).fill(`<div class="skeleton-card">
+    <div class="skel skel-img"></div>
+    <div style="padding:16px"><div class="skel skel-text w40"></div><div class="skel skel-text w80"></div><div class="skel skel-text" style="height:36px;width:100%;margin-top:12px;border-radius:var(--radius)"></div></div>
+  </div>`).join('');
+}
+function showSectionSkeletons(){
+  // Stats row skeleton
+  const stats=document.getElementById('stats-row');
+  if(stats&&!stats.dataset.loaded){
+    stats.querySelectorAll('.num-tick').forEach(el=>{el.textContent='';el.className='skel';el.style.cssText='display:inline-block;width:60px;height:28px;border-radius:6px';});
+  }
 }
 
 /* ═════════════════════════════════════════════════════
