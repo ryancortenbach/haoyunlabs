@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411h';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411j';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -439,6 +439,7 @@ ul{list-style:none}
 /* ── DISCORD FLY BUTTON ── */
 @keyframes discord-fly{from{transform:translateY(0.1em)}to{transform:translateY(-0.1em)}}
 .discord-fly-btn:hover .discord-fly-svg{animation:discord-fly 0.6s ease-in-out infinite alternate;transform:translateX(1.2em) rotate(45deg) scale(1.1)}
+.discord-cta-btn:hover{background:#5865F2;color:#fff}
 .discord-fly-btn:hover .discord-fly-text{transform:translateX(5em)}
 .discord-fly-btn:active{transform:scale(0.95)}
 .spinner.lg{width:24px;height:24px;border-width:2.5px}
@@ -927,22 +928,32 @@ ul{list-style:none}
         </div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
-        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('kits')">
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
-          <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">10-Vial Kits</div>
-          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk research kits. Same purity, better value.</div>
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:0;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr 1fr;overflow:hidden" onclick="navigate('catalog');setHomeCat('kits')">
+          <div style="padding:28px 24px;display:flex;flex-direction:column;justify-content:center">
+            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
+            <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">10-Vial Kits</div>
+            <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk kits.</div>
+          </div>
+          <div style="background:#000;display:flex;align-items:center;justify-content:center;min-height:100%">
+            <div style="color:rgba(255,255,255,0.15);font-family:'Instrument Serif',serif;font-size:3rem;font-weight:400">10x</div>
+          </div>
         </div>
-        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:32px 28px;cursor:pointer;border:1px solid var(--stroke)" onclick="navigate('catalog');setHomeCat('stacks')">
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Curated</div>
-          <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">Research Stacks</div>
-          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Pre-built compound bundles for metabolic, recovery, and cognitive research.</div>
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:0;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr 1fr;overflow:hidden" onclick="navigate('catalog');setHomeCat('stacks')">
+          <div style="padding:28px 24px;display:flex;flex-direction:column;justify-content:center">
+            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Curated</div>
+            <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">Research Stacks</div>
+            <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Pre-built compound bundles.</div>
+          </div>
+          <div style="background:#000;display:flex;align-items:center;justify-content:center;min-height:100%">
+            <div style="color:rgba(255,255,255,0.15);font-family:'Instrument Serif',serif;font-size:2rem;font-weight:400">3-5x</div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- SHOP YOUR WAY -->
     <div style="margin-bottom:48px;padding:40px 0">
-      <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;margin-bottom:28px">Shop <em style="font-style:italic">your</em> way</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;margin-bottom:28px">Browse by <em style="font-style:italic">category</em></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
         <a class="shop-pill" onclick="navigate('catalog');setHomeCat('all')">
           <div class="shop-pill-img"></div>
@@ -1342,8 +1353,8 @@ ul{list-style:none}
   <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#5865F2;margin-bottom:10px">Insider Access</div>
   <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">Join the Research Community</div>
   <div style="font-size:0.88rem;color:var(--muted);max-width:600px;margin:0 auto 24px;line-height:1.6">Join the Discord ecosystem for exclusive drops, discounted group buys, and free weekly peptide giveaways. Validate your research by viewing or leaving product reviews with our growing community.</div>
-  <a href="https://discord.gg/WDYVkgt5dB" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:2px solid #5865F2;border-radius:999px;color:#5865F2;font-size:0.82rem;font-weight:700;text-decoration:none;transition:all 0.3s cubic-bezier(0.22,1,0.36,1)">
-    <svg width="18" height="14" viewBox="0 0 71 55" fill="#5865F2"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
+  <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="discord-cta-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:2px solid #5865F2;border-radius:999px;color:#5865F2;font-size:0.82rem;font-weight:700;text-decoration:none;transition:all 0.3s cubic-bezier(0.22,1,0.36,1)">
+    <svg width="18" height="14" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
     Join The Community
   </a>
 </div>
@@ -1390,8 +1401,7 @@ ul{list-style:none}
       <div class="footer-brand-name">Hao Yun Labs</div>
       <div class="footer-brand-desc">Research-grade peptides and supplies. Every compound is HPLC-tested, lot-verified, and ships with a Certificate of Analysis.</div>
       <div class="footer-social">
-        <a href="https://discord.gg/WDYVkgt5dB" target="_blank" aria-label="Discord"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg></a>
-        <a href="https://twitter.com/haoyunlabs" target="_blank" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg></a>
+        <a href="https://discord.gg/WDYVkgt5dB" target="_blank" aria-label="Discord"><svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor" style="stroke:none"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg></a>
         <a href="mailto:support@haoyunlabs.com" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></a>
       </div>
     </div>
@@ -2204,9 +2214,58 @@ window.addEventListener('hashchange', handleRoute);
 /* ═════════════════════════════════════════════════════
    PRODUCT CARD HTML
    ═════════════════════════════════════════════════════ */
+function autoDesc(p){
+  const n=p.name.toLowerCase();
+  const compound=p.name.replace(/\s*\d+\s*(mg|iu|ml|mcg|tabs?|caps?|pk|pack|x\s*\d+\s*vials?)/gi,'').replace(/\s*\(.*?\)/g,'').trim();
+  if(p.cat==='kits') return compound+' bulk research kit. 10 vials per kit for extended protocols.';
+  if(p.cat==='stacks'||p.cat==='bundles') return 'Curated research bundle. Multiple compounds selected for synergistic research protocols.';
+  if(p.cat==='sprays') return compound+' pre-mixed nasal spray. Ready-to-use intranasal delivery for research.';
+  if(p.cat==='supplies') return 'Research supply item for peptide preparation and handling.';
+  if(n.includes('semaglutide')) return 'GLP-1 receptor agonist. Studied for glucose regulation and metabolic research.';
+  if(n.includes('tirzepatide')) return 'Dual GIP/GLP-1 agonist. Advanced metabolic research compound.';
+  if(n.includes('retatrutide')) return 'Triple-agonist peptide targeting GIP, GLP-1, and glucagon receptors.';
+  if(n.includes('bpc-157')||n.includes('bpc 157')) return 'Body Protection Compound. Studied for tissue repair and gut healing.';
+  if(n.includes('tb-500')||n.includes('thymosin b4')) return 'Thymosin Beta-4 fragment. Studied for tissue repair and recovery.';
+  if(n.includes('ipamorelin')) return 'Selective GH secretagogue. Clean GH pulse without cortisol elevation.';
+  if(n.includes('tesamorelin')) return 'GHRH analog studied for growth hormone release research.';
+  if(n.includes('cjc-1295')||n.includes('cjc 1295')) return 'GHRH analog for sustained growth hormone elevation research.';
+  if(n.includes('ghk-cu')||n.includes('ahk-cu')) return 'Copper peptide studied for skin remodeling and collagen synthesis.';
+  if(n.includes('melanotan')) return 'Alpha-MSH analog studied for melanogenesis and photoprotection.';
+  if(n.includes('pt-141')) return 'Melanocortin receptor agonist studied for physiological response.';
+  if(n.includes('semax')) return 'Nootropic heptapeptide studied for cognitive enhancement.';
+  if(n.includes('selank')) return 'Anxiolytic peptide studied for stress and cognitive research.';
+  if(n.includes('epithalon')) return 'Tetrapeptide studied for telomerase activation and longevity.';
+  if(n.includes('wolverine')) return 'BPC-157 + TB-500 combination for accelerated recovery research.';
+  if(n.includes('glow')) return 'Multi-peptide blend for skin rejuvenation and healing research.';
+  if(n.includes('mots-c')) return 'Mitochondrial-derived peptide for metabolic regulation research.';
+  if(n.includes('ss-31')||n.includes('elamipretide')) return 'Mitochondria-targeted peptide for cellular energy research.';
+  if(n.includes('hgh')||n.includes('somatropin')) return 'Growth hormone for physiological and metabolic research.';
+  if(n.includes('hcg')) return 'Human chorionic gonadotropin for receptor activation research.';
+  if(n.includes('nad+')) return 'Coenzyme for cellular energy metabolism and longevity research.';
+  if(n.includes('foxo4')) return 'Senolytic peptide studied for cellular aging research.';
+  if(n.includes('survodutide')) return 'Dual glucagon/GLP-1 agonist for metabolic and liver research.';
+  if(n.includes('mazdutide')) return 'Next-generation GLP-1/glucagon agonist for metabolic research.';
+  if(n.includes('cagri')) return 'Amylin analog for metabolic and appetite regulation research.';
+  if(n.includes('ll-37')) return 'Antimicrobial peptide for immune defense and wound healing.';
+  if(n.includes('dsip')) return 'Delta sleep-inducing peptide for sleep regulation research.';
+  if(n.includes('oxytocin')) return 'Neuropeptide studied for social bonding and behavioral research.';
+  if(n.includes('gonadorelin')) return 'GnRH analog for LH/FSH stimulation research.';
+  if(n.includes('sermorelin')) return 'GHRH analog (1-29) for growth hormone stimulation research.';
+  if(n.includes('hexarelin')) return 'Hexapeptide GH secretagogue for growth hormone research.';
+  if(n.includes('ghrp')) return 'Growth hormone releasing peptide for GH secretion research.';
+  if(n.includes('igf')) return 'Insulin-like growth factor for tissue growth and repair research.';
+  if(n.includes('aod')) return 'Modified GH fragment for lipolysis and cartilage research.';
+  if(n.includes('follistatin')) return 'Myostatin inhibitor studied for muscle growth research.';
+  if(n.includes('kisspeptin')) return 'Neuropeptide for GnRH stimulation and reproductive research.';
+  if(n.includes('humanin')) return 'Mitochondrial peptide for neuroprotection and longevity.';
+  if(n.includes('glutathione')) return 'Master antioxidant for detoxification and cellular protection.';
+  if(n.includes('l-carnitine')) return 'Amino acid derivative for fat metabolism and energy research.';
+  return 'Research-grade compound. HPLC-verified, lyophilized, for laboratory use only.';
+}
+
 function cardHTML(p){
   const detailId = 'det-'+p.sku;
-  const descText = p.description || '';
+  const descText = p.description || autoDesc(p);
   const specs = [`Purity: >99% <span class="term-tip" data-tip="High Performance Liquid Chromatography — gold standard purity test">(HPLC)</span>`,`Form: <span class="term-tip" data-tip="Freeze-dried powder for maximum stability and shelf life">Lyophilized</span> Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
   if(p.cat==='sprays') specs[1] = 'Form: Nasal Spray (30ml)';
   if(p.cat==='bundles') specs.push('Includes: <span class="term-tip" data-tip="Bacteriostatic water — sterile solvent for reconstitution">BAC water</span> where noted');
@@ -2328,7 +2387,7 @@ function openProduct(sku){
   const imgHTML = PRODUCT_IMAGES[p.sku]
     ? `<img src="${PRODUCT_IMAGES[p.sku]}" alt="${p.name}">`
     : getProductImageHTML(p);
-  const desc = p.description || 'Premium research-grade compound. Lyophilized powder. For laboratory use only.';
+  const desc = p.description || autoDesc(p);
   const comp = p.components || 'Purity: >99% (HPLC)\nStorage: -20°C (lyophilized, desiccated)\nAppearance: White Powder\nResearch Use Only.';
 
   const others = ALL_PRODUCTS.filter(x=>x.sku!==sku).slice(0,3);
