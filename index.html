@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411s';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411t';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1313,15 +1313,75 @@ ul{list-style:none}
 
 <!-- ═══════════════ SCREEN: COA VERIFICATION ═══════════════ -->
 <div class="screen" id="screen-coa">
-  <div class="container" style="padding-top:100px;max-width:600px;margin:0 auto">
-    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Purity Verification</h1>
-    <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Enter a product SKU to view its Certificate of Analysis.</p>
-    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px">
+  <div class="container" style="padding-top:120px;max-width:800px;margin:0 auto">
+    <!-- HERO -->
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Transparency</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;font-weight:400;line-height:1.1;margin-bottom:12px">Verify purity. Every lot.</div>
+      <div style="font-size:0.88rem;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.6">Every compound we ship is independently tested via HPLC. Enter a product SKU below to view its Certificate of Analysis.</div>
+    </div>
+
+    <!-- TRUST ROW -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px">
+      <div style="text-align:center;padding:20px;border:1px solid var(--stroke);border-radius:var(--radius)">
+        <div style="font-size:1.4rem;margin-bottom:6px">&#128300;</div>
+        <div style="font-size:0.75rem;font-weight:700">HPLC Tested</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">Every lot analyzed</div>
+      </div>
+      <div style="text-align:center;padding:20px;border:1px solid var(--stroke);border-radius:var(--radius)">
+        <div style="font-size:1.4rem;margin-bottom:6px">&#128203;</div>
+        <div style="font-size:0.75rem;font-weight:700">COA on File</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">Downloadable reports</div>
+      </div>
+      <div style="text-align:center;padding:20px;border:1px solid var(--stroke);border-radius:var(--radius)">
+        <div style="font-size:1.4rem;margin-bottom:6px">&#9989;</div>
+        <div style="font-size:0.75rem;font-weight:700">99%+ Standard</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">Minimum purity guarantee</div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px;margin-bottom:24px">
+      <div style="font-weight:800;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Look up a Certificate of Analysis</div>
       <div style="display:flex;gap:8px">
-        <input class="form-input" type="text" id="coa-sku" placeholder="e.g. RT10SV" style="text-transform:uppercase;flex:1">
-        <button class="btn-add" style="padding:12px 24px;border-radius:var(--radius);white-space:nowrap" onclick="lookupCOA()">VERIFY</button>
+        <div style="flex:1;position:relative">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px;position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.3"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+          <input class="form-input" type="text" id="coa-sku" placeholder="Enter SKU (e.g. RT10SV)" style="text-transform:uppercase;width:100%;padding-left:36px">
+        </div>
+        <button class="hero-btn hero-btn-primary" onclick="lookupCOA()" style="padding:12px 24px;font-size:0.75rem">Verify <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
       </div>
       <div id="coa-result" style="margin-top:20px"></div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">Popular lookups:</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button onclick="document.getElementById('coa-sku').value='RT10SV';lookupCOA()" style="padding:6px 14px;border:1px solid var(--stroke);border-radius:999px;background:var(--bg);font-size:0.7rem;font-weight:600;cursor:pointer">RT10SV</button>
+        <button onclick="document.getElementById('coa-sku').value='SM5SV';lookupCOA()" style="padding:6px 14px;border:1px solid var(--stroke);border-radius:999px;background:var(--bg);font-size:0.7rem;font-weight:600;cursor:pointer">SM5SV</button>
+        <button onclick="document.getElementById('coa-sku').value='TR10SV';lookupCOA()" style="padding:6px 14px;border:1px solid var(--stroke);border-radius:999px;background:var(--bg);font-size:0.7rem;font-weight:600;cursor:pointer">TR10SV</button>
+        <button onclick="document.getElementById('coa-sku').value='BC5SV';lookupCOA()" style="padding:6px 14px;border:1px solid var(--stroke);border-radius:999px;background:var(--bg);font-size:0.7rem;font-weight:600;cursor:pointer">BC5SV</button>
+        <button onclick="document.getElementById('coa-sku').value='CU50SV';lookupCOA()" style="padding:6px 14px;border:1px solid var(--stroke);border-radius:999px;background:var(--bg);font-size:0.7rem;font-weight:600;cursor:pointer">CU50SV</button>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="padding:28px;background:#f7f7f7;border-radius:var(--radius);margin-bottom:40px">
+      <div style="font-weight:800;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:16px">How our testing works</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div>
+          <div style="font-weight:700;font-size:0.78rem;margin-bottom:4px">1. Sample collection</div>
+          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">A sample from each production batch is pulled for independent analysis.</div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:0.78rem;margin-bottom:4px">2. HPLC analysis</div>
+          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">High-Performance Liquid Chromatography measures compound purity and identifies impurities.</div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:0.78rem;margin-bottom:4px">3. COA issued</div>
+          <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Results are documented with lot number, test date, purity percentage, and testing method.</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
