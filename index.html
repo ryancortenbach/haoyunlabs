@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411y';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411z';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -67,19 +67,42 @@ ul{list-style:none}
 
 /* ── FAQ ACCORDION ── */
 .faq-list{display:flex;flex-direction:column;gap:0}
-.faq-item{border-bottom:1px solid var(--stroke);background:#fff}
+.faq-item{border-bottom:1px solid var(--stroke);background:#fff;overflow:hidden}
 .faq-item:first-child{border-top:1px solid var(--stroke);border-radius:var(--radius) var(--radius) 0 0}
 .faq-item:last-child{border-radius:0 0 var(--radius) var(--radius)}
-.faq-item summary{
+.faq-q{
   padding:18px 20px;font-size:0.88rem;font-weight:700;cursor:pointer;
-  list-style:none;display:flex;justify-content:space-between;align-items:center;
-  transition:background 0.15s;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:background 0.3s cubic-bezier(0.22,1,0.36,1);
+  user-select:none;color:var(--text);
 }
-.faq-item summary:hover{background:#f9f9f9}
-.faq-item summary::after{content:'+';font-size:1.2rem;font-weight:300;transition:transform 0.2s}
-.faq-item[open] summary::after{transform:rotate(45deg)}
-.faq-item summary::-webkit-details-marker{display:none}
-.faq-item p{padding:0 20px 18px;font-size:0.82rem;line-height:1.7;color:var(--muted)}
+.faq-q:hover{background:#f9f9f9}
+.faq-item.open .faq-q{background:#fafafa}
+.faq-icon{
+  width:18px;height:18px;flex-shrink:0;position:relative;
+  transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.faq-icon::before,.faq-icon::after{
+  content:'';position:absolute;background:var(--text);
+  border-radius:1px;
+}
+.faq-icon::before{
+  top:50%;left:0;width:100%;height:2px;margin-top:-1px;
+  transition:transform 0.4s cubic-bezier(0.65,0,0.35,1);
+}
+.faq-icon::after{
+  top:0;left:50%;width:2px;height:100%;margin-left:-1px;
+  transition:transform 0.4s cubic-bezier(0.65,0,0.35,1);
+}
+.faq-item.open .faq-icon{transform:rotate(180deg)}
+.faq-item.open .faq-icon::after{transform:scaleY(0)}
+.faq-answer{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.5s cubic-bezier(0.65,0,0.35,1),opacity 0.4s ease,padding 0.5s cubic-bezier(0.65,0,0.35,1);
+  opacity:0;
+}
+.faq-item.open .faq-answer{max-height:500px;opacity:1}
+.faq-answer-inner{padding:0 20px 18px;font-size:0.82rem;line-height:1.7;color:var(--muted)}
 
 /* ── GRID BG + SHIMMER + RIPPLE ── */
 #vanta-bg{
@@ -1312,17 +1335,17 @@ ul{list-style:none}
   <div class="container" style="padding-top:100px;max-width:800px;margin:0 auto">
     <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Frequently Asked Questions</h1>
     <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Find answers to common questions about our products and services.</p>
-    <div class="faq-list">
-      <details class="faq-item"><summary>What are research peptides?</summary><p>Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</p></details>
-      <details class="faq-item"><summary>How do I place an order?</summary><p>Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</p></details>
-      <details class="faq-item"><summary>What payment methods do you accept?</summary><p>We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</p></details>
-      <details class="faq-item"><summary>How long does shipping take?</summary><p>Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</p></details>
-      <details class="faq-item"><summary>Do you ship internationally?</summary><p>Currently, we primarily serve customers within the United States. International shipping may be available for select kit orders. Contact us for details.</p></details>
-      <details class="faq-item"><summary>What is your purity guarantee?</summary><p>All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</p></details>
-      <details class="faq-item"><summary>Can I get a refund?</summary><p>Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</p></details>
-      <details class="faq-item"><summary>How do I store my peptides?</summary><p>Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</p></details>
-      <details class="faq-item"><summary>Do you offer discount codes?</summary><p>Yes! Join our mailing list for exclusive deals, or check our Discord community for active promo codes. Affiliate codes are also available for content creators.</p></details>
-      <details class="faq-item"><summary>Is my payment secure?</summary><p>Absolutely. Cryptocurrency payments are processed directly on the blockchain with no intermediaries. For wallet payments, transactions are signed locally in your browser wallet — we never have access to your private keys.</p></details>
+    <div class="faq-list" id="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What are research peptides?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How do I place an order?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What payment methods do you accept?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How long does shipping take?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Do you ship internationally?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Currently, we primarily serve customers within the United States. International shipping may be available for select kit orders. Contact us for details.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What is your purity guarantee?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Can I get a refund?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How do I store my peptides?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Do you offer discount codes?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Yes! Join our mailing list for exclusive deals, or check our Discord community for active promo codes. Affiliate codes are also available for content creators.</div></div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Is my payment secure?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Cryptocurrency payments are processed directly on the blockchain with no intermediaries. For wallet payments, transactions are signed locally in your browser wallet — we never have access to your private keys.</div></div></div>
     </div>
   </div>
 </div>
@@ -2481,6 +2504,18 @@ function updateCardPrice(sku, idx){
     const oldP = (Math.floor(s.price * 1.8) - 0.01).toFixed(2);
     priceEl.innerHTML = '<span class="card-price-old">$'+oldP+'</span><br>$'+s.price.toFixed(2);
   }
+}
+
+function toggleFaq(qEl){
+  const item = qEl.closest('.faq-item');
+  if(!item) return;
+  const isOpen = item.classList.contains('open');
+  // Close all other FAQ items first (one open at a time)
+  document.querySelectorAll('.faq-item.open').forEach(el=>{
+    if(el!==item) el.classList.remove('open');
+  });
+  // Toggle this one
+  item.classList.toggle('open', !isOpen);
 }
 
 function toggleSizeSelect(id){
