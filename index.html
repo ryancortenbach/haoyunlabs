@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412p';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412s';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1384,25 +1384,6 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
       <div style="font-size:0.88rem;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.6">Every compound we ship is independently tested via HPLC. Enter a product SKU below to view its Certificate of Analysis.</div>
     </div>
 
-    <!-- TRUST ROW -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px">
-      <div style="text-align:center;padding:20px;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:6px">&#128300;</div>
-        <div style="font-size:0.75rem;font-weight:700">HPLC Tested</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">Every lot analyzed</div>
-      </div>
-      <div style="text-align:center;padding:20px;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:6px">&#128203;</div>
-        <div style="font-size:0.75rem;font-weight:700">COA on File</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">Downloadable reports</div>
-      </div>
-      <div style="text-align:center;padding:20px;border:1px solid var(--stroke);border-radius:var(--radius)">
-        <div style="font-size:1.4rem;margin-bottom:6px">&#9989;</div>
-        <div style="font-size:0.75rem;font-weight:700">99%+ Standard</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">Minimum purity guarantee</div>
-      </div>
-    </div>
-
     <!-- SEARCH -->
     <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px;margin-bottom:24px">
       <div style="font-weight:800;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Look up a Certificate of Analysis</div>
@@ -2085,7 +2066,7 @@ const VALID_SKUS = new Set([
   '10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
   'ACTH1-39-5MGSV','ADAMAX10SV','ADAMAX5SV','AE1','AE1SV','AHK-CU-100MGSV','AHK-CU-50MGSV','AOD2',
   'AOD2SV','AOD5','AOD5SV','AP10','AP10SV','AP5','AP5SV','AQUA8','AR50','AR50SV','Adamax10','Adamax5',
-  'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC3SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
+  'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC3SV','BAC10SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
   'BBG70SV','BC10','BC10SV','BC2','BC20SV','BC2SV','BC5','BC5SV','BT10','BT10SV','BT5','BT5SV','Bron',
   'BronSV','CARDIO20SV','CARTALAX20SV','CD2','CD2SV','CD5','CD5SV','CND10','CND10SV',
   'CND2','CND2SV','CND5','CND5SV','CORTAGEN20SV','CP10SV','CRYSTAGEN20SV','CS10','CS10SV','CU100',
@@ -2430,7 +2411,7 @@ function pickSize(id, idx){
   if(!sizes||!sizes[idx]) return;
   // Update trigger text
   const valEl = el.querySelector('.hyl-select-value');
-  if(valEl) valEl.textContent = sizes[idx].label + ' - $' + sizes[idx].price.toFixed(2);
+  if(valEl) valEl.textContent = sizes[idx].label;
   // Update selected state
   el.querySelectorAll('.hyl-select-item').forEach((item,i)=>{
     item.classList.toggle('selected', i===idx);
@@ -2530,14 +2511,14 @@ function cardHTML(p){
     ${PRODUCT_SIZES[p.sku] ? `<div style="padding:0 16px 8px" onclick="event.stopPropagation()">
       <div class="hyl-select" id="size-${p.sku}" data-sku="${p.sku}" data-value="${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);return idx>=0?idx:0;})()}">
         <button class="hyl-select-trigger" onclick="event.stopPropagation();toggleSizeSelect('size-${p.sku}')" type="button">
-          <span class="hyl-select-value">${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);const s=PRODUCT_SIZES[p.sku][idx>=0?idx:0];return s.label+' - $'+s.price.toFixed(2);})()}</span>
+          <span class="hyl-select-value">${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);const s=PRODUCT_SIZES[p.sku][idx>=0?idx:0];return s.label;})()}</span>
           <svg class="hyl-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div class="hyl-select-content">
           ${PRODUCT_SIZES[p.sku].map((s,i)=>{
             const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();
             const isSelected=s.label.toLowerCase()===dose;
-            return `<div class="hyl-select-item${isSelected?' selected':''}" data-index="${i}" onclick="event.stopPropagation();pickSize('size-${p.sku}',${i})"><span>${s.label} - $${s.price.toFixed(2)}</span><svg class="sel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>`;
+            return `<div class="hyl-select-item${isSelected?' selected':''}" data-index="${i}" onclick="event.stopPropagation();pickSize('size-${p.sku}',${i})"><span>${s.label}</span><svg class="sel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>`;
           }).join('')}
         </div>
       </div>
