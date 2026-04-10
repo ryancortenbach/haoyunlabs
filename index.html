@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411m';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411n';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2868,21 +2868,32 @@ function copyAddr(addr, el){
 /* ── BROWSER WALLET PAYMENT (MetaMask / Phantom) ── */
 async function payWithWallet(data){
   const currency = data.currency;
+  const statusEl = document.getElementById('crypto-status-text');
+  function setStatus(msg,color){if(statusEl){statusEl.textContent=msg;statusEl.style.color=color||'#d97706';}}
 
   if((currency === 'ETH' || currency === 'USDT') && window.ethereum){
     try {
+      // Validate address
+      if(!data.address || !data.address.match(/^0x[0-9a-fA-F]{40}$/)){
+        showToast('Invalid Ethereum address','error'); return;
+      }
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      if(!accounts.length){ showToast('Wallet not connected'); return; }
+      if(!accounts || !accounts.length){ showToast('Wallet not connected','error'); return; }
+
+      // Check chain (Ethereum mainnet = 0x1)
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if(chainId !== '0x1'){
+        showToast('Please switch to Ethereum Mainnet','error'); return;
+      }
 
       if(currency === 'ETH'){
         const weiHex = '0x' + BigInt(Math.round(data.amount_crypto * 1e18)).toString(16);
-        const txHash = await window.ethereum.request({
+        await window.ethereum.request({
           method: 'eth_sendTransaction',
-          params: [{ from: accounts[0], to: data.address, value: weiHex }],
+          params: [{ from: accounts[0], to: data.address, value: weiHex, gas: '0x5208' }],
         });
-        showToast('Transaction sent! Waiting for confirmation...');
-        document.getElementById('crypto-status-text').textContent = 'Transaction sent! Confirming...';
-        document.getElementById('crypto-status-text').style.color = '#d97706';
+        showToast('Transaction sent!');
+        setStatus('Transaction sent! Confirming...');
       } else {
         // USDT ERC-20 transfer
         const usdtContract = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
@@ -2890,40 +2901,40 @@ async function payWithWallet(data){
         const amountHex = amount6dec.toString(16).padStart(64,'0');
         const toHex = data.address.slice(2).toLowerCase().padStart(64,'0');
         const txData = '0xa9059cbb' + toHex + amountHex;
-        const txHash = await window.ethereum.request({
+        await window.ethereum.request({
           method: 'eth_sendTransaction',
-          params: [{ from: accounts[0], to: usdtContract, data: txData }],
+          params: [{ from: accounts[0], to: usdtContract, data: txData, gas: '0x186A0' }],
         });
-        showToast('USDT transfer sent! Waiting for confirmation...');
-        document.getElementById('crypto-status-text').textContent = 'Transaction sent! Confirming...';
-        document.getElementById('crypto-status-text').style.color = '#d97706';
+        showToast('USDT transfer sent!');
+        setStatus('Transaction sent! Confirming...');
       }
     } catch(e){
-      if(e.code === 4001) showToast('Transaction rejected by user');
-      else showToast('Wallet error: ' + (e.message || 'Unknown'));
+      if(e.code === 4001) showToast('Transaction rejected','error');
+      else { showToast('Wallet error: ' + (e.message||'Unknown').slice(0,60),'error'); console.error('[EVM]',e); }
     }
   }
   else if(currency === 'SOL' && window.solana?.isPhantom){
     try {
-      await window.solana.connect();
+      if(!window.solanaWeb3){ showToast('Solana library not loaded','error'); return; }
+      const resp = await window.solana.connect();
+      if(!resp.publicKey){ showToast('Wallet not connected','error'); return; }
       const lamports = Math.round(data.amount_crypto * 1e9);
-      // Use Phantom's native signAndSendTransaction with versioned transaction
       const connection = new window.solanaWeb3.Connection('https://api.mainnet-beta.solana.com');
-      const fromPubkey = window.solana.publicKey;
+      const fromPubkey = resp.publicKey;
       const toPubkey = new window.solanaWeb3.PublicKey(data.address);
       const tx = new window.solanaWeb3.Transaction().add(
         window.solanaWeb3.SystemProgram.transfer({ fromPubkey, toPubkey, lamports })
       );
       tx.feePayer = fromPubkey;
-      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-      const { signature } = await window.solana.signAndSendTransaction(tx);
-      showToast('SOL transfer sent! Tx: ' + signature.slice(0,8) + '...');
-      document.getElementById('crypto-status-text').textContent = 'Transaction sent! Confirming...';
-      document.getElementById('crypto-status-text').style.color = '#d97706';
+      const { blockhash } = await connection.getLatestBlockhash();
+      tx.recentBlockhash = blockhash;
+      const result = await window.solana.signAndSendTransaction(tx);
+      const sig = result.signature || result;
+      showToast('SOL transfer sent!');
+      setStatus('Transaction sent! Confirming...');
     } catch(e){
-      if(e.code === 4001) showToast('Transaction rejected by user');
-      else showToast('Wallet error: ' + (e.message || 'Unexpected error'));
-      console.error('[PHANTOM]', e);
+      if(e.code === 4001) showToast('Transaction rejected','error');
+      else { showToast('Wallet error: ' + (e.message||'Unknown').slice(0,60),'error'); console.error('[PHANTOM]',e); }
     }
   }
   else {
