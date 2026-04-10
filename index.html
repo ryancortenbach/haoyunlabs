@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411k';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411m';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -928,25 +928,42 @@ ul{list-style:none}
         </div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
-        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:0;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr 1fr;overflow:hidden" onclick="navigate('catalog');setHomeCat('kits')">
-          <div style="padding:28px 24px;display:flex;flex-direction:column;justify-content:center">
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:20px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center" onclick="navigate('catalog');setHomeCat('kits')">
+          <div>
             <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
             <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">10-Vial Kits</div>
             <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk kits.</div>
           </div>
-          <div style="background:#000;display:flex;align-items:center;justify-content:center;min-height:100%">
-            <div style="color:rgba(255,255,255,0.15);font-family:'Instrument Serif',serif;font-size:3rem;font-weight:400">10x</div>
+          <div style="width:90px;height:90px;background:#000;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="color:rgba(255,255,255,0.2);font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:400">10x</div>
           </div>
         </div>
-        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:0;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr 1fr;overflow:hidden" onclick="navigate('catalog');setHomeCat('stacks')">
-          <div style="padding:28px 24px;display:flex;flex-direction:column;justify-content:center">
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:20px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center" onclick="navigate('catalog');setHomeCat('stacks')">
+          <div>
             <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Curated</div>
             <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">Research Stacks</div>
             <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Pre-built compound bundles.</div>
           </div>
-          <div style="background:#000;display:flex;align-items:center;justify-content:center;min-height:100%">
-            <div style="color:rgba(255,255,255,0.15);font-family:'Instrument Serif',serif;font-size:2rem;font-weight:400">3-5x</div>
+          <div style="width:90px;height:90px;background:#000;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="color:rgba(255,255,255,0.2);font-family:'Instrument Serif',serif;font-size:1.4rem;font-weight:400">3-5x</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUNDLES FEATURE CARD (reversed) -->
+    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:240px" onclick="navigate('catalog');setHomeCat('stacks')">
+      <div style="background:#f7f7f7;padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--stroke);border-right:none;border-radius:var(--radius) 0 0 var(--radius)">
+        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Curated Bundles</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Research Stacks</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Pre-built multi-compound bundles. LooksMax, Focus, Recovery, and more — designed for specific research goals.</div>
+        <div style="margin-top:16px"><span style="display:inline-block;padding:8px 20px;border:1.5px solid var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">Browse Stacks &rarr;</span></div>
+      </div>
+      <div style="background:#000;display:flex;align-items:center;justify-content:center;border-radius:0 var(--radius) var(--radius) 0;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:0"></div>
+        <div style="position:relative;z-index:1;text-align:center;color:#fff">
+          <div style="font-family:'Instrument Serif',serif;font-size:3rem;font-weight:400;opacity:0.2">15</div>
+          <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4">Bundles</div>
         </div>
       </div>
     </div>
@@ -3416,7 +3433,7 @@ function toggleDiscreet(){
   function renderWord(word){
     el.style.width=measureWord(word)+'px';
     el.innerHTML=word.split('').map(function(c,i){
-      var col=colors[i%colors.length];
+      var col=colors[Math.floor(Math.random()*colors.length)];
       return '<span class="hc-char" style="color:'+col+';animation:hc-color 8s linear infinite;animation-delay:'+(-i*0.4)+'s;opacity:0;transform:translateY(10px)">'+c+'</span>';
     }).join('');
     el.querySelectorAll('.hc-char').forEach(function(ch,i){
