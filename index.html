@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412b';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412c';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1586,20 +1586,20 @@ ul{list-style:none}
     <div class="upsell-desc">Add the prep supplies you need now, then keep browsing.</div>
     <div class="upsell-items">
       <div class="upsell-items-title">Quick Add-ons</div>
-      <div class="upsell-item" onclick="toggleUpsellItem(this,'SYRSV')">
-        <div class="upsell-check checked" id="upsell-check-SYRSV"></div>
-        <div><div class="upsell-item-name">Insulin Syringes (100pk)</div><div class="upsell-item-detail">29G x 1/2" needles</div></div>
-        <div class="upsell-item-price">$19.99</div>
+      <div class="upsell-item" onclick="toggleUpsellItem(this,'NEEDLE31G8MM100PK')">
+        <div class="upsell-check checked" id="upsell-check-NEEDLE31G8MM100PK"></div>
+        <div><div class="upsell-item-name">Insulin Syringes (100pk)</div><div class="upsell-item-detail">31G x 5/16" needles</div></div>
+        <div class="upsell-item-price">$29.99</div>
       </div>
-      <div class="upsell-item" onclick="toggleUpsellItem(this,'SWBSV')">
-        <div class="upsell-check" id="upsell-check-SWBSV"></div>
-        <div><div class="upsell-item-name">Alcohol Swabs (100pk)</div><div class="upsell-item-detail">Sterile prep pads</div></div>
-        <div class="upsell-item-price">$4.99</div>
+      <div class="upsell-item" onclick="toggleUpsellItem(this,'SWAB100PK')">
+        <div class="upsell-check" id="upsell-check-SWAB100PK"></div>
+        <div><div class="upsell-item-name">Alcohol Swabs (100pk)</div><div class="upsell-item-detail">Sterile 70% isopropyl prep pads</div></div>
+        <div class="upsell-item-price">$19.00</div>
       </div>
-      <div class="upsell-item" onclick="toggleUpsellItem(this,'BACSV')">
-        <div class="upsell-check" id="upsell-check-BACSV"></div>
-        <div><div class="upsell-item-name">BAC Water 30ml</div><div class="upsell-item-detail">Bacteriostatic water for reconstitution</div></div>
-        <div class="upsell-item-price">$11.99</div>
+      <div class="upsell-item" onclick="toggleUpsellItem(this,'BAC10SV')">
+        <div class="upsell-check" id="upsell-check-BAC10SV"></div>
+        <div><div class="upsell-item-name">BAC Water 10ml</div><div class="upsell-item-detail">Bacteriostatic water for reconstitution</div></div>
+        <div class="upsell-item-price">$10.00</div>
       </div>
     </div>
     <div class="upsell-actions">
@@ -2296,7 +2296,7 @@ function addToCartQty(sku, qty){
   const p = getProduct(sku);
   showToast(p ? `${p.name} x${qty} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
-  const supplySkus = ['BACSV','SYRSV'];
+  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
   if(!supplySkus.includes(sku)){
     const shown = sessionStorage.getItem('hyl_upsell_shown');
     if(!shown){
@@ -2327,7 +2327,7 @@ function addToCart(sku, btn){
     }
   } catch(e){}
   // Show supplies upsell if adding a peptide (not supplies themselves)
-  const supplySkus = ['BACSV','SYRSV'];
+  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
   if(!supplySkus.includes(sku)){
     const shown = sessionStorage.getItem('hyl_upsell_shown');
     if(!shown){
@@ -2337,7 +2337,7 @@ function addToCart(sku, btn){
   }
 }
 /* ── SUPPLIES UPSELL ── */
-const _upsellSelected = new Set(['SYRSV']);
+const _upsellSelected = new Set(['NEEDLE31G8MM100PK']);
 function toggleUpsellItem(el, sku){
   const check = document.getElementById('upsell-check-'+sku);
   if(_upsellSelected.has(sku)){ _upsellSelected.delete(sku); check.classList.remove('checked'); }
@@ -2351,14 +2351,14 @@ function addUpsellItems(){
 function closeUpsell(){
   document.getElementById('upsell-overlay').classList.remove('open');
   _upsellSelected.clear();
-  _upsellSelected.add('SYRSV');
+  _upsellSelected.add('NEEDLE31G8MM100PK');
   document.querySelectorAll('.upsell-check').forEach(c=>c.classList.remove('checked'));
-  const syrCheck=document.getElementById('upsell-check-SYRSV');
+  const syrCheck=document.getElementById('upsell-check-NEEDLE31G8MM100PK');
   if(syrCheck) syrCheck.classList.add('checked');
 }
 
 function addBacWater(qty){
-  for(let i=0;i<qty;i++) addToCart('BACSV');
+  for(let i=0;i<qty;i++) addToCart('BAC10SV');
   const el = document.getElementById('upsell-suggestion');
   if(el){
     const inner = el.querySelector('div');
@@ -2962,15 +2962,16 @@ function renderUpsell(){
     parent.appendChild(el);
   }
   // Show BAC water suggestion if cart has peptides but no BAC water
-  const hasBAC = cart.has('BACSV');
+  const SUPPLY_SKUS = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
+  const hasBAC = cart.has('BAC10SV') || cart.has('BAC3SV');
   const hasPeptides = cart.size > 0;
   let peptideQty = 0;
-  cart.forEach((qty,sku)=>{ if(!['BACSV','SYRSV'].includes(sku) && !sku.endsWith('SPRAY')) peptideQty+=qty; });
+  cart.forEach((qty,sku)=>{ if(!SUPPLY_SKUS.includes(sku) && !sku.endsWith('SPRAY')) peptideQty+=qty; });
   const bacNeeded = Math.max(1, Math.ceil(peptideQty / 3));
-  const bacInCart = cart.get('BACSV') || 0;
+  const bacInCart = (cart.get('BAC10SV') || 0) + (cart.get('BAC3SV') || 0);
   if(peptideQty > 0 && bacInCart < bacNeeded){
     const toAdd = bacNeeded - bacInCart;
-    const cost = (toAdd * 11.99).toFixed(2);
+    const cost = (toAdd * 10.00).toFixed(2);
     el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
       <div>
         <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Recommended</div>
