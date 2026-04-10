@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411j';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411k';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2214,6 +2214,20 @@ window.addEventListener('hashchange', handleRoute);
 /* ═════════════════════════════════════════════════════
    PRODUCT CARD HTML
    ═════════════════════════════════════════════════════ */
+function updateCardPrice(sku, sel){
+  const sizes = PRODUCT_SIZES[sku];
+  if(!sizes) return;
+  const s = sizes[sel.value];
+  if(!s) return;
+  const card = sel.closest('.product-card');
+  if(!card) return;
+  const priceEl = card.querySelector('.card-price');
+  if(priceEl){
+    const oldP = (Math.floor(s.price * 1.8) - 0.01).toFixed(2);
+    priceEl.innerHTML = '<span class="card-price-old">$'+oldP+'</span><br>$'+s.price.toFixed(2);
+  }
+}
+
 function autoDesc(p){
   const n=p.name.toLowerCase();
   const compound=p.name.replace(/\s*\d+\s*(mg|iu|ml|mcg|tabs?|caps?|pk|pack|x\s*\d+\s*vials?)/gi,'').replace(/\s*\(.*?\)/g,'').trim();
@@ -2291,6 +2305,14 @@ function cardHTML(p){
       <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)">+ More Details</button>
       <div class="card-details" id="${detailId}">${detailHTML}</div>
     </div>
+    ${PRODUCT_SIZES[p.sku] ? `<div style="padding:0 16px 8px" onclick="event.stopPropagation()">
+      <select class="card-size-select" id="size-${p.sku}" onchange="event.stopPropagation();updateCardPrice('${p.sku}',this)" style="width:100%;padding:8px 12px;border:1px solid var(--stroke);border-radius:8px;font-size:0.72rem;font-weight:600;background:var(--bg);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 10px center;padding-right:28px">
+        ${PRODUCT_SIZES[p.sku].map((s,i)=>{
+          const selected = s.label.toLowerCase() === ((p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0]).toLowerCase();
+          return '<option value="'+i+'"'+(selected?' selected':'')+'>'+s.label+' — $'+s.price.toFixed(2)+'</option>';
+        }).join('')}
+      </select>
+    </div>` : ''}
     <div class="card-footer">
       <button class="btn-add" onclick="event.stopPropagation();addToCart('${p.sku}',this)">ADD TO CART</button>
     </div>
