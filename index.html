@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412f';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412g';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -495,6 +495,9 @@ ul{list-style:none}
 .hero-btn:hover svg{transform:translateX(4px)}
 .hero-btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
 .hero-btn-primary:hover{background:#222}
+.hero-btn-invert{transition:all 0.3s ease}
+.hero-btn-invert:hover{background:var(--brand)!important;color:var(--bg)!important}
+.tilt-card:hover .hero-btn-invert{background:var(--brand);color:var(--bg)}
 .hero-btn-secondary{background:#fff;color:var(--brand);border-color:var(--stroke)}
 .hero-btn-secondary:hover{background:#f5f5f5}
 
@@ -1038,12 +1041,12 @@ ul{list-style:none}
     </div>
 
     <!-- BUNDLES FEATURE CARD (reversed) -->
-    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:240px" onclick="navigate('catalog');setHomeCat('stacks')">
+    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:240px" onclick="goToCategory('kits')">
       <div style="background:#f7f7f7;padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--stroke);border-right:none;border-radius:var(--radius) 0 0 var(--radius)">
-        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Curated Bundles</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Research Stacks</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Pre-built multi-compound bundles. LooksMax, Focus, Recovery, and more — designed for specific research goals.</div>
-        <div style="margin-top:16px"><span style="display:inline-block;padding:8px 20px;border:1.5px solid var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">Browse Stacks &rarr;</span></div>
+        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Bulk Research Kits</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">10-Vial Kits</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Save when you order in bulk. Each kit ships with 10 individually-sealed lyophilized vials of the same compound — perfect for extended research protocols.</div>
+        <div style="margin-top:16px"><span class="hero-btn-invert" style="display:inline-block;padding:10px 22px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">Browse Kits &rarr;</span></div>
       </div>
       <div style="background:#000;display:flex;align-items:center;justify-content:center;border-radius:0 var(--radius) var(--radius) 0;position:relative;overflow:hidden">
         <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:0"></div>
@@ -1460,22 +1463,22 @@ ul{list-style:none}
     <!-- HERO -->
     <div style="text-align:center;margin-bottom:48px">
       <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Our Research</div>
-      <div style="font-family:'Instrument Serif',serif;font-size:2.8rem;font-weight:400;line-height:1.1;margin-bottom:12px">The science behind every vial.</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:2.8rem;font-weight:400;line-height:1.1;margin-bottom:12px">The science <em style="font-style:italic">behind</em> every <span id="research-flip-word" class="hero-colourful"></span></div>
       <div style="font-size:0.88rem;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.6">We focus on synthesis quality, repeatability, and analytical confidence for advanced research workflows.</div>
     </div>
 
     <!-- STATS -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--stroke);border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;margin-bottom:48px">
+    <div id="research-stats-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--stroke);border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;margin-bottom:48px">
       <div style="background:#000;color:#fff;padding:32px 20px;text-align:center">
-        <div style="font-family:'Instrument Serif',serif;font-size:2rem">150+</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem"><span class="num-tick" data-target="150" data-suffix="+">0</span></div>
         <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;opacity:0.5">Research Initiatives</div>
       </div>
       <div style="background:#000;color:#fff;padding:32px 20px;text-align:center">
-        <div style="font-family:'Instrument Serif',serif;font-size:2rem">70+</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem"><span class="num-tick" data-target="70" data-suffix="+">0</span></div>
         <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;opacity:0.5">Active Projects</div>
       </div>
       <div style="background:#000;color:#fff;padding:32px 20px;text-align:center">
-        <div style="font-family:'Instrument Serif',serif;font-size:2rem">99%+</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:2rem"><span class="num-tick" data-target="99" data-suffix="%+">0</span></div>
         <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;opacity:0.5">Purity Standard</div>
       </div>
     </div>
@@ -2763,27 +2766,132 @@ function slideCatTab(containerId){
 let pdpQty = 1;
 
 const PRODUCT_SIZES = {
-  'RT10SV': [{label:'5mg',price:72.00},{label:'10mg',price:119.99},{label:'15mg',price:158.00},{label:'20mg',price:216.00}],
-  'SM15SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.00},{label:'15mg',price:65.00},{label:'20mg',price:79.00}],
-  'TZ15SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.00},{label:'15mg',price:65.00},{label:'20mg',price:79.00},{label:'30mg',price:108.00}],
-  'SU3SV':  [{label:'5mg',price:79.00},{label:'10mg',price:151.00}],
-  'TSM2SV': [{label:'2mg',price:36.00},{label:'5mg',price:50.00},{label:'10mg',price:122.00},{label:'20mg',price:209.00}],
-  'BPC5SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
-  'TB5SV':  [{label:'5mg',price:58.00},{label:'10mg',price:108.00}],
-  'IPA5SV': [{label:'5mg',price:43.00},{label:'10mg',price:65.00}],
-  'CJC2SV': [{label:'2mg',price:65.00},{label:'5mg',price:108.00}],
-  'CU50SV': [{label:'50mg',price:50.00},{label:'100mg',price:100.00}],
-  'MT2SV':  [{label:'5mg',price:28.00},{label:'10mg',price:36.00}],
-  'PT14SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.00}],
-  'EP1SV':  [{label:'10mg',price:36.00},{label:'50mg',price:108.00}],
-  'XA5SV':  [{label:'5mg',price:36.00},{label:'10mg',price:50.00}],
-  'SS10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.00}],
-  'HCG5SV': [{label:'2000iu',price:36.00},{label:'5000iu',price:65.00},{label:'10000iu',price:108.00}],
-  'AOD3SV': [{label:'2mg',price:36.00},{label:'5mg',price:65.00}],
-  'MOTCSV': [{label:'5mg',price:40.00},{label:'10mg',price:50.00},{label:'20mg',price:94.00}],
-  'MAZSV':  [{label:'5mg',price:79.00},{label:'10mg',price:137.00},{label:'20mg',price:209.00}],
-  'IGFSV':  [{label:'0.1mg',price:36.00},{label:'1mg',price:137.00}],
-  'SS31SV': [{label:'5mg',price:50.00},{label:'10mg',price:65.00},{label:'50mg',price:209.00}],
+  '10AMSV': [{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
+  '50AMSV': [{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
+  'AHK-CU-50MGSV': [{label:'50mg',price:36.00},{label:'100mg',price:50.40}],
+  'AHK-CU-100MGSV': [{label:'50mg',price:36.00},{label:'100mg',price:50.40}],
+  'AOD2SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
+  'AOD5SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
+  'ADAMAX5SV': [{label:'5mg',price:50.40},{label:'10mg',price:79.20}],
+  'ADAMAX10SV': [{label:'5mg',price:50.40},{label:'10mg',price:79.20}],
+  'AP5SV': [{label:'5mg',price:93.60},{label:'10mg',price:122.40}],
+  'AP10SV': [{label:'5mg',price:93.60},{label:'10mg',price:122.40}],
+  'BC2SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
+  'BC5SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
+  'BC10SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
+  'BC20SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
+  'BronSV': [{label:'20mg',price:70.00},{label:'20mg',price:64.80}],
+  'BRONSV': [{label:'20mg',price:70.00},{label:'20mg',price:64.80}],
+  'CND2SV': [{label:'2mg',price:36.00},{label:'5mg',price:40.00},{label:'10mg',price:108.00}],
+  'CND5SV': [{label:'2mg',price:36.00},{label:'5mg',price:40.00},{label:'10mg',price:108.00}],
+  'CND10SV': [{label:'2mg',price:36.00},{label:'5mg',price:40.00},{label:'10mg',price:108.00}],
+  'CD2SV': [{label:'2mg',price:64.80},{label:'5mg',price:108.00}],
+  'CD5SV': [{label:'2mg',price:64.80},{label:'5mg',price:108.00}],
+  'DS2SV': [{label:'2mg',price:20.00},{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'DS5SV': [{label:'2mg',price:20.00},{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'DS10SV': [{label:'2mg',price:20.00},{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'ET10SV': [{label:'10mg',price:36.00},{label:'50mg',price:108.00}],
+  'ET50SV': [{label:'10mg',price:36.00},{label:'50mg',price:108.00}],
+  'CU50SV': [{label:'50mg',price:25.00},{label:'100mg',price:50.00}],
+  'CU100SV': [{label:'50mg',price:25.00},{label:'100mg',price:50.00}],
+  'G25SV': [{label:'5mg',price:28.80},{label:'10mg',price:36.00}],
+  'G210SV': [{label:'5mg',price:28.80},{label:'10mg',price:36.00}],
+  'G65SV': [{label:'5mg',price:28.80},{label:'10mg',price:36.00}],
+  'G610SV': [{label:'5mg',price:28.80},{label:'10mg',price:36.00}],
+  'GTT500SV': [{label:'600mg',price:36.00},{label:'1500mg',price:64.80}],
+  'GTT1SV': [{label:'600mg',price:36.00},{label:'1500mg',price:64.80}],
+  'G2KSV': [{label:'2000iu',price:36.00},{label:'5000iu',price:64.80},{label:'10000iu',price:108.00}],
+  'G5KSV': [{label:'2000iu',price:36.00},{label:'5000iu',price:64.80},{label:'10000iu',price:108.00}],
+  'G10KSV': [{label:'2000iu',price:36.00},{label:'5000iu',price:64.80},{label:'10000iu',price:108.00}],
+  'H6SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
+  'H10SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
+  'H12SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
+  'H15SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
+  'H24SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
+  'FR2SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
+  'FR5SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
+  'HX2SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
+  'HX5SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
+  'IGF0.1SV': [{label:'0.1mg',price:36.00},{label:'1mg',price:136.80}],
+  'IGF1SV': [{label:'0.1mg',price:36.00},{label:'1mg',price:136.80}],
+  'IGD1SV': [{label:'1mg',price:25.00},{label:'2mg',price:36.00}],
+  'IGD2SV': [{label:'1mg',price:25.00},{label:'2mg',price:36.00}],
+  'IPS5SV': [{label:'5mg',price:43.20},{label:'10mg',price:64.80}],
+  'IP10SV': [{label:'5mg',price:43.20},{label:'10mg',price:64.80}],
+  'KS5SV': [{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'KS10SV': [{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'LC200SV': [{label:'200mg',price:25.00},{label:'600mg',price:36.00},{label:'1200mg',price:50.40}],
+  'LC600SV': [{label:'200mg',price:25.00},{label:'600mg',price:36.00},{label:'1200mg',price:50.40}],
+  'LC1200SV': [{label:'200mg',price:25.00},{label:'600mg',price:36.00},{label:'1200mg',price:50.40}],
+  'LemonSV': [{label:'10mg',price:50.00},{label:'10mg',price:50.40}],
+  'LEMONSV': [{label:'10mg',price:50.00},{label:'10mg',price:50.40}],
+  'LIRA5SV': [{label:'5mg',price:64.80},{label:'10mg',price:108.00}],
+  'LIRA10SV': [{label:'5mg',price:64.80},{label:'10mg',price:108.00}],
+  'MS5SV': [{label:'5mg',price:40.00},{label:'10mg',price:50.40},{label:'20mg',price:93.60},{label:'40mg',price:122.40}],
+  'MS10SV': [{label:'5mg',price:40.00},{label:'10mg',price:50.40},{label:'20mg',price:93.60},{label:'40mg',price:122.40}],
+  'MS20SV': [{label:'5mg',price:40.00},{label:'10mg',price:50.40},{label:'20mg',price:93.60},{label:'40mg',price:122.40}],
+  'MS40SV': [{label:'5mg',price:40.00},{label:'10mg',price:50.40},{label:'20mg',price:93.60},{label:'40mg',price:122.40}],
+  'MAZ5SV': [{label:'5mg',price:79.20},{label:'10mg',price:136.80},{label:'20mg',price:208.80}],
+  'MDT10SV': [{label:'5mg',price:79.20},{label:'10mg',price:136.80},{label:'20mg',price:208.80}],
+  'MAZ20SV': [{label:'5mg',price:79.20},{label:'10mg',price:136.80},{label:'20mg',price:208.80}],
+  'NJ100SV': [{label:'100mg',price:35.00},{label:'500mg',price:50.40},{label:'1000mg',price:64.80}],
+  'NJ500SV': [{label:'100mg',price:35.00},{label:'500mg',price:50.40},{label:'1000mg',price:64.80}],
+  'NJ1000SV': [{label:'100mg',price:35.00},{label:'500mg',price:50.40},{label:'1000mg',price:64.80}],
+  'OT2SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00}],
+  'OT5SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00}],
+  'PE5SV': [{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'PE10SV': [{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
+  'PNC275SV': [{label:'5mg',price:64.80},{label:'10mg',price:120.00}],
+  'PNC2710SV': [{label:'5mg',price:64.80},{label:'10mg',price:120.00}],
+  'PIN5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'PIN10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'RT5SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT10SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT15SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT20SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT30SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT40SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT50SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  'RT60SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
+  '2S10SV': [{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
+  '2S50SV': [{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
+  'SK5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'SK10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'SM2SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'SM5SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'SM10SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'SM15SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'SM20SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'SM30SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'SM50SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
+  'XA5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'XA10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'SMO2SV': [{label:'2mg',price:43.20},{label:'5mg',price:50.40},{label:'10mg',price:108.00}],
+  'SMO5SV': [{label:'2mg',price:43.20},{label:'5mg',price:50.40},{label:'10mg',price:108.00}],
+  'SMO10SV': [{label:'2mg',price:43.20},{label:'5mg',price:50.40},{label:'10mg',price:108.00}],
+  'BT5SV': [{label:'5mg',price:57.60},{label:'10mg',price:108.00}],
+  'BT10SV': [{label:'5mg',price:57.60},{label:'10mg',price:108.00}],
+  'TSM2SV': [{label:'2mg',price:36.00},{label:'10mg',price:122.40},{label:'20mg',price:208.80}],
+  'TSM10SV': [{label:'2mg',price:36.00},{label:'10mg',price:122.40},{label:'20mg',price:208.80}],
+  'TSM20SV': [{label:'2mg',price:36.00},{label:'10mg',price:122.40},{label:'20mg',price:208.80}],
+  'TA2SV': [{label:'2mg',price:25.00},{label:'5mg',price:79.20},{label:'10mg',price:108.00}],
+  'TA5SV': [{label:'2mg',price:25.00},{label:'5mg',price:79.20},{label:'10mg',price:108.00}],
+  'TA10SV': [{label:'2mg',price:25.00},{label:'5mg',price:79.20},{label:'10mg',price:108.00}],
+  'TR5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR15SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR20SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR30SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR40SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR50SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR60SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR80SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR100SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'VIP5SV': [{label:'5mg',price:64.80},{label:'10mg',price:93.60}],
+  'VIP10SV': [{label:'5mg',price:64.80},{label:'10mg',price:93.60}],
+  'BB10SV': [{label:'10mg',price:79.20},{label:'20mg',price:122.40},{label:'30mg',price:180.00}],
+  'BB20SV': [{label:'10mg',price:79.20},{label:'20mg',price:122.40},{label:'30mg',price:180.00}],
+  'BB30SV': [{label:'10mg',price:79.20},{label:'20mg',price:122.40},{label:'30mg',price:180.00}],
 };
 let _pdpSelectedSize = null;
 
@@ -2934,7 +3042,7 @@ function setCatCat(cat){
   renderCatalog();
 }
 
-const BESTSELLER_SKUS = ['RT10SV','CU50SV','SM15SV','TZ15SV','BPC5SV','TB5SV','TSM2SV','IPA5SV','MT2SV','PT14SV','XA5SV','EP1SV'];
+const BESTSELLER_SKUS = ['RT10SV','CU50SV','SM15SV','TR15SV','BC5SV','BT5SV','TSM2SV','IPS5SV','MT2SV','P41','XA5SV','ET10SV'];
 
 function getFilteredProducts(cat, searchId, sortId){
   let items;
@@ -2991,8 +3099,42 @@ function renderCatalog(){
 function renderOrder(){
   renderCartItems();
   renderUpsell();
+  renderSuggested();
   renderReceipt();
   renderPayMethods();
+}
+
+function renderSuggested(){
+  let el = document.getElementById('order-suggested');
+  if(!el){
+    const parent = document.getElementById('cart-items-list')?.parentElement;
+    if(!parent) return;
+    el = document.createElement('div');
+    el.id = 'order-suggested';
+    parent.appendChild(el);
+  }
+  // Pick 3 bestsellers not already in cart (from VALID_SKUS only so they have images)
+  const candidates = BESTSELLER_SKUS
+    .filter(sku => !cart.has(sku) && VALID_SKUS.has(sku))
+    .map(sku => getProduct(sku))
+    .filter(p => p)
+    .slice(0, 3);
+  if(!candidates.length){ el.innerHTML = ''; return; }
+  el.innerHTML = `<div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--stroke)">
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Customers Also Add</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${candidates.map(p=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--stroke);border-radius:8px;background:#fafafa">
+          <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:0.78rem;font-weight:700;line-height:1.2">${p.name}</div>
+            <div style="font-size:0.7rem;color:var(--muted);font-family:var(--mono);margin-top:2px">$${p.price.toFixed(2)}</div>
+          </div>
+          <button onclick="addToCart('${p.sku}',this);renderOrder()" style="padding:6px 12px;background:var(--brand);color:#fff;border:none;border-radius:6px;font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s">+ Add</button>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
 }
 
 function renderUpsell(){
