@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412s';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412t';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2169,18 +2169,7 @@ function addToCart(sku, btn){
   showToast(p ? `${p.name} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   // Animate button: green checkmark then revert
-  try {
-    if(btn && btn.tagName==='BUTTON'){
-      const origText = btn.textContent;
-      btn.textContent = '\u2713';
-      btn.style.cssText += ';background:#16a34a !important;color:#fff !important;transform:scale(1.05);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)';
-      setTimeout(()=>{
-        btn.textContent = origText;
-        btn.style.cssText = btn.style.cssText.replace(/background:#16a34a !important;color:#fff !important;transform:scale\(1\.05\);/g,'');
-        btn.style.transform = '';
-      }, 1200);
-    }
-  } catch(e){}
+  try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
   // Show supplies upsell if adding a peptide (not supplies themselves)
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
   if(!supplySkus.includes(sku)){
@@ -2543,21 +2532,30 @@ function cardQtyChange(sku, delta){
   const el = document.getElementById('card-qty-'+sku);
   if(el) el.textContent = next;
 }
+function flashAddedToCart(btn){
+  if(!btn || btn.tagName!=='BUTTON') return;
+  const origText = btn.textContent;
+  // Smooth spring transition
+  btn.style.transition = 'background 0.45s cubic-bezier(0.34,1.56,0.64,1), color 0.45s ease, transform 0.45s cubic-bezier(0.34,1.56,0.64,1)';
+  btn.style.background = '#16a34a';
+  btn.style.color = '#fff';
+  btn.style.transform = 'scale(1.04)';
+  btn.textContent = '\u2713 ADDED';
+  setTimeout(()=>{
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.transform = '';
+    btn.textContent = origText;
+    setTimeout(()=>{ btn.style.transition = ''; }, 500);
+  }, 1300);
+}
 function cardAdd(sku, btn){
   const qty = window._cardQty[sku] || 1;
   addToCartQty(sku, qty);
   delete window._cardQty[sku];
   const el = document.getElementById('card-qty-'+sku);
   if(el) el.textContent = '1';
-  // Visual feedback on the button
-  try {
-    if(btn && btn.tagName==='BUTTON'){
-      const orig = btn.textContent;
-      btn.textContent = '\u2713';
-      btn.style.cssText += ';background:#16a34a !important;color:#fff !important';
-      setTimeout(()=>{btn.textContent=orig;btn.style.background='';btn.style.color='';},1200);
-    }
-  } catch(e){}
+  flashAddedToCart(btn);
 }
 
 function toggleDetails(id, btn){
@@ -4106,39 +4104,9 @@ function checkInternational(){
    LOAD PRODUCTS FROM SUPABASE
    ═════════════════════════════════════════════════════ */
 async function loadProductsFromDB(){
-  try {
-    const {data, error} = await sb.from('products').select('*').eq('in_stock',true).order('sort_order');
-    if(error || !data || data.length === 0) return false;
-
-    // Clear and rebuild
-    CATALOG_INDIVIDUAL.length=0; CATALOG_KITS.length=0; CATALOG_BUNDLES.length=0; CATALOG_SPRAYS.length=0; CATALOG_SUPPLIES.length=0;
-
-    const catMap = {singles:CATALOG_INDIVIDUAL, kits:CATALOG_KITS, bundles:CATALOG_BUNDLES, sprays:CATALOG_SPRAYS, supplies:CATALOG_SUPPLIES};
-    data.forEach(row=>{
-      const p = {sku:row.sku, name:row.name, price:parseFloat(row.price)};
-      if(row.description) p.description = row.description;
-      if(row.components) p.components = row.components;
-      const arr = catMap[row.category];
-      if(arr) arr.push(p);
-    });
-
-    // Rebuild ALL_PRODUCTS
-    ALL_PRODUCTS.length = 0;
-    const rebuilt = [].concat(
-      CATALOG_INDIVIDUAL.map(p=>Object.assign({},p,{cat:'peptides'})),
-      CATALOG_KITS.map(p=>Object.assign({},p,{cat:'kits'})),
-      CATALOG_BUNDLES.map(p=>Object.assign({},p,{cat:'stacks'})),
-      CATALOG_SPRAYS.map(p=>Object.assign({},p,{cat:'sprays'})),
-      CATALOG_SUPPLIES.map(p=>Object.assign({},p,{cat:'supplies'}))
-    );
-    for(let i=0;i<rebuilt.length;i++) ALL_PRODUCTS.push(rebuilt[i]);
-
-    console.log(`[DB] Loaded ${ALL_PRODUCTS.length} products from Supabase`);
-    return true;
-  } catch(e){
-    console.warn('[DB] Failed to load products, using fallback:', e);
-    return false;
-  }
+  // Disabled - Supabase has stale rows (BACSV/SYRSV/RTKIT/SMKIT/Dihexa/Tablets) that
+  // bypass VALID_SKUS and pollute the catalog. Hardcoded JS arrays are the source of truth.
+  return false;
 }
 
 /* ═════════════════════════════════════════════════════
