@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411v';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411w';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -350,6 +350,48 @@ ul{list-style:none}
 .card-details-toggle:hover{color:var(--brand)}
 .card-details{display:none;padding:8px 0 0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
 .card-details.open{display:block}
+/* ── CUSTOM SIZE SELECT (shadcn-style) ── */
+.hyl-select{position:relative;user-select:none}
+.hyl-select-trigger{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border:1px solid var(--stroke);border-radius:8px;
+  background:var(--bg);cursor:pointer;font-size:0.72rem;font-weight:600;
+  font-family:var(--mono);transition:border-color 0.2s,box-shadow 0.2s;
+  color:var(--text);gap:4px;
+}
+.hyl-select-trigger:hover{border-color:#999}
+.hyl-select-trigger:focus,.hyl-select.open .hyl-select-trigger{
+  border-color:var(--brand);box-shadow:0 0 0 2px rgba(0,0,0,0.06);outline:none;
+}
+.hyl-select-chevron{
+  width:14px;height:14px;flex-shrink:0;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  color:var(--muted);
+}
+.hyl-select.open .hyl-select-chevron{transform:rotate(180deg)}
+.hyl-select-content{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:50;
+  background:var(--bg);border:1px solid var(--stroke);border-radius:8px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.08),0 1px 3px rgba(0,0,0,0.04);
+  padding:4px;opacity:0;transform:translateY(-4px) scale(0.98);
+  pointer-events:none;transition:opacity 0.15s ease,transform 0.15s cubic-bezier(0.34,1.56,0.64,1);
+  max-height:200px;overflow-y:auto;
+}
+.hyl-select.open .hyl-select-content{
+  opacity:1;transform:translateY(0) scale(1);pointer-events:auto;
+}
+.hyl-select-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 10px;border-radius:5px;cursor:pointer;font-size:0.72rem;
+  font-weight:600;font-family:var(--mono);color:var(--text);
+  transition:background 0.12s;
+}
+.hyl-select-item:hover{background:rgba(0,0,0,0.04)}
+.hyl-select-item.selected{background:rgba(0,0,0,0.06)}
+.hyl-select-item .sel-check{
+  width:12px;height:12px;opacity:0;transition:opacity 0.15s;
+}
+.hyl-select-item.selected .sel-check{opacity:1}
+.hyl-select-separator{height:1px;background:var(--stroke);margin:4px 6px}
 .card-footer{padding:0 16px 16px;margin-top:auto}
 .btn-add{
   width:100%;padding:12px;background:var(--brand);color:var(--bg);
@@ -2425,12 +2467,13 @@ window.addEventListener('hashchange', handleRoute);
 /* ═════════════════════════════════════════════════════
    PRODUCT CARD HTML
    ═════════════════════════════════════════════════════ */
-function updateCardPrice(sku, sel){
+function updateCardPrice(sku, idx){
   const sizes = PRODUCT_SIZES[sku];
-  if(!sizes) return;
-  const s = sizes[sel.value];
-  if(!s) return;
-  const card = sel.closest('.product-card');
+  if(!sizes||!sizes[idx]) return;
+  const s = sizes[idx];
+  const selectEl = document.getElementById('size-'+sku);
+  if(!selectEl) return;
+  const card = selectEl.closest('.product-card');
   if(!card) return;
   const priceEl = card.querySelector('.card-price');
   if(priceEl){
@@ -2438,6 +2481,42 @@ function updateCardPrice(sku, sel){
     priceEl.innerHTML = '<span class="card-price-old">$'+oldP+'</span><br>$'+s.price.toFixed(2);
   }
 }
+
+function toggleSizeSelect(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const wasOpen = el.classList.contains('open');
+  // Close all other selects first
+  document.querySelectorAll('.hyl-select.open').forEach(s=>s.classList.remove('open'));
+  if(!wasOpen) el.classList.add('open');
+}
+
+function pickSize(id, idx){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const sku = el.dataset.sku;
+  el.dataset.value = idx;
+  const sizes = PRODUCT_SIZES[sku];
+  if(!sizes||!sizes[idx]) return;
+  // Update trigger text
+  const valEl = el.querySelector('.hyl-select-value');
+  if(valEl) valEl.textContent = sizes[idx].label + ' — $' + sizes[idx].price.toFixed(2);
+  // Update selected state
+  el.querySelectorAll('.hyl-select-item').forEach((item,i)=>{
+    item.classList.toggle('selected', i===idx);
+  });
+  // Close dropdown
+  el.classList.remove('open');
+  // Update card price
+  updateCardPrice(sku, idx);
+}
+
+// Close all selects when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.hyl-select')){
+    document.querySelectorAll('.hyl-select.open').forEach(s=>s.classList.remove('open'));
+  }
+});
 
 function autoDesc(p){
   const n=p.name.toLowerCase();
@@ -2517,12 +2596,19 @@ function cardHTML(p){
       <div class="card-details" id="${detailId}">${detailHTML}</div>
     </div>
     ${PRODUCT_SIZES[p.sku] ? `<div style="padding:0 16px 8px" onclick="event.stopPropagation()">
-      <select class="card-size-select" id="size-${p.sku}" onchange="event.stopPropagation();updateCardPrice('${p.sku}',this)" style="width:100%;padding:8px 12px;border:1px solid var(--stroke);border-radius:8px;font-size:0.72rem;font-weight:600;background:var(--bg);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 10px center;padding-right:28px">
-        ${PRODUCT_SIZES[p.sku].map((s,i)=>{
-          const selected = s.label.toLowerCase() === ((p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0]).toLowerCase();
-          return '<option value="'+i+'"'+(selected?' selected':'')+'>'+s.label+' — $'+s.price.toFixed(2)+'</option>';
-        }).join('')}
-      </select>
+      <div class="hyl-select" id="size-${p.sku}" data-sku="${p.sku}" data-value="${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);return idx>=0?idx:0;})()}">
+        <button class="hyl-select-trigger" onclick="event.stopPropagation();toggleSizeSelect('size-${p.sku}')" type="button">
+          <span class="hyl-select-value">${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);const s=PRODUCT_SIZES[p.sku][idx>=0?idx:0];return s.label+' — $'+s.price.toFixed(2);})()}</span>
+          <svg class="hyl-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="hyl-select-content">
+          ${PRODUCT_SIZES[p.sku].map((s,i)=>{
+            const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();
+            const isSelected=s.label.toLowerCase()===dose;
+            return `<div class="hyl-select-item${isSelected?' selected':''}" data-index="${i}" onclick="event.stopPropagation();pickSize('size-${p.sku}',${i})"><span>${s.label} — $${s.price.toFixed(2)}</span><svg class="sel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>`;
+          }).join('')}
+        </div>
+      </div>
     </div>` : ''}
     <div class="card-footer">
       <button class="btn-add" onclick="event.stopPropagation();addToCart('${p.sku}',this)">ADD TO CART</button>
