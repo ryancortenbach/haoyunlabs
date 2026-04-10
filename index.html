@@ -7,9 +7,9 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412g';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412h';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
-<title>HAO YUN LABS — Premium Research Peptides</title>
+<title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -329,12 +329,6 @@ ul{list-style:none}
 .pricing-switch.on{background:var(--brand)}
 .pricing-switch.on::after{transform:translateX(16px)}
 .search-sort{display:flex;gap:10px;align-items:center}
-.toolbar-search-wrap{display:flex;align-items:center;position:relative}
-.toolbar-search-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--stroke);background:var(--bg);cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
-.toolbar-search-btn:hover{border-color:var(--brand);background:#f5f5f5}
-.toolbar-search-input{width:0;padding:0;border:none;font-size:0.78rem;font-family:var(--sans);overflow:hidden;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)}
-.toolbar-search-wrap.open .toolbar-search-input{width:160px;padding:7px 12px;border:1px solid var(--stroke);border-radius:999px;margin-left:6px}
-.toolbar-search-wrap.open .toolbar-search-input:focus{border-color:var(--brand);outline:none}
 .sort-select{
   padding:8px 12px;font-size:0.78rem;border:1px solid var(--stroke);
   background:var(--bg);cursor:pointer;text-transform:uppercase;letter-spacing:0.05em;
@@ -357,13 +351,13 @@ ul{list-style:none}
   position:relative;
 }
 .product-card .prod-img{border-radius:var(--radius) var(--radius) 0 0;overflow:hidden}
-.product-card.has-open-select{z-index:50}
+.product-card.has-open-select{z-index:200}
 .product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0}
 .card-sku{font-family:var(--mono);font-size:0.68rem;font-weight:300;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
 .card-price{font-family:var(--mono);font-size:0.95rem;font-weight:700;letter-spacing:0.02em}
-.card-price-old{font-size:0.72rem;font-weight:500;color:#999;text-decoration:line-through;margin-right:6px}
+.card-price-old{font-size:0.72rem;font-weight:500;color:#707070;text-decoration:line-through;margin-right:6px}
 .card-body{padding:20px 16px 12px;flex:1;display:flex;flex-direction:column}
 .card-name{font-family:var(--display);font-size:0.88rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;line-height:1.3}
 .card-desc{font-size:0.75rem;color:var(--muted);margin-top:6px;line-height:1.4}
@@ -445,7 +439,7 @@ ul{list-style:none}
 .skel-pill{height:48px;border-radius:999px}
 .skel-img{aspect-ratio:1/1;border-radius:var(--radius)}
 
-/* ── QUICK VIEW — removed, using card lift instead ── */
+/* ── QUICK VIEW - removed, using card lift instead ── */
 .product-card .prod-img{position:relative}
 .quick-view-overlay{display:none}
 
@@ -498,6 +492,9 @@ ul{list-style:none}
 .hero-btn-invert{transition:all 0.3s ease}
 .hero-btn-invert:hover{background:var(--brand)!important;color:var(--bg)!important}
 .tilt-card:hover .hero-btn-invert{background:var(--brand);color:var(--bg)}
+.hero-btn-invert-dark{transition:all 0.3s ease}
+.hero-btn-invert-dark:hover{background:#fff!important;color:#000!important;border-color:#fff!important}
+.tilt-card:hover .hero-btn-invert-dark{background:#fff;color:#000;border-color:#fff}
 .hero-btn-secondary{background:#fff;color:var(--brand);border-color:var(--stroke)}
 .hero-btn-secondary:hover{background:#f5f5f5}
 
@@ -533,19 +530,6 @@ ul{list-style:none}
 .discord-fly-btn:active{transform:scale(0.95)}
 .spinner.lg{width:24px;height:24px;border-width:2.5px}
 
-/* ── 3x3 GRID LOADER ── */
-@keyframes loader_grid{from{opacity:0}to{opacity:1}}
-.grid-loader{position:relative;width:30px;height:30px;display:inline-block;vertical-align:middle}
-.grid-loader .sq{background:#fff;width:8px;height:8px;position:absolute;top:50%;left:50%;margin-top:-4px;margin-left:-4px;border-radius:1px}
-.grid-loader .sq:nth-child(1){margin-top:-14px;margin-left:-14px;animation:loader_grid 675ms ease-in-out 0s infinite alternate}
-.grid-loader .sq:nth-child(2){margin-top:-14px;animation:loader_grid 675ms ease-in-out 75ms infinite alternate}
-.grid-loader .sq:nth-child(3){margin-top:-14px;margin-left:6px;animation:loader_grid 675ms ease-in-out 150ms infinite alternate}
-.grid-loader .sq:nth-child(4){margin-left:-14px;animation:loader_grid 675ms ease-in-out 225ms infinite alternate}
-.grid-loader .sq:nth-child(5){animation:loader_grid 675ms ease-in-out 300ms infinite alternate}
-.grid-loader .sq:nth-child(6){margin-left:6px;animation:loader_grid 675ms ease-in-out 375ms infinite alternate}
-.grid-loader .sq:nth-child(7){margin-top:6px;margin-left:-14px;animation:loader_grid 675ms ease-in-out 450ms infinite alternate}
-.grid-loader .sq:nth-child(8){margin-top:6px;animation:loader_grid 675ms ease-in-out 525ms infinite alternate}
-.grid-loader .sq:nth-child(9){margin-top:6px;margin-left:6px;animation:loader_grid 675ms ease-in-out 600ms infinite alternate}
 .btn-loading{pointer-events:none;opacity:0.7}
 .btn-loading .crypto-btn-text::before,.btn-loading::before{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:btnSpin 0.6s linear infinite;margin-right:8px;vertical-align:middle}
 
@@ -570,8 +554,15 @@ ul{list-style:none}
 
 /* ── TOOLTIPS ── */
 .term-tip{position:relative;cursor:help;border-bottom:1px dotted var(--muted);display:inline}
-.term-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:6px 10px;border-radius:4px;font-size:0.68rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;font-weight:400;letter-spacing:0}
+.term-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:6px 10px;border-radius:4px;font-size:0.68rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:9999;font-weight:400;letter-spacing:0}
 .term-tip:hover::after{opacity:1}
+.product-card:has(.term-tip:hover){z-index:9998;position:relative}
+/* a11y: divs converted to buttons keep design system look */
+button.faq-q{background:none;border:none;width:100%;text-align:left;cursor:pointer;color:inherit;font-family:inherit}
+button.faq-q:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+button.pdp-tab{background:none;border:none;cursor:pointer;color:inherit;font-family:inherit}
+button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
 
 /* ── ORDER TRACKING TIMELINE ── */
 .tracking-timeline{display:flex;justify-content:space-between;margin:24px 0;position:relative}
@@ -676,7 +667,7 @@ ul{list-style:none}
 .cart-item-qty{font-family:var(--mono);font-size:0.82rem;min-width:20px;text-align:center}
 .cart-item-price{font-family:var(--mono);font-weight:700;margin-left:16px;min-width:60px;text-align:right}
 .cart-item-remove{
-  background:none;border:none;font-size:1.1rem;cursor:pointer;color:#999;
+  background:none;border:none;font-size:1.1rem;cursor:pointer;color:#666;
   margin-left:10px;padding:0 4px;
 }
 .cart-item-remove:hover{color:#c00}
@@ -826,7 +817,6 @@ ul{list-style:none}
   .toolbar{flex-direction:column;align-items:stretch}
   .search-sort{width:100%}
   .search-input{flex:1}
-  .nav-links{gap:16px}
   .nav-links a{font-size:0.72rem;letter-spacing:0.08em}
 }
 @media(max-width:520px){
@@ -854,10 +844,9 @@ ul{list-style:none}
 }
 .product-card:hover .prod-img svg,
 .product-card:hover .prod-img img {
-  transform: scale(1.05);
-  transition: transform 0.2s;
+  transform: scale(1.04);
 }
-.prod-img svg, .prod-img img { transition: transform 0.2s; }
+.prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
 .pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:100px 0 40px;align-items:start}
 .pdp-image{background:#f7f7f7;border-radius:var(--radius);overflow:hidden;border:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;padding:32px;aspect-ratio:1/1;position:sticky;top:100px;align-self:start}
@@ -872,7 +861,7 @@ ul{list-style:none}
 .pdp-badge-seller{background:#000;color:#fff;border-color:#000}
 .pdp-badge-purity{background:var(--bg);color:var(--text)}
 .pdp-price-wrap{margin:8px 0}
-.pdp-price-old{font-family:var(--mono);font-size:0.88rem;color:#999;text-decoration:line-through}
+.pdp-price-old{font-family:var(--mono);font-size:0.88rem;color:#707070;text-decoration:line-through}
 .pdp-price{font-family:var(--mono);font-size:2rem;font-weight:800}
 .pdp-meta{border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden}
 .pdp-meta-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;font-size:0.82rem;border-bottom:1px solid var(--stroke)}
@@ -1013,28 +1002,28 @@ ul{list-style:none}
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:8px">Individual Vials</div>
         <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px;color:#fff">Research Peptides</div>
         <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
-        <div style="margin-top:16px"><span style="display:inline-block;padding:8px 20px;border:1.5px solid rgba(255,255,255,0.5);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;transition:all 0.3s ease">Browse Peptides &rarr;</span></div>
+        <div style="margin-top:16px"><span class="hero-btn-invert-dark" style="display:inline-block;padding:10px 22px;border:1.5px solid rgba(255,255,255,0.5);background:transparent;border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;transition:all 0.3s ease">Browse Peptides &rarr;</span></div>
         </div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:20px">
-        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:20px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center" onclick="navigate('catalog');setHomeCat('kits')">
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:36px 32px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center" onclick="navigate('catalog');setHomeCat('kits')">
           <div>
-            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
-            <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">10-Vial Kits</div>
-            <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk kits.</div>
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Bulk Packs</div>
+            <div style="font-family:'Instrument Serif',serif;font-size:2rem;line-height:1.1;margin-bottom:8px">10-Vial Kits</div>
+            <div style="font-size:0.88rem;color:var(--muted);line-height:1.5">Save up to 33% with bulk kits.</div>
           </div>
-          <div style="width:90px;height:90px;background:#000;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <div style="color:rgba(255,255,255,0.2);font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:400">10x</div>
+          <div style="width:130px;height:130px;background:#000;border-radius:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="color:rgba(255,255,255,0.25);font-family:'Instrument Serif',serif;font-size:2.6rem;font-weight:400">10x</div>
           </div>
         </div>
-        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:20px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center" onclick="navigate('catalog');setHomeCat('stacks')">
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:36px 32px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center" onclick="goToCategory('bestsellers')">
           <div>
-            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Curated</div>
-            <div style="font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.2;margin-bottom:4px">Research Stacks</div>
-            <div style="font-size:0.75rem;color:var(--muted);line-height:1.5">Pre-built compound bundles.</div>
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Top Sellers</div>
+            <div style="font-family:'Instrument Serif',serif;font-size:2rem;line-height:1.1;margin-bottom:8px">Best Sellers</div>
+            <div style="font-size:0.88rem;color:var(--muted);line-height:1.5">Our most-ordered research peptides.</div>
           </div>
-          <div style="width:90px;height:90px;background:#000;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <div style="color:rgba(255,255,255,0.2);font-family:'Instrument Serif',serif;font-size:1.4rem;font-weight:400">3-5x</div>
+          <div style="width:130px;height:130px;background:#000;border-radius:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="color:rgba(255,255,255,0.25);font-family:'Instrument Serif',serif;font-size:2.4rem;font-weight:400">★</div>
           </div>
         </div>
       </div>
@@ -1045,7 +1034,7 @@ ul{list-style:none}
       <div style="background:#f7f7f7;padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--stroke);border-right:none;border-radius:var(--radius) 0 0 var(--radius)">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Bulk Research Kits</div>
         <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">10-Vial Kits</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Save when you order in bulk. Each kit ships with 10 individually-sealed lyophilized vials of the same compound — perfect for extended research protocols.</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Save when you order in bulk. Each kit ships with 10 individually-sealed lyophilized vials of the same compound - perfect for extended research protocols.</div>
         <div style="margin-top:16px"><span class="hero-btn-invert" style="display:inline-block;padding:10px 22px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">Browse Kits &rarr;</span></div>
       </div>
       <div style="background:#000;display:flex;align-items:center;justify-content:center;border-radius:0 var(--radius) var(--radius) 0;position:relative;overflow:hidden">
@@ -1060,7 +1049,7 @@ ul{list-style:none}
     <!-- SHOP YOUR WAY -->
     <div style="margin-bottom:48px;padding:40px 0">
       <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;margin-bottom:28px">Browse by <em style="font-style:italic">category</em></div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px">
         <a class="shop-pill" onclick="goToCategory('bestsellers')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Bestsellers</div>
@@ -1332,16 +1321,16 @@ ul{list-style:none}
     <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Frequently Asked Questions</h1>
     <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Find answers to common questions about our products and services.</p>
     <div class="faq-list" id="faq-list">
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What are research peptides?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How do I place an order?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What payment methods do you accept?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How long does shipping take?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Do you ship internationally?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Currently, we primarily serve customers within the United States. International shipping may be available for select kit orders. Contact us for details.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What is your purity guarantee?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Can I get a refund?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How do I store my peptides?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Do you offer discount codes?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Yes! Join our mailing list for exclusive deals, or check our Discord community for active promo codes. Affiliate codes are also available for content creators.</div></div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Is my payment secure?</span><span class="faq-icon"></span></div><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Cryptocurrency payments are processed directly on the blockchain with no intermediaries. For wallet payments, transactions are signed locally in your browser wallet — we never have access to your private keys.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What are research peptides?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I place an order?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What payment methods do you accept?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How long does shipping take?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Do you ship internationally?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Currently, we primarily serve customers within the United States. International shipping may be available for select kit orders. Contact us for details.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What is your purity guarantee?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Can I get a refund?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I store my peptides?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Do you offer discount codes?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Yes! Join our mailing list for exclusive deals, or check our Discord community for active promo codes. Affiliate codes are also available for content creators.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Is my payment secure?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Cryptocurrency payments are processed directly on the blockchain with no intermediaries. For wallet payments, transactions are signed locally in your browser wallet - we never have access to your private keys.</div></div></div>
     </div>
   </div>
 </div>
@@ -1377,7 +1366,7 @@ ul{list-style:none}
       <h3 style="margin:20px 0 8px;color:var(--text)">Research Use Only</h3>
       <p>All compounds are sold strictly for research purposes. By purchasing, you confirm you are 21+ and that products will be used in a laboratory setting only. Hao Yun Labs is not liable for misuse.</p>
       <h3 style="margin:20px 0 8px;color:var(--text)">Privacy</h3>
-      <p>We collect only the information necessary to process your order (name, address, email). We do not sell or share personal data with third parties. Payment is processed via blockchain — we never store financial credentials.</p>
+      <p>We collect only the information necessary to process your order (name, address, email). We do not sell or share personal data with third parties. Payment is processed via blockchain - we never store financial credentials.</p>
     </div>
   </div>
 </div>
@@ -1650,8 +1639,6 @@ ul{list-style:none}
       <div class="footer-col-title">Shop</div>
       <a onclick="navigate('catalog');setHomeCat('peptides')">Peptides</a>
       <a onclick="navigate('catalog');setHomeCat('kits')">Kits</a>
-      <a onclick="navigate('catalog');setHomeCat('stacks')">Stacks</a>
-      <a onclick="navigate('catalog');setHomeCat('sprays')">Sprays</a>
       <a onclick="navigate('catalog');setHomeCat('supplies')">Supplies</a>
     </div>
     <div class="footer-col">
@@ -1711,7 +1698,7 @@ function klIdentify(email) {
 }
 
 /* ═════════════════════════════════════════════════════
-   PRODUCT CATALOG DATA (fallback — overridden by DB)
+   PRODUCT CATALOG DATA (fallback - overridden by DB)
    ═════════════════════════════════════════════════════ */
 
 const CATALOG_INDIVIDUAL = [
@@ -1724,7 +1711,7 @@ const CATALOG_INDIVIDUAL = [
   { sku:'SM50SV', name:'Semaglutide 50mg', price:151.2 },
   { sku:'TR5SV', name:'Tirzepatide 5mg', price:36 },
   { sku:'TR10SV', name:'Tirzepatide 10mg', price:50.4 },
-  { sku:'TR15SV', name:'Tirzepatide 15mg', price:162 },
+  { sku:'TR15SV', name:'Tirzepatide 15mg', price:64.8 },
   { sku:'TR20SV', name:'Tirzepatide 20mg', price:79.2 },
   { sku:'TR30SV', name:'Tirzepatide 30mg', price:108 },
   { sku:'TR40SV', name:'Tirzepatide 40mg', price:136.8 },
@@ -1866,7 +1853,6 @@ const CATALOG_INDIVIDUAL = [
   { sku:'AQUA8', name:'AQUALYX 8ml (single vial)', price:65 },
   { sku:'B12-1MGMLSV', name:'B12 1mg/ml', price:36 },
   { sku:'BB30SV', name:'Wolverine 30mg', price:180 },
-  { sku:'BRONSV', name:'Bronchogen 20mg', price:64.8 },
   { sku:'CP10SV', name:'CJC-1295 no DAC 5mg + IPA 5mg', price:60 },
   { sku:'DS5SV', name:'DSIP 5mg', price:36 },
   { sku:'DP10SV', name:'Demorphin 10mg', price:64.8 },
@@ -1876,7 +1862,6 @@ const CATALOG_INDIVIDUAL = [
   { sku:'H40SV', name:'HGH 40iu', price:44 },
   { sku:'IGD2SV', name:'IGF-DES 2mg', price:36 },
   { sku:'LIPOC10SV', name:'Lipo-C 10mg', price:43.2 },
-  { sku:'LEMONSV', name:'Lemon Bottle lipolytic 10mg', price:50.4 },
   { sku:'LIRA5SV', name:'Liraglutide 5mg', price:64.8 },
   { sku:'LIRA10SV', name:'Liraglutide 10mg', price:108 },
   { sku:'MS20SV', name:'MOTS-C 20mg', price:93.6 },
@@ -2084,7 +2069,7 @@ const CATALOG_SPRAYS = [
 ];
 
 const CATALOG_SUPPLIES = [
-  { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:6, description:'3ml sterile bacteriostatic water — the standard solvent for reconstituting lyophilized peptides. Single-use vial.' },
+  { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:6, description:'3ml sterile bacteriostatic water - the standard solvent for reconstituting lyophilized peptides. Single-use vial.' },
   { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:10, description:'10ml bacteriostatic water for multi-vial research setups. 0.9% benzyl alcohol preservative for extended stability after reconstitution.' },
   { sku:'NEEDLE31G8MM10PK', name:'Insulin Syringes (10 pack)', price:4.99, description:'Box of 10 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
   { sku:'NEEDLE31G8MM100PK', name:'Insulin Syringes (100 pack)', price:29.99, description:'Box of 100 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
@@ -2092,15 +2077,7 @@ const CATALOG_SUPPLIES = [
   { sku:'SWAB100PK', name:'Alcohol Swabs (100 pack)', price:19, description:'Sterile 2-ply alcohol prep pads saturated with 70% isopropyl alcohol for effective antiseptic cleansing of injection sites. Thick, textured material removes oils and residue while remaining durable.' },
 ];
 
-const CATALOG_NOOTROPICS = [];
 
-const CATEGORIES = {
-  peptides: { label:'Peptides', data:CATALOG_INDIVIDUAL },
-  kits:     { label:'Kits', data:CATALOG_KITS },
-  stacks:   { label:'Stacks', data:CATALOG_BUNDLES },
-  sprays:   { label:'Sprays', data:CATALOG_SPRAYS },
-  supplies: { label:'Supplies', data:CATALOG_SUPPLIES },
-};
 
 // Only show products that have a real mockup image in site/media/products/
 const VALID_SKUS = new Set([
@@ -2143,145 +2120,7 @@ const ALL_PRODUCTS = [
 /* ═════════════════════════════════════════════════════
    SVG VIAL GENERATOR (no external images needed)
    ═════════════════════════════════════════════════════ */
-const _REMOVED_IMAGE_MAP = {
-  "SM15SV":  "semaglutide_15mg.png",
-  "SM20SV":  "semaglutide_20mg.png",
-  // Tirzepatide singles
-  "TR5SV":   "tirzepatide_5mg.png",
-  "TR10SV":  "tirzepatide_10mg.png",
-  "TR15SV":  "tirzepatide_15mg.png",
-  "TR20SV":  "tirzepatide_20mg.png",
-  "TR30SV":  "tirzepatide_30mg.png",
-  // Retatrutide singles
-  "RT5SV":   "retatrutide_5mg.png",
-  "RT10SV":  "retatrutide_10mg.png",
-  "RT15SV":  "retatrutide_15mg.png",
-  "RT20SV":  "retatrutide_20mg.png",
-  "RT30SV":  "retatrutide_30mg.png",
-  // CagriSema
-  "CS10SV":  "cagrisemablend_10mg.png",
-  // Survodutide
-  "SUR10SV": "survodutide_10mg.png",
-  // Mazdutide
-  "MAZ5SV":  "mazdutide_5mg.png",
-  "MAZ10SV": "mazdutide_10mg.png",
-  // HGH 191AA
-  "H10SV":   "hgh191aa_10iu.png",
-  "H12SV":   "hgh191aa_12iu.png",
-  "H24SV":   "hgh191aa_24iu.png",
-  // HGH Fragment 176-191 (using aod9604 as closest match)
-  "FR2SV":   "aod9604_2mg.png",
-  // Ipamorelin
-  "IPS5SV":  "ipamorelin_5mg.png",
-  "IP10SV":  "ipamorelin_10mg.png",
-  // Tesamorelin
-  "TSM2SV":  "tesamorelin_2mg.png",
-  "TSM5SV":  "tesamorelin_5mg.png",
-  "TSM10SV": "tesamorelin_10mg.png",
-  // Sermorelin
-  "SMO5SV":  "sermorelin_5mg.png",
-  // CJC-1295
-  "CND5SV":  "cjc1295nodac_5mg.png",
-  "CD5SV":   "cjc1295withdac_5mg.png",
-  // HCG
-  "G2KSV":   "hcg_2000iu.png",
-  "G5KSV":   "hcg_5000iu.png",
-  // BPC-157
-  "BC2SV":   "bpc157_2mg.png",
-  "BC5SV":   "bpc157_5mg.png",
-  "BC10SV":  "bpc157_10mg.png",
-  "BC20SV":  "bpc157_20mg.png",
-  // TB-500
-  "BT5SV":   "tb500_5mg.png",
-  "BT10SV":  "tb500_10mg.png",
-  // Wolverine (BPC+TB)
-  "WLV10SV": "wolverine_10mg.png",
-  "WLV20SV": "wolverine_20mg.png",
-  // GHK-Cu
-  "CU50SV":  "ghkcu_50mg.png",
-  "CU100SV": "ghkcu_100mg.png",
-  // Snap-8
-  "NP810SV": "snap8_10mg.png",
-  // Glutathione
-  "GTT1500SV": "glutathione_1500mg.png",
-  // L-Carnitine
-  "LC600SV":  "lcarnitine_600mg.png",
-  "LC1200SV": "lcarnitine_1200mg.png",
-  // Epithalon
-  "ET10SV":  "epithalon_10mg.png",
-  "ET50SV":  "epithalon_50mg.png",
-  // Semax
-  "XA5SV":   "semax_5mg.png",
-  "XA10SV":  "semax_10mg.png",
-  // Selank
-  "SK5SV":   "selank_5mg.png",
-  "SK10SV":  "selank_10mg.png",
-  // Adamax
-  "ADX5SV":  "adamax_5mg.png",
-  "ADX10SV": "adamax_10mg.png",
-  // DSIP
-  "DS2SV":   "dsip_2mg.png",
-  "DS10SV":  "dsip_10mg.png",
-  // Kisspeptin
-  "KS5SV":   "kisspeptin_5mg.png",
-  // Melanotan-2
-  "MT2SV":   "melanotan2_10mg.png",
-  // PT-141
-  "P41SV":   "pt141_10mg.png",
-  // Oxytocin
-  "OT10SV":  "oxytocin_10mg.png",
-  // NAD+
-  "NJ100SV": "nadplus_100mg.png",
-  "NJ500SV": "nadplus_500mg.png",
-  // MOTS-C
-  "MS10SV":  "motsc_10mg.png",
-  // SS-31
-  "2S10SV":  "ss31_10mg.png",
-  // 5-amino-1mq
-  "5AM5SV":  "5amino1mq_5mg.png",
-  // IGF-1 LR3
-  "IGF1SV":  "igf1lr3_1mg.png",
-  // Follistatin 344
-  "FN1SV":   "follistatin344_1mg.png",
-  // BAC Water
-  "BAC3SV":  "bacteriostaticwater_3ml.png",
-  "BAC10SV": "bacteriostaticwater_10ml.png",
 
-  // ── Kits (use same image as single vial) ──
-  "SM5K":    "semaglutide_5mg.png",
-  "SM10K":   "semaglutide_10mg.png",
-  "TR10K":   "tirzepatide_10mg.png",
-  "TR20K":   "tirzepatide_20mg.png",
-  "RT5K":    "retatrutide_5mg.png",
-  "RT10K":   "retatrutide_10mg.png",
-  "RT20K":   "retatrutide_20mg.png",
-  "BC5K":    "bpc157_5mg.png",
-  "BC10K":   "bpc157_10mg.png",
-  "BT5K":    "tb500_5mg.png",
-  "H10K":    "hgh191aa_10iu.png",
-  "H24K":    "hgh191aa_24iu.png",
-  "IPS5K":   "ipamorelin_5mg.png",
-  "TSM5K":   "tesamorelin_5mg.png",
-  "MT2K":    "melanotan2_10mg.png",
-  "NJ100K":  "nadplus_100mg.png",
-  "ET10K":   "epithalon_10mg.png",
-
-  // ── Nootropics ──
-  "MODA200":  "modafinil_200mg.png",
-  "ARMO250":  "armodafinil_250mg.png",
-
-  // ── Nasal Sprays ──
-  "NS-SLK-10":  "selank_10mg.png",
-  "NS-SMX-10":  "semax_10mg.png",
-  "NS-ADX-10":  "adamax_10mg.png",
-  "NS-DSIP-10": "dsip_10mg.png",
-  "NS-OXY-10":  "oxytocin_10mg.png",
-  "NS-PIN-10":  "pinealon_10mg.png",
-  "NS-MT2-10":  "melanotan2_10mg.png",
-  "NS-PE22-10": "pe2228_10mg.png",
-};
-
-const PRODUCT_IMAGES = {};
 
 function getProductImageHTML(p) {
   // Use real mockup if SKU has an image in media/products/
@@ -2539,6 +2378,12 @@ function updateCardPrice(sku, idx){
     const oldP = (Math.floor(s.price * 1.8) - 0.01).toFixed(2);
     priceEl.innerHTML = '<span class="card-price-old">$'+oldP+'</span><br>$'+s.price.toFixed(2);
   }
+  // Update card name to swap dose label
+  const nameEl = card.querySelector('.card-name');
+  if(nameEl){
+    const newName = nameEl.textContent.replace(/\d+(?:\.\d+)?\s*(?:mg|iu|ml|mcg)/i, s.label);
+    nameEl.textContent = newName;
+  }
 }
 
 function toggleFaq(qEl){
@@ -2547,10 +2392,15 @@ function toggleFaq(qEl){
   const isOpen = item.classList.contains('open');
   // Close all other FAQ items first (one open at a time)
   document.querySelectorAll('.faq-item.open').forEach(el=>{
-    if(el!==item) el.classList.remove('open');
+    if(el!==item){
+      el.classList.remove('open');
+      const btn = el.querySelector('.faq-q');
+      if(btn) btn.setAttribute('aria-expanded','false');
+    }
   });
   // Toggle this one
   item.classList.toggle('open', !isOpen);
+  qEl.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
 }
 
 function toggleSizeSelect(id){
@@ -2579,7 +2429,7 @@ function pickSize(id, idx){
   if(!sizes||!sizes[idx]) return;
   // Update trigger text
   const valEl = el.querySelector('.hyl-select-value');
-  if(valEl) valEl.textContent = sizes[idx].label + ' — $' + sizes[idx].price.toFixed(2);
+  if(valEl) valEl.textContent = sizes[idx].label + ' - $' + sizes[idx].price.toFixed(2);
   // Update selected state
   el.querySelectorAll('.hyl-select-item').forEach((item,i)=>{
     item.classList.toggle('selected', i===idx);
@@ -2607,8 +2457,6 @@ function autoDesc(p){
   const n=p.name.toLowerCase();
   const compound=p.name.replace(/\s*\d+\s*(mg|iu|ml|mcg|tabs?|caps?|pk|pack|x\s*\d+\s*vials?)/gi,'').replace(/\s*\(.*?\)/g,'').trim();
   if(p.cat==='kits') return compound+' bulk research kit. 10 vials per kit for extended protocols.';
-  if(p.cat==='stacks'||p.cat==='bundles') return 'Curated research bundle. Multiple compounds selected for synergistic research protocols.';
-  if(p.cat==='sprays') return compound+' pre-mixed nasal spray. Ready-to-use intranasal delivery for research.';
   if(p.cat==='supplies') return 'Research supply item for peptide preparation and handling.';
   if(n.includes('semaglutide')) return 'GLP-1 receptor agonist. Studied for glucose regulation and metabolic research.';
   if(n.includes('tirzepatide')) return 'Dual GIP/GLP-1 agonist. Advanced metabolic research compound.';
@@ -2655,9 +2503,7 @@ function autoDesc(p){
 function cardHTML(p){
   const detailId = 'det-'+p.sku;
   const descText = p.description || autoDesc(p);
-  const specs = [`Purity: >99% <span class="term-tip" data-tip="High Performance Liquid Chromatography — gold standard purity test">(HPLC)</span>`,`Form: <span class="term-tip" data-tip="Freeze-dried powder for maximum stability and shelf life">Lyophilized</span> Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
-  if(p.cat==='sprays') specs[1] = 'Form: Nasal Spray (30ml)';
-  if(p.cat==='bundles') specs.push('Includes: <span class="term-tip" data-tip="Bacteriostatic water — sterile solvent for reconstitution">BAC water</span> where noted');
+  const specs = [`Purity: >99% <span class="term-tip" data-tip="High Performance Liquid Chromatography - gold standard purity test">(HPLC)</span>`,`Form: <span class="term-tip" data-tip="Freeze-dried powder for maximum stability and shelf life">Lyophilized</span> Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
   const detailHTML = (descText ? `<div style="margin-bottom:6px;font-size:0.75rem;color:var(--muted);line-height:1.5">${descText}</div>` : '') + specs.map(s=>`<div>${s}</div>`).join('');
 
   const purityMap = {RT10SV:'99.25',TSM2SV:'99.64',XA5SV:'99.22',CU50SV:'99.87'};
@@ -2683,14 +2529,14 @@ function cardHTML(p){
     ${PRODUCT_SIZES[p.sku] ? `<div style="padding:0 16px 8px" onclick="event.stopPropagation()">
       <div class="hyl-select" id="size-${p.sku}" data-sku="${p.sku}" data-value="${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);return idx>=0?idx:0;})()}">
         <button class="hyl-select-trigger" onclick="event.stopPropagation();toggleSizeSelect('size-${p.sku}')" type="button">
-          <span class="hyl-select-value">${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);const s=PRODUCT_SIZES[p.sku][idx>=0?idx:0];return s.label+' — $'+s.price.toFixed(2);})()}</span>
+          <span class="hyl-select-value">${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);const s=PRODUCT_SIZES[p.sku][idx>=0?idx:0];return s.label+' - $'+s.price.toFixed(2);})()}</span>
           <svg class="hyl-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div class="hyl-select-content">
           ${PRODUCT_SIZES[p.sku].map((s,i)=>{
             const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();
             const isSelected=s.label.toLowerCase()===dose;
-            return `<div class="hyl-select-item${isSelected?' selected':''}" data-index="${i}" onclick="event.stopPropagation();pickSize('size-${p.sku}',${i})"><span>${s.label} — $${s.price.toFixed(2)}</span><svg class="sel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>`;
+            return `<div class="hyl-select-item${isSelected?' selected':''}" data-index="${i}" onclick="event.stopPropagation();pickSize('size-${p.sku}',${i})"><span>${s.label} - $${s.price.toFixed(2)}</span><svg class="sel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>`;
           }).join('')}
         </div>
       </div>
@@ -2766,8 +2612,9 @@ function slideCatTab(containerId){
 let pdpQty = 1;
 
 const PRODUCT_SIZES = {
-  '10AMSV': [{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
-  '50AMSV': [{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
+  '10AMSV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
+  '50AMSV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
+  '5AM5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'50mg',price:79.20}],
   'AHK-CU-50MGSV': [{label:'50mg',price:36.00},{label:'100mg',price:50.40}],
   'AHK-CU-100MGSV': [{label:'50mg',price:36.00},{label:'100mg',price:50.40}],
   'AOD2SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
@@ -2780,8 +2627,7 @@ const PRODUCT_SIZES = {
   'BC5SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
   'BC10SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
   'BC20SV': [{label:'2mg',price:20.00},{label:'5mg',price:20.00},{label:'10mg',price:35.00},{label:'20mg',price:80.00}],
-  'BronSV': [{label:'20mg',price:70.00},{label:'20mg',price:64.80}],
-  'BRONSV': [{label:'20mg',price:70.00},{label:'20mg',price:64.80}],
+  'BronSV': [{label:'20mg',price:70.00}],
   'CND2SV': [{label:'2mg',price:36.00},{label:'5mg',price:40.00},{label:'10mg',price:108.00}],
   'CND5SV': [{label:'2mg',price:36.00},{label:'5mg',price:40.00},{label:'10mg',price:108.00}],
   'CND10SV': [{label:'2mg',price:36.00},{label:'5mg',price:40.00},{label:'10mg',price:108.00}],
@@ -2803,11 +2649,12 @@ const PRODUCT_SIZES = {
   'G2KSV': [{label:'2000iu',price:36.00},{label:'5000iu',price:64.80},{label:'10000iu',price:108.00}],
   'G5KSV': [{label:'2000iu',price:36.00},{label:'5000iu',price:64.80},{label:'10000iu',price:108.00}],
   'G10KSV': [{label:'2000iu',price:36.00},{label:'5000iu',price:64.80},{label:'10000iu',price:108.00}],
-  'H6SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
-  'H10SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
-  'H12SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
-  'H15SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
-  'H24SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40}],
+  'H6SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40},{label:'40iu',price:44.00}],
+  'H10SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40},{label:'40iu',price:44.00}],
+  'H12SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40},{label:'40iu',price:44.00}],
+  'H15SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40},{label:'40iu',price:44.00}],
+  'H24SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40},{label:'40iu',price:44.00}],
+  'H40SV': [{label:'6iu',price:6.60},{label:'10iu',price:11.00},{label:'12iu',price:13.20},{label:'15iu',price:16.50},{label:'24iu',price:26.40},{label:'40iu',price:44.00}],
   'FR2SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
   'FR5SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
   'HX2SV': [{label:'2mg',price:36.00},{label:'5mg',price:64.80}],
@@ -2823,8 +2670,7 @@ const PRODUCT_SIZES = {
   'LC200SV': [{label:'200mg',price:25.00},{label:'600mg',price:36.00},{label:'1200mg',price:50.40}],
   'LC600SV': [{label:'200mg',price:25.00},{label:'600mg',price:36.00},{label:'1200mg',price:50.40}],
   'LC1200SV': [{label:'200mg',price:25.00},{label:'600mg',price:36.00},{label:'1200mg',price:50.40}],
-  'LemonSV': [{label:'10mg',price:50.00},{label:'10mg',price:50.40}],
-  'LEMONSV': [{label:'10mg',price:50.00},{label:'10mg',price:50.40}],
+  'LemonSV': [{label:'10mg',price:50.00}],
   'LIRA5SV': [{label:'5mg',price:64.80},{label:'10mg',price:108.00}],
   'LIRA10SV': [{label:'5mg',price:64.80},{label:'10mg',price:108.00}],
   'MS5SV': [{label:'5mg',price:40.00},{label:'10mg',price:50.40},{label:'20mg',price:93.60},{label:'40mg',price:122.40}],
@@ -2837,8 +2683,9 @@ const PRODUCT_SIZES = {
   'NJ100SV': [{label:'100mg',price:35.00},{label:'500mg',price:50.40},{label:'1000mg',price:64.80}],
   'NJ500SV': [{label:'100mg',price:35.00},{label:'500mg',price:50.40},{label:'1000mg',price:64.80}],
   'NJ1000SV': [{label:'100mg',price:35.00},{label:'500mg',price:50.40},{label:'1000mg',price:64.80}],
-  'OT2SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00}],
-  'OT5SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00}],
+  'OT2SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'OT5SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
+  'OT10SV': [{label:'2mg',price:28.80},{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
   'PE5SV': [{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
   'PE10SV': [{label:'5mg',price:36.00},{label:'10mg',price:64.80}],
   'PNC275SV': [{label:'5mg',price:64.80},{label:'10mg',price:120.00}],
@@ -2853,8 +2700,9 @@ const PRODUCT_SIZES = {
   'RT40SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
   'RT50SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
   'RT60SV': [{label:'5mg',price:36.00},{label:'10mg',price:59.99},{label:'15mg',price:79.20},{label:'20mg',price:108.00},{label:'30mg',price:136.80},{label:'40mg',price:170.00},{label:'50mg',price:194.40},{label:'60mg',price:216.00}],
-  '2S10SV': [{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
-  '2S50SV': [{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
+  '2S10SV': [{label:'5mg',price:50.40},{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
+  '2S50SV': [{label:'5mg',price:50.40},{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
+  '2S5SV': [{label:'5mg',price:50.40},{label:'10mg',price:64.80},{label:'50mg',price:208.80}],
   'SK5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
   'SK10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40}],
   'SM2SV': [{label:'2mg',price:35.00},{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:122.40},{label:'50mg',price:151.20}],
@@ -2877,16 +2725,16 @@ const PRODUCT_SIZES = {
   'TA2SV': [{label:'2mg',price:25.00},{label:'5mg',price:79.20},{label:'10mg',price:108.00}],
   'TA5SV': [{label:'2mg',price:25.00},{label:'5mg',price:79.20},{label:'10mg',price:108.00}],
   'TA10SV': [{label:'2mg',price:25.00},{label:'5mg',price:79.20},{label:'10mg',price:108.00}],
-  'TR5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR15SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR20SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR30SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR40SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR50SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR60SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR80SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
-  'TR100SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:162.00},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR5SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR10SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR15SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR20SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR30SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR40SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR50SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR60SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR80SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
+  'TR100SV': [{label:'5mg',price:36.00},{label:'10mg',price:50.40},{label:'15mg',price:64.80},{label:'20mg',price:79.20},{label:'30mg',price:108.00},{label:'40mg',price:136.80},{label:'50mg',price:165.60},{label:'60mg',price:194.40},{label:'80mg',price:237.60},{label:'100mg',price:266.40}],
   'VIP5SV': [{label:'5mg',price:64.80},{label:'10mg',price:93.60}],
   'VIP10SV': [{label:'5mg',price:64.80},{label:'10mg',price:93.60}],
   'BB10SV': [{label:'10mg',price:79.20},{label:'20mg',price:122.40},{label:'30mg',price:180.00}],
@@ -2901,9 +2749,7 @@ function openProduct(sku){
   window._pdpSku = sku;
   pdpQty = 1;
   const oldPrice = (Math.floor(p.price * 1.8) - 0.01).toFixed(2);
-  const imgHTML = PRODUCT_IMAGES[p.sku]
-    ? `<img src="${PRODUCT_IMAGES[p.sku]}" alt="${p.name}">`
-    : getProductImageHTML(p);
+  const imgHTML = getProductImageHTML(p);
   const desc = p.description || autoDesc(p);
   const comp = p.components || 'Purity: >99% (HPLC)\nStorage: -20°C (lyophilized, desiccated)\nAppearance: White Powder\nResearch Use Only.';
 
@@ -2925,7 +2771,7 @@ function openProduct(sku){
           ${PRODUCT_SIZES[p.sku].map((s,i)=>{
             const dose = (p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0];
             const isActive = s.label.toLowerCase() === dose.toLowerCase();
-            return `<button onclick="selectPdpSize('${p.sku}',${i})" class="pdp-size-btn ${isActive?'active':''}" style="padding:8px 18px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);border:1.5px solid ${isActive?'var(--brand)':'var(--stroke)'};background:${isActive?'var(--brand)':'var(--bg)'};color:${isActive?'#fff':'var(--text)'}">${s.label} — $${s.price.toFixed(2)}</button>`;
+            return `<button onclick="selectPdpSize('${p.sku}',${i})" class="pdp-size-btn ${isActive?'active':''}" style="padding:8px 18px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);border:1.5px solid ${isActive?'var(--brand)':'var(--stroke)'};background:${isActive?'var(--brand)':'var(--bg)'};color:${isActive?'#fff':'var(--text)'}">${s.label} - $${s.price.toFixed(2)}</button>`;
           }).join('')}
         </div>
       </div>` : ''}
@@ -2946,9 +2792,9 @@ function openProduct(sku){
         <button class="pdp-add-btn" onclick="addToCartQty('${p.sku}',pdpQty)">ADD TO CART</button>
       </div>
       <div class="pdp-tabs">
-        <div class="pdp-tab active" onclick="switchPdpTab('desc',this)">Description</div>
-        <div class="pdp-tab" onclick="switchPdpTab('specs',this)">Specifications</div>
-        <div class="pdp-tab" onclick="switchPdpTab('shipping',this)">Shipping</div>
+        <button class="pdp-tab active" type="button" role="tab" onclick="switchPdpTab(\'desc\',this)" aria-selected="true">Description</button>
+        <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'specs\',this)" aria-selected="false">Specifications</button>
+        <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'shipping\',this)" aria-selected="false">Shipping</button>
       </div>
       <div class="pdp-tab-content active" id="pdp-tab-desc">
         <p>${desc}</p>
@@ -3009,9 +2855,10 @@ function selectPdpSize(sku, idx){
 }
 
 function switchPdpTab(tab, el){
-  document.querySelectorAll('.pdp-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pdp-tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
   document.querySelectorAll('.pdp-tab-content').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
+  el.setAttribute('aria-selected','true');
   document.getElementById('pdp-tab-'+tab).classList.add('active');
 }
 
@@ -3104,6 +2951,21 @@ function renderOrder(){
   renderPayMethods();
 }
 
+window._suggestedQty = window._suggestedQty || {};
+function suggestedQtyChange(sku, delta){
+  const current = window._suggestedQty[sku] || 1;
+  const next = Math.max(1, current + delta);
+  window._suggestedQty[sku] = next;
+  const el = document.getElementById('sugg-qty-'+sku);
+  if(el) el.textContent = next;
+}
+function suggestedAdd(sku){
+  const qty = window._suggestedQty[sku] || 1;
+  addToCartQty(sku, qty);
+  delete window._suggestedQty[sku];
+  renderOrder();
+}
+
 function renderSuggested(){
   let el = document.getElementById('order-suggested');
   if(!el){
@@ -3123,16 +2985,23 @@ function renderSuggested(){
   el.innerHTML = `<div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--stroke)">
     <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Customers Also Add</div>
     <div style="display:flex;flex-direction:column;gap:8px">
-      ${candidates.map(p=>`
+      ${candidates.map(p=>{
+        const qty = window._suggestedQty[p.sku] || 1;
+        return `
         <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--stroke);border-radius:8px;background:#fafafa">
           <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">
           <div style="flex:1;min-width:0">
             <div style="font-size:0.78rem;font-weight:700;line-height:1.2">${p.name}</div>
             <div style="font-size:0.7rem;color:var(--muted);font-family:var(--mono);margin-top:2px">$${p.price.toFixed(2)}</div>
           </div>
-          <button onclick="addToCart('${p.sku}',this);renderOrder()" style="padding:6px 12px;background:var(--brand);color:#fff;border:none;border-radius:6px;font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s">+ Add</button>
+          <div style="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--stroke);border-radius:6px;padding:2px">
+            <button onclick="suggestedQtyChange('${p.sku}',-1)" style="width:22px;height:22px;background:transparent;border:none;border-radius:4px;font-size:0.85rem;font-weight:700;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center" aria-label="Decrease">&minus;</button>
+            <span id="sugg-qty-${p.sku}" style="min-width:18px;text-align:center;font-size:0.78rem;font-weight:700;font-family:var(--mono)">${qty}</span>
+            <button onclick="suggestedQtyChange('${p.sku}',1)" style="width:22px;height:22px;background:transparent;border:none;border-radius:4px;font-size:0.85rem;font-weight:700;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center" aria-label="Increase">+</button>
+          </div>
+          <button onclick="suggestedAdd('${p.sku}')" style="padding:6px 12px;background:var(--brand);color:#fff;border:none;border-radius:6px;font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Add</button>
         </div>
-      `).join('')}
+      `}).join('')}
     </div>
   </div>`;
 }
@@ -3160,7 +3029,7 @@ function renderUpsell(){
     el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
       <div>
         <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Recommended</div>
-        <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x suggested for ${peptideQty} vial${peptideQty>1?'s':''} — $${cost}</div>
+        <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x suggested for ${peptideQty} vial${peptideQty>1?'s':''} - $${cost}</div>
       </div>
       <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
     </div>`;
@@ -3225,12 +3094,12 @@ async function applyCode(){
     const {data,error} = await sb.from('discount_codes').select('code,percent_off').eq('code',code).single();
     if(!error && data){
       discountCode=data.code;discountPct=data.percent_off;
-      msg.textContent=`Code ${data.code} applied — ${data.percent_off}% off!`;msg.className='discount-msg success';
+      msg.textContent=`Code ${data.code} applied - ${data.percent_off}% off!`;msg.className='discount-msg success';
       foundDiscount=true;
     }
   } catch(e){
-    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied — 10% off!';msg.className='discount-msg success';foundDiscount=true;}
-    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied — 15% off!';msg.className='discount-msg success';foundDiscount=true;}
+    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied - 10% off!';msg.className='discount-msg success';foundDiscount=true;}
+    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied - 15% off!';msg.className='discount-msg success';foundDiscount=true;}
   }
   // If not a discount code, try as affiliate code
   if(!foundDiscount){
@@ -3257,7 +3126,7 @@ function renderOrderSearch(){
   const el = document.getElementById('order-search-results');
   if(!q){el.innerHTML='';return;}
   const matches = ALL_PRODUCTS.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q)).slice(0,6);
-  if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#999;padding:4px 0">No products found</div>';return;}
+  if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
   el.innerHTML = matches.map(p=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--stroke);font-size:0.78rem">
       <div><span style="font-weight:700;text-transform:uppercase">${p.name}</span> <span style="font-family:var(--mono);color:var(--muted);font-size:0.7rem;margin-left:6px">${p.sku}</span></div>
@@ -3320,10 +3189,6 @@ function renderPayMethods(){
   `;
 }
 
-function selectPay(id){
-  selectedPayMethod = id;
-  renderPayMethods();
-}
 
 function selectCrypto(currency, ev){
   if(ev && ev.stopPropagation) ev.stopPropagation();
@@ -3333,12 +3198,6 @@ function selectCrypto(currency, ev){
 }
 
 /* ── NAV SEARCH ── */
-function toggleToolbarSearch(wrapId, inputId){
-  const wrap = document.getElementById(wrapId);
-  wrap.classList.toggle('open');
-  if(wrap.classList.contains('open')) document.getElementById(inputId).focus();
-  else { document.getElementById(inputId).value=''; renderHome(); }
-}
 
 let showKits = false;
 function toggleKitView(){
@@ -3468,7 +3327,7 @@ async function payWithWallet(data){
     }
   }
   else {
-    showToast('No compatible wallet detected — copy the address manually');
+    showToast('No compatible wallet detected - copy the address manually');
   }
 }
 
@@ -3518,7 +3377,7 @@ function showCryptoPayment(data){
           </button>
         `).join('')}
       </div>
-      <div style="text-align:center;font-size:0.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em">— or send manually —</div>
+      <div style="text-align:center;font-size:0.7rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em">- or send manually -</div>
     ` : ''}
     ${data.qr_code ? `<div style="text-align:center;padding:12px 0"><img src="${data.qr_code}" alt="QR" style="width:200px;height:200px;margin:0 auto;border:1px solid var(--stroke)"></div>` : ''}
     <div style="background:#f5f5f5;padding:14px;margin:12px 0;font-family:var(--mono);font-size:0.72rem;word-break:break-all;text-align:center;line-height:1.6;user-select:all;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:var(--radius);cursor:pointer" onclick="copyAddr('${data.address}',this)">
@@ -3629,7 +3488,7 @@ async function submitOrder(){
   // Auto-subscribe email at checkout
   try { await sb.from('email_subscribers').upsert({email, source:'checkout'},{onConflict:'email'}); } catch(e){}
 
-  // Crypto only — billing server → get unique address + monitor
+  // Crypto only - billing server → get unique address + monitor
   try {
     const resp = await fetch(BILLING_SERVER + '/api/crypto-invoice', {
       method:'POST',
@@ -3672,7 +3531,7 @@ async function submitOrder(){
       return;
     }
   } catch(e){
-    showToast('Server error — please try again');
+    showToast('Server error - please try again');
     payBtn.disabled=false; payBtn.classList.remove('btn-loading'); payBtn.querySelector('.crypto-btn-text').textContent='COMPLETE ORDER';
     return;
   }
@@ -3695,7 +3554,7 @@ async function submitOrder(){
 
   if(selectedPayMethod !== 'card'){
     const instructions = {
-      zelle:'<strong>Send via Zelle to:</strong> Alex Chen — (555) 123-4567. Include your order number in the memo.',
+      zelle:'<strong>Send via Zelle to:</strong> Alex Chen - (555) 123-4567. Include your order number in the memo.',
       apple:'<strong>Send via Apple Cash to:</strong> (555) 987-6543 via iMessage. Include your order number.',
       cashapp:'<strong>Send via CashApp to:</strong> $HaoYunLabs. Include your order number in the note.',
       crypto:'<strong>Send crypto to the address shown on the checkout page.</strong> Include your order number or email us after sending.'
@@ -3779,7 +3638,7 @@ async function lookupCOA(){
             <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Test Date</div><div style="font-size:0.88rem;margin-top:4px">${data.coa_date}</div></div>
             <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Method</div><div style="font-size:0.88rem;margin-top:4px">HPLC</div></div>
           </div>
-          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--stroke);font-size:0.72rem;color:var(--muted);text-align:center">Hao Yun Labs — All compounds verified via High-Performance Liquid Chromatography</div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--stroke);font-size:0.72rem;color:var(--muted);text-align:center">Hao Yun Labs - All compounds verified via High-Performance Liquid Chromatography</div>
         </div>
       </div>`;
   } catch(e){ el.innerHTML = '<div style="color:#dc2626;font-size:0.85rem">Lookup failed. Try again.</div>'; }
@@ -3883,7 +3742,7 @@ async function submitSupport(){
     document.getElementById('support-email').value='';
     document.getElementById('support-message').value='';
     document.getElementById('support-order').value='';
-  } catch(e){ showToast('Failed to send — please email us directly.'); }
+  } catch(e){ showToast('Failed to send - please email us directly.'); }
 }
 
 async function subscribeFooterEmail(){
@@ -3896,22 +3755,6 @@ async function subscribeFooterEmail(){
     msg.textContent='You\'re in! Watch your inbox.';msg.style.color='#16a34a';
     klIdentify(email);input.value='';
   } catch(e){msg.textContent='Something went wrong.';msg.style.color='#dc2626';}
-}
-async function subscribeEmail(){
-  const input = document.getElementById('footer-email');
-  const msg = document.getElementById('footer-sub-msg');
-  const email = input.value.trim().toLowerCase();
-  if(!email || !email.includes('@')){msg.textContent='Please enter a valid email.';msg.style.color='#dc2626';return;}
-
-  try {
-    const {error} = await sb.from('email_subscribers').upsert({email, source:'footer'},{onConflict:'email'});
-    if(error) throw error;
-    msg.textContent='Subscribed! Watch your inbox.';msg.style.color='#16a34a';
-    klIdentify(email);
-    input.value='';
-  } catch(e){
-    msg.textContent='Something went wrong. Try again.';msg.style.color='#dc2626';
-  }
 }
 
 /* ── ORDER TRACKING ── */
@@ -4007,7 +3850,7 @@ function renderResearch(){
   const el=document.getElementById('research-cards');
   if(!el)return;
   const q=(document.getElementById('research-search')?.value||'').toLowerCase();
-  const filtered=q?RESEARCH_DATA.filter(r=>r.compound.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)||r.studies.some(s=>s.toLowerCase().includes(q))):RESEARCH_DATA;
+  const filtered=q?RESEARCH_DATA.filter(r=>r.compound.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)||r.studies.some(s=>s.title.toLowerCase().includes(q))):RESEARCH_DATA;
   if(!filtered.length){
     el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No matching research found.</div>';
     return;
@@ -4087,7 +3930,7 @@ function toggleDiscreet(){
   const el=document.getElementById('hero-flip-word');
   if(!el)return;
   let idx=0;
-  // Full rainbow spectrum — red, orange, yellow, green, blue, indigo, violet
+  // Full rainbow spectrum - red, orange, yellow, green, blue, indigo, violet
   const colors=['#dc2626','#ea580c','#f59e0b','#eab308','#ca8a04','#84cc16','#16a34a','#15803d','#0d9488','#0891b2','#0284c7','#2563eb','#4f46e5','#7c3aed','#9333ea','#c026d3','#db2777','#e11d48','#f97316','#facc15','#22c55e','#06b6d4','#3b82f6','#8b5cf6','#a855f7','#ec4899'];
   // Hidden measurer
   var measurer=document.createElement('span');
@@ -4282,7 +4125,6 @@ async function loadProductsFromDB(){
 /* ═════════════════════════════════════════════════════
    INTRO
    ═════════════════════════════════════════════════════ */
-function introFade(){}
 
 /* ═════════════════════════════════════════════════════
    INIT
@@ -4324,7 +4166,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       grid.appendChild(cell);
       cells[i] = cell;
     }
-    // Ripple — waits for full animation to finish before allowing another
+    // Ripple - waits for full animation to finish before allowing another
     let rippleActive = false;
     document.addEventListener('click', (e) => {
       if(rippleActive) return;
