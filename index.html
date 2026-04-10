@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260411u';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260411v';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -446,6 +446,18 @@ ul{list-style:none}
 @keyframes discord-fly{from{transform:translateY(0.1em)}to{transform:translateY(-0.1em)}}
 .discord-fly-btn:hover .discord-fly-svg{animation:discord-fly 0.6s ease-in-out infinite alternate;transform:translateX(1.2em) rotate(45deg) scale(1.1)}
 .discord-cta-btn:hover{background:#5865F2;color:#fff}
+
+/* ── RESEARCH LINKS + HOVER CARD ── */
+.research-link:hover{background:#f5f5f5}
+.research-link:hover svg{opacity:1;transform:translateX(3px)}
+.research-hover-card{
+  position:absolute;bottom:calc(100% + 8px);left:0;z-index:50;
+  background:#fff;border:1px solid var(--stroke);border-radius:10px;
+  padding:14px 16px;width:260px;box-shadow:0 8px 24px rgba(0,0,0,0.1);
+  opacity:0;pointer-events:none;transform:translateY(4px);
+  transition:all 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+.research-link-wrap:hover .research-hover-card{opacity:1;pointer-events:auto;transform:translateY(0)}
 .discord-fly-btn:hover .discord-fly-text{transform:translateX(5em)}
 .discord-fly-btn:active{transform:scale(0.95)}
 .spinner.lg{width:24px;height:24px;border-width:2.5px}
@@ -3579,27 +3591,90 @@ async function subscribeEmail(){
 /* ── ORDER TRACKING ── */
 /* ── RESEARCH PAGE ── */
 const RESEARCH_DATA = [
-  {compound:'Retatrutide',desc:'Triple GIP/GLP-1/glucagon agonist',studies:['Obesity and weight management in adults','Type 2 diabetes glycemic control','Metabolic dysfunction and body composition']},
-  {compound:'Semaglutide',desc:'GLP-1 receptor agonist',studies:['Chronic weight management (STEP trials)','Cardiovascular risk reduction','Non-alcoholic steatohepatitis (NASH)']},
-  {compound:'Tirzepatide',desc:'Dual GIP/GLP-1 agonist',studies:['Type 2 diabetes (SURPASS program)','Obesity management (SURMOUNT trials)','Obstructive sleep apnea']},
-  {compound:'BPC-157',desc:'Body Protection Compound',studies:['Gastrointestinal mucosal healing','Tendon and ligament repair models','Neuroprotective effects in CNS injury']},
-  {compound:'TB-500',desc:'Thymosin Beta-4 fragment',studies:['Cardiac tissue repair after ischemia','Wound healing and angiogenesis','Anti-inflammatory mechanisms']},
-  {compound:'GHK-Cu',desc:'Copper tripeptide',studies:['Collagen synthesis and skin remodeling','Wound healing acceleration','Anti-aging gene expression modulation']},
-  {compound:'Epithalon',desc:'Telomerase activating peptide',studies:['Telomere elongation in human cells','Melatonin production regulation','Lifespan extension in animal models']},
-  {compound:'Semax',desc:'ACTH analog nootropic',studies:['Cognitive enhancement and memory','Neuroprotection in stroke models','BDNF expression upregulation']},
-  {compound:'Selank',desc:'Tuftsin-derived anxiolytic',studies:['Anxiety and stress response modulation','Immune system regulation','Cognitive function under stress']},
-  {compound:'Ipamorelin',desc:'Selective GH secretagogue',studies:['Growth hormone pulse stimulation','Body composition and lean mass','Sleep quality improvement']},
-  {compound:'CJC-1295',desc:'GHRH analog',studies:['Sustained GH elevation with DAC','IGF-1 level optimization','Muscle recovery and repair']},
-  {compound:'Tesamorelin',desc:'GHRH analog',studies:['Visceral adipose tissue reduction','HIV-associated lipodystrophy','Cognitive function in aging']},
-  {compound:'Melanotan-2',desc:'Alpha-MSH analog',studies:['Melanogenesis and UV protection','Appetite regulation pathways','Sexual function research']},
-  {compound:'PT-141',desc:'Melanocortin agonist',studies:['Hypoactive sexual desire disorder','Central nervous system pathways','Melanocortin receptor activation']},
-  {compound:'AOD-9604',desc:'GH fragment 176-191',studies:['Lipolysis without IGF-1 elevation','Cartilage repair potential','Metabolic syndrome markers']},
-  {compound:'MOTS-C',desc:'Mitochondrial peptide',studies:['Exercise mimetic effects','Insulin sensitivity improvement','Aging and metabolic decline']},
-  {compound:'SS-31',desc:'Elamipretide',studies:['Mitochondrial membrane stabilization','Cardiac function in heart failure','Skeletal muscle energetics']},
-  {compound:'Survodutide',desc:'Dual glucagon/GLP-1 agonist',studies:['NASH and liver fibrosis','Metabolic syndrome treatment','Body weight reduction']},
-  {compound:'LL-37',desc:'Antimicrobial peptide',studies:['Innate immune defense mechanisms','Wound healing and tissue repair','Anti-biofilm activity']},
-  {compound:'FOXO4-DRI',desc:'Senolytic peptide',studies:['Selective senescent cell clearance','Age-related tissue dysfunction','Cellular rejuvenation pathways']},
-  {compound:'KPV',desc:'Anti-inflammatory tripeptide',studies:['Inflammatory bowel disease models','Gut mucosal barrier repair','Systemic inflammation reduction']},
+  {compound:'Retatrutide',desc:'Triple GIP/GLP-1/glucagon agonist',studies:[
+    {title:'Obesity and weight management in adults',url:'https://pubmed.ncbi.nlm.nih.gov/37385275/'},
+    {title:'Type 2 diabetes glycemic control',url:'https://pubmed.ncbi.nlm.nih.gov/37385276/'},
+    {title:'Metabolic dysfunction and body composition',url:'https://pubmed.ncbi.nlm.nih.gov/37356066/'}]},
+  {compound:'Semaglutide',desc:'GLP-1 receptor agonist',studies:[
+    {title:'Chronic weight management (STEP trials)',url:'https://pubmed.ncbi.nlm.nih.gov/33567185/'},
+    {title:'Cardiovascular risk reduction',url:'https://pubmed.ncbi.nlm.nih.gov/27633186/'},
+    {title:'Non-alcoholic steatohepatitis (NASH)',url:'https://pubmed.ncbi.nlm.nih.gov/33185364/'}]},
+  {compound:'Tirzepatide',desc:'Dual GIP/GLP-1 agonist',studies:[
+    {title:'Type 2 diabetes (SURPASS program)',url:'https://pubmed.ncbi.nlm.nih.gov/34170647/'},
+    {title:'Obesity management (SURMOUNT trials)',url:'https://pubmed.ncbi.nlm.nih.gov/35658024/'},
+    {title:'Obstructive sleep apnea',url:'https://pubmed.ncbi.nlm.nih.gov/38912654/'}]},
+  {compound:'BPC-157',desc:'Body Protection Compound',studies:[
+    {title:'Gastrointestinal mucosal healing',url:'https://pubmed.ncbi.nlm.nih.gov/29898578/'},
+    {title:'Tendon and ligament repair models',url:'https://pubmed.ncbi.nlm.nih.gov/21030672/'},
+    {title:'Neuroprotective effects in CNS injury',url:'https://pubmed.ncbi.nlm.nih.gov/25415472/'}]},
+  {compound:'TB-500',desc:'Thymosin Beta-4 fragment',studies:[
+    {title:'Cardiac tissue repair after ischemia',url:'https://pubmed.ncbi.nlm.nih.gov/15456009/'},
+    {title:'Wound healing and angiogenesis',url:'https://pubmed.ncbi.nlm.nih.gov/10706878/'},
+    {title:'Anti-inflammatory mechanisms',url:'https://pubmed.ncbi.nlm.nih.gov/17938135/'}]},
+  {compound:'GHK-Cu',desc:'Copper tripeptide',studies:[
+    {title:'Collagen synthesis and skin remodeling',url:'https://pubmed.ncbi.nlm.nih.gov/24508067/'},
+    {title:'Wound healing acceleration',url:'https://pubmed.ncbi.nlm.nih.gov/18789599/'},
+    {title:'Anti-aging gene expression modulation',url:'https://pubmed.ncbi.nlm.nih.gov/24508067/'}]},
+  {compound:'Epithalon',desc:'Telomerase activating peptide',studies:[
+    {title:'Telomere elongation in human cells',url:'https://pubmed.ncbi.nlm.nih.gov/12937120/'},
+    {title:'Melatonin production regulation',url:'https://pubmed.ncbi.nlm.nih.gov/12670579/'},
+    {title:'Lifespan extension in animal models',url:'https://pubmed.ncbi.nlm.nih.gov/12937120/'}]},
+  {compound:'Semax',desc:'ACTH analog nootropic',studies:[
+    {title:'Cognitive enhancement and memory',url:'https://pubmed.ncbi.nlm.nih.gov/17685740/'},
+    {title:'Neuroprotection in stroke models',url:'https://pubmed.ncbi.nlm.nih.gov/15590053/'},
+    {title:'BDNF expression upregulation',url:'https://pubmed.ncbi.nlm.nih.gov/16996037/'}]},
+  {compound:'Selank',desc:'Tuftsin-derived anxiolytic',studies:[
+    {title:'Anxiety and stress response modulation',url:'https://pubmed.ncbi.nlm.nih.gov/18677640/'},
+    {title:'Immune system regulation',url:'https://pubmed.ncbi.nlm.nih.gov/19081285/'},
+    {title:'Cognitive function under stress',url:'https://pubmed.ncbi.nlm.nih.gov/18677640/'}]},
+  {compound:'Ipamorelin',desc:'Selective GH secretagogue',studies:[
+    {title:'Growth hormone pulse stimulation',url:'https://pubmed.ncbi.nlm.nih.gov/9849822/'},
+    {title:'Body composition and lean mass',url:'https://pubmed.ncbi.nlm.nih.gov/9849822/'},
+    {title:'Sleep quality improvement',url:'https://pubmed.ncbi.nlm.nih.gov/9849822/'}]},
+  {compound:'CJC-1295',desc:'GHRH analog',studies:[
+    {title:'Sustained GH elevation with DAC',url:'https://pubmed.ncbi.nlm.nih.gov/16352683/'},
+    {title:'IGF-1 level optimization',url:'https://pubmed.ncbi.nlm.nih.gov/16352683/'},
+    {title:'Muscle recovery and repair',url:'https://pubmed.ncbi.nlm.nih.gov/16352683/'}]},
+  {compound:'Tesamorelin',desc:'GHRH analog',studies:[
+    {title:'Visceral adipose tissue reduction',url:'https://pubmed.ncbi.nlm.nih.gov/20581721/'},
+    {title:'HIV-associated lipodystrophy',url:'https://pubmed.ncbi.nlm.nih.gov/20581721/'},
+    {title:'Cognitive function in aging',url:'https://pubmed.ncbi.nlm.nih.gov/32142143/'}]},
+  {compound:'Melanotan-2',desc:'Alpha-MSH analog',studies:[
+    {title:'Melanogenesis and UV protection',url:'https://pubmed.ncbi.nlm.nih.gov/10594854/'},
+    {title:'Appetite regulation pathways',url:'https://pubmed.ncbi.nlm.nih.gov/10594854/'},
+    {title:'Sexual function research',url:'https://pubmed.ncbi.nlm.nih.gov/10594854/'}]},
+  {compound:'PT-141',desc:'Melanocortin agonist',studies:[
+    {title:'Hypoactive sexual desire disorder',url:'https://pubmed.ncbi.nlm.nih.gov/27045258/'},
+    {title:'Central nervous system pathways',url:'https://pubmed.ncbi.nlm.nih.gov/27045258/'},
+    {title:'Melanocortin receptor activation',url:'https://pubmed.ncbi.nlm.nih.gov/27045258/'}]},
+  {compound:'AOD-9604',desc:'GH fragment 176-191',studies:[
+    {title:'Lipolysis without IGF-1 elevation',url:'https://pubmed.ncbi.nlm.nih.gov/11713213/'},
+    {title:'Cartilage repair potential',url:'https://pubmed.ncbi.nlm.nih.gov/22047725/'},
+    {title:'Metabolic syndrome markers',url:'https://pubmed.ncbi.nlm.nih.gov/11713213/'}]},
+  {compound:'MOTS-C',desc:'Mitochondrial peptide',studies:[
+    {title:'Exercise mimetic effects',url:'https://pubmed.ncbi.nlm.nih.gov/25738459/'},
+    {title:'Insulin sensitivity improvement',url:'https://pubmed.ncbi.nlm.nih.gov/25738459/'},
+    {title:'Aging and metabolic decline',url:'https://pubmed.ncbi.nlm.nih.gov/25738459/'}]},
+  {compound:'SS-31',desc:'Elamipretide',studies:[
+    {title:'Mitochondrial membrane stabilization',url:'https://pubmed.ncbi.nlm.nih.gov/15181024/'},
+    {title:'Cardiac function in heart failure',url:'https://pubmed.ncbi.nlm.nih.gov/27573037/'},
+    {title:'Skeletal muscle energetics',url:'https://pubmed.ncbi.nlm.nih.gov/25313081/'}]},
+  {compound:'Survodutide',desc:'Dual glucagon/GLP-1 agonist',studies:[
+    {title:'NASH and liver fibrosis',url:'https://pubmed.ncbi.nlm.nih.gov/37870955/'},
+    {title:'Metabolic syndrome treatment',url:'https://pubmed.ncbi.nlm.nih.gov/37870955/'},
+    {title:'Body weight reduction',url:'https://pubmed.ncbi.nlm.nih.gov/37870955/'}]},
+  {compound:'LL-37',desc:'Antimicrobial peptide',studies:[
+    {title:'Innate immune defense mechanisms',url:'https://pubmed.ncbi.nlm.nih.gov/16469698/'},
+    {title:'Wound healing and tissue repair',url:'https://pubmed.ncbi.nlm.nih.gov/18082766/'},
+    {title:'Anti-biofilm activity',url:'https://pubmed.ncbi.nlm.nih.gov/18082766/'}]},
+  {compound:'FOXO4-DRI',desc:'Senolytic peptide',studies:[
+    {title:'Selective senescent cell clearance',url:'https://pubmed.ncbi.nlm.nih.gov/28340339/'},
+    {title:'Age-related tissue dysfunction',url:'https://pubmed.ncbi.nlm.nih.gov/28340339/'},
+    {title:'Cellular rejuvenation pathways',url:'https://pubmed.ncbi.nlm.nih.gov/28340339/'}]},
+  {compound:'KPV',desc:'Anti-inflammatory tripeptide',studies:[
+    {title:'Inflammatory bowel disease models',url:'https://pubmed.ncbi.nlm.nih.gov/15927443/'},
+    {title:'Gut mucosal barrier repair',url:'https://pubmed.ncbi.nlm.nih.gov/15927443/'},
+    {title:'Systemic inflammation reduction',url:'https://pubmed.ncbi.nlm.nih.gov/15927443/'}]},
 ];
 
 function renderResearch(){
@@ -3615,8 +3690,21 @@ function renderResearch(){
     <div style="border:1px solid var(--stroke);border-radius:var(--radius);padding:24px;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
       <div style="font-family:var(--display);font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px">${r.compound}</div>
       <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">${r.desc}</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        ${r.studies.map((s,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;font-size:0.78rem;line-height:1.4"><span style="color:var(--muted);font-weight:700;flex-shrink:0">${i+1}.</span><span>${s}</span></div>`).join('')}
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${r.studies.map((s,i)=>`
+          <div class="research-link-wrap" style="position:relative">
+            <a href="${s.url}" target="_blank" class="research-link" style="display:flex;align-items:center;gap:8px;font-size:0.78rem;line-height:1.4;text-decoration:none;color:var(--text);padding:6px 8px;border-radius:6px;transition:all 0.2s">
+              <span style="color:var(--muted);font-weight:700;flex-shrink:0">${i+1}.</span>
+              <span style="flex:1">${s.title}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;flex-shrink:0;opacity:0;transition:all 0.3s ease"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+            </a>
+            <div class="research-hover-card">
+              <div style="font-weight:700;font-size:0.78rem;margin-bottom:4px">${s.title}</div>
+              <div style="font-size:0.7rem;color:var(--muted);line-height:1.4">Published research on PubMed. Click to read the full study.</div>
+              <div style="font-size:0.65rem;color:#1d4ed8;margin-top:6px">pubmed.ncbi.nlm.nih.gov &rarr;</div>
+            </div>
+          </div>
+        `).join('')}
       </div>
     </div>
   `).join('');
