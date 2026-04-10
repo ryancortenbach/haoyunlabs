@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412d';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1070,16 +1070,6 @@ ul{list-style:none}
           <div class="shop-pill-name">Kits</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
-        <a class="shop-pill" onclick="goToCategory('stacks')">
-          <div class="shop-pill-img"></div>
-          <div class="shop-pill-name">Stacks</div>
-          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
-        </a>
-        <a class="shop-pill" onclick="goToCategory('sprays')">
-          <div class="shop-pill-img"></div>
-          <div class="shop-pill-name">Sprays</div>
-          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
-        </a>
         <a class="shop-pill" onclick="goToCategory('supplies')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Supplies</div>
@@ -2106,13 +2096,43 @@ const CATEGORIES = {
   supplies: { label:'Supplies', data:CATALOG_SUPPLIES },
 };
 
+// Only show products that have a real mockup image in site/media/products/
+const VALID_SKUS = new Set([
+  '10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
+  'ACTH1-39-5MGSV','ADAMAX10SV','ADAMAX5SV','AE1','AE1SV','AHK-CU-100MGSV','AHK-CU-50MGSV','AOD2',
+  'AOD2SV','AOD5','AOD5SV','AP10','AP10SV','AP5','AP5SV','AQUA8','AR50','AR50SV','Adamax10','Adamax5',
+  'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC3SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
+  'BBG70SV','BC10','BC10SV','BC2','BC20SV','BC2SV','BC5','BC5SV','BT10','BT10SV','BT5','BT5SV','Bron',
+  'BronSV','CARDIO20SV','CARTALAX20SV','CD2','CD2SV','CD5','CD5SV','CGL10','CGL5','CND10','CND10SV',
+  'CND2','CND2SV','CND5','CND5SV','CORTAGEN20SV','CP10SV','CRYSTAGEN20SV','CS10','CS10SV','CU100',
+  'CU100SV','CU50','CU50SV','Cardio','Cartalax','Cortagen','Crystagen','DP10SV','DS10','DS10SV','DS2',
+  'DS2SV','DS5SV','DULA5SV','Dula5','EPO-3000IUSV','ET10','ET10SV','ET50','ET50SV','F410','F410SV',
+  'FM2','FM2SV','FMP2','FMP2SV','FN1','FN1SV','FR2','FR2SV','FR5','FR5SV','G10KSV','G210','G210SV',
+  'G25','G25SV','G2K','G2KSV','G5K','G5KSV','G610','G610SV','G65','G65SV','G75','G75SV','GDF8',
+  'GDF8SV','GONAD5SV','GTT','GTT1SV','GTT500','GTT500SV','Gonad','H06','H10','H10SV','H12','H12SV',
+  'H15','H15SV','H24','H24SV','H40SV','H6SV','HUM10SV','HX2','HX2SV','HX5','HX5SV','Hum','IGD',
+  'IGD1SV','IGD2SV','IGF0.1SV','IGF01','IGF1','IGF1SV','IP10','IP10SV','IPS','IPS5SV','KLOW80',
+  'KLOW80SV','KPV10','KPV10SV','KS10','KS10SV','KS5','KS5SV','LC1200','LC1200SV','LC200','LC200SV',
+  'LC600','LC600SV','LIPOC10SV','LIRA10SV','LIRA5SV','LL375','LL375SV','Lemon','LemonSV','Lira10',
+  'Lira5','MAZ20','MAZ20SV','MAZ5','MAZ5SV','MDT','MDT10SV','MIC','MICSV','MS10','MS10SV','MS20SV',
+  'MS40','MS40SV','MS5SV','MT1SV','MT2','MT2SV','NJ100','NJ1000SV','NJ100SV','NJ500','NJ500SV',
+  'NP810','NP8100SV','NP810SV','OT10','OT10SV','OT2SV','OT5SV','P21','P21SV','P41','P411SV','PE10',
+  'PE10SV','PE5SV','PIN10','PIN10SV','PIN5SV','PNC27','PNC2710SV','PNC275SV','PTD-1','PTD-1SV','RA10',
+  'RA10SV','RT10','RT10SV','RT15','RT15SV','RT20','RT20PLUSTR40SV','RT20SV','RT30','RT30SV','RT40',
+  'RT40SV','RT5','RT50','RT50SV','RT5SV','RT60','RT60SV','SK10','SK10SV','SK5','SK5SV','SM10',
+  'SM10SV','SM15','SM15SV','SM2','SM20','SM20SV','SM2SV','SM30','SM30SV','SM5','SM50','SM50SV',
+  'SM5SV','SMO10','SMO10SV','SMO2','SMO2SV','SMO5','SMO5SV','SUR10','SUR10SV','TA10','TA10SV','TA2',
+  'TA2SV','TA5','TA5SV','TESA10PLUSIP5SV','TESTE10SV','TR10','TR100','TR100SV','TR10SV','TR15',
+  'TR15SV','TR20','TR20SV','TR30','TR30SV','TR40','TR40SV','TR5','TR50','TR50SV','TR5SV','TR60',
+  'TR60SV','TR80','TR80SV','TSM10','TSM10SV','TSM2','TSM20','TSM20SV','TSM2SV','TY','TY1SV',
+  'VESUGEN10SV','VIP10','VIP10SV','VIP5SV','Ves','XA10','XA10SV','XA5','XA5SV','XT100','XT100SV'
+]);
+
 const ALL_PRODUCTS = [
   ...CATALOG_INDIVIDUAL.map(p=>({...p,cat:'peptides'})),
   ...CATALOG_KITS.map(p=>({...p,cat:'kits'})),
-  ...CATALOG_BUNDLES.map(p=>({...p,cat:'stacks'})),
-  ...CATALOG_SPRAYS.map(p=>({...p,cat:'sprays'})),
   ...CATALOG_SUPPLIES.map(p=>({...p,cat:'supplies'})),
-];
+].filter(p => VALID_SKUS.has(p.sku));
 
 /* ═════════════════════════════════════════════════════
    SVG VIAL GENERATOR (no external images needed)
@@ -2258,6 +2278,14 @@ const _REMOVED_IMAGE_MAP = {
 const PRODUCT_IMAGES = {};
 
 function getProductImageHTML(p) {
+  // Use real mockup if SKU has an image in media/products/
+  if(VALID_SKUS.has(p.sku)){
+    return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
+      <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
+      <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
+    </div>`;
+  }
+  // Fallback for products without mockups (shouldn't happen since we filter)
   const dose = p.name.match(/(\d+\s*(?:mg|iu|ml|tabs?|caps?|pk))/i);
   const doseText = dose ? dose[1].toUpperCase() : '';
   const compound = p.name.replace(/\s*\(.*?\)/g,'').replace(/\d+\s*(?:mg|iu|ml|tabs?|caps?|pk)/i,'').replace(/x\d+\s*(?:vials?|kit)/i,'').trim();
@@ -2690,8 +2718,6 @@ function buildCatTabs(containerId, activeVar, clickFn){
     html += `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`;
     html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Peptides</button>`;
     html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
-    html += `<button class="cat-tab" data-cat="stacks" onclick="${clickFn}('stacks')">Stacks</button>`;
-    html += `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`;
     html += `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`;
     c.innerHTML = html;
   }
