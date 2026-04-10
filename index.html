@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412d';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412e';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -351,10 +351,13 @@ ul{list-style:none}
 }
 .product-card{
   border:1px solid var(--stroke);background:var(--bg);
-  border-radius:var(--radius);overflow:hidden;
+  border-radius:var(--radius);
   transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.5s cubic-bezier(0.34,1.56,0.64,1);
   display:flex;flex-direction:column;
+  position:relative;
 }
+.product-card .prod-img{border-radius:var(--radius) var(--radius) 0 0;overflow:hidden}
+.product-card.has-open-select{z-index:50}
 .product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0}
@@ -2552,8 +2555,16 @@ function toggleSizeSelect(id){
   if(!el) return;
   const wasOpen = el.classList.contains('open');
   // Close all other selects first
-  document.querySelectorAll('.hyl-select.open').forEach(s=>s.classList.remove('open'));
-  if(!wasOpen) el.classList.add('open');
+  document.querySelectorAll('.hyl-select.open').forEach(s=>{
+    s.classList.remove('open');
+    const c = s.closest('.product-card');
+    if(c) c.classList.remove('has-open-select');
+  });
+  if(!wasOpen){
+    el.classList.add('open');
+    const card = el.closest('.product-card');
+    if(card) card.classList.add('has-open-select');
+  }
 }
 
 function pickSize(id, idx){
@@ -2572,6 +2583,8 @@ function pickSize(id, idx){
   });
   // Close dropdown
   el.classList.remove('open');
+  const card = el.closest('.product-card');
+  if(card) card.classList.remove('has-open-select');
   // Update card price
   updateCardPrice(sku, idx);
 }
@@ -2579,7 +2592,11 @@ function pickSize(id, idx){
 // Close all selects when clicking outside
 document.addEventListener('click', function(e){
   if(!e.target.closest('.hyl-select')){
-    document.querySelectorAll('.hyl-select.open').forEach(s=>s.classList.remove('open'));
+    document.querySelectorAll('.hyl-select.open').forEach(s=>{
+      s.classList.remove('open');
+      const c = s.closest('.product-card');
+      if(c) c.classList.remove('has-open-select');
+    });
   }
 });
 
