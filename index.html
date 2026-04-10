@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412a';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412b';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS — Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1055,32 +1055,32 @@ ul{list-style:none}
     <div style="margin-bottom:48px;padding:40px 0">
       <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;margin-bottom:28px">Browse by <em style="font-style:italic">category</em></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
-        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('all')">
+        <a class="shop-pill" onclick="goToCategory('bestsellers')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Bestsellers</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
-        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('peptides')">
+        <a class="shop-pill" onclick="goToCategory('peptides')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Peptides</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
-        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('kits')">
+        <a class="shop-pill" onclick="goToCategory('kits')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Kits</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
-        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('stacks')">
+        <a class="shop-pill" onclick="goToCategory('stacks')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Stacks</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
-        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('sprays')">
+        <a class="shop-pill" onclick="goToCategory('sprays')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Sprays</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
-        <a class="shop-pill" onclick="navigate('catalog');setHomeCat('supplies')">
+        <a class="shop-pill" onclick="goToCategory('supplies')">
           <div class="shop-pill-img"></div>
           <div class="shop-pill-name">Supplies</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
@@ -2088,11 +2088,12 @@ const CATALOG_SPRAYS = [
 ];
 
 const CATALOG_SUPPLIES = [
-  { sku:'NEEDLE31G8MM10PK', name:'Needles (10 pack)', price:4.99, description:'This product is a box of 10 sterile, 31-gauge insulin syringes with a 0.5 mL capacity and 5/16\" fixed needles. They fea' },
-  { sku:'NEEDLE31G8MM100PK', name:'Needles (100 pack)', price:29.99, description:'This product is a box of 100 sterile, 31-gauge insulin syringes with a 0.5 mL capacity and 5/16\" fixed needles. They fe' },
-  { sku:'SWAB10PK', name:'Alcohol swabs (10 pack)', price:3.99, description:'These sterile, 2-ply alcohol prep pads are saturated with 70% isopropyl alcohol to provide effective antiseptic cleansin' },
-  { sku:'SWAB100PK', name:'Alcohol swabs (100 pack)', price:19, description:'These sterile, 2-ply alcohol prep pads are saturated with 70% isopropyl alcohol to provide effective antiseptic cleansin' },
-  { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:10, description:'10ml bacteriostatic water for multi-vial research setups.' },
+  { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:6, description:'3ml sterile bacteriostatic water — the standard solvent for reconstituting lyophilized peptides. Single-use vial.' },
+  { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:10, description:'10ml bacteriostatic water for multi-vial research setups. 0.9% benzyl alcohol preservative for extended stability after reconstitution.' },
+  { sku:'NEEDLE31G8MM10PK', name:'Insulin Syringes (10 pack)', price:4.99, description:'Box of 10 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
+  { sku:'NEEDLE31G8MM100PK', name:'Insulin Syringes (100 pack)', price:29.99, description:'Box of 100 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
+  { sku:'SWAB10PK', name:'Alcohol Swabs (10 pack)', price:3.99, description:'Sterile 2-ply alcohol prep pads saturated with 70% isopropyl alcohol for effective antiseptic cleansing of injection sites. Thick, textured material removes oils and residue while remaining durable.' },
+  { sku:'SWAB100PK', name:'Alcohol Swabs (100 pack)', price:19, description:'Sterile 2-ply alcohol prep pads saturated with 70% isopropyl alcohol for effective antiseptic cleansing of injection sites. Thick, textured material removes oils and residue while remaining durable.' },
 ];
 
 const CATALOG_NOOTROPICS = [];
@@ -2872,20 +2873,37 @@ function setHomeCat(cat){
   if(toggle) toggle.classList.toggle('on', showKits);
   renderHome();
 }
+
+// Browse-by-category pills: filter the home grid and scroll to it
+function goToCategory(cat){
+  setHomeCat(cat);
+  setTimeout(()=>{
+    const grid = document.getElementById('home-grid');
+    if(grid){
+      const rect = grid.getBoundingClientRect();
+      const top = window.scrollY + rect.top - 120;
+      window.scrollTo({top, behavior:'smooth'});
+    }
+  }, 50);
+}
 function setCatCat(cat){
   catCategory = cat;
   renderCatalog();
 }
 
+const BESTSELLER_SKUS = ['RT10SV','CU50SV','SM15SV','TZ15SV','BPC5SV','TB5SV','TSM2SV','IPA5SV','MT2SV','PT14SV','XA5SV','EP1SV'];
+
 function getFilteredProducts(cat, searchId, sortId){
-  let items = cat==='all' ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p=>p.cat===cat);
+  let items;
+  if(cat==='bestsellers') items = ALL_PRODUCTS.filter(p=>BESTSELLER_SKUS.includes(p.sku));
+  else if(cat==='all') items = ALL_PRODUCTS;
+  else items = ALL_PRODUCTS.filter(p=>p.cat===cat);
   const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
   if(q) items = items.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q));
-  const bestSellers = ['RT10SV','CU50SV'];
   const sort = document.getElementById(sortId)?.value||'featured';
   if(sort==='low') items.sort((a,b)=>a.price-b.price);
   else if(sort==='high') items.sort((a,b)=>b.price-a.price);
-  else items.sort((a,b)=>(bestSellers.includes(b.sku)?1:0)-(bestSellers.includes(a.sku)?1:0));
+  else items.sort((a,b)=>(BESTSELLER_SKUS.includes(b.sku)?1:0)-(BESTSELLER_SKUS.includes(a.sku)?1:0));
   return items;
 }
 
