@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412a5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412a6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -750,10 +750,10 @@ ul{list-style:none}
 .shop-pill-arrow svg{width:18px;height:18px;stroke:#000;transition:transform 0.3s ease-in-out}
 .shop-pill:hover .shop-pill-arrow svg{transform:translateX(3px)}
 
-/* tilt-card: NO whole-card hover. Only image sub-element reacts. */
+/* tilt-card: image-only hover for cards with explicit images, lift+zoom for cards with inline bg url */
 .tilt-card{transition:none}
 .tilt-card .tilt-img,.tilt-card video,.tilt-card div[style*="width:130px"],.tilt-card img{
-  transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)!important;will-change:transform;
+  transition:transform 0.45s cubic-bezier(0.22,1,0.36,1)!important;will-change:transform;
 }
 .tilt-card:hover .tilt-img,
 .tilt-card:hover video,
@@ -761,6 +761,19 @@ ul{list-style:none}
 .tilt-card:hover img{
   transform:scale(1.06)!important;
 }
+/* Dark/feature cards that use `background:#xxx url(...)` as the image — lift + subtle zoom */
+.tilt-card[style*="url("]{
+  transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),box-shadow 0.5s cubic-bezier(0.22,1,0.36,1),background-size 0.6s cubic-bezier(0.22,1,0.36,1)!important;
+}
+.tilt-card[style*="url("]:hover{
+  transform:translateY(-4px) scale(1.015)!important;
+  box-shadow:0 22px 44px rgba(0,0,0,0.28),0 4px 12px rgba(0,0,0,0.12)!important;
+}
+.tilt-card[style*="url("]:hover .hero-btn-invert-dark{
+  background:#fff!important;color:#000!important;border-color:#fff!important;
+  transform:translateX(4px);
+}
+.hero-btn-invert-dark{transition:all 0.35s cubic-bezier(0.22,1,0.36,1)}
 
 /* ── DISCORD FLY BUTTON ── */
 @keyframes discord-fly{from{transform:translateY(0.1em)}to{transform:translateY(-0.1em)}}
@@ -1128,6 +1141,63 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .pay-chip-crypto{background:linear-gradient(135deg,#3b82f6,#8b5cf6)}
 .pay-chip-label{font-weight:800;text-transform:uppercase;font-size:0.75rem;letter-spacing:0.1em}
 .pay-chip-detail{font-size:0.7rem;margin-top:6px;opacity:0.85;font-family:var(--mono);word-break:break-all;line-height:1.5}
+
+/* ── CRYPTO CURRENCY CHIPS (BTC/ETH/SOL/USDT) ── */
+.crypto-chip{
+  position:relative;
+  padding:16px 10px;
+  text-align:center;cursor:pointer;
+  border:1.5px solid var(--stroke);
+  background:#fff;color:var(--text);
+  border-radius:14px;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+             box-shadow 0.35s cubic-bezier(0.22,1,0.36,1),
+             border-color 0.25s ease,
+             background 0.3s ease,
+             color 0.3s ease;
+  overflow:hidden;user-select:none;
+  will-change:transform;
+}
+.crypto-chip::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 100%);
+  pointer-events:none;opacity:0;transition:opacity 0.4s ease;
+}
+.crypto-chip:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 12px 28px rgba(2,6,23,0.14),0 2px 6px rgba(2,6,23,0.06);
+  border-color:#0a0a0b;
+}
+.crypto-chip:hover::before{opacity:1}
+.crypto-chip .cc-symbol{
+  font-family:var(--sans);font-weight:900;
+  font-size:1rem;letter-spacing:0.06em;line-height:1;
+}
+.crypto-chip .cc-name{
+  font-size:0.62rem;margin-top:6px;
+  color:var(--muted);font-weight:600;letter-spacing:0.04em;
+}
+.crypto-chip .cc-logo{
+  display:block;margin:0 auto 6px;
+  width:22px;height:22px;
+  transform:scale(1);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.crypto-chip:hover .cc-logo{transform:scale(1.2) rotate(-6deg)}
+/* Selected state */
+.crypto-chip.selected{
+  background:#0a0a0b;color:#fff;border-color:#0a0a0b;
+  box-shadow:0 0 0 2px rgba(2,6,23,0.12),0 10px 24px rgba(2,6,23,0.18);
+}
+.crypto-chip.selected .cc-name{color:rgba(255,255,255,0.6)}
+/* Branded gradient overlays on hover */
+.crypto-chip[data-c="BTC"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(247,147,26,0.14),rgba(247,147,26,0))}
+.crypto-chip[data-c="ETH"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(98,126,234,0.18),rgba(98,126,234,0))}
+.crypto-chip[data-c="SOL"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(153,69,255,0.18),rgba(20,241,149,0.12))}
+.crypto-chip[data-c="USDT"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(38,161,123,0.18),rgba(38,161,123,0))}
+.crypto-chip.selected[data-c="BTC"]{background:linear-gradient(135deg,#f7931a 0%,#c87309 100%);border-color:#f7931a}
+.crypto-chip.selected[data-c="ETH"]{background:linear-gradient(135deg,#627eea 0%,#4b60d6 100%);border-color:#627eea}
+.crypto-chip.selected[data-c="SOL"]{background:linear-gradient(135deg,#9945ff 0%,#14f195 100%);border-color:#9945ff}
+.crypto-chip.selected[data-c="USDT"]{background:linear-gradient(135deg,#26a17b 0%,#1b7e5e 100%);border-color:#26a17b}
 .copy-addr{
   display:inline-block;margin-left:6px;padding:2px 8px;
   background:rgba(255,255,255,0.2);font-size:0.65rem;cursor:pointer;
@@ -1145,31 +1215,32 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .btn-pay:hover{opacity:0.8}
 .btn-pay:disabled{background:#bbb;cursor:not-allowed}
 
-/* ── CRYPTO PAY BUTTON (animated icons) ── */
+/* ── CRYPTO PAY BUTTON (icon reacts to chip hover) ── */
 .crypto-pay-btn{
-  width:100%;padding:14px 24px;font-size:0.85rem;background:#1a1a1a;color:#fff;
-  border:none;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;
-  justify-content:center;gap:12px;transition:all 0.3s ease;margin-top:8px;
+  width:100%;padding:16px 24px;font-size:0.85rem;background:#0a0a0b;color:#fff;
+  border:none;border-radius:999px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:14px;margin-top:12px;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),box-shadow 0.35s ease,background 0.3s ease;
   flex-direction:row-reverse;
+  position:relative;overflow:hidden;
 }
-.crypto-pay-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.4)}
+.crypto-pay-btn::before{
+  content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0.12) 50%,transparent 100%);
+  transform:skewX(-18deg);transition:left 0.7s cubic-bezier(0.22,1,0.36,1);pointer-events:none;
+}
+.crypto-pay-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,0.35);background:#1a1a1d}
+.crypto-pay-btn:hover::before{left:140%}
 .crypto-pay-btn:disabled{background:#bbb;cursor:not-allowed;transform:none;box-shadow:none}
-.crypto-icon-container{position:relative;width:24px;height:24px;flex-shrink:0}
-.crypto-icon{position:absolute;top:0;left:0;width:24px;height:24px;opacity:0;visibility:hidden}
-.crypto-default-icon{opacity:1;visibility:visible}
-.crypto-pay-btn:hover .crypto-default-icon{opacity:0;visibility:hidden}
-.crypto-pay-btn:hover .crypto-i1{animation:cryptoIconRotate 3s infinite;animation-delay:0s}
-.crypto-pay-btn:hover .crypto-i2{animation:cryptoIconRotate 3s infinite;animation-delay:0.75s}
-.crypto-pay-btn:hover .crypto-i3{animation:cryptoIconRotate 3s infinite;animation-delay:1.5s}
-.crypto-pay-btn:hover .crypto-i4{animation:cryptoIconRotate 3s infinite;animation-delay:2.25s}
-.crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
-@keyframes cryptoIconRotate{
-  0%{opacity:0;visibility:hidden;transform:translateY(10px) scale(0.5)}
-  5%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
-  20%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
-  25%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}
-  100%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}
+.crypto-icon-container{position:relative;width:26px;height:26px;flex-shrink:0}
+.crypto-icon{
+  position:absolute;top:0;left:0;width:26px;height:26px;
+  opacity:0;visibility:hidden;transform:translateY(8px) scale(0.88);
+  transition:opacity 0.35s ease,transform 0.45s cubic-bezier(0.22,1,0.36,1);
+  will-change:opacity,transform;
 }
+.crypto-icon.active{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+.crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
 
 /* ── PAYMENT CONFIRMED ── */
 .confirmed-wrap{text-align:center;padding:80px 0}
@@ -1834,11 +1905,10 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
             <div class="pay-methods" id="pay-methods"></div>
             <button class="crypto-pay-btn" id="btn-pay" onclick="submitOrder()">
               <span class="crypto-icon-container">
-                <img src="crypto-icons/btc.svg" class="crypto-icon crypto-default-icon" alt="BTC">
-                <img src="crypto-icons/btc.svg" class="crypto-icon crypto-i1" alt="BTC">
-                <img src="crypto-icons/eth.svg" class="crypto-icon crypto-i2" alt="ETH">
-                <img src="crypto-icons/sol.svg" class="crypto-icon crypto-i3" alt="SOL">
-                <img src="crypto-icons/usdt.svg" class="crypto-icon crypto-i4" alt="USDT">
+                <img src="crypto-icons/btc.svg" class="crypto-icon crypto-default-icon active" data-currency="BTC" alt="BTC">
+                <img src="crypto-icons/eth.svg" class="crypto-icon" data-currency="ETH" alt="ETH">
+                <img src="crypto-icons/sol.svg" class="crypto-icon" data-currency="SOL" alt="SOL">
+                <img src="crypto-icons/usdt.svg" class="crypto-icon" data-currency="USDT" alt="USDT">
               </span>
               <span class="crypto-btn-text">COMPLETE ORDER</span>
             </button>
@@ -2974,7 +3044,14 @@ async function initWalletConnect(){
 }
 
 async function connectWallet(){
-  if(window.hylWallet.connecting) return;
+  if(window.hylWallet.connecting){
+    // If already connecting, let the user bail out on a second click
+    if(confirm('Connection in progress. Cancel and try again?')){
+      window.hylWallet.connecting = false;
+      updateConnectBtn();
+    }
+    return;
+  }
   // If already connected, show menu (disconnect / copy / view)
   if(window.hylWallet.address){
     showWalletMenu();
@@ -2982,9 +3059,18 @@ async function connectWallet(){
   }
   window.hylWallet.connecting = true;
   updateConnectBtn();
+  // Safety: always reset connecting state after 45s no matter what
+  const safetyTimer = setTimeout(()=>{
+    if(window.hylWallet.connecting){
+      window.hylWallet.connecting = false;
+      updateConnectBtn();
+      showToast('Connection timed out. Check your wallet extension for pending requests.','error');
+    }
+  }, 45000);
   try {
     // If injected wallet is available (desktop MetaMask / mobile in-app browser), use that first
     if(window.ethereum && window.ethereum.request){
+      console.log('[WC] using injected provider');
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       if(accounts && accounts[0]){
         window.hylWallet.address = accounts[0];
@@ -3001,7 +3087,11 @@ async function connectWallet(){
       }
     }
     // Fall through to WalletConnect (QR modal / deep link)
-    const provider = await initWalletConnect();
+    console.log('[WC] falling back to WalletConnect');
+    const provider = await Promise.race([
+      initWalletConnect(),
+      new Promise((_, rej) => setTimeout(()=>rej(new Error('WalletConnect module load timed out')), 15000))
+    ]);
     if(!provider){ return; }
     await provider.connect();
     if(provider.accounts && provider.accounts[0]){
@@ -3012,9 +3102,10 @@ async function connectWallet(){
   } catch(e){
     console.error('[WC] connect failed', e);
     if(!/user rejected|user denied|user closed|modal closed/i.test(e.message||'')){
-      showToast('Connection failed: ' + (e.message||'unknown').slice(0,60),'error');
+      showToast('Connection failed: ' + (e.message||'unknown').slice(0,80),'error');
     }
   } finally {
+    clearTimeout(safetyTimer);
     window.hylWallet.connecting = false;
     updateConnectBtn();
   }
@@ -4396,26 +4487,55 @@ function renderPayMethods(){
   const el = document.getElementById('pay-methods');
   selectedPayMethod = 'crypto';
   const coins = ['BTC','ETH','SOL','USDT'];
+  const names = {BTC:'Bitcoin',ETH:'Ethereum',SOL:'Solana',USDT:'Tether'};
   el.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
       ${coins.map(c=>`
-        <div class="pay-chip ${selectedCryptoCurrency===c?'selected':''}"
-             style="padding:14px 8px;text-align:center;cursor:pointer;border:2px solid ${selectedCryptoCurrency===c?'var(--brand)':'var(--stroke)'};background:${selectedCryptoCurrency===c?'var(--brand)':'var(--bg)'};color:${selectedCryptoCurrency===c?'var(--bg)':'var(--text)'};transition:all 0.15s ease"
-             onclick="selectCrypto('${c}')">
-          <div style="font-weight:800;font-size:0.82rem;letter-spacing:0.08em">${c}</div>
-          <div style="font-size:0.65rem;margin-top:4px;opacity:0.7">${{BTC:'Bitcoin',ETH:'Ethereum',SOL:'Solana',USDT:'Tether'}[c]}</div>
+        <div class="crypto-chip ${selectedCryptoCurrency===c?'selected':''}"
+             data-c="${c}"
+             onclick="selectCrypto('${c}')"
+             onmouseenter="previewPayCurrency('${c}')"
+             onmouseleave="previewPayCurrency(null)">
+          <img class="cc-logo" src="crypto-icons/${c.toLowerCase()}.svg" alt="${c}" onerror="this.style.display='none'">
+          <div class="cc-symbol">${c}</div>
+          <div class="cc-name">${names[c]}</div>
         </div>
       `).join('')}
     </div>
   `;
+  // Sync pay button icon to selected currency
+  syncPayBtnIcon();
 }
 
+function syncPayBtnIcon(){
+  const btn = document.getElementById('btn-pay');
+  if(!btn) return;
+  const container = btn.querySelector('.crypto-icon-container');
+  if(!container) return;
+  const cur = selectedCryptoCurrency;
+  container.querySelectorAll('.crypto-icon').forEach(img => img.classList.remove('active'));
+  const match = container.querySelector('img[data-currency="'+cur+'"]') || container.querySelector('.crypto-default-icon');
+  if(match) match.classList.add('active');
+}
+
+function previewPayCurrency(currency){
+  const btn = document.getElementById('btn-pay');
+  if(!btn) return;
+  const container = btn.querySelector('.crypto-icon-container');
+  if(!container) return;
+  container.querySelectorAll('.crypto-icon').forEach(img => img.classList.remove('active'));
+  const target = currency
+    ? (container.querySelector('img[data-currency="'+currency+'"]') || container.querySelector('.crypto-default-icon'))
+    : (container.querySelector('img[data-currency="'+selectedCryptoCurrency+'"]') || container.querySelector('.crypto-default-icon'));
+  if(target) target.classList.add('active');
+}
 
 function selectCrypto(currency, ev){
   if(ev && ev.stopPropagation) ev.stopPropagation();
   selectedCryptoCurrency = currency;
   selectedPayMethod = 'crypto';
   renderPayMethods();
+  syncPayBtnIcon();
 }
 
 /* ── NAV SEARCH ── */
