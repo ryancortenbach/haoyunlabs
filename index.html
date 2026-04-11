@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412m2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -812,6 +812,91 @@ ul{list-style:none}
   /* Sticky mobile cart CTA */
   body.has-cart-items #mobile-cart-cta{display:flex}
 }
+/* ═══════════════ ADMIN PANEL ═══════════════ */
+#admin-toggle{
+  position:fixed;bottom:18px;right:18px;z-index:9500;
+  width:54px;height:54px;border-radius:50%;
+  background:#000;color:#fff;border:2px solid #fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 28px rgba(0,0,0,0.35);cursor:pointer;
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),background 0.2s;
+}
+#admin-toggle:hover{transform:scale(1.08);background:#1a1a1a}
+#admin-toggle:active{transform:scale(0.94)}
+#admin-toggle svg{opacity:0.95}
+body.admin-open #admin-toggle{transform:rotate(90deg) scale(1.05)}
+#admin-panel{
+  position:fixed!important;top:0!important;right:0!important;bottom:0!important;
+  width:380px;max-width:100vw;z-index:9600;
+  background:#0a0a0b;color:#fff;
+  display:flex;flex-direction:column;
+  transform:translateX(100%)!important;transition:transform 0.38s cubic-bezier(0.22,1,0.36,1)!important;
+  box-shadow:-12px 0 40px rgba(0,0,0,0.5);
+  font-family:var(--sans);
+}
+#admin-panel.open{transform:translateX(0)!important}
+.ap-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;
+}
+.ap-title-sub{font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45)}
+.ap-title-main{font-family:var(--display);font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
+.ap-close{
+  width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,0.08);
+  color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.ap-close:hover{background:rgba(255,255,255,0.16)}
+.ap-body{flex:1;overflow-y:auto;padding:18px 20px 32px;-webkit-overflow-scrolling:touch}
+.ap-section{margin-bottom:22px}
+.ap-section-title{
+  font-size:0.6rem;font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(255,255,255,0.45);
+  margin-bottom:10px;
+}
+.ap-status-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+}
+.ap-stat{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:10px 12px;
+}
+.ap-stat-label{font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.ap-stat-val{font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-top:4px;word-break:break-all}
+.ap-grid{display:grid;gap:8px}
+.ap-grid-1{grid-template-columns:1fr}
+.ap-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ap-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ap-btn{
+  background:rgba(255,255,255,0.06);color:#fff;
+  border:1px solid rgba(255,255,255,0.12);border-radius:10px;
+  padding:11px 8px;font-size:0.7rem;font-weight:700;letter-spacing:0.02em;
+  font-family:var(--sans);cursor:pointer;
+  transition:background 0.15s,transform 0.1s,border-color 0.15s;
+  min-height:40px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ap-btn:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.22)}
+.ap-btn:active{transform:scale(0.97)}
+.ap-btn.ap-btn-danger{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:#fca5a5}
+.ap-btn.ap-btn-danger:hover{background:rgba(239,68,68,0.22)}
+.ap-btn.ap-btn-active{background:#fff;color:#000;border-color:#fff}
+.ap-log{
+  background:#000;border:1px solid rgba(255,255,255,0.1);border-radius:10px;
+  padding:10px 12px;font-family:var(--mono);font-size:0.68rem;line-height:1.45;
+  color:#a7f3d0;max-height:180px;overflow:auto;white-space:pre-wrap;word-break:break-all;margin:0;
+}
+body.admin-open{overflow:hidden}
+#admin-panel-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9550;
+  opacity:0;pointer-events:none;transition:opacity 0.3s;
+}
+#admin-panel-backdrop.open{opacity:1;pointer-events:auto}
+@media(max-width:540px){
+  #admin-panel{width:100vw}
+  #admin-toggle{bottom:84px;right:12px;width:48px;height:48px}
+  body.has-cart-items #admin-toggle{bottom:80px}
+}
+
 #mobile-cart-cta{display:none}
 @media(max-width:820px){
   #mobile-cart-cta{
@@ -1237,6 +1322,121 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     </div>
   </div>
 </nav>
+
+<!-- ═══════════════ ADMIN PANEL ═══════════════ -->
+<div id="admin-panel-backdrop" onclick="toggleAdminPanel()"></div>
+<button id="admin-toggle" onclick="toggleAdminPanel()" aria-label="Admin panel" title="Admin">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
+<div id="admin-panel" role="dialog" aria-label="Admin Panel">
+  <div class="ap-header">
+    <div class="ap-title">
+      <div class="ap-title-sub">HYL Console</div>
+      <div class="ap-title-main">Admin Panel</div>
+    </div>
+    <button class="ap-close" onclick="toggleAdminPanel()" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="ap-body">
+    <!-- STATUS -->
+    <div class="ap-section">
+      <div class="ap-section-title">Status</div>
+      <div class="ap-status-grid">
+        <div class="ap-stat"><div class="ap-stat-label">Build</div><div class="ap-stat-val" id="ap-build">—</div></div>
+        <div class="ap-stat"><div class="ap-stat-label">Viewport</div><div class="ap-stat-val" id="ap-vp">—</div></div>
+        <div class="ap-stat"><div class="ap-stat-label">Cart</div><div class="ap-stat-val" id="ap-cart">0</div></div>
+        <div class="ap-stat"><div class="ap-stat-label">Screen</div><div class="ap-stat-val" id="ap-screen">—</div></div>
+      </div>
+    </div>
+    <!-- NAVIGATE -->
+    <div class="ap-section">
+      <div class="ap-section-title">Jump to Screen</div>
+      <div class="ap-grid ap-grid-3">
+        <button class="ap-btn" onclick="adminNav('home')">Home</button>
+        <button class="ap-btn" onclick="adminNav('catalog')">Catalog</button>
+        <button class="ap-btn" onclick="adminNav('product')">Product</button>
+        <button class="ap-btn" onclick="adminNav('order')">Checkout</button>
+        <button class="ap-btn" onclick="adminNav('payment-confirmed')">Confirmed</button>
+        <button class="ap-btn" onclick="adminNav('coa')">COA</button>
+        <button class="ap-btn" onclick="adminNav('research')">Research</button>
+        <button class="ap-btn" onclick="adminNav('faq')">FAQ</button>
+        <button class="ap-btn" onclick="adminNav('support')">Support</button>
+        <button class="ap-btn" onclick="adminNav('terms')">Terms</button>
+        <button class="ap-btn" onclick="adminNav('tracking')">Tracking</button>
+      </div>
+    </div>
+    <!-- CART -->
+    <div class="ap-section">
+      <div class="ap-section-title">Cart</div>
+      <div class="ap-grid ap-grid-2">
+        <button class="ap-btn" onclick="adminSeedCart()">Seed Test Cart</button>
+        <button class="ap-btn" onclick="adminAddOne()">+ 1 Random SKU</button>
+        <button class="ap-btn ap-btn-danger" onclick="adminClearCart()">Clear Cart</button>
+        <button class="ap-btn" onclick="adminDumpCart()">Dump Cart JSON</button>
+      </div>
+    </div>
+    <!-- FORMS -->
+    <div class="ap-section">
+      <div class="ap-section-title">Checkout Forms</div>
+      <div class="ap-grid ap-grid-2">
+        <button class="ap-btn" onclick="adminFillShipping()">Fill Shipping</button>
+        <button class="ap-btn" onclick="adminFillAll()">Fill All + Proceed</button>
+      </div>
+    </div>
+    <!-- MODALS -->
+    <div class="ap-section">
+      <div class="ap-section-title">Modals</div>
+      <div class="ap-grid ap-grid-2">
+        <button class="ap-btn" onclick="adminShowEmailPopup()">Email Popup</button>
+        <button class="ap-btn" onclick="adminShowUpsell()">Upsell Modal</button>
+        <button class="ap-btn" onclick="adminShowMobileMenu()">Mobile Menu</button>
+        <button class="ap-btn ap-btn-danger" onclick="adminHideAllModals()">Hide All</button>
+      </div>
+    </div>
+    <!-- STORAGE -->
+    <div class="ap-section">
+      <div class="ap-section-title">Storage & State</div>
+      <div class="ap-grid ap-grid-2">
+        <button class="ap-btn" onclick="adminSkipAge()">Skip Age Gate</button>
+        <button class="ap-btn" onclick="adminResetAge()">Reset Age Gate</button>
+        <button class="ap-btn" onclick="adminDumpStorage()">Dump localStorage</button>
+        <button class="ap-btn ap-btn-danger" onclick="adminNukeStorage()">Nuke localStorage</button>
+      </div>
+    </div>
+    <!-- DEBUG -->
+    <div class="ap-section">
+      <div class="ap-section-title">Debug View</div>
+      <div class="ap-grid ap-grid-2">
+        <button class="ap-btn" onclick="adminToggleOverflow()" id="ap-btn-overflow">Show Overflow</button>
+        <button class="ap-btn" onclick="adminToggleOutline()" id="ap-btn-outline">Outline All</button>
+        <button class="ap-btn" onclick="adminFindOverflow()">Find Overflow</button>
+        <button class="ap-btn" onclick="adminMeasureGrid()">Measure Grid</button>
+      </div>
+    </div>
+    <!-- VIEW TOGGLES -->
+    <div class="ap-section">
+      <div class="ap-section-title">View Toggles</div>
+      <div class="ap-grid ap-grid-2">
+        <button class="ap-btn" onclick="toggleKitView && toggleKitView()">Toggle Kits</button>
+        <button class="ap-btn" onclick="adminReload()">Force Reload</button>
+      </div>
+    </div>
+    <!-- EXTERNAL -->
+    <div class="ap-section">
+      <div class="ap-section-title">External</div>
+      <div class="ap-grid ap-grid-1">
+        <button class="ap-btn" onclick="window.open('https://haoyunlabs-billing.onrender.com/orders','_blank')">Billing Server → Orders</button>
+        <button class="ap-btn" onclick="adminCopyURL()">Copy URL + State</button>
+      </div>
+    </div>
+    <!-- OUTPUT LOG -->
+    <div class="ap-section">
+      <div class="ap-section-title">Output Log</div>
+      <pre class="ap-log" id="ap-log">Ready.</pre>
+    </div>
+  </div>
+</div>
 
 <!-- STICKY MOBILE CART CTA -->
 <button id="mobile-cart-cta" onclick="navigate('order')">
@@ -2608,6 +2808,187 @@ function showToast(msg, type){
 function navigate(screen){
   window.location.hash = '#' + screen;
 }
+
+/* ═══════════════ ADMIN PANEL JS ═══════════════ */
+function apLog(msg){
+  const log = document.getElementById('ap-log');
+  if(!log) return;
+  const ts = new Date().toLocaleTimeString([], {hour12:false});
+  log.textContent = `[${ts}] ${msg}\n` + log.textContent.split('\n').slice(0,40).join('\n');
+}
+function apRefreshStatus(){
+  const build = document.getElementById('ap-build');
+  const vp = document.getElementById('ap-vp');
+  const cartEl = document.getElementById('ap-cart');
+  const screen = document.getElementById('ap-screen');
+  if(build) build.textContent = localStorage.getItem('hyl_build') || 'none';
+  if(vp) vp.textContent = window.innerWidth + '×' + window.innerHeight;
+  if(cartEl){
+    let total = 0;
+    try { (cart||new Map()).forEach(v => total += v); } catch(e){}
+    cartEl.textContent = total;
+  }
+  if(screen) screen.textContent = (location.hash||'#home').replace('#','');
+}
+function toggleAdminPanel(){
+  const panel = document.getElementById('admin-panel');
+  const back = document.getElementById('admin-panel-backdrop');
+  if(!panel) return;
+  const opening = !panel.classList.contains('open');
+  panel.classList.toggle('open', opening);
+  back.classList.toggle('open', opening);
+  document.body.classList.toggle('admin-open', opening);
+  if(opening) apRefreshStatus();
+}
+function adminNav(screen){
+  navigate(screen);
+  apLog('navigate → ' + screen);
+  setTimeout(apRefreshStatus, 100);
+}
+function adminSeedCart(){
+  const test = ['RT10SV','CU50SV','SM5SV','BP10SV'];
+  test.forEach(sku => { try { addToCart(sku); } catch(e){} });
+  apLog('seeded cart with ' + test.join(', '));
+  apRefreshStatus();
+}
+function adminAddOne(){
+  try {
+    const valid = [...(VALID_SKUS||[])];
+    const sku = valid[Math.floor(Math.random()*valid.length)];
+    addToCart(sku);
+    apLog('added random: ' + sku);
+  } catch(e){ apLog('error: ' + e.message); }
+  apRefreshStatus();
+}
+function adminClearCart(){
+  try { cart.clear(); saveCart(); updateBadge(); apLog('cart cleared'); } catch(e){ apLog('error: ' + e.message); }
+  apRefreshStatus();
+}
+function adminDumpCart(){
+  try {
+    const obj = {};
+    cart.forEach((v,k) => obj[k] = v);
+    const json = JSON.stringify(obj, null, 2);
+    navigator.clipboard?.writeText(json);
+    apLog('cart: ' + json + '\n(copied)');
+  } catch(e){ apLog('error: ' + e.message); }
+}
+function adminFillShipping(){
+  const set = (id,val) => { const el=document.getElementById(id); if(el){ el.value=val; el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); }};
+  set('f-fname','Test'); set('f-lname','User');
+  set('f-street','123 Main St'); set('f-apt','Apt 4');
+  set('f-city','Austin'); set('f-state','TX'); set('f-zip','78701');
+  set('f-phone','5551234567'); set('f-email','test@example.com');
+  apLog('filled shipping form');
+}
+function adminFillAll(){
+  adminFillShipping();
+  setTimeout(() => {
+    const btn = [...document.querySelectorAll('button')].find(b => /continue to payment/i.test(b.textContent));
+    if(btn){ btn.click(); apLog('clicked Continue to Payment'); }
+  }, 200);
+}
+function adminShowEmailPopup(){
+  const p = document.getElementById('email-popup');
+  if(p){ p.style.opacity='1'; p.style.pointerEvents='auto'; p.style.display='flex'; apLog('email popup shown'); }
+}
+function adminShowUpsell(){
+  const p = document.getElementById('upsell-overlay');
+  if(p){ p.style.display='flex'; p.style.opacity='1'; apLog('upsell shown'); }
+}
+function adminShowMobileMenu(){
+  toggleAdminPanel();
+  setTimeout(toggleMobileMenu, 300);
+}
+function adminHideAllModals(){
+  ['email-popup','upsell-overlay','mobile-menu'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){ el.style.display='none'; el.style.opacity='0'; el.style.pointerEvents='none'; el.classList.remove('open'); }
+  });
+  document.body.style.overflow = '';
+  document.body.classList.remove('admin-open');
+  const panel = document.getElementById('admin-panel');
+  if(panel) panel.classList.add('open'); // keep admin open
+  apLog('all modals hidden');
+}
+function adminSkipAge(){
+  localStorage.setItem('hyl_age_verified','true');
+  document.getElementById('age-gate')?.classList.add('hidden');
+  apLog('age gate skipped');
+}
+function adminResetAge(){
+  localStorage.removeItem('hyl_age_verified');
+  document.getElementById('age-gate')?.classList.remove('hidden');
+  apLog('age gate reset');
+}
+function adminDumpStorage(){
+  const dump = {};
+  for(let i=0; i<localStorage.length; i++){
+    const k = localStorage.key(i);
+    dump[k] = localStorage.getItem(k);
+  }
+  const json = JSON.stringify(dump, null, 2);
+  navigator.clipboard?.writeText(json);
+  apLog('localStorage: ' + json + '\n(copied)');
+}
+function adminNukeStorage(){
+  if(!confirm('Nuke all localStorage?')) return;
+  localStorage.clear();
+  apLog('localStorage nuked');
+}
+let _apOverflow = false;
+function adminToggleOverflow(){
+  _apOverflow = !_apOverflow;
+  const id = 'ap-overflow-style';
+  let s = document.getElementById(id);
+  if(_apOverflow){
+    if(!s){ s = document.createElement('style'); s.id = id; document.head.appendChild(s); }
+    s.textContent = 'html,body{overflow-x:auto!important}*{outline:1px solid rgba(239,68,68,0.25)}';
+    document.getElementById('ap-btn-overflow').classList.add('ap-btn-active');
+  } else {
+    s?.remove();
+    document.getElementById('ap-btn-overflow').classList.remove('ap-btn-active');
+  }
+  apLog('overflow debug: ' + _apOverflow);
+}
+let _apOutline = false;
+function adminToggleOutline(){
+  _apOutline = !_apOutline;
+  const id = 'ap-outline-style';
+  let s = document.getElementById(id);
+  if(_apOutline){
+    if(!s){ s = document.createElement('style'); s.id = id; document.head.appendChild(s); }
+    s.textContent = '*{outline:1px dashed rgba(34,197,94,0.4)!important}';
+    document.getElementById('ap-btn-outline').classList.add('ap-btn-active');
+  } else {
+    s?.remove();
+    document.getElementById('ap-btn-outline').classList.remove('ap-btn-active');
+  }
+}
+function adminFindOverflow(){
+  const vw = window.innerWidth;
+  const bad = [];
+  document.querySelectorAll('body *').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.right > vw + 2 && r.width < 2000 && r.width > 5 && el.children.length < 4){
+      bad.push(`${el.tagName}.${(el.className?.toString()||'').slice(0,30)} w=${Math.round(r.width)} right=${Math.round(r.right)}`);
+    }
+  });
+  apLog('body=' + document.body.scrollWidth + ' vw=' + vw + '\n' + (bad.slice(0,12).join('\n')||'clean ✓'));
+}
+function adminMeasureGrid(){
+  const grids = [...document.querySelectorAll('.product-grid')];
+  apLog('grids: ' + grids.map(g => g.children.length + ' cards').join(', '));
+}
+function adminReload(){
+  location.reload(true);
+}
+function adminCopyURL(){
+  const url = location.href + '\nviewport=' + window.innerWidth + 'x' + window.innerHeight + '\nua=' + navigator.userAgent;
+  navigator.clipboard?.writeText(url);
+  apLog('URL copied');
+}
+window.addEventListener('resize', apRefreshStatus);
 
 function toggleMobileMenu(){
   const menu = document.getElementById('mobile-menu');
