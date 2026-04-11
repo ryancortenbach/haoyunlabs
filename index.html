@@ -750,16 +750,19 @@ ul{list-style:none}
 .shop-pill-arrow svg{width:18px;height:18px;stroke:#000;transition:transform 0.3s ease-in-out}
 .shop-pill:hover .shop-pill-arrow svg{transform:translateX(3px)}
 
-/* tilt-card: image-only hover for cards with explicit images, lift+zoom for cards with inline bg url */
+/* tilt-card: pronounced image-only hover for cards with explicit images, lift+zoom for cards with inline bg url */
 .tilt-card{transition:none}
 .tilt-card .tilt-img,.tilt-card video,.tilt-card div[style*="width:130px"],.tilt-card img{
-  transition:transform 0.45s cubic-bezier(0.22,1,0.36,1)!important;will-change:transform;
+  transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),filter 0.5s ease,box-shadow 0.5s ease!important;
+  will-change:transform,filter;
 }
 .tilt-card:hover .tilt-img,
 .tilt-card:hover video,
 .tilt-card:hover div[style*="width:130px"],
 .tilt-card:hover img{
-  transform:scale(1.06)!important;
+  transform:scale(1.14) rotate(-2.5deg)!important;
+  filter:brightness(1.06) saturate(1.08);
+  box-shadow:0 12px 24px rgba(0,0,0,0.18);
 }
 /* Dark/feature cards that use `background:#xxx url(...)` as the image — lift + subtle zoom */
 .tilt-card[style*="url("]{
