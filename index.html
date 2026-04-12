@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260412m5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412m6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -3243,6 +3243,7 @@ function saveCart(){
   updateBadge();
 }
 function addToCartQty(sku, qty){
+  if(!getProduct(sku)){console.warn('[cart] unknown SKU:',sku);return;}
   const existing = cart.get(sku) || 0;
   cart.set(sku, existing + qty);
   saveCart();
@@ -3259,6 +3260,7 @@ function addToCartQty(sku, qty){
   }
 }
 function addToCart(sku, btn){
+  if(!getProduct(sku)){console.warn('[cart] unknown SKU:',sku);return;}
   const existing = cart.get(sku);
   if(existing) cart.set(sku, existing + 1);
   else cart.set(sku, 1);
@@ -5600,6 +5602,9 @@ function showCryptoPayment(data){
   }
   updateTimer();
   window._cryptoTimerInt = setInterval(updateTimer, 1000);
+
+  // Scroll to payment card on mobile
+  setTimeout(() => payCard.scrollIntoView({block:'start',behavior:'smooth'}), 200);
 
   cryptoPollInterval = setInterval(async () => {
     try {
