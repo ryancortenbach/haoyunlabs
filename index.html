@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412c2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1311,6 +1311,42 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   border-radius:12px;
   display:flex;gap:12px;align-items:flex-start;
 }
+.crypto-ack{
+  margin:10px 22px 0;
+  padding:12px 14px;
+  background:#fffbeb;
+  border:1.5px solid #fcd34d;border-radius:10px;
+  display:flex;gap:10px;align-items:flex-start;
+  cursor:pointer;user-select:none;
+  transition:background 0.2s;
+}
+.crypto-ack:hover{background:#fef3c7}
+.crypto-ack.checked{background:#ecfdf5;border-color:#86efac}
+.crypto-ack input{
+  width:18px;height:18px;flex-shrink:0;margin-top:1px;
+  accent-color:#16a34a;cursor:pointer;
+}
+.crypto-ack .ack-text{
+  font-size:0.72rem;line-height:1.45;color:#713f12;font-weight:700;
+}
+.crypto-ack.checked .ack-text{color:#14532d}
+.crypto-pay-body.locked{
+  position:relative;
+}
+.crypto-pay-body.locked::before{
+  content:'';position:absolute;inset:-4px;
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border-radius:14px;z-index:5;pointer-events:auto;
+}
+.crypto-pay-body.locked::after{
+  content:'Check the box above to reveal the payment details';
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--sans);font-size:0.78rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.04em;
+  color:var(--muted);z-index:6;text-align:center;
+  padding:0 20px;
+}
 .crypto-warn-box svg{flex-shrink:0;color:#dc2626;margin-top:1px}
 .crypto-warn-box .cw-body{
   font-size:0.72rem;line-height:1.55;color:#7f1d1d;
@@ -1328,6 +1364,13 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   padding:12px;background:#fff;
   border:1px solid var(--stroke);border-radius:16px;
   box-shadow:0 8px 24px rgba(0,0,0,0.06);
+  display:block;text-decoration:none;color:inherit;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease;
+  cursor:pointer;
+}
+.crypto-qr-wrap:hover{
+  transform:scale(1.02);
+  box-shadow:0 14px 36px rgba(0,0,0,0.14);
 }
 .crypto-qr-wrap img{width:100%;height:100%;display:block}
 .crypto-qr-badge{
@@ -2581,6 +2624,8 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 <script async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=pk_87626803657fa394fbb4beecd94baa7e4d"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+<!-- QR code generator (~10KB) for EIP-681 / BIP21 / Solana Pay URIs -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script>
 /* ═════════════════════════════════════════════════════
    SUPABASE CLIENT
@@ -5059,6 +5104,61 @@ const CRYPTO_WRONG_CHAIN_COPY = {
   USDT: 'USDT on Ethereum Mainnet (ERC-20) only. Do NOT send USDT-TRC20 (Tron), USDT-BEP20 (BSC), USDT on Polygon, Arbitrum, Avalanche, Solana, or any other network. Funds sent on any other chain will be permanently lost and we cannot recover them.',
 };
 const CRYPTO_SYMBOL = {BTC:'₿', ETH:'Ξ', SOL:'◎', USDT:'₮'};
+const USDT_CONTRACT = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+
+/* Build wallet deep-link URI per currency.
+   BIP21 for BTC, EIP-681 for ETH/USDT, Solana Pay for SOL.
+   Scanning wallets auto-fill amount + recipient + chain + token. */
+function buildPaymentURI(data){
+  const c = data.currency;
+  const addr = data.address;
+  const amt = Number(data.amount_crypto);
+  if(!addr) return '';
+  try {
+    if(c === 'BTC'){
+      return 'bitcoin:' + addr + '?amount=' + amt.toFixed(8).replace(/\.?0+$/, '');
+    }
+    if(c === 'ETH'){
+      // EIP-681 native transfer with chainId=1
+      const weiStr = (() => {
+        const s = amt.toFixed(18);
+        const [intPart, fracPart=''] = s.split('.');
+        return (BigInt(intPart) * 10n**18n + BigInt((fracPart + '000000000000000000').slice(0,18))).toString();
+      })();
+      return 'ethereum:' + addr + '@1?value=' + weiStr;
+    }
+    if(c === 'USDT'){
+      // EIP-681 ERC-20 transfer
+      const microStr = (() => {
+        const s = amt.toFixed(6);
+        const [intPart, fracPart=''] = s.split('.');
+        return (BigInt(intPart) * 10n**6n + BigInt((fracPart + '000000').slice(0,6))).toString();
+      })();
+      return 'ethereum:' + USDT_CONTRACT + '@1/transfer?address=' + addr + '&uint256=' + microStr;
+    }
+    if(c === 'SOL'){
+      // Solana Pay spec — amount in SOL, not lamports
+      return 'solana:' + addr + '?amount=' + amt + '&label=HaoYunLabs&message=Order%20' + (data.orderNumber||'');
+    }
+  } catch(e){ console.warn('[crypto] buildPaymentURI failed', e); }
+  return addr; // fallback
+}
+
+/* Generate a QR code SVG (data URL) from a URI using qrcode-generator CDN.
+   Falls back to null if library not loaded — caller then uses backend qr_code. */
+function generateQRDataURL(uri){
+  if(typeof qrcode !== 'function') return null;
+  try {
+    const qr = qrcode(0, 'M');
+    qr.addData(uri);
+    qr.make();
+    // createDataURL(cellSize, margin) → PNG data URL
+    return qr.createDataURL(6, 2);
+  } catch(e){
+    console.warn('[crypto] generateQRDataURL failed', e);
+    return null;
+  }
+}
 
 function showCryptoPayment(data){
   const payCard = document.querySelector('.payment-card');
@@ -5069,6 +5169,10 @@ function showCryptoPayment(data){
   const warnCopy = CRYPTO_WRONG_CHAIN_COPY[currency] || 'Send only on the specified network.';
   const symbol = CRYPTO_SYMBOL[currency] || currency;
   const fmtAmount = formatCryptoAmount(data.amount_crypto, currency);
+
+  // Build wallet deep-link URI and generate QR from it (EIP-681 / BIP21 / Solana Pay)
+  const payUri = buildPaymentURI(data);
+  const qrDataUrl = generateQRDataURL(payUri) || data.qr_code;
 
   // Wallet detection
   const wallets = detectWallets();
@@ -5114,12 +5218,18 @@ function showCryptoPayment(data){
         <div class="cw-body"><strong>${networkLabel}.</strong> ${warnCopy}</div>
       </div>
 
-      <div class="crypto-pay-body">
-        ${data.qr_code ? `
-          <div class="crypto-qr-wrap">
-            <img src="${data.qr_code}" alt="Payment QR">
+      <!-- Acknowledgment checkbox (reveals address on check) -->
+      <label class="crypto-ack" id="crypto-ack-label" onclick="cryptoToggleAck(event)">
+        <input type="checkbox" id="crypto-ack-check" onchange="cryptoToggleAck()">
+        <span class="ack-text">I have verified my wallet is set to <strong>${networkLabel}</strong> and I'm sending <strong>${currency}</strong> on the correct network.</span>
+      </label>
+
+      <div class="crypto-pay-body locked" id="crypto-pay-body">
+        ${qrDataUrl ? `
+          <a class="crypto-qr-wrap" href="${payUri}" aria-label="Open in wallet">
+            <img src="${qrDataUrl}" alt="Payment QR">
             <div class="crypto-qr-badge ${iconClass}">${symbol}</div>
-          </div>
+          </a>
         ` : ''}
 
         <!-- Send exactly X -->
@@ -5275,6 +5385,20 @@ function cryptoCopy(btn, value){
   btn.classList.add('copied');
   btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copied';
   setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+}
+
+function cryptoToggleAck(ev){
+  const check = document.getElementById('crypto-ack-check');
+  const label = document.getElementById('crypto-ack-label');
+  const body = document.getElementById('crypto-pay-body');
+  if(!check || !label || !body) return;
+  // If the click was on the checkbox itself, onchange already flipped it — don't flip again
+  if(ev && ev.target && ev.target.tagName !== 'INPUT'){
+    check.checked = !check.checked;
+  }
+  const on = check.checked;
+  label.classList.toggle('checked', on);
+  body.classList.toggle('locked', !on);
 }
 
 function cryptoToggleRecovery(){
