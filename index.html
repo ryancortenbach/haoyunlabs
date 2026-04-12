@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412l2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412l3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2632,7 +2632,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
       <input type="email" id="popup-email" placeholder="you@example.com" style="width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;font-size:0.88rem;margin-bottom:20px;background:rgba(255,255,255,0.05);color:#fff;font-family:var(--sans)">
     </div>
     <button onclick="submitPopupEmail()" style="width:100%;padding:16px;background:#fff;color:#1a1a1a;border:none;border-radius:10px;font-size:0.88rem;font-weight:800;cursor:pointer;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)">Claim My Free Mystery Vial</button>
-    <div onclick="closeEmailPopup()" style="margin-top:14px;font-size:0.72rem;color:rgba(255,255,255,0.3);cursor:pointer">No thanks</div>
+    <div onclick="closeEmailPopup()" style="margin-top:14px;font-size:0.72rem;color:rgba(255,255,255,0.3);cursor:pointer;padding:12px 24px">No thanks</div>
   </div>
 </div>
 
@@ -2663,7 +2663,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     <div class="upsell-actions">
       <button class="upsell-btn primary" onclick="addUpsellItems()">Add selected items</button>
     </div>
-    <span class="upsell-skip" onclick="closeUpsell()">No thanks</span>
+    <div class="upsell-skip" onclick="closeUpsell()" style="padding:12px 24px;cursor:pointer">No thanks</div>
   </div>
 </div>
 
@@ -5654,6 +5654,9 @@ function cryptoChangePaymentMethod(){
     }
   } catch(e){}
   localStorage.removeItem('hyl_pending_invoice');
+  // Hide crypto payment screen, show checkout steps again
+  const cryptoScreen = document.getElementById('crypto-payment-screen');
+  if(cryptoScreen) cryptoScreen.style.display = 'none';
   // Re-render the order screen with the chip picker visible
   try {
     renderOrder();
@@ -5664,7 +5667,7 @@ function cryptoChangePaymentMethod(){
       document.getElementById('pay-methods')?.scrollIntoView({block:'center',behavior:'smooth'});
     }, 150);
   } catch(e){ navigate('order'); }
-  showToast('Choose a different currency','info');
+  showToast('Choose a different payment method','info');
 }
 
 function cryptoPlaySuccessSound(){
@@ -5781,6 +5784,13 @@ async function submitOrder(){
   for(const fid of fields){
     const el = document.getElementById(fid);
     if(!el.value.trim()){el.focus();showToast('Please fill in all required fields','error');return;}
+  }
+  // Email validation
+  const emailVal = document.getElementById('f-email').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+    document.getElementById('f-email').focus();
+    showToast('Please enter a valid email address','error');
+    return;
   }
 
   const payBtn = document.getElementById('btn-pay');
@@ -6110,6 +6120,10 @@ function initEmailPopup(){
   let popupTriggered = false;
   window.addEventListener('scroll', function onScroll(){
     if(popupTriggered) return;
+    // Don't show popup during checkout or crypto payment
+    const hash = location.hash.replace('#','');
+    if(hash === 'order' || hash === 'checkout') return;
+    if(document.getElementById('crypto-payment-screen')?.style.display !== 'none') return;
     if(window.scrollY > window.innerHeight * 0.5){
       popupTriggered = true;
       showEmailPopup();
