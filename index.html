@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412c9';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1212,10 +1212,10 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-chip.selected[data-c="TRON"]{background:#0a0a0b;color:#fff;border-color:#000}
 .crypto-chip .cc-badge{
   position:absolute;top:6px;right:6px;z-index:2;
-  background:linear-gradient(135deg,#facc15,#f59e0b);color:#7c2d12;
+  background:#000;color:#fff;
   font-size:0.5rem;font-weight:900;letter-spacing:0.06em;
   padding:2px 6px;border-radius:999px;
-  box-shadow:0 2px 6px rgba(245,158,11,0.4);
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 .crypto-chip.selected .cc-badge{background:#fff;color:#000}
 /* Payment method subhead */
@@ -1456,7 +1456,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   padding:6px 10px!important;font-size:0.58rem!important;
 }
 .ctc-copy:hover{background:rgba(255,255,255,0.22)!important}
-.ctc-copy.copied{background:#16a34a!important;color:#fff!important}
+.ctc-copy.copied{background:#333!important;color:#fff!important}
 
 .crypto-field{
   background:#f7f7f7;
@@ -4612,7 +4612,7 @@ function renderHome(){
   const items = getFilteredProducts(homeCategory, 'home-search', 'home-sort');
   const visible = items.slice(0, homeShown);
   if(visible.length === 0){
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="font-size:2.4rem;margin-bottom:12px">&#128300;</div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
   } else {
     grid.innerHTML = visible.map(cardHTML).join('');
   }
@@ -4635,7 +4635,7 @@ function renderCatalog(){
   const grid = document.getElementById('cat-grid');
   const items = getFilteredProducts(catCategory, 'cat-search', 'cat-sort');
   if(items.length === 0){
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="font-size:2.4rem;margin-bottom:12px">&#128300;</div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
   } else {
     grid.innerHTML = items.map(cardHTML).join('');
   }
@@ -5569,8 +5569,8 @@ function cryptoShowExpiredCTA(){
   body.classList.remove('locked');
   body.innerHTML = `
     <div style="text-align:center;padding:40px 20px">
-      <div style="width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;border:2px solid #fca5a5">
-        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div style="width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;border:2px solid #000">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
       <div style="font-family:var(--display);font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px">Invoice expired</div>
       <div style="color:var(--muted);font-size:0.82rem;line-height:1.5;margin-bottom:24px;max-width:320px;margin-left:auto;margin-right:auto">The exchange rate lock on this invoice ran out. Don't worry — you haven't been charged. Generate a fresh invoice at the current rate to continue.</div>
