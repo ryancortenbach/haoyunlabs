@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412c3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1207,6 +1207,22 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-chip.selected[data-c="ETH"]{background:linear-gradient(135deg,#627eea 0%,#4b60d6 100%);border-color:#627eea}
 .crypto-chip.selected[data-c="SOL"]{background:linear-gradient(135deg,#9945ff 0%,#14f195 100%);border-color:#9945ff}
 .crypto-chip.selected[data-c="USDT"]{background:linear-gradient(135deg,#26a17b 0%,#1b7e5e 100%);border-color:#26a17b}
+.crypto-chip[data-c="TRON"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(239,0,39,0.16),rgba(239,0,39,0))}
+.crypto-chip.selected[data-c="TRON"]{background:linear-gradient(135deg,#ef0027 0%,#8f0015 100%);border-color:#ef0027}
+.crypto-chip .cc-badge{
+  position:absolute;top:6px;right:6px;z-index:2;
+  background:linear-gradient(135deg,#facc15,#f59e0b);color:#7c2d12;
+  font-size:0.5rem;font-weight:900;letter-spacing:0.06em;
+  padding:2px 6px;border-radius:999px;
+  box-shadow:0 2px 6px rgba(245,158,11,0.4);
+}
+.crypto-chip.selected .cc-badge{background:#fff;color:#000}
+/* Payment method subhead */
+.pm-subhead{
+  font-size:0.55rem;font-weight:800;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);
+  margin:14px 0 8px;
+}
 .copy-addr{
   display:inline-block;margin-left:6px;padding:2px 8px;
   background:rgba(255,255,255,0.2);font-size:0.65rem;cursor:pointer;
@@ -1237,6 +1253,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-header .cc-icon.cc-eth{background:linear-gradient(135deg,#627eea,#4b60d6)}
 .crypto-header .cc-icon.cc-sol{background:linear-gradient(135deg,#9945ff,#14f195)}
 .crypto-header .cc-icon.cc-usdt{background:linear-gradient(135deg,#26a17b,#1b7e5e)}
+.crypto-header .cc-icon.cc-tron{background:linear-gradient(135deg,#ef0027,#8f0015)}
 .crypto-header .cc-title{flex:1;min-width:0}
 .crypto-header .cc-title-main{
   font-family:var(--display);font-size:1.15rem;font-weight:900;
@@ -1386,6 +1403,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-qr-badge.cc-eth{background:linear-gradient(135deg,#627eea,#4b60d6)}
 .crypto-qr-badge.cc-sol{background:linear-gradient(135deg,#9945ff,#14f195)}
 .crypto-qr-badge.cc-usdt{background:linear-gradient(135deg,#26a17b,#1b7e5e)}
+.crypto-qr-badge.cc-tron{background:linear-gradient(135deg,#ef0027,#8f0015)}
 
 /* Amount + address fields */
 .crypto-field{
@@ -4822,30 +4840,41 @@ function showPaymentStep(){
 function renderPayMethods(){
   const el = document.getElementById('pay-methods');
   selectedPayMethod = 'crypto';
-  const coins = [
+  // Two rows: natives and stablecoins. Stablecoins get their own block so users
+  // see they're paying a stable USD amount instead of a volatile crypto quote.
+  const natives = [
     {c:'BTC', name:'Bitcoin', chain:'Bitcoin Network'},
     {c:'ETH', name:'Ethereum', chain:'Mainnet'},
     {c:'SOL', name:'Solana', chain:'Mainnet'},
-    {c:'USDT', name:'Tether', chain:'ERC-20'},
   ];
+  const stables = [
+    {c:'USDT', name:'Tether', chain:'Ethereum · ERC-20'},
+    {c:'TRON', name:'Tether', chain:'Tron · TRC-20', badge:'LOW FEES'},
+  ];
+  const chipHtml = (o) => `
+    <div class="crypto-chip ${selectedCryptoCurrency===o.c?'selected':''}"
+         data-c="${o.c}"
+         onclick="selectCrypto('${o.c}')"
+         onmouseenter="previewPayCurrency('${o.c}')"
+         onmouseleave="previewPayCurrency(null)">
+      ${o.badge ? `<div class="cc-badge">${o.badge}</div>` : ''}
+      <img class="cc-logo" src="crypto-icons/${o.c.toLowerCase()}.svg" alt="${o.c}" onerror="this.style.display='none'">
+      <div class="cc-symbol">${o.c === 'TRON' ? 'USDT' : o.c}</div>
+      <div class="cc-name">${o.name}</div>
+      <div class="cc-chain">${o.chain}</div>
+    </div>`;
   el.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
-      ${coins.map(o=>`
-        <div class="crypto-chip ${selectedCryptoCurrency===o.c?'selected':''}"
-             data-c="${o.c}"
-             onclick="selectCrypto('${o.c}')"
-             onmouseenter="previewPayCurrency('${o.c}')"
-             onmouseleave="previewPayCurrency(null)">
-          <img class="cc-logo" src="crypto-icons/${o.c.toLowerCase()}.svg" alt="${o.c}" onerror="this.style.display='none'">
-          <div class="cc-symbol">${o.c}</div>
-          <div class="cc-name">${o.name}</div>
-          <div class="cc-chain">${o.chain}</div>
-        </div>
-      `).join('')}
+    <div class="pm-subhead">Crypto</div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px">
+      ${natives.map(chipHtml).join('')}
     </div>
-    <div style="margin-top:10px;padding:10px 14px;background:#fef3c7;border:1px solid #fcd34d;border-left:3px solid #f59e0b;border-radius:10px;font-size:0.7rem;color:#78350f;line-height:1.5;display:flex;gap:8px;align-items:flex-start">
+    <div class="pm-subhead">Stablecoins · $1 USD locked</div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+      ${stables.map(chipHtml).join('')}
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:#fef3c7;border:1px solid #fcd34d;border-left:3px solid #f59e0b;border-radius:10px;font-size:0.7rem;color:#78350f;line-height:1.5;display:flex;gap:8px;align-items:flex-start">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:1px;color:#f59e0b"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Each coin is accepted on <strong>one specific network only</strong>. USDT on <strong>Ethereum (ERC-20)</strong>. Sending on Tron, BSC, or any other network will permanently lose funds.</span>
+      <span>Each coin is accepted on <strong>one specific network only</strong>. Sending USDT on the wrong chain (ERC-20 vs TRC-20 vs BEP-20) will permanently lose funds. Double-check your wallet's network before sending.</span>
     </div>
   `;
   // Sync pay button icon to selected currency
@@ -4944,7 +4973,8 @@ function copyAddr(addr, el){
 function formatCryptoAmount(amount, currency){
   const n = Number(amount);
   if(!isFinite(n)) return String(amount);
-  const decimals = currency === 'BTC' ? 8 : currency === 'ETH' ? 6 : currency === 'SOL' ? 4 : 2; // USDT 2
+  // USDT, TRON (USDT-TRC20) both stable USD → 2 dp
+  const decimals = currency === 'BTC' ? 8 : currency === 'ETH' ? 6 : currency === 'SOL' ? 4 : 2;
   return n.toFixed(decimals).replace(/\.?0+$/, '');
 }
 
@@ -5096,14 +5126,23 @@ const CRYPTO_NETWORK_LABEL = {
   ETH: 'Ethereum Mainnet',
   SOL: 'Solana Mainnet',
   USDT: 'Ethereum Mainnet · ERC-20',
+  TRON: 'Tron Network · TRC-20',
 };
 const CRYPTO_WRONG_CHAIN_COPY = {
   BTC: 'Bitcoin on-chain only. Do NOT send via Lightning Network — those transactions will not be detected and funds will be lost.',
   ETH: 'Ethereum Mainnet only. Do NOT send on Polygon, Arbitrum, Optimism, Base, BSC, Avalanche, or any other network. Funds sent on any other chain will be permanently lost and we cannot recover them.',
   SOL: 'Solana Mainnet only. Do NOT send from a bridged token on another chain or funds will be permanently lost.',
   USDT: 'USDT on Ethereum Mainnet (ERC-20) only. Do NOT send USDT-TRC20 (Tron), USDT-BEP20 (BSC), USDT on Polygon, Arbitrum, Avalanche, Solana, or any other network. Funds sent on any other chain will be permanently lost and we cannot recover them.',
+  TRON: 'USDT on Tron Network (TRC-20) only. Do NOT send USDT-ERC20 (Ethereum), USDT-BEP20 (BSC), native TRX (Tronix), or USDT on any other chain. Sending native TRX or a different stablecoin will be permanently lost. We cannot recover them.',
 };
-const CRYPTO_SYMBOL = {BTC:'₿', ETH:'Ξ', SOL:'◎', USDT:'₮'};
+const CRYPTO_FULL_NAME = {
+  BTC: 'Bitcoin',
+  ETH: 'Ethereum',
+  SOL: 'Solana',
+  USDT: 'USDT (ERC-20)',
+  TRON: 'USDT (TRC-20)',
+};
+const CRYPTO_SYMBOL = {BTC:'₿', ETH:'Ξ', SOL:'◎', USDT:'₮', TRON:'₮'};
 const USDT_CONTRACT = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
 
 /* Build wallet deep-link URI per currency.
@@ -5139,6 +5178,11 @@ function buildPaymentURI(data){
     if(c === 'SOL'){
       // Solana Pay spec — amount in SOL, not lamports
       return 'solana:' + addr + '?amount=' + amt + '&label=HaoYunLabs&message=Order%20' + (data.orderNumber||'');
+    }
+    if(c === 'TRON'){
+      // Tron wallets (TronLink / Trust Wallet / imToken) recognize `tron:addr` URI
+      // with amount = TRC-20 token units. For USDT (6 decimals), amount is plain USD.
+      return 'tron:' + addr + '?amount=' + amt + '&token=USDT&label=HaoYunLabs';
     }
   } catch(e){ console.warn('[crypto] buildPaymentURI failed', e); }
   return addr; // fallback
@@ -5190,7 +5234,7 @@ function showCryptoPayment(data){
       <div class="crypto-header">
         <div class="cc-icon ${iconClass}">${symbol}</div>
         <div class="cc-title">
-          <div class="cc-title-main">Pay with ${currency}</div>
+          <div class="cc-title-main">Pay with ${CRYPTO_FULL_NAME[currency] || currency}</div>
           <div class="crypto-chain-pill">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             ${networkLabel}
@@ -5236,7 +5280,7 @@ function showCryptoPayment(data){
         <div class="crypto-field">
           <div class="crypto-field-main">
             <div class="crypto-field-label">Send exactly</div>
-            <div class="crypto-field-value big">${fmtAmount} ${currency}</div>
+            <div class="crypto-field-value big">${fmtAmount} ${currency === 'TRON' ? 'USDT' : currency}</div>
           </div>
           <button class="crypto-copy-btn" onclick="cryptoCopy(this,'${fmtAmount}')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
