@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260412m4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412m5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -442,6 +442,9 @@ ul{list-style:none}
   .btn-add,.hero-btn,.btn-show-more{border-radius:999px!important}
   .hero-btn{padding:14px 26px!important;font-weight:800}
   .tilt-card,.feature-card{border-radius:18px!important}
+  .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important}
+  .big-feature-card .card-3d-wrap{width:100%!important;aspect-ratio:16/9!important;max-height:200px}
+  .hero-feature-grid{grid-template-columns:1fr!important}
   #stats-row{border-radius:16px!important}
   #screen-home .hero-banner{border-radius:16px}
 }
@@ -2065,7 +2068,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     <div id="stats-row" style="display:none"></div>
 
     <!-- FEATURE CARDS -->
-    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+    <div class="reveal hero-feature-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
       <div class="tilt-card card-3d-wrap" style="background:#000 url('group319.png') center/cover no-repeat;color:#fff;border-radius:var(--radius);padding:32px 24px;display:flex;flex-direction:column;justify-content:flex-end;min-height:200px;cursor:pointer;position:relative;overflow:hidden" onclick="goToCategory('peptides')">
         <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:0"></div>
         <div style="position:relative;z-index:1">
@@ -2104,7 +2107,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     </div>
 
     <!-- FULL CATALOG (text card wraps image card inside with padding buffer) -->
-    <div class="reveal" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('catalog')">
+    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('catalog')">
       <div>
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Built for Serious Research</div>
@@ -2118,7 +2121,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     </div>
 
     <!-- COA / PURITY (text card wraps image card, alternated: images left) -->
-    <div class="reveal" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="navigate('coa')">
+    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="navigate('coa')">
       <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative">
         <video autoplay muted loop playsinline webkit-playsinline="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="media/coa-v4.mp4" type="video/mp4"></video>
       </div>
