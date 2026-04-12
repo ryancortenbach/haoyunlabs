@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412e1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412e2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -779,6 +779,30 @@ ul{list-style:none}
   transform:translateX(4px);
 }
 .hero-btn-invert-dark{transition:all 0.35s cubic-bezier(0.22,1,0.36,1)}
+
+/* ── SHIMMER TEXT (Aceternity-style) ── */
+.shimmer-title{
+  font-family:var(--display);font-weight:900;
+  font-size:1.4rem;line-height:1.1;
+  text-transform:uppercase;letter-spacing:0.1em;
+  background:linear-gradient(
+    110deg,
+    #000 0%,#000 40%,
+    rgba(120,120,120,0.9) 48%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(120,120,120,0.9) 52%,
+    #000 60%,#000 100%
+  );
+  background-size:250% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmerText 4s ease-in-out infinite;
+}
+@keyframes shimmerText{
+  0%{background-position:150% center}
+  100%{background-position:-150% center}
+}
 
 /* ── DISCORD FLY BUTTON ── */
 @keyframes discord-fly{from{transform:translateY(0.1em)}to{transform:translateY(-0.1em)}}
@@ -2028,73 +2052,42 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <div style="margin-top:16px"><span class="hero-btn-invert-dark" style="display:inline-block;padding:10px 22px;border:1.5px solid rgba(255,255,255,0.5);background:transparent;border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;transition:all 0.3s ease">Browse Peptides &rarr;</span></div>
         </div>
       </div>
-      <div style="display:grid;grid-template-rows:1fr 1fr;gap:14px">
+      <div style="display:grid;grid-template-rows:repeat(4,auto);gap:14px">
+        <!-- Bulk Packs -->
         <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('kits')">
           <div>
-            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
-            <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;line-height:1.1;margin-bottom:4px">10-Vial Kits</div>
-            <div style="font-size:0.74rem;color:var(--muted);line-height:1.4">Save up to 33% with bulk kits.</div>
+            <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bulk Packs</div>
+            <div class="shimmer-title">10-Vial Kits</div>
+            <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;margin-top:4px">Save up to 33% with bulk kits.</div>
           </div>
-          <div class="tilt-img" style="width:88px;height:88px;background:#000;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <div style="color:rgba(255,255,255,0.25);font-family:'Instrument Serif',serif;font-size:2rem;font-weight:400">10x</div>
-          </div>
+          <img class="tilt-img" src="media/products/RT10SV.png" alt="Kits" loading="lazy" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#f0f0f0">
         </div>
+        <!-- Best Sellers -->
         <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('bestsellers')">
           <div>
-            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Top Sellers</div>
-            <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;line-height:1.1;margin-bottom:4px">Best Sellers</div>
-            <div style="font-size:0.74rem;color:var(--muted);line-height:1.4">Our most-ordered research peptides.</div>
+            <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Top Sellers</div>
+            <div class="shimmer-title">Best Sellers</div>
+            <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;margin-top:4px">Our most-ordered research peptides.</div>
           </div>
-          <video class="tilt-img" src="media/hero.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#000"></video>
+          <img class="tilt-img" src="media/products/TR10SV.png" alt="Best Sellers" loading="lazy" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#f0f0f0">
         </div>
-      </div>
-    </div>
-
-    <!-- BUNDLES FEATURE CARD (reversed) -->
-    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:180px" onclick="goToCategory('kits')">
-      <div style="background:#f7f7f7;padding:48px 36px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--stroke);border-right:none;border-radius:var(--radius) 0 0 var(--radius)">
-        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Bulk Research Kits</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">10-Vial Kits</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Save when you order in bulk. Each kit ships with 10 individually-sealed lyophilized vials of the same compound - perfect for extended research protocols.</div>
-        <div style="margin-top:16px"><span class="hero-btn-invert" style="display:inline-block;padding:10px 22px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">Browse Kits &rarr;</span></div>
-      </div>
-      <div style="background:#000;display:flex;align-items:center;justify-content:center;border-radius:0 var(--radius) var(--radius) 0;position:relative;overflow:hidden">
-        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:0"></div>
-        <div style="position:relative;z-index:1;text-align:center;color:#fff">
-          <div style="font-family:'Instrument Serif',serif;font-size:3rem;font-weight:400;opacity:0.2">15</div>
-          <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4">Bundles</div>
+        <!-- Full Catalog -->
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;overflow:hidden" onclick="navigate('catalog')">
+          <div>
+            <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Full Catalog</div>
+            <div class="shimmer-title">All Compounds</div>
+            <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;margin-top:4px">125+ HPLC-verified peptides and supplies.</div>
+          </div>
+          <img class="tilt-img" src="media/products/SM15SV.png" alt="Catalog" loading="lazy" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#f0f0f0">
         </div>
-      </div>
-    </div>
-
-    <!-- FULL CATALOG FEATURE CARD -->
-    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:180px" onclick="navigate('catalog')">
-      <div style="background:#000;display:flex;align-items:center;justify-content:center;border-radius:var(--radius) 0 0 var(--radius);position:relative;overflow:hidden">
-        <div style="position:relative;z-index:1;text-align:center;color:#fff">
-          <div style="font-family:'Instrument Serif',serif;font-size:3rem;font-weight:400;opacity:0.2">302</div>
-          <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4">Products</div>
-        </div>
-      </div>
-      <div style="background:#fff;padding:36px 32px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--stroke);border-left:none;border-radius:0 var(--radius) var(--radius) 0">
-        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Full Catalog</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Browse All Compounds</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">125+ research peptides, secretagogues, nootropics, and supplies — all HPLC-verified and ready to ship.</div>
-        <div style="margin-top:16px"><span class="hero-btn-invert" style="display:inline-block;padding:10px 22px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">View Catalog &rarr;</span></div>
-      </div>
-    </div>
-
-    <!-- COA FEATURE CARD -->
-    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:180px" onclick="navigate('coa')">
-      <div style="background:#fff;padding:36px 32px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--stroke);border-right:none;border-radius:var(--radius) 0 0 var(--radius)">
-        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificates of Analysis</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:1.6rem;line-height:1.2;margin-bottom:8px">Verify Purity</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.5">Every lot is HPLC-tested with 99%+ purity. Search by SKU or compound name to view and download your certificate.</div>
-        <div style="margin-top:16px"><span class="hero-btn-invert" style="display:inline-block;padding:10px 22px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
-      </div>
-      <div style="background:#000;display:flex;align-items:center;justify-content:center;border-radius:0 var(--radius) var(--radius) 0;position:relative;overflow:hidden">
-        <div style="position:relative;z-index:1;text-align:center;color:#fff">
-          <div style="font-family:'Instrument Serif',serif;font-size:3rem;font-weight:400;opacity:0.2">153</div>
-          <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4">COAs</div>
+        <!-- COAs -->
+        <div class="tilt-card" style="background:#f7f7f7;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;overflow:hidden" onclick="navigate('coa')">
+          <div>
+            <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Certificates of Analysis</div>
+            <div class="shimmer-title">Verify Purity</div>
+            <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;margin-top:4px">153 COAs searchable by SKU.</div>
+          </div>
+          <img class="tilt-img" src="media/products/ET10SV.png" alt="COA" loading="lazy" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#f0f0f0">
         </div>
       </div>
     </div>
