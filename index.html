@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260412m2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412m3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -4588,7 +4588,7 @@ function openProduct(sku){
         <div class="pdp-price" id="pdp-price-display">$${p.price.toFixed(2)}</div>
       </div>
       <div class="pdp-meta">
-        <div class="pdp-meta-row"><span class="pdp-meta-label">SKU</span><span class="pdp-meta-value">${p.sku}</span></div>
+        <div class="pdp-meta-row"><span class="pdp-meta-label">SKU</span><span class="pdp-meta-value pdp-sku-value">${p.sku}</span></div>
         <div class="pdp-meta-row"><span class="pdp-meta-label">Status</span><span class="pdp-status">Available for order</span></div>
       </div>
       <div class="pdp-qty-row">
