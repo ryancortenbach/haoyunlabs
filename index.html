@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412h2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412h3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -4343,6 +4343,7 @@ function buildCatTabs(containerId, activeVar, clickFn){
   if(!c.querySelector('.cat-tabs-slider')){
     let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
     html += `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`;
+    html += `<button class="cat-tab" data-cat="bestsellers" onclick="${clickFn}('bestsellers')">Best Sellers</button>`;
     html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Peptides</button>`;
     html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
     html += `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`;
