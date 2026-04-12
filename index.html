@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412d7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412d8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -6242,10 +6242,10 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
 /* ── NUMBER TICKER ── */
 (function(){
   var ticked=false;
-  function animateNumbers(){
-    if(ticked) return;
-    ticked=true;
-    document.querySelectorAll('.num-tick').forEach(function(el){
+  function animateNumbersInRow(row){
+    if(!row || row.dataset.ticked) return;
+    row.dataset.ticked = '1';
+    row.querySelectorAll('.num-tick').forEach(function(el){
       var target=parseInt(el.dataset.target)||0;
       var prefix=el.dataset.prefix||'';
       var suffix=el.dataset.suffix||'';
@@ -6254,7 +6254,6 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
       function tick(now){
         var elapsed=now-start;
         var progress=Math.min(elapsed/duration,1);
-        // Ease out cubic
         var eased=1-Math.pow(1-progress,3);
         var current=Math.round(eased*target);
         el.textContent=prefix+current.toLocaleString()+suffix;
@@ -6263,12 +6262,15 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
       requestAnimationFrame(tick);
     });
   }
-  var row=document.getElementById('stats-row');
-  if(row && 'IntersectionObserver' in window){
-    new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting) animateNumbers();
-    },{threshold:0.3}).observe(row);
-  } else { setTimeout(animateNumbers,500); }
+  // Observe BOTH the home stats row AND the research stats row
+  ['stats-row','research-stats-row'].forEach(function(id){
+    var row=document.getElementById(id);
+    if(row && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        if(entries[0].isIntersecting) animateNumbersInRow(entries[0].target);
+      },{threshold:0.3}).observe(row);
+    } else if(row) { setTimeout(function(){animateNumbersInRow(row);},500); }
+  });
 })();
 
 /* 3D tilt removed — hover animation now isolated to the image sub-element only */
