@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260412m3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412m4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -4192,6 +4192,19 @@ function pickSize(id, idx){
         if(skuEl) skuEl.textContent = match.sku;
         const nameEl = card.querySelector('.card-name');
         if(nameEl) nameEl.textContent = match.name;
+        // Update Add to Cart button to use new SKU
+        const addBtn = card.querySelector('.card-add-btn');
+        if(addBtn) addBtn.setAttribute('onclick', "event.stopPropagation();cardAdd('" + match.sku + "',this)");
+        // Update quantity ID
+        const qtyEl = card.querySelector('[id^="card-qty-"]');
+        if(qtyEl) qtyEl.id = 'card-qty-' + match.sku;
+        // Update +/- buttons
+        card.querySelectorAll('[onclick*="cardQtyChange"]').forEach(b => {
+          const delta = b.textContent.trim() === '+' ? 1 : -1;
+          b.setAttribute('onclick', "event.stopPropagation();cardQtyChange('" + match.sku + "'," + delta + ")");
+        });
+        // Update card click to open correct product
+        card.setAttribute('onclick', "openProduct('" + match.sku + "')");
         // Update purity badge from COA data
         const coaEntry = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r._skus && r._skus.includes(match.sku.toLowerCase()));
         if(coaEntry){
