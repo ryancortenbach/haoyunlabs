@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412l5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412l6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -5395,6 +5395,8 @@ function generateQRDataURL(uri){
 function showCryptoPayment(data){
   const payCard = document.querySelector('.payment-card');
   if(!payCard){ console.error('[crypto] payment-card element missing'); return; }
+  // Save original content for "change payment method"
+  if(!window._payCardOriginal) window._payCardOriginal = payCard.innerHTML;
   const currency = data.currency;
   const iconClass = 'cc-' + currency.toLowerCase();
   const networkLabel = CRYPTO_NETWORK_LABEL[currency] || currency;
@@ -5654,27 +5656,25 @@ function cryptoChangePaymentMethod(){
     }
   } catch(e){}
   localStorage.removeItem('hyl_pending_invoice');
-  // Clear the crypto card and re-show the currency picker
+  // Restore original payment card content
   const payCard = document.querySelector('.payment-card');
-  if(payCard){
-    // Re-render payment methods inside the payment card
+  if(payCard && window._payCardOriginal){
+    payCard.innerHTML = window._payCardOriginal;
+    // Re-render dynamic content
+    renderReceipt();
     renderPayMethods();
-    // Also re-show the pay button
-    const payBtn = document.getElementById('btn-pay');
-    if(payBtn){
-      payBtn.disabled = false;
-      payBtn.classList.remove('btn-loading');
-      const txt = payBtn.querySelector('.crypto-btn-text');
-      if(txt) txt.innerHTML = 'Complete Order';
-    }
+    // Show payment step directly
+    const ps = document.getElementById('payment-step');
+    if(ps) ps.style.display = '';
+    // Scroll to payment methods
+    setTimeout(() => {
+      const pm = document.getElementById('pay-methods');
+      if(pm) pm.scrollIntoView({block:'center',behavior:'smooth'});
+    }, 200);
+  } else {
+    // Fallback: full page re-navigate
+    navigate('order');
   }
-  // Reset selected crypto
-  window._selectedCrypto = null;
-  // Scroll to payment methods
-  setTimeout(() => {
-    const pm = document.getElementById('pay-methods');
-    if(pm) pm.scrollIntoView({block:'center',behavior:'smooth'});
-  }, 200);
   showToast('Choose a different payment method','info');
 }
 
