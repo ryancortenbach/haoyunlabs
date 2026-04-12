@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412h4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412h5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2098,7 +2098,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
       <div style="padding:36px 32px;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;cursor:pointer" onclick="navigate('catalog')">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Full Catalog</div>
         <div class="shimmer-title" style="font-size:1.6rem;margin-bottom:12px">Built for Serious Research</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:16px;font-weight:400"><strong style="color:var(--text);font-family:var(--sans);font-weight:800">125+ HPLC-verified compounds</strong> for advanced research protocols. Metabolic peptides, secretagogues, nootropics, and reconstitution supplies. Sourced, tested, and sealed under controlled conditions.</div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.65;margin-bottom:16px"><strong style="color:var(--text);font-family:var(--sans);font-weight:800">125+ HPLC-verified compounds</strong> for advanced research protocols. Metabolic peptides, secretagogues, nootropics, and reconstitution supplies. Sourced, tested, and sealed under controlled conditions.</div>
         <div style="text-align:center"><span class="hero-btn-invert" style="display:inline-block;padding:12px 32px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.82rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
       </div>
       <div class="card-3d-wrap" style="background:#fff;display:flex;align-items:center;justify-content:center;gap:12px;padding:24px;border:1px solid var(--stroke);border-radius:var(--radius);cursor:pointer" onclick="navigate('catalog')">
@@ -2118,7 +2118,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
       <div style="padding:36px 32px;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;cursor:pointer" onclick="navigate('coa')">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Purity you can verify</div>
         <div class="shimmer-title" style="font-size:1.6rem;margin-bottom:12px">Purity You Can Prove.</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:10px;font-weight:400"><strong style="color:var(--text);font-family:var(--sans);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive. Search by SKU or compound name and download the PDF.</div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.65;margin-bottom:10px"><strong style="color:var(--text);font-family:var(--sans);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive. Search by SKU or compound name and download the PDF.</div>
         <div style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:16px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="text-align:center"><span class="hero-btn-invert" style="display:inline-block;padding:12px 32px;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.82rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
@@ -6357,8 +6357,8 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
 
 /* 3D tilt removed — hover animation now isolated to the image sub-element only */
 
-/* 3D CARD TILT (Aceternity-style) */
-(function init3dCards(){
+/* 3D CARD TILT (Aceternity-style) — deferred to DOMContentLoaded */
+document.addEventListener('DOMContentLoaded', function init3dCards(){
   document.querySelectorAll('.card-3d-wrap').forEach(function(el){
     el.style.transition = 'transform 0.15s ease-out, box-shadow 0.3s ease';
     el.style.transformStyle = 'preserve-3d';
@@ -6396,7 +6396,7 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
       img.style.transform = '';
     });
   });
-})();
+});
 
 
 /* ── TEST PANEL (Ctrl+P) ── */
