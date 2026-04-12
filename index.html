@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412j3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412j4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2064,7 +2064,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
             <div class="shimmer-title">10-Vial Kits</div>
             <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;margin-top:4px">Pre-built collections of our most-requested compounds. Lot-traceable and COA-backed.</div>
           </div>
-          <img class="tilt-img" src="media/products/RT10SV.png" alt="Kits" loading="lazy" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#f0f0f0">
+          <div style="width:88px;height:88px;border-radius:14px;flex-shrink:0;position:relative;overflow:hidden;background:#f0f0f0">
+            <img class="kit-slide" src="media/kits/SM2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:1" alt="Kit" loading="lazy">
+            <img class="kit-slide" src="media/kits/SM5.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
+            <img class="kit-slide" src="media/kits/SM10.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
+          </div>
         </div>
         <!-- Best Sellers (compact, ALTERNATED: image left, text right) -->
         <div class="tilt-card" style="background:#fff;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('bestsellers')">
@@ -3167,7 +3171,15 @@ const ALL_PRODUCTS = [
    ═════════════════════════════════════════════════════ */
 
 
+const KIT_SKUS_WITH_IMAGES = new Set(['SM2','SM5','SM10','SM15','SM20','SM30','SM50','FMP2','TA2','TA5','TA10','TY','B7-33-2','CU50','CU100','NP810','XT100','GTT','GTT500','Lemon','LC200','LC600','LC1200','MIC','KPV10','ET10','ET50','XA5','XA10','SK5','SK10','Adamax5','Adamax10','DS2','DS10','KS5','KS10','MT2','OT10','P41','PE10','PIN10','Hum','NJ100','NJ500','2S10','2S50','MS10','MS40','5AM','F410','PNC27','FN1','AE1','AR50','GDF8','P21','PTD-1','VIP10','Bron','Cardio','Cartalax','Cortagen','Crystagen','Ves']);
 function getProductImageHTML(p) {
+  // Kit images from Canva bulk renders
+  if(p.cat==='kits' && KIT_SKUS_WITH_IMAGES.has(p.sku)){
+    return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
+      <img src="media/kits/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
+      <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
+    </div>`;
+  }
   // Use real mockup if SKU has an image in media/products/
   if(VALID_SKUS.has(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
@@ -6242,17 +6254,19 @@ function renderResearch(){
 function filterResearch(){renderResearch();}
 function navigateToProduct(sku){openProduct(sku);}
 
-// Pinterest lab slideshow
-(function(){
+// Slideshow helper for pin-slide and kit-slide
+function initSlideshow(selector, interval){
   let idx=0;
-  const slides=document.querySelectorAll('.pin-slide');
+  const slides=document.querySelectorAll(selector);
   if(slides.length<2)return;
   setInterval(function(){
     slides[idx].style.opacity='0';
     idx=(idx+1)%slides.length;
     slides[idx].style.opacity='1';
-  },3000);
-})();
+  },interval||3000);
+}
+initSlideshow('.pin-slide',3000);
+initSlideshow('.kit-slide',3000);
 
 async function lookupOrder(){
   const num = document.getElementById('tracking-input').value.trim().toUpperCase();
