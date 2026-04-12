@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412l3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412l4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -5654,18 +5654,20 @@ function cryptoChangePaymentMethod(){
     }
   } catch(e){}
   localStorage.removeItem('hyl_pending_invoice');
-  // Hide crypto payment screen, show checkout steps again
-  const cryptoScreen = document.getElementById('crypto-payment-screen');
-  if(cryptoScreen) cryptoScreen.style.display = 'none';
-  // Re-render the order screen with the chip picker visible
+  // Clear the crypto card content and re-show the full checkout
+  const cryptoCard = document.querySelector('.crypto-card');
+  if(cryptoCard) cryptoCard.closest('.payment-card')?.remove();
+  // Reset selected crypto so user can pick again
+  window._selectedCrypto = null;
+  // Re-render the full order screen
   try {
-    renderOrder();
-    const cs = document.getElementById('cart-step'); if(cs) cs.style.display = '';
-    const ps = document.getElementById('payment-step'); if(ps) ps.style.display = '';
-    // Scroll to the pay methods
+    navigate('order');
     setTimeout(() => {
-      document.getElementById('pay-methods')?.scrollIntoView({block:'center',behavior:'smooth'});
-    }, 150);
+      // Show payment step and scroll to methods
+      const ps = document.getElementById('payment-step'); if(ps) ps.style.display = '';
+      const pm = document.getElementById('pay-methods');
+      if(pm) pm.scrollIntoView({block:'center',behavior:'smooth'});
+    }, 300);
   } catch(e){ navigate('order'); }
   showToast('Choose a different payment method','info');
 }
