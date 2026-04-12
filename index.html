@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412l4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412l5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -5654,21 +5654,27 @@ function cryptoChangePaymentMethod(){
     }
   } catch(e){}
   localStorage.removeItem('hyl_pending_invoice');
-  // Clear the crypto card content and re-show the full checkout
-  const cryptoCard = document.querySelector('.crypto-card');
-  if(cryptoCard) cryptoCard.closest('.payment-card')?.remove();
-  // Reset selected crypto so user can pick again
+  // Clear the crypto card and re-show the currency picker
+  const payCard = document.querySelector('.payment-card');
+  if(payCard){
+    // Re-render payment methods inside the payment card
+    renderPayMethods();
+    // Also re-show the pay button
+    const payBtn = document.getElementById('btn-pay');
+    if(payBtn){
+      payBtn.disabled = false;
+      payBtn.classList.remove('btn-loading');
+      const txt = payBtn.querySelector('.crypto-btn-text');
+      if(txt) txt.innerHTML = 'Complete Order';
+    }
+  }
+  // Reset selected crypto
   window._selectedCrypto = null;
-  // Re-render the full order screen
-  try {
-    navigate('order');
-    setTimeout(() => {
-      // Show payment step and scroll to methods
-      const ps = document.getElementById('payment-step'); if(ps) ps.style.display = '';
-      const pm = document.getElementById('pay-methods');
-      if(pm) pm.scrollIntoView({block:'center',behavior:'smooth'});
-    }, 300);
-  } catch(e){ navigate('order'); }
+  // Scroll to payment methods
+  setTimeout(() => {
+    const pm = document.getElementById('pay-methods');
+    if(pm) pm.scrollIntoView({block:'center',behavior:'smooth'});
+  }, 200);
   showToast('Choose a different payment method','info');
 }
 
