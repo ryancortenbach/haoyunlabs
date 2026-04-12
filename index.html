@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412j7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412j8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -6255,19 +6255,26 @@ function renderResearch(){
 function filterResearch(){renderResearch();}
 function navigateToProduct(sku){openProduct(sku);}
 
-// Slideshow helper for pin-slide and kit-slide
-function initSlideshow(selector, interval){
+// Slideshow helper
+function initSlideshow(selector, interval, fadeGap){
   let idx=0;
   const slides=document.querySelectorAll(selector);
   if(slides.length<2)return;
   setInterval(function(){
     slides[idx].style.opacity='0';
-    idx=(idx+1)%slides.length;
-    slides[idx].style.opacity='1';
+    if(fadeGap){
+      setTimeout(function(){
+        idx=(idx+1)%slides.length;
+        slides[idx].style.opacity='1';
+      }, fadeGap);
+    } else {
+      idx=(idx+1)%slides.length;
+      slides[idx].style.opacity='1';
+    }
   },interval||3000);
 }
 initSlideshow('.pin-slide',3000);
-initSlideshow('.kit-slide',3000);
+initSlideshow('.kit-slide',3000,600);
 
 async function lookupOrder(){
   const num = document.getElementById('tracking-input').value.trim().toUpperCase();
