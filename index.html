@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412j1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412j2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -6215,30 +6215,28 @@ function renderResearch(){
     const sku = RESEARCH_SKU_MAP[r.compound.toLowerCase()] || '';
     const hasImg = sku && ALL_PRODUCTS.some(p=>p.sku===sku);
     return `
-    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:24px;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-        ${hasImg ? `<img src="media/products/${sku}.png" alt="${r.compound}" style="width:56px;height:56px;object-fit:contain;cursor:pointer;border-radius:8px;background:#f7f7f7;padding:4px;transition:transform 0.2s" onclick="event.stopPropagation();navigateToProduct('${sku}')" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform=''">` : ''}
-        <div>
-          <div style="font-family:var(--display);font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px${hasImg?' ;cursor:pointer':''}" ${hasImg?`onclick="navigateToProduct('${sku}')"`:''}>${r.compound}</div>
-          <div style="font-size:0.72rem;color:var(--muted)">${r.desc}</div>
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease;display:grid;grid-template-columns:1fr ${hasImg?'100px':''};gap:0" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div style="padding:24px">
+        <div style="font-family:var(--display);font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px${hasImg?';cursor:pointer':''}" ${hasImg?`onclick="navigateToProduct('${sku}')"`:''}>${r.compound}</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">${r.desc}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${r.studies.map((s,i)=>`
+            <div class="research-link-wrap" style="position:relative">
+              <a href="${s.url}" target="_blank" class="research-link" style="display:flex;align-items:center;gap:8px;font-size:0.78rem;line-height:1.4;text-decoration:none;color:var(--text);padding:6px 8px;border-radius:6px;transition:all 0.2s">
+                <span style="color:var(--muted);font-weight:700;flex-shrink:0">${i+1}.</span>
+                <span style="flex:1">${s.title}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;flex-shrink:0;opacity:0;transition:all 0.3s ease"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+              </a>
+              <div class="research-hover-card">
+                <div style="font-weight:700;font-size:0.78rem;margin-bottom:4px">${s.title}</div>
+                <div style="font-size:0.7rem;color:var(--muted);line-height:1.4">Published research on PubMed. Click to read the full study.</div>
+                <div style="font-size:0.65rem;color:#1d4ed8;margin-top:6px">pubmed.ncbi.nlm.nih.gov &rarr;</div>
+              </div>
+            </div>
+          `).join('')}
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        ${r.studies.map((s,i)=>`
-          <div class="research-link-wrap" style="position:relative">
-            <a href="${s.url}" target="_blank" class="research-link" style="display:flex;align-items:center;gap:8px;font-size:0.78rem;line-height:1.4;text-decoration:none;color:var(--text);padding:6px 8px;border-radius:6px;transition:all 0.2s">
-              <span style="color:var(--muted);font-weight:700;flex-shrink:0">${i+1}.</span>
-              <span style="flex:1">${s.title}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;flex-shrink:0;opacity:0;transition:all 0.3s ease"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-            </a>
-            <div class="research-hover-card">
-              <div style="font-weight:700;font-size:0.78rem;margin-bottom:4px">${s.title}</div>
-              <div style="font-size:0.7rem;color:var(--muted);line-height:1.4">Published research on PubMed. Click to read the full study.</div>
-              <div style="font-size:0.65rem;color:#1d4ed8;margin-top:6px">pubmed.ncbi.nlm.nih.gov &rarr;</div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
+      ${hasImg ? `<div style="background:#f7f7f7;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="navigateToProduct('${sku}')"><img src="media/products/${sku}.png" alt="${r.compound}" style="width:70px;height:auto;object-fit:contain;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform=''"></div>` : ''}
     </div>`;
   }).join('');
 }
