@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260412m6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412m7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -3153,7 +3153,7 @@ const CATALOG_SUPPLIES = [
 
 // Only show products that have a real mockup image in site/media/products/
 const VALID_SKUS = new Set([
-  '10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
+  'TEST01','10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
   'ACTH1-39-5MGSV','ADAMAX10SV','ADAMAX5SV','AE1','AE1SV','AHK-CU-100MGSV','AHK-CU-50MGSV','AOD2',
   'AOD2SV','AOD5','AOD5SV','AP10','AP10SV','AP5','AP5SV','AQUA8','AR50','AR50SV','Adamax10','Adamax5',
   'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC3SV','BAC10SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
