@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412d2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412d3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -4450,8 +4450,22 @@ function openProduct(sku){
     <div class="pdp-image">${imgHTML}</div>
     <div class="pdp-info">
       <div class="pdp-back" onclick="history.back()">&#8592; Back</div>
-      <div class="pdp-name">${p.name.replace(/\d+\s*mg/i,'').trim()}</div>
-      <div class="pdp-dose">${(p.name.match(/\d+\s*mg/i)||[''])[0]}</div>
+      <div class="pdp-name">${(() => {
+        const n = p.name;
+        // Kit format: "Compound (Xmg x 10 vials)" → show compound only
+        const kitMatch = n.match(/^(.+?)\s*\(/);
+        if(kitMatch && /x\s*10\s*vials/i.test(n)) return kitMatch[1].trim();
+        // Single format: "Compound Xmg" → strip dose
+        return n.replace(/\s*\d+\s*(?:mg|iu|ml|mcg)\s*/i,'').trim();
+      })()}</div>
+      <div class="pdp-dose">${(() => {
+        const n = p.name;
+        // Kit format: show full parenthetical
+        const kitPart = n.match(/\(([^)]+)\)/);
+        if(kitPart && /x\s*10\s*vials/i.test(n)) return kitPart[1];
+        // Single: just the dose
+        return (n.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0];
+      })()}</div>
       <div class="pdp-badges">
         <span class="pdp-badge pdp-badge-purity">99%+ PURITY</span>
       </div>
