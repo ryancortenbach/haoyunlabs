@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412c4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1242,6 +1242,15 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
 /* ═══════════════ CRYPTO PAYMENT SCREEN (Bitrefill-style) ═══════════════ */
 .crypto-card{display:flex;flex-direction:column;gap:16px;padding:0;font-family:var(--sans)}
+.crypto-topbar{padding:16px 22px 0}
+.crypto-back{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.66rem;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--muted);cursor:pointer;
+  transition:color 0.2s,transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.crypto-back:hover{color:var(--text);transform:translateX(-3px)}
+.crypto-back svg{width:14px;height:14px}
 .crypto-header{display:flex;align-items:center;gap:14px;padding:22px 22px 0}
 .crypto-header .cc-icon{
   width:46px;height:46px;border-radius:50%;
@@ -1406,6 +1415,47 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-qr-badge.cc-tron{background:linear-gradient(135deg,#ef0027,#8f0015)}
 
 /* Amount + address fields */
+.crypto-total-card{
+  background:linear-gradient(135deg,#0a0a0b 0%,#1a1a1d 100%);
+  color:#fff;
+  border-radius:16px;
+  padding:18px 20px;
+  display:flex;flex-direction:column;gap:10px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.25);
+}
+.ctc-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.ctc-label{
+  font-size:0.56rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(255,255,255,0.5);
+}
+.ctc-usd{
+  font-family:var(--display);font-size:1.8rem;font-weight:900;
+  letter-spacing:-0.01em;
+}
+.ctc-usd span{
+  font-size:0.68rem;font-weight:700;letter-spacing:0.12em;
+  color:rgba(255,255,255,0.55);margin-left:4px;
+}
+.ctc-divider{
+  height:1px;background:rgba(255,255,255,0.1);margin:2px -4px;
+}
+.ctc-crypto{
+  display:flex;align-items:center;gap:8px;
+}
+.ctc-amount{
+  font-family:var(--mono);font-size:1.05rem;font-weight:800;color:#fff;
+}
+.ctc-ticker{
+  font-size:0.66rem;font-weight:800;letter-spacing:0.08em;
+  color:rgba(255,255,255,0.7);
+}
+.ctc-copy{
+  background:rgba(255,255,255,0.14)!important;color:#fff!important;
+  padding:6px 10px!important;font-size:0.58rem!important;
+}
+.ctc-copy:hover{background:rgba(255,255,255,0.22)!important}
+.ctc-copy.copied{background:#16a34a!important;color:#fff!important}
+
 .crypto-field{
   background:#f7f7f7;
   border:1px solid var(--stroke);
@@ -5230,6 +5280,14 @@ function showCryptoPayment(data){
   payCard.innerHTML = `
     <div class="crypto-card">
 
+      <!-- Top: 'Change payment method' link -->
+      <div class="crypto-topbar">
+        <a class="crypto-back" onclick="cryptoChangePaymentMethod()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          Change payment method
+        </a>
+      </div>
+
       <!-- Header: coin icon + title + chain badge -->
       <div class="crypto-header">
         <div class="cc-icon ${iconClass}">${symbol}</div>
@@ -5276,16 +5334,24 @@ function showCryptoPayment(data){
           </a>
         ` : ''}
 
-        <!-- Send exactly X -->
-        <div class="crypto-field">
-          <div class="crypto-field-main">
-            <div class="crypto-field-label">Send exactly</div>
-            <div class="crypto-field-value big">${fmtAmount} ${currency === 'TRON' ? 'USDT' : currency}</div>
+        <!-- Big total card (USD + crypto) -->
+        <div class="crypto-total-card">
+          <div class="ctc-row">
+            <div class="ctc-label">Order total</div>
+            <div class="ctc-usd">$${Number(data.amount_usd).toFixed(2)} <span>USD</span></div>
           </div>
-          <button class="crypto-copy-btn" onclick="cryptoCopy(this,'${fmtAmount}')">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-            Copy
-          </button>
+          <div class="ctc-divider"></div>
+          <div class="ctc-row">
+            <div class="ctc-label">Send exactly</div>
+            <div class="ctc-crypto">
+              <span class="ctc-amount">${fmtAmount}</span>
+              <span class="ctc-ticker">${currency === 'TRON' ? 'USDT' : currency}</span>
+              <button class="crypto-copy-btn ctc-copy" onclick="cryptoCopy(this,'${fmtAmount}')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- To address -->
@@ -5352,6 +5418,8 @@ function showCryptoPayment(data){
       cryptoSetStage('expired');
       if(cryptoPollInterval){ clearInterval(cryptoPollInterval); cryptoPollInterval = null; }
       if(window._cryptoTimerInt){ clearInterval(window._cryptoTimerInt); window._cryptoTimerInt = null; }
+      // Show refresh-invoice action
+      cryptoShowExpiredCTA();
       return;
     }
     const m = Math.floor(remaining/60000);
@@ -5379,6 +5447,9 @@ function showCryptoPayment(data){
         cryptoSetStage('paid');
         clearInterval(cryptoPollInterval); cryptoPollInterval = null;
         clearInterval(window._cryptoTimerInt); window._cryptoTimerInt = null;
+        // Success feedback: vibrate + success tone
+        try { if(navigator.vibrate) navigator.vibrate([100, 60, 100]); } catch(e){}
+        try { cryptoPlaySuccessSound(); } catch(e){}
         try {
           cart.clear(); saveCart();
           window.discountCode = null; window.discountPct = 0;
@@ -5429,6 +5500,99 @@ function cryptoCopy(btn, value){
   btn.classList.add('copied');
   btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copied';
   setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+}
+
+function cryptoChangePaymentMethod(){
+  // Stop polling + timer, clear pending, return to checkout (user is still on #order)
+  if(cryptoPollInterval){ clearInterval(cryptoPollInterval); cryptoPollInterval = null; }
+  if(window._cryptoTimerInt){ clearInterval(window._cryptoTimerInt); window._cryptoTimerInt = null; }
+  try {
+    const pending = JSON.parse(localStorage.getItem('hyl_pending_invoice')||'null');
+    if(pending && Array.isArray(pending.cartSnapshot) && typeof cart !== 'undefined' && cart.size === 0){
+      // Restore cart if it was cleared
+      pending.cartSnapshot.forEach(([sku,qty]) => cart.set(sku, qty));
+      try { saveCart(); } catch(e){}
+      try { updateBadge(); } catch(e){}
+    }
+  } catch(e){}
+  localStorage.removeItem('hyl_pending_invoice');
+  // Re-render the order screen with the chip picker visible
+  try {
+    renderOrder();
+    const cs = document.getElementById('cart-step'); if(cs) cs.style.display = '';
+    const ps = document.getElementById('payment-step'); if(ps) ps.style.display = '';
+    // Scroll to the pay methods
+    setTimeout(() => {
+      document.getElementById('pay-methods')?.scrollIntoView({block:'center',behavior:'smooth'});
+    }, 150);
+  } catch(e){ navigate('order'); }
+  showToast('Choose a different currency','info');
+}
+
+function cryptoPlaySuccessSound(){
+  // Web Audio API 3-note success chord, no external assets
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    const ctx = new AC();
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+      gain.gain.linearRampToValueAtTime(0.14, ctx.currentTime + i * 0.12 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i * 0.12 + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.5);
+    });
+    setTimeout(() => ctx.close?.(), 2000);
+  } catch(e){ /* silent fail */ }
+}
+
+function cryptoShowExpiredCTA(){
+  const body = document.getElementById('crypto-pay-body');
+  if(!body) return;
+  body.classList.remove('locked');
+  body.innerHTML = `
+    <div style="text-align:center;padding:40px 20px">
+      <div style="width:72px;height:72px;margin:0 auto 20px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;border:2px solid #fca5a5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div style="font-family:var(--display);font-size:1.3rem;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px">Invoice expired</div>
+      <div style="color:var(--muted);font-size:0.82rem;line-height:1.5;margin-bottom:24px;max-width:320px;margin-left:auto;margin-right:auto">The exchange rate lock on this invoice ran out. Don't worry — you haven't been charged. Generate a fresh invoice at the current rate to continue.</div>
+      <button onclick="cryptoRegenerateInvoice()" style="padding:14px 26px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer">Generate new invoice</button>
+    </div>
+  `;
+}
+
+async function cryptoRegenerateInvoice(){
+  // Restore the cart from the pending invoice (if still present), otherwise kick the user back to checkout
+  try {
+    const pending = JSON.parse(localStorage.getItem('hyl_pending_invoice')||'null');
+    if(pending && Array.isArray(pending.cartSnapshot) && typeof cart !== 'undefined'){
+      cart.clear();
+      pending.cartSnapshot.forEach(([sku,qty]) => cart.set(sku, qty));
+      try { saveCart(); } catch(e){}
+      try { updateBadge(); } catch(e){}
+    }
+    localStorage.removeItem('hyl_pending_invoice');
+    // Send them back to the shipping step so they can re-submit with fresh rate
+    showToast('Invoice refreshed — confirming your details...','info');
+    navigate('order');
+    // Auto-scroll to the payment card + resubmit
+    setTimeout(() => {
+      const btn = document.getElementById('btn-pay');
+      if(btn) btn.click();
+    }, 800);
+  } catch(e){
+    console.error('[crypto] regenerate failed', e);
+    showToast('Could not refresh. Please re-add items and check out again.','error');
+    navigate('home');
+  }
 }
 
 function cryptoToggleAck(ev){
