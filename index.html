@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412g6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412g7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -4230,8 +4230,7 @@ function cardHTML(p){
   // Look up real purity from COA data (falls back to 99.00 if no COA exists)
   const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r._skus && r._skus.includes(p.sku.toLowerCase()));
   const purity = coaMatch ? coaMatch.pu.replace('%','') : '99.00';
-  const bestSellers = ['RT10SV','CU50SV'];
-  const isBest = bestSellers.includes(p.sku);
+  const isBest = BESTSELLER_SKUS.includes(p.sku);
 
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative">
     ${getProductImageHTML(p)}
