@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412g5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412g6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -6359,24 +6359,45 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
 
 /* 3D CARD TILT (Aceternity-style) */
 (function init3dCards(){
-  document.querySelectorAll('.card-3d-wrap').forEach(function(wrap){
-    var card = wrap.querySelector('.card-3d');
-    if(!card) return;
-    wrap.addEventListener('mousemove', function(e){
-      var rect = wrap.getBoundingClientRect();
+  document.querySelectorAll('.card-3d-wrap').forEach(function(el){
+    el.style.transition = 'transform 0.15s ease-out, box-shadow 0.3s ease';
+    el.style.transformStyle = 'preserve-3d';
+    el.addEventListener('mousemove', function(e){
+      var rect = el.getBoundingClientRect();
       var x = e.clientX - rect.left;
       var y = e.clientY - rect.top;
       var cx = rect.width / 2;
       var cy = rect.height / 2;
-      var rotY = ((x - cx) / cx) * 12;
-      var rotX = ((y - cy) / cy) * -12;
-      card.style.transform = 'perspective(1000px) rotateX('+rotX+'deg) rotateY('+rotY+'deg) scale3d(1.02,1.02,1.02)';
+      var rotY = ((x - cx) / cx) * 15;
+      var rotX = ((y - cy) / cy) * -15;
+      el.style.transform = 'perspective(800px) rotateX('+rotX+'deg) rotateY('+rotY+'deg) scale3d(1.03,1.03,1.03)';
+      el.style.boxShadow = '0 25px 50px rgba(0,0,0,0.15)';
     });
-    wrap.addEventListener('mouseleave', function(){
-      card.style.transform = '';
+    el.addEventListener('mouseleave', function(){
+      el.style.transform = '';
+      el.style.boxShadow = '';
+    });
+  });
+  // Also apply to the compact tilt-card images
+  document.querySelectorAll('.tilt-card .tilt-img, .tilt-card img.tilt-img').forEach(function(img){
+    var card = img.closest('.tilt-card');
+    if(!card) return;
+    card.addEventListener('mousemove', function(e){
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var cx = rect.width / 2;
+      var cy = rect.height / 2;
+      var rotY = ((x - cx) / cx) * 8;
+      var rotX = ((y - cy) / cy) * -8;
+      img.style.transform = 'perspective(600px) rotateX('+rotX+'deg) rotateY('+rotY+'deg) scale(1.08)';
+    });
+    card.addEventListener('mouseleave', function(){
+      img.style.transform = '';
     });
   });
 })();
+
 
 /* ── TEST PANEL (Ctrl+P) ── */
 document.addEventListener('keydown',function(e){
