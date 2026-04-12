@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412g2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412g3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -779,6 +779,21 @@ ul{list-style:none}
   transform:translateX(4px);
 }
 .hero-btn-invert-dark{transition:all 0.35s cubic-bezier(0.22,1,0.36,1)}
+
+/* ── 3D CARD TILT (Aceternity-style) ── */
+.card-3d-wrap{perspective:1200px}
+.card-3d{
+  transition:transform 0.15s ease-out,box-shadow 0.3s ease;
+  transform-style:preserve-3d;will-change:transform;
+}
+.card-3d:hover{box-shadow:0 30px 60px rgba(0,0,0,0.12)}
+.card-3d .card-3d-float{
+  transition:transform 0.15s ease-out;
+  transform:translateZ(0);
+}
+.card-3d:hover .card-3d-float{transform:translateZ(40px)}
+.card-3d .card-3d-float-deep{transition:transform 0.15s ease-out}
+.card-3d:hover .card-3d-float-deep{transform:translateZ(60px)}
 
 /* ── SHIMMER TEXT (Aceternity-style) ── */
 .shimmer-title{
@@ -2079,7 +2094,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     </div>
 
     <!-- FULL CATALOG (text left, images right) -->
-    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:220px;border:1px solid var(--stroke)" onclick="navigate('catalog')">
+    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:220px;border:1px solid var(--stroke);background:#fff" onclick="navigate('catalog')">
       <div style="padding:36px 32px;display:flex;flex-direction:column;justify-content:center">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Full Catalog</div>
         <div class="shimmer-title" style="font-size:1.6rem;margin-bottom:12px">Built for Serious Research</div>
@@ -2094,7 +2109,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     </div>
 
     <!-- COA / PURITY (images left, text right — alternating) -->
-    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:220px;border:1px solid var(--stroke)" onclick="navigate('coa')">
+    <div class="tilt-card" style="display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;margin-bottom:48px;cursor:pointer;min-height:220px;border:1px solid var(--stroke);background:#fff" onclick="navigate('coa')">
       <div style="background:#fff;display:flex;align-items:center;justify-content:center;gap:8px;padding:20px">
         <img src="media/products/ET10SV.png" alt="Epithalon" style="width:30%;max-width:110px;height:auto;object-fit:contain;transform:scale(1.05)" loading="lazy">
         <img src="media/products/BC5SV.png" alt="BPC-157" style="width:30%;max-width:110px;height:auto;object-fit:contain;transform:scale(1.1)" loading="lazy">
