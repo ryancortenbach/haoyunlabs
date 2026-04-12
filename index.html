@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c9';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412d1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -5331,7 +5331,7 @@ function showCryptoPayment(data){
       </div>
 
       <!-- Acknowledgment checkbox (reveals address on check) -->
-      <label class="crypto-ack" id="crypto-ack-label" onclick="cryptoToggleAck(event)">
+      <label class="crypto-ack" id="crypto-ack-label">
         <input type="checkbox" id="crypto-ack-check" onchange="cryptoToggleAck()">
         <span class="ack-text">I have verified my wallet is set to <strong>${networkLabel}</strong> and I'm sending <strong>${currency}</strong> on the correct network.</span>
       </label>
@@ -5605,15 +5605,13 @@ async function cryptoRegenerateInvoice(){
   }
 }
 
-function cryptoToggleAck(ev){
+function cryptoToggleAck(){
   const check = document.getElementById('crypto-ack-check');
   const label = document.getElementById('crypto-ack-label');
   const body = document.getElementById('crypto-pay-body');
   if(!check || !label || !body) return;
-  // If the click was on the checkbox itself, onchange already flipped it — don't flip again
-  if(ev && ev.target && ev.target.tagName !== 'INPUT'){
-    check.checked = !check.checked;
-  }
+  // Browser's native <label> wrapping <input> handles the toggle.
+  // We just sync the CSS classes.
   const on = check.checked;
   label.classList.toggle('checked', on);
   body.classList.toggle('locked', !on);
