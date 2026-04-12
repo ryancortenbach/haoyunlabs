@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412j6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412j7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -743,14 +743,14 @@ ul{list-style:none}
 .hero-btn-secondary:hover{background:#f5f5f5}
 
 /* ── SHOP YOUR WAY PILLS ── */
-.shop-pill{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#f0f0ee;border-radius:999px;cursor:pointer;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
-.shop-pill:hover{background:#e8e8e5;transform:translateY(-2px)}
+.shop-pill{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#fff;border:1px solid var(--stroke);border-radius:999px;cursor:pointer;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill:hover{background:#fafafa;transform:translateY(-2px)}
 .shop-pill-img{width:56px;height:56px;background:#f5f5f5;border-radius:14px;flex-shrink:0;overflow:hidden;transform:scale(0.85);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
 .shop-pill-img img{width:100%;height:100%;object-fit:cover;display:block}
 .shop-pill:hover .shop-pill-img{transform:scale(1)}
 .shop-pill-name{font-size:1.3rem;font-weight:800;flex:1;letter-spacing:0.01em}
-.shop-pill-arrow{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.3s ease-in-out}
-.shop-pill-arrow svg{width:18px;height:18px;stroke:#000;transition:transform 0.3s ease-in-out}
+.shop-pill-arrow{width:36px;height:36px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.3s ease-in-out}
+.shop-pill-arrow svg{width:18px;height:18px;stroke:#fff;transition:transform 0.3s ease-in-out}
 .shop-pill:hover .shop-pill-arrow svg{transform:translateX(3px)}
 
 /* tilt-card: pronounced image-only hover for cards with explicit images, lift+zoom for cards with inline bg url */
@@ -2066,8 +2066,10 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
           </div>
           <div style="width:88px;height:88px;border-radius:14px;flex-shrink:0;position:relative;overflow:hidden;background:#f0f0f0">
             <img class="kit-slide" src="media/kits/SM2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:1" alt="Kit" loading="lazy">
-            <img class="kit-slide" src="media/kits/SM5.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
-            <img class="kit-slide" src="media/kits/SM10.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
+            <img class="kit-slide" src="media/kits/ET10.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
+            <img class="kit-slide" src="media/kits/CU50.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
+            <img class="kit-slide" src="media/kits/MT2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
+            <img class="kit-slide" src="media/kits/P41.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
           </div>
         </div>
         <!-- Best Sellers (compact, ALTERNATED: image left, text right) -->
@@ -2098,8 +2100,9 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
     <!-- COA / PURITY (text card wraps image card, alternated: images left) -->
     <div style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="navigate('coa')">
-      <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden">
-        <video src="media/coa-preview.mp4" autoplay muted loop playsinline webkit-playsinline="true" style="width:100%;height:100%;object-fit:cover"></video>
+      <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative">
+        <video autoplay muted loop playsinline webkit-playsinline="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="media/coa-fast.mp4" type="video/mp4"></video>
+        <img src="media/kits/ET10.png" alt="COA" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.5s" onload="this.parentElement.querySelector('video').addEventListener('error',()=>{this.style.opacity='1'})">
       </div>
       <div>
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
