@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412k9';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412l1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2110,7 +2110,6 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <div style="position:absolute;top:0;left:0;right:0;z-index:2;background:#fff;padding:14px 16px 8px;text-align:center">
           <div style="font-family:var(--display);font-size:0.72rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase">Browse Every Vials' COAS</div>
         </div>
-        <img src="media/coa-preview.mp4.png" alt="COA" style="display:none">
         <video autoplay muted loop playsinline webkit-playsinline="true" style="position:absolute;top:36px;left:10px;right:10px;bottom:0;width:calc(100% - 20px);height:calc(100% - 36px);object-fit:cover;object-position:top"><source src="media/coa-v4.mp4" type="video/mp4"></video>
       </div>
       <div>
@@ -3498,14 +3497,28 @@ async function connectWallet(){
     }
   }, 10000);
   try {
-    // If injected wallet is available (desktop MetaMask / mobile in-app browser), use that first
-    // MetaMask may take a moment to inject window.ethereum
+    // If injected wallet is available, use it directly
     if(!window.ethereum){ await new Promise(r=>setTimeout(r,500)); }
-    const eth = window.ethereum?.providers?.find(p=>p.isMetaMask) || window.ethereum;
+    let eth = window.ethereum;
+    // If multiple providers, let the browser's native wallet chooser handle it
     if(eth && eth.request){
-      console.log('[WC] using injected provider:', eth.isMetaMask ? 'MetaMask' : 'other');
-      showToast('Opening wallet...','info');
-      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      const name = eth.isMetaMask ? 'MetaMask' : eth.isPhantom ? 'Phantom' : eth.isCoinbaseWallet ? 'Coinbase' : 'Wallet';
+      console.log('[WC] requesting accounts from:', name);
+      showToast('Opening ' + name + '...','info');
+      let accounts;
+      try {
+        accounts = await eth.request({ method: 'eth_requestAccounts' });
+      } catch(injErr){
+        console.warn('[WC] injected provider error, trying direct MetaMask:', injErr);
+        // evmAsk or similar proxy failed - try to find raw MetaMask provider
+        const rawMM = window.ethereum?.providers?.find(p=>p.isMetaMask);
+        if(rawMM){
+          accounts = await rawMM.request({ method: 'eth_requestAccounts' });
+          eth = rawMM;
+        } else {
+          throw injErr;
+        }
+      }
       if(accounts && accounts[0]){
         window.hylWallet.address = accounts[0];
         const chainId = await eth.request({ method: 'eth_chainId' });
@@ -3514,15 +3527,13 @@ async function connectWallet(){
         window.hylWallet._injected = true;
         updateConnectBtn();
         showToast('Wallet connected','success');
-        // Listen for future changes
         try { eth.on('accountsChanged', (a)=>{ window.hylWallet.address = a && a[0] || null; updateConnectBtn(); }); } catch(e){}
         try { eth.on('chainChanged', (c)=>{ window.hylWallet.chainId = c; updateConnectBtn(); }); } catch(e){}
         return;
       }
     }
-    // No injected wallet found
     if(!eth || !eth.request){
-      showToast('No wallet extension detected. Install MetaMask or use WalletConnect.','error');
+      showToast('No wallet detected. Install MetaMask or use WalletConnect.','error');
     }
     // Fall through to WalletConnect (QR modal / deep link)
     console.log('[WC] falling back to WalletConnect');
