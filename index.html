@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412k7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412k8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -3128,6 +3128,7 @@ const CATALOG_SPRAYS = [
 ];
 
 const CATALOG_SUPPLIES = [
+  { sku:'TEST01', name:'Sepolia Test Product', price:0.01, description:'Test product for Sepolia testnet payment testing. $0.01 USD. Use test mode in admin panel.' },
   { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:6, description:'3ml sterile bacteriostatic water - the standard solvent for reconstituting lyophilized peptides. Single-use vial.' },
   { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:10, description:'10ml bacteriostatic water for multi-vial research setups. 0.9% benzyl alcohol preservative for extended stability after reconstitution.' },
   { sku:'NEEDLE31G8MM10PK', name:'Insulin Syringes (10 pack)', price:4.99, description:'Box of 10 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
@@ -3499,7 +3500,8 @@ async function connectWallet(){
   try {
     // If injected wallet is available (desktop MetaMask / mobile in-app browser), use that first
     if(window.ethereum && window.ethereum.request){
-      console.log('[WC] using injected provider');
+      console.log('[WC] using injected provider:', window.ethereum.isMetaMask ? 'MetaMask' : 'other');
+      showToast('Opening wallet...','info');
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       if(accounts && accounts[0]){
         window.hylWallet.address = accounts[0];
@@ -3514,6 +3516,10 @@ async function connectWallet(){
         try { window.ethereum.on('chainChanged', (c)=>{ window.hylWallet.chainId = c; updateConnectBtn(); }); } catch(e){}
         return;
       }
+    }
+    // No injected wallet found
+    if(!window.ethereum){
+      showToast('No wallet extension detected. Install MetaMask or use WalletConnect.','error');
     }
     // Fall through to WalletConnect (QR modal / deep link)
     console.log('[WC] falling back to WalletConnect');
