@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412f4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412f5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -4590,9 +4590,37 @@ function selectPdpSize(sku, idx){
   // Update price display
   const priceEl = document.getElementById('pdp-price-display');
   if(priceEl) priceEl.textContent = '$' + sizes[idx].price.toFixed(2);
+  // Update old price (strikethrough)
+  const oldPriceEl = document.querySelector('.pdp-price-old');
+  if(oldPriceEl) oldPriceEl.textContent = '$' + (Math.floor(sizes[idx].price * 1.8) - 0.01).toFixed(2);
   // Update dose display
   const doseEl = document.querySelector('.pdp-dose');
   if(doseEl) doseEl.textContent = sizes[idx].label;
+  // Find the matching variant product and update image + SKU + Add to Cart
+  const baseProduct = getProduct(sku);
+  if(baseProduct){
+    const newDose = sizes[idx].label.toLowerCase();
+    const compound = baseProduct.name.replace(/\s*\d+\s*(mg|iu|ml|mcg).*/i,'').trim().toLowerCase();
+    const match = ALL_PRODUCTS.find(p =>
+      p.name.toLowerCase().includes(compound) &&
+      p.name.toLowerCase().includes(newDose) &&
+      p.sku.endsWith('SV') &&
+      !p.name.toLowerCase().includes('x 10')
+    );
+    if(match){
+      // Update PDP image
+      const img = document.querySelector('.pdp-image img');
+      if(img) img.src = 'media/products/' + match.sku + '.png';
+      // Update SKU display
+      const skuEl = document.querySelector('.pdp-sku-value');
+      if(skuEl) skuEl.textContent = match.sku;
+      // Update Add to Cart to use the variant SKU
+      const addBtn = document.querySelector('.pdp-add-btn');
+      if(addBtn) addBtn.setAttribute('onclick', "addToCartQty('" + match.sku + "',pdpQty)");
+      // Store for reference
+      window._pdpCurrentSku = match.sku;
+    }
+  }
   // Update button styles
   document.querySelectorAll('.pdp-size-btn').forEach(function(b,i){
     const active = i===idx;
