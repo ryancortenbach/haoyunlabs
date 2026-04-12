@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412c7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412c8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1200,16 +1200,16 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 }
 .crypto-chip.selected .cc-name{color:rgba(255,255,255,0.6)}
 /* Branded gradient overlays on hover */
-.crypto-chip[data-c="BTC"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(247,147,26,0.14),rgba(247,147,26,0))}
-.crypto-chip[data-c="ETH"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(98,126,234,0.18),rgba(98,126,234,0))}
-.crypto-chip[data-c="SOL"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(153,69,255,0.18),rgba(20,241,149,0.12))}
-.crypto-chip[data-c="USDT"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(38,161,123,0.18),rgba(38,161,123,0))}
-.crypto-chip.selected[data-c="BTC"]{background:linear-gradient(135deg,#f7931a 0%,#c87309 100%);border-color:#f7931a}
-.crypto-chip.selected[data-c="ETH"]{background:linear-gradient(135deg,#627eea 0%,#4b60d6 100%);border-color:#627eea}
-.crypto-chip.selected[data-c="SOL"]{background:linear-gradient(135deg,#9945ff 0%,#14f195 100%);border-color:#9945ff}
-.crypto-chip.selected[data-c="USDT"]{background:linear-gradient(135deg,#26a17b 0%,#1b7e5e 100%);border-color:#26a17b}
-.crypto-chip[data-c="TRON"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(239,0,39,0.16),rgba(239,0,39,0))}
-.crypto-chip.selected[data-c="TRON"]{background:linear-gradient(135deg,#ef0027 0%,#8f0015 100%);border-color:#ef0027}
+.crypto-chip[data-c="BTC"]:hover::before,
+.crypto-chip[data-c="ETH"]:hover::before,
+.crypto-chip[data-c="SOL"]:hover::before,
+.crypto-chip[data-c="USDT"]:hover::before,
+.crypto-chip[data-c="TRON"]:hover::before{opacity:1;background:linear-gradient(135deg,rgba(0,0,0,0.06),rgba(0,0,0,0))}
+.crypto-chip.selected[data-c="BTC"],
+.crypto-chip.selected[data-c="ETH"],
+.crypto-chip.selected[data-c="SOL"],
+.crypto-chip.selected[data-c="USDT"],
+.crypto-chip.selected[data-c="TRON"]{background:#0a0a0b;color:#fff;border-color:#000}
 .crypto-chip .cc-badge{
   position:absolute;top:6px;right:6px;z-index:2;
   background:linear-gradient(135deg,#facc15,#f59e0b);color:#7c2d12;
@@ -1259,11 +1259,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   flex-shrink:0;font-family:var(--display);font-size:1.4rem;font-weight:900;color:#fff;
   box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
-.crypto-header .cc-icon.cc-btc{background:linear-gradient(135deg,#f7931a,#e07b00)}
-.crypto-header .cc-icon.cc-eth{background:linear-gradient(135deg,#627eea,#4b60d6)}
-.crypto-header .cc-icon.cc-sol{background:linear-gradient(135deg,#9945ff,#14f195)}
-.crypto-header .cc-icon.cc-usdt{background:linear-gradient(135deg,#26a17b,#1b7e5e)}
-.crypto-header .cc-icon.cc-tron{background:linear-gradient(135deg,#ef0027,#8f0015)}
+.crypto-header .cc-icon.cc-btc,
+.crypto-header .cc-icon.cc-eth,
+.crypto-header .cc-icon.cc-sol,
+.crypto-header .cc-icon.cc-usdt,
+.crypto-header .cc-icon.cc-tron{background:#0a0a0b}
 .crypto-header .cc-title{flex:1;min-width:0}
 .crypto-header .cc-title-main{
   font-family:var(--display);font-size:1.15rem;font-weight:900;
@@ -1272,7 +1272,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-chain-pill{
   display:inline-flex;align-items:center;gap:6px;
   padding:4px 11px;margin-top:6px;
-  background:#fef2f2;color:#b91c1c;border:1.5px solid #fca5a5;
+  background:#f5f5f5;color:#000;border:1.5px solid #000;
   border-radius:999px;
   font-size:0.58rem;font-weight:800;letter-spacing:0.1em;
   text-transform:uppercase;font-family:var(--sans);
@@ -1299,13 +1299,13 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
   margin-top:-7px;
 }
-.crypto-stage.active{border-top-color:#f59e0b;color:#d97706}
-.crypto-stage.active::before{background:#f59e0b;animation:cryptoPulse 1.4s ease-in-out infinite}
-.crypto-stage.done{border-top-color:#16a34a;color:#16a34a}
-.crypto-stage.done::before{background:#16a34a;animation:none}
+.crypto-stage.active{border-top-color:#000;color:#000}
+.crypto-stage.active::before{background:#000;animation:cryptoPulse 1.4s ease-in-out infinite}
+.crypto-stage.done{border-top-color:#000;color:#000}
+.crypto-stage.done::before{background:#000;animation:none}
 @keyframes cryptoPulse{
-  0%,100%{transform:scale(1);opacity:1;box-shadow:0 0 0 0 rgba(245,158,11,0.5)}
-  50%{transform:scale(1.35);opacity:0.85;box-shadow:0 0 0 6px rgba(245,158,11,0)}
+  0%,100%{transform:scale(1);opacity:1;box-shadow:0 0 0 0 rgba(0,0,0,0.3)}
+  50%{transform:scale(1.35);opacity:0.85;box-shadow:0 0 0 6px rgba(0,0,0,0)}
 }
 
 /* Big timer */
@@ -1321,42 +1321,42 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   margin-top:4px;letter-spacing:0.04em;color:var(--text);
   transition:color 0.3s ease;
 }
-.crypto-timer-big .ct-value.urgent{color:#dc2626;animation:cryptoUrgentPulse 1.2s ease-in-out infinite}
+.crypto-timer-big .ct-value.urgent{color:#000;animation:cryptoUrgentPulse 1.2s ease-in-out infinite}
 .crypto-timer-big .ct-value.expired{color:#9ca3af;font-size:1.3rem;letter-spacing:0.1em}
 @keyframes cryptoUrgentPulse{
   0%,100%{opacity:1}
-  50%{opacity:0.65}
+  50%{opacity:0.4}
 }
 
 /* Warning box */
 .crypto-warn-box{
   margin:0 22px;
   padding:14px 16px;
-  background:linear-gradient(135deg,#fef2f2,#fee2e2);
-  border:1.5px solid #fca5a5;
-  border-left:4px solid #dc2626;
+  background:#f7f7f7;
+  border:1.5px solid #000;
+  border-left:4px solid #000;
   border-radius:12px;
   display:flex;gap:12px;align-items:flex-start;
 }
 .crypto-ack{
   margin:10px 22px 0;
   padding:12px 14px;
-  background:#fffbeb;
-  border:1.5px solid #fcd34d;border-radius:10px;
+  background:#f7f7f7;
+  border:1.5px solid var(--stroke);border-radius:10px;
   display:flex;gap:10px;align-items:flex-start;
   cursor:pointer;user-select:none;
-  transition:background 0.2s;
+  transition:background 0.2s,border-color 0.2s;
 }
-.crypto-ack:hover{background:#fef3c7}
-.crypto-ack.checked{background:#ecfdf5;border-color:#86efac}
+.crypto-ack:hover{background:#eee}
+.crypto-ack.checked{background:#f7f7f7;border-color:#000}
 .crypto-ack input{
   width:18px;height:18px;flex-shrink:0;margin-top:1px;
-  accent-color:#16a34a;cursor:pointer;
+  accent-color:#000;cursor:pointer;
 }
 .crypto-ack .ack-text{
-  font-size:0.72rem;line-height:1.45;color:#713f12;font-weight:700;
+  font-size:0.72rem;line-height:1.45;color:#333;font-weight:700;
 }
-.crypto-ack.checked .ack-text{color:#14532d}
+.crypto-ack.checked .ack-text{color:#000}
 .crypto-pay-body.locked{
   position:relative;
 }
@@ -1374,11 +1374,12 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   color:var(--muted);z-index:6;text-align:center;
   padding:0 20px;
 }
-.crypto-warn-box svg{flex-shrink:0;color:#dc2626;margin-top:1px}
+.crypto-warn-box svg{flex-shrink:0;color:#000;margin-top:1px}
 .crypto-warn-box .cw-body{
   font-size:0.72rem;line-height:1.55;color:#7f1d1d;
 }
-.crypto-warn-box .cw-body strong{color:#991b1b;font-weight:800}
+.crypto-warn-box .cw-body{font-size:0.72rem;line-height:1.55;color:#333}
+.crypto-warn-box .cw-body strong{color:#000;font-weight:800}
 
 /* Pay body (QR + fields) */
 .crypto-pay-body{
@@ -1409,11 +1410,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   box-shadow:0 4px 14px rgba(0,0,0,0.22);
   font-family:var(--display);font-size:1.35rem;font-weight:900;color:#fff;
 }
-.crypto-qr-badge.cc-btc{background:linear-gradient(135deg,#f7931a,#e07b00)}
-.crypto-qr-badge.cc-eth{background:linear-gradient(135deg,#627eea,#4b60d6)}
-.crypto-qr-badge.cc-sol{background:linear-gradient(135deg,#9945ff,#14f195)}
-.crypto-qr-badge.cc-usdt{background:linear-gradient(135deg,#26a17b,#1b7e5e)}
-.crypto-qr-badge.cc-tron{background:linear-gradient(135deg,#ef0027,#8f0015)}
+.crypto-qr-badge.cc-btc,
+.crypto-qr-badge.cc-eth,
+.crypto-qr-badge.cc-sol,
+.crypto-qr-badge.cc-usdt,
+.crypto-qr-badge.cc-tron{background:#0a0a0b}
 
 /* Amount + address fields */
 .crypto-total-card{
@@ -1487,7 +1488,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-copy-btn:hover{background:#1a1a1a;transform:scale(1.05)}
 .crypto-copy-btn:active{transform:scale(0.96)}
 .crypto-copy-btn svg{width:13px;height:13px;stroke-width:2.4}
-.crypto-copy-btn.copied{background:#16a34a!important;animation:cryptoCopyBounce 0.4s}
+.crypto-copy-btn.copied{background:#333!important;animation:cryptoCopyBounce 0.4s}
 @keyframes cryptoCopyBounce{
   0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}
 }
@@ -5299,7 +5300,7 @@ function showCryptoPayment(data){
 
       <!-- Header: coin icon + title + chain badge -->
       <div class="crypto-header">
-        <div class="cc-icon ${iconClass}">${symbol}</div>
+        <div class="cc-icon ${iconClass}"><img src="crypto-icons/${currency.toLowerCase()}.svg" alt="${currency}" style="width:26px;height:26px;filter:brightness(0) invert(1)" onerror="this.parentElement.textContent='${symbol}'"></div>
         <div class="cc-title">
           <div class="cc-title-main">Pay with ${CRYPTO_FULL_NAME[currency] || currency}</div>
           <div class="crypto-chain-pill">
@@ -5339,7 +5340,7 @@ function showCryptoPayment(data){
         ${qrDataUrl ? `
           <a class="crypto-qr-wrap" href="${payUri}" aria-label="Open in wallet">
             <img src="${qrDataUrl}" alt="Payment QR">
-            <div class="crypto-qr-badge ${iconClass}">${symbol}</div>
+            <div class="crypto-qr-badge ${iconClass}"><img src="crypto-icons/${currency.toLowerCase()}.svg" alt="${currency}" style="width:28px;height:28px;filter:brightness(0) invert(1)" onerror="this.parentElement.textContent='${symbol}'"></div>
           </a>
         ` : ''}
 
