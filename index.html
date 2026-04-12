@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412k1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412k2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -2064,13 +2064,13 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:14px">
         <!-- Bulk Packs (compact) -->
-        <div class="tilt-card card-3d-wrap" style="background:#fff;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('kits')">
+        <div class="tilt-card" style="background:#fff;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('kits')">
           <div>
             <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Need more? Save up to 33% on our</div>
             <div class="shimmer-title">10-Vial Kits</div>
             <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;margin-top:4px">Pre-built collections of our most-requested compounds. Lot-traceable and COA-backed.</div>
           </div>
-          <div style="width:88px;height:88px;border-radius:14px;flex-shrink:0;position:relative;overflow:hidden;background:#f0f0f0">
+          <div class="card-3d-wrap" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;position:relative;overflow:hidden;background:#fff">
             <img class="kit-slide" src="media/kits/SM2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:1" alt="Kit" loading="lazy">
             <img class="kit-slide" src="media/kits/ET10.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
             <img class="kit-slide" src="media/kits/CU50.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0" alt="Kit" loading="lazy">
@@ -2079,8 +2079,8 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
           </div>
         </div>
         <!-- Best Sellers (compact, ALTERNATED: image left, text right) -->
-        <div class="tilt-card card-3d-wrap" style="background:#fff;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('bestsellers')">
-          <video class="tilt-img" src="media/hero.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;object-fit:cover;background:#000"></video>
+        <div class="tilt-card" style="background:#fff;border-radius:var(--radius);padding:22px 22px;cursor:pointer;border:1px solid var(--stroke);display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;overflow:hidden" onclick="goToCategory('bestsellers')">
+          <div class="card-3d-wrap" style="width:88px;height:88px;border-radius:14px;flex-shrink:0;overflow:hidden;background:#000"><video src="media/hero.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="width:100%;height:100%;object-fit:cover"></video></div>
           <div>
             <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Can't decide? Shop our</div>
             <div class="shimmer-title">Best Sellers</div>
@@ -6261,26 +6261,22 @@ function renderResearch(){
 function filterResearch(){renderResearch();}
 function navigateToProduct(sku){openProduct(sku);}
 
-// Slideshow helper
-function initSlideshow(selector, interval, fadeGap){
+// Slideshow helper - crossfade: next fades in on top, then old hides
+function initSlideshow(selector, interval){
   let idx=0;
   const slides=document.querySelectorAll(selector);
   if(slides.length<2)return;
   setInterval(function(){
-    slides[idx].style.opacity='0';
-    if(fadeGap){
-      setTimeout(function(){
-        idx=(idx+1)%slides.length;
-        slides[idx].style.opacity='1';
-      }, fadeGap);
-    } else {
-      idx=(idx+1)%slides.length;
-      slides[idx].style.opacity='1';
-    }
+    var next=(idx+1)%slides.length;
+    slides[next].style.opacity='1';
+    setTimeout(function(){
+      slides[idx].style.opacity='0';
+      idx=next;
+    },800);
   },interval||3000);
 }
 initSlideshow('.pin-slide',3000);
-initSlideshow('.kit-slide',3000,600);
+initSlideshow('.kit-slide',3000);
 
 async function lookupOrder(){
   const num = document.getElementById('tracking-input').value.trim().toUpperCase();
