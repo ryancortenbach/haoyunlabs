@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412h6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412h7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -3473,7 +3473,7 @@ async function connectWallet(){
       updateConnectBtn();
       showToast('Connection timed out. Check your wallet extension for pending requests.','error');
     }
-  }, 45000);
+  }, 10000);
   try {
     // If injected wallet is available (desktop MetaMask / mobile in-app browser), use that first
     if(window.ethereum && window.ethereum.request){
@@ -3497,7 +3497,7 @@ async function connectWallet(){
     console.log('[WC] falling back to WalletConnect');
     const provider = await Promise.race([
       initWalletConnect(),
-      new Promise((_, rej) => setTimeout(()=>rej(new Error('WalletConnect module load timed out')), 15000))
+      new Promise((_, rej) => setTimeout(()=>rej(new Error('WalletConnect module load timed out')), 8000))
     ]);
     if(!provider){ return; }
     await provider.connect();
