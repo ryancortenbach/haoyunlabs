@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-(function(){var B='20260412f5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260412f6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -900,6 +900,10 @@ ul{list-style:none}
   #screen-research div[style*="grid-template-columns:repeat(4,1fr)"]>div{padding:18px 8px!important}
   #research-cards{grid-template-columns:1fr!important;gap:12px!important}
   #research-cards>div{padding:20px 16px!important}
+  /* Feature split cards: stack to 1 column on mobile */
+  .tilt-card[style*="min-height:220px"]{grid-template-columns:1fr!important;min-height:auto!important}
+  .tilt-card[style*="min-height:220px"]>div[style*="padding:36px"]{padding:24px 20px!important}
+  .tilt-card[style*="min-height:220px"]>div[style*="background:#fff"]{padding:16px!important}
   /* iOS 16px minimum to prevent zoom on focus */
   input[type="text"],input[type="email"],input[type="tel"],input[type="search"],select,textarea{font-size:16px!important}
   /* Email popup close button */
