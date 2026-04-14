@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -3277,6 +3277,8 @@ function addToCartQty(sku, qty){
   const existing = cart.get(sku) || 0;
   cart.set(sku, existing + qty);
   saveCart();
+  // If on order screen, re-render to update empty state / receipt
+  if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
   showToast(p ? `${p.name} x${qty} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
@@ -3295,6 +3297,8 @@ function addToCart(sku, btn){
   if(existing) cart.set(sku, existing + 1);
   else cart.set(sku, 1);
   saveCart();
+  // If on order screen, re-render to update empty state / receipt
+  if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
   showToast(p ? `${p.name} added to cart` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
