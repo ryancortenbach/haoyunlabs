@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414b3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414b4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -5088,36 +5088,31 @@ async function applyCode(){
   const code = document.getElementById('discount-input').value.trim().toUpperCase();
   const msg = document.getElementById('discount-msg');
   if(!code){msg.textContent='';return;}
-  // Try as discount code first
   let foundDiscount = false;
+  // Try server-side validation via edge function
   try {
-    const {data,error} = await sb.from('discount_codes').select('code,percent_off').eq('code',code).maybeSingle();
-    if(!error && data){
-      discountCode=data.code;discountPct=data.percent_off;
-      msg.textContent=`Code ${data.code} applied - ${data.percent_off}% off!`;msg.className='discount-msg success';
+    const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/validate-code?code=' + encodeURIComponent(code), {
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+    });
+    const d = await resp.json();
+    if(d.ok && d.type === 'discount'){
+      discountCode=d.code;discountPct=d.percent_off;
+      msg.textContent=`Code ${d.code} applied - ${d.percent_off}% off!`;msg.className='discount-msg success';
+      foundDiscount=true;
+    } else if(d.ok && d.type === 'affiliate'){
+      window._affiliateCode=d.code;
+      msg.textContent=`Affiliate ${d.name||d.code} linked!`;msg.className='discount-msg success';
       foundDiscount=true;
     }
-  } catch(e){/* network error - try hardcoded fallbacks */}
-  // Hardcoded fallback codes (run if Supabase didn't match)
+  } catch(e){ console.warn('[applyCode] validation error', e); }
+  // Hardcoded fallback codes
   if(!foundDiscount){
     if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied - 10% off!';msg.className='discount-msg success';foundDiscount=true;}
     else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied - 15% off!';msg.className='discount-msg success';foundDiscount=true;}
   }
-  // If not a discount code, try as affiliate code
   if(!foundDiscount){
-    try {
-      const {data,error} = await sb.from('affiliates').select('code,name').eq('code',code).maybeSingle();
-      if(!error && data){
-        window._affiliateCode=data.code;
-        msg.textContent=`Affiliate ${data.name||data.code} linked!`;msg.className='discount-msg success';
-      } else {
-        discountCode=null;discountPct=0;window._affiliateCode=null;
-        msg.textContent='Invalid code.';msg.className='discount-msg error';
-      }
-    } catch(e){
-      discountCode=null;discountPct=0;window._affiliateCode=null;
-      msg.textContent='Invalid code.';msg.className='discount-msg error';
-    }
+    discountCode=null;discountPct=0;window._affiliateCode=null;
+    msg.textContent='Invalid code.';msg.className='discount-msg error';
   }
   renderReceipt();
 }
