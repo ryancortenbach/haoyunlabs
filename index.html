@@ -9,7 +9,21 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+// Bankful return handler - detect ?payment=success/failed/pending/cancel
+(function(){
+  try{
+    var params=new URLSearchParams(location.search);
+    var pay=params.get('payment');
+    var ord=params.get('order');
+    if(pay && ord){
+      localStorage.setItem('hyl_card_result',JSON.stringify({status:pay,order:ord,t:Date.now()}));
+      // Strip query params
+      var clean=location.pathname+(location.hash||'');
+      history.replaceState(null,'',clean);
+    }
+  }catch(e){}
+})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -5113,12 +5127,21 @@ function renderPayMethods(){
       <span>Each coin is accepted on <strong>one specific network only</strong>. Sending USDT on the wrong chain (ERC-20 vs TRC-20 vs BEP-20) will permanently lose funds. Double-check your wallet's network before sending.</span>
     </div>
     <div style="margin-top:20px;border-top:1px solid var(--stroke);padding-top:16px">
-      <div class="pm-subhead">Bank Transfer</div>
-      <div class="crypto-chip ${selectedPayMethod==='zelle'?'selected':''}" onclick="selectPayMethodZelle()" style="cursor:pointer;padding:16px;border-radius:14px;border:1.5px solid ${selectedPayMethod==='zelle'?'var(--brand)':'var(--stroke)'};background:${selectedPayMethod==='zelle'?'#000':'#fff'};color:${selectedPayMethod==='zelle'?'#fff':'var(--text)'};display:flex;align-items:center;gap:12px;transition:all 0.3s">
-        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
-        <div>
-          <div style="font-weight:800;font-size:0.9rem;letter-spacing:0.04em">ZELLE</div>
-          <div style="font-size:0.68rem;opacity:0.7">Bank-to-bank transfer</div>
+      <div class="pm-subhead">Card & Bank</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="crypto-chip ${selectedPayMethod==='card'?'selected':''}" onclick="selectPayMethodCard()" style="cursor:pointer;padding:16px;border-radius:14px;border:1.5px solid ${selectedPayMethod==='card'?'var(--brand)':'var(--stroke)'};background:${selectedPayMethod==='card'?'#000':'#fff'};color:${selectedPayMethod==='card'?'#fff':'var(--text)'};display:flex;align-items:center;gap:10px;transition:all 0.3s">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <div>
+            <div style="font-weight:800;font-size:0.82rem;letter-spacing:0.04em">CARD</div>
+            <div style="font-size:0.62rem;opacity:0.7">Credit / Debit</div>
+          </div>
+        </div>
+        <div class="crypto-chip ${selectedPayMethod==='zelle'?'selected':''}" onclick="selectPayMethodZelle()" style="cursor:pointer;padding:16px;border-radius:14px;border:1.5px solid ${selectedPayMethod==='zelle'?'var(--brand)':'var(--stroke)'};background:${selectedPayMethod==='zelle'?'#000':'#fff'};color:${selectedPayMethod==='zelle'?'#fff':'var(--text)'};display:flex;align-items:center;gap:10px;transition:all 0.3s">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+          <div>
+            <div style="font-weight:800;font-size:0.82rem;letter-spacing:0.04em">ZELLE</div>
+            <div style="font-size:0.62rem;opacity:0.7">Bank transfer</div>
+          </div>
         </div>
       </div>
     </div>
@@ -5127,35 +5150,52 @@ function renderPayMethods(){
   syncPayBtnIcon();
 }
 
+function _resetAltPayChips(){
+  ['[onclick*="selectPayMethodZelle"]','[onclick*="selectPayMethodCard"]'].forEach(sel => {
+    const chip = document.querySelector(sel);
+    if(chip){
+      chip.classList.remove('selected');
+      chip.style.borderColor='var(--stroke)';chip.style.background='#fff';chip.style.color='var(--text)';
+    }
+  });
+}
+function _highlightChip(selector){
+  const chip = document.querySelector(selector);
+  if(chip){
+    chip.classList.add('selected');
+    chip.style.borderColor='var(--brand)';chip.style.background='#000';chip.style.color='#fff';
+  }
+}
+function _setPayBtn(label, hideIcon){
+  const btn = document.getElementById('btn-pay');
+  if(!btn) return;
+  const txt = btn.querySelector('.crypto-btn-text');
+  if(txt) txt.textContent = label;
+  const iconContainer = btn.querySelector('.crypto-icon-container');
+  if(iconContainer) iconContainer.style.display = hideIcon ? 'none' : '';
+}
+
 function selectPayMethodZelle(){
   selectedPayMethod = 'zelle';
   selectedCryptoCurrency = null;
-  // Deselect all crypto chips
   document.querySelectorAll('.crypto-chip').forEach(c => c.classList.remove('selected'));
-  // Highlight zelle chip
-  const zelleChip = document.querySelector('[onclick*="selectPayMethodZelle"]');
-  if(zelleChip){
-    zelleChip.classList.add('selected');
-    zelleChip.style.borderColor='var(--brand)';zelleChip.style.background='#000';zelleChip.style.color='#fff';
-  }
-  // Update pay button
-  const btn = document.getElementById('btn-pay');
-  if(btn){
-    const txt = btn.querySelector('.crypto-btn-text');
-    if(txt) txt.textContent = 'COMPLETE ORDER';
-    const iconContainer = btn.querySelector('.crypto-icon-container');
-    if(iconContainer) iconContainer.style.display = 'none';
-  }
+  _resetAltPayChips();
+  _highlightChip('[onclick*="selectPayMethodZelle"]');
+  _setPayBtn('COMPLETE ORDER', true);
+}
+
+function selectPayMethodCard(){
+  selectedPayMethod = 'card';
+  selectedCryptoCurrency = null;
+  document.querySelectorAll('.crypto-chip').forEach(c => c.classList.remove('selected'));
+  _resetAltPayChips();
+  _highlightChip('[onclick*="selectPayMethodCard"]');
+  _setPayBtn('PAY WITH CARD', true);
 }
 
 function selectCryptoAndResetZelle(c){
   selectedPayMethod = 'crypto';
-  // Reset zelle chip style
-  const zelleChip = document.querySelector('[onclick*="selectPayMethodZelle"]');
-  if(zelleChip){
-    zelleChip.classList.remove('selected');
-    zelleChip.style.borderColor='var(--stroke)';zelleChip.style.background='#fff';zelleChip.style.color='var(--text)';
-  }
+  _resetAltPayChips();
   const iconContainer = document.querySelector('#btn-pay .crypto-icon-container');
   if(iconContainer) iconContainer.style.display = '';
   selectCrypto(c);
@@ -5927,6 +5967,41 @@ async function submitOrder(){
 
   // Auto-subscribe email at checkout
   try { await sb.from('email_subscribers').upsert({email, source:'checkout'},{onConflict:'email'}); } catch(e){}
+
+  // CARD flow (Bankful Hosted Payment Page)
+  if(selectedPayMethod === 'card'){
+    try {
+      const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/bankful-invoice', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},
+        body:JSON.stringify({
+          orderNumber:orderNum, amount:total, email, fname, lname, phone,
+          street, apt, city, state, zip, items,
+          subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
+          affiliateCode: window._affiliateCode || null,
+          discreetPackaging,
+        })
+      });
+      const data = await resp.json();
+      if(data.ok && data.redirect_url){
+        cart.clear(); saveCart(); updateBadge();
+        // Persist pending order number for return-from-Bankful detection
+        try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total}));}catch(e){}
+        // Redirect to Bankful hosted page
+        window.location.href = data.redirect_url;
+        return;
+      }
+      showToast('Payment setup failed: ' + (data.error || 'try again'), 'error');
+      console.error('[bankful] error', data);
+    } catch(e){
+      console.error('[bankful] request failed', e);
+      showToast('Payment setup failed. Please try another method.', 'error');
+    }
+    payBtn.disabled = false;
+    payBtn.classList.remove('btn-loading');
+    payBtn.querySelector('.crypto-btn-text').textContent = 'PAY WITH CARD';
+    return;
+  }
 
   // ZELLE flow - save order and show Discord ticket screen
   if(selectedPayMethod === 'zelle'){
