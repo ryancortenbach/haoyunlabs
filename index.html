@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260412m8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -445,6 +445,22 @@ ul{list-style:none}
   .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important}
   .big-feature-card .card-3d-wrap{width:100%!important;aspect-ratio:16/9!important;max-height:200px}
   .hero-feature-grid{grid-template-columns:1fr!important}
+  /* Mobile menu safe areas */
+  .mobile-menu{padding-top:max(72px,env(safe-area-inset-top,72px))!important;padding-bottom:max(32px,env(safe-area-inset-bottom,32px))!important}
+  /* Mobile cart CTA safe area */
+  #mobile-cart-cta{bottom:max(12px,env(safe-area-inset-bottom,12px))!important}
+  /* PDP size grid: 3 cols on small screens */
+  .pdp-size-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  /* Research focus areas stack */
+  #screen-research div[style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr!important}
+  /* Research workflow stack */
+  #screen-research div[style*="grid-template-columns:repeat(4"]{grid-template-columns:repeat(2,1fr)!important}
+  /* COA action buttons bigger tap target */
+  .coa-action{padding:8px 12px!important;font-size:0.75rem!important}
+  /* Help form inputs taller */
+  #screen-help .form-input,#screen-help input[type="text"]{min-height:44px!important;padding:12px 14px!important}
+  /* Sticky banner readable */
+  .sticky-banner .banner-track span{font-size:0.58rem!important;padding-top:max(5px,env(safe-area-inset-top,5px))!important}
   #stats-row{border-radius:16px!important}
   #screen-home .hero-banner{border-radius:16px}
 }
@@ -1828,7 +1844,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 </style>
 </head>
 <body>
-<ol id="sonner-toast-container" position="top-center" max-toasts="1" rich-colors="true" theme="light" close-button="true" duration="3000" style="--width:420px;font-size:0.9rem"></ol>
+<ol id="sonner-toast-container" position="top-center" max-toasts="1" rich-colors="true" theme="light" close-button="true" duration="3000" style="--width:min(420px,calc(100vw - 32px));font-size:0.9rem"></ol>
 <script type="module">
   import { toast } from 'https://cdn.jsdelivr.net/npm/vanilla-sonner@latest/dist/vanilla-sonner.es.min.js';
   window._sonnerToast = toast;
@@ -2112,7 +2128,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Built for Serious Research</div>
         <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for advanced research protocols. Metabolic peptides, secretagogues, nootropics, and reconstitution supplies. Sourced, tested, and sealed under controlled conditions.</div>
-        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:380px;padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
+        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
       </div>
       <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden">
         <img src="https://i.pinimg.com/736x/60/a1/1e/60a11ec6b61677230fc6fdd7f5e18344.jpg" class="pin-slide" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:1" alt="Lab">
@@ -2130,7 +2146,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Purity You Can Prove</div>
         <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive. Search by SKU or compound name and download the PDF.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
-        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:380px;padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
+        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
     </div>
 
@@ -2633,7 +2649,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
 <!-- EMAIL CAPTURE POPUP -->
 <div id="email-popup" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1)">
-  <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:48px 40px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
+  <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:36px 24px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.3);line-height:1">&times;</button>
     <div style="font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin-bottom:4px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery vial</div>
     <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
