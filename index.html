@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -6016,7 +6016,7 @@ async function submitOrder(){
     let dbSaved = false;
     try {
       // Save order to Supabase
-      const {data:custData,error:custErr} = await sb.from('customers').upsert({email,first_name:fname,last_name:lname,phone,address_street:street,address_apt:apt,address_city:city,address_state:state,address_zip:zip},{onConflict:'email'}).select().single();
+      const {data:custData,error:custErr} = await sb.from('customers').upsert({email,first_name:fname,last_name:lname,phone,street,apt:apt||null,city,state,zip},{onConflict:'email'}).select().single();
       if(custErr) throw custErr;
       const {error:ordErr} = await sb.from('orders').insert({
         order_number:orderNum, customer_id:custData?.id, status:'awaiting_payment',
