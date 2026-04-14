@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414b1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414b2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -4878,7 +4878,11 @@ async function renderCardReturn(){
   const poll = async () => {
     attempts++;
     try {
-      const { data } = await sb.from('orders').select('status,paid_at,payment_reference').eq('order_number', result.order).maybeSingle();
+      const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/order-status?order=' + encodeURIComponent(result.order), {
+        headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+      });
+      const res = await resp.json();
+      const data = res.order;
       if(data && data.status === 'paid'){
         localStorage.removeItem('hyl_card_result');
         localStorage.removeItem('hyl_card_pending');
