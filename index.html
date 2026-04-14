@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -6011,23 +6011,25 @@ async function submitOrder(){
     return;
   }
 
-  // ZELLE flow - save order and show Discord ticket screen
+  // ZELLE flow - save order via edge function (service role) and show Discord ticket screen
   if(selectedPayMethod === 'zelle'){
-    let dbSaved = false;
     try {
-      // Save order to Supabase
-      const {data:custData,error:custErr} = await sb.from('customers').upsert({email,first_name:fname,last_name:lname,phone,street,apt:apt||null,city,state,zip},{onConflict:'email'}).select().single();
-      if(custErr) throw custErr;
-      const {error:ordErr} = await sb.from('orders').insert({
-        order_number:orderNum, customer_id:custData?.id, status:'awaiting_payment',
-        payment_method:'zelle', subtotal:sub, shipping, discount_amount:disc,
-        discount_code:discountCode||null, processing_fee:processingFee, total,
-        items, discreet_packaging:discreetPackaging
+      const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/zelle-order', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},
+        body:JSON.stringify({
+          orderNumber:orderNum, amount:total, email, fname, lname, phone,
+          street, apt, city, state, zip, items,
+          subtotal:sub, shipping, processingFee,
+          discountCode, discountAmount:disc,
+          affiliateCode: window._affiliateCode || null,
+          discreetPackaging,
+        })
       });
-      if(ordErr) throw ordErr;
-      dbSaved = true;
+      const data = await resp.json();
+      if(!data.ok) throw new Error(data.error || 'save failed');
     } catch(e){
-      console.error('[zelle] db save error', e);
+      console.error('[zelle] save error', e);
       showToast('Could not save order. Please try again or contact support.','error');
       window._submittingOrder = false;
       payBtn.disabled = false;
