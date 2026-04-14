@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414b2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414b3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -4120,16 +4120,32 @@ function handleRoute(){
       const block = document.getElementById('conf-tx-block');
       const link = document.getElementById('conf-tx-link');
       const confirms = document.getElementById('conf-tx-confirms');
+      const headerEl = block?.querySelector('div:first-child');
+      const confirmsRow = confirms?.closest('div')?.parentElement;
       if(p && p.tx_hash && block && link){
         const network = p.network || 'ethereum';
-        const explorer = {
-          bitcoin: 'https://mempool.space/tx/',
-          ethereum: 'https://etherscan.io/tx/',
-          solana: 'https://solscan.io/tx/',
-        }[network] || 'https://etherscan.io/tx/';
-        link.href = explorer + p.tx_hash;
-        link.textContent = p.tx_hash.slice(0,10) + '…' + p.tx_hash.slice(-6);
-        if(confirms) confirms.textContent = (p.confirmations||0) + ' / ' + (p.required_confirmations||6);
+        if(network === 'card'){
+          // Card payment - show as Payment Receipt, not Blockchain Receipt
+          if(headerEl) headerEl.textContent = 'Payment Receipt';
+          link.removeAttribute('href');
+          link.style.textDecoration = 'none';
+          link.style.cursor = 'default';
+          link.textContent = p.tx_hash;
+          if(confirms) confirms.textContent = 'Settled';
+          // Rename "Confirmations" label
+          const confirmsLabel = confirms?.previousElementSibling;
+          if(confirmsLabel) confirmsLabel.textContent = 'Status';
+        } else {
+          const explorer = {
+            bitcoin: 'https://mempool.space/tx/',
+            ethereum: 'https://etherscan.io/tx/',
+            solana: 'https://solscan.io/tx/',
+          }[network] || 'https://etherscan.io/tx/';
+          link.href = explorer + p.tx_hash;
+          link.textContent = p.tx_hash.slice(0,10) + '…' + p.tx_hash.slice(-6);
+          if(confirms) confirms.textContent = (p.confirmations||0) + ' / ' + (p.required_confirmations||6);
+          if(headerEl) headerEl.textContent = 'Blockchain Receipt';
+        }
         block.style.display = '';
       } else if(block) {
         block.style.display = 'none';
