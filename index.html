@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -5937,9 +5937,14 @@ async function submitOrder(){
   }
 
   const payBtn = document.getElementById('btn-pay');
+  if(!payBtn) return;
+  // Double-submit guard
+  if(window._submittingOrder) return;
+  window._submittingOrder = true;
   payBtn.disabled = true;
   payBtn.classList.add('btn-loading');
-  payBtn.querySelector('.crypto-btn-text').innerHTML = '<span class="spinner" style="margin-right:10px"></span> Processing...';
+  const btnText = payBtn.querySelector('.crypto-btn-text');
+  if(btnText) btnText.innerHTML = '<span class="spinner" style="margin-right:10px"></span> Processing...';
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
@@ -5997,24 +6002,37 @@ async function submitOrder(){
       console.error('[bankful] request failed', e);
       showToast('Payment setup failed. Please try another method.', 'error');
     }
+    window._submittingOrder = false;
     payBtn.disabled = false;
     payBtn.classList.remove('btn-loading');
-    payBtn.querySelector('.crypto-btn-text').textContent = 'PAY WITH CARD';
+    if(btnText) btnText.textContent = 'PAY WITH CARD';
     return;
   }
 
   // ZELLE flow - save order and show Discord ticket screen
   if(selectedPayMethod === 'zelle'){
+    let dbSaved = false;
     try {
       // Save order to Supabase
-      const {data:custData} = await sb.from('customers').upsert({email,first_name:fname,last_name:lname,phone,address_street:street,address_apt:apt,address_city:city,address_state:state,address_zip:zip},{onConflict:'email'}).select().single();
-      await sb.from('orders').insert({
+      const {data:custData,error:custErr} = await sb.from('customers').upsert({email,first_name:fname,last_name:lname,phone,address_street:street,address_apt:apt,address_city:city,address_state:state,address_zip:zip},{onConflict:'email'}).select().single();
+      if(custErr) throw custErr;
+      const {error:ordErr} = await sb.from('orders').insert({
         order_number:orderNum, customer_id:custData?.id, status:'awaiting_payment',
         payment_method:'zelle', subtotal:sub, shipping, discount_amount:disc,
         discount_code:discountCode||null, processing_fee:processingFee, total,
         items, discreet_packaging:discreetPackaging
       });
-    } catch(e){ console.warn('[zelle] db save error', e); }
+      if(ordErr) throw ordErr;
+      dbSaved = true;
+    } catch(e){
+      console.error('[zelle] db save error', e);
+      showToast('Could not save order. Please try again or contact support.','error');
+      window._submittingOrder = false;
+      payBtn.disabled = false;
+      payBtn.classList.remove('btn-loading');
+      if(btnText) btnText.textContent = 'COMPLETE ORDER';
+      return;
+    }
 
     // Build order summary text for clipboard
     const orderSummary = [
@@ -6071,6 +6089,7 @@ async function submitOrder(){
     `;
     payCard.scrollIntoView({block:'start',behavior:'smooth'});
     cart.clear(); saveCart(); updateBadge();
+    window._submittingOrder = false;
     payBtn.disabled = false;
     payBtn.classList.remove('btn-loading');
     return;
@@ -6178,7 +6197,9 @@ async function submitOrder(){
   });
 
   cart.clear(); saveCart(); discountCode=null; discountPct=0;
-  payBtn.disabled=false; payBtn.classList.remove('btn-loading'); payBtn.querySelector('.crypto-btn-text').textContent='COMPLETE ORDER';
+  window._submittingOrder = false;
+  payBtn.disabled=false; payBtn.classList.remove('btn-loading');
+  if(btnText) btnText.textContent='COMPLETE ORDER';
   navigate('payment-confirmed');
 }
 
