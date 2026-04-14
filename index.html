@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414a2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 </script>
 <title>HAO YUN LABS - Premium Research Peptides</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -5090,7 +5090,7 @@ function renderPayMethods(){
   const chipHtml = (o) => `
     <div class="crypto-chip ${selectedCryptoCurrency===o.c?'selected':''}"
          data-c="${o.c}"
-         onclick="selectCrypto('${o.c}')"
+         onclick="selectCryptoAndResetZelle('${o.c}')"
          onmouseenter="previewPayCurrency('${o.c}')"
          onmouseleave="previewPayCurrency(null)">
       ${o.badge ? `<div class="cc-badge">${o.badge}</div>` : ''}
@@ -5112,9 +5112,53 @@ function renderPayMethods(){
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:1px;color:#f59e0b"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>Each coin is accepted on <strong>one specific network only</strong>. Sending USDT on the wrong chain (ERC-20 vs TRC-20 vs BEP-20) will permanently lose funds. Double-check your wallet's network before sending.</span>
     </div>
+    <div style="margin-top:20px;border-top:1px solid var(--stroke);padding-top:16px">
+      <div class="pm-subhead">Bank Transfer</div>
+      <div class="crypto-chip ${selectedPayMethod==='zelle'?'selected':''}" onclick="selectPayMethodZelle()" style="cursor:pointer;padding:16px;border-radius:14px;border:1.5px solid ${selectedPayMethod==='zelle'?'var(--brand)':'var(--stroke)'};background:${selectedPayMethod==='zelle'?'#000':'#fff'};color:${selectedPayMethod==='zelle'?'#fff':'var(--text)'};display:flex;align-items:center;gap:12px;transition:all 0.3s">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+        <div>
+          <div style="font-weight:800;font-size:0.9rem;letter-spacing:0.04em">ZELLE</div>
+          <div style="font-size:0.68rem;opacity:0.7">Bank-to-bank transfer</div>
+        </div>
+      </div>
+    </div>
   `;
   // Sync pay button icon to selected currency
   syncPayBtnIcon();
+}
+
+function selectPayMethodZelle(){
+  selectedPayMethod = 'zelle';
+  selectedCryptoCurrency = null;
+  // Deselect all crypto chips
+  document.querySelectorAll('.crypto-chip').forEach(c => c.classList.remove('selected'));
+  // Highlight zelle chip
+  const zelleChip = document.querySelector('[onclick*="selectPayMethodZelle"]');
+  if(zelleChip){
+    zelleChip.classList.add('selected');
+    zelleChip.style.borderColor='var(--brand)';zelleChip.style.background='#000';zelleChip.style.color='#fff';
+  }
+  // Update pay button
+  const btn = document.getElementById('btn-pay');
+  if(btn){
+    const txt = btn.querySelector('.crypto-btn-text');
+    if(txt) txt.textContent = 'COMPLETE ORDER';
+    const iconContainer = btn.querySelector('.crypto-icon-container');
+    if(iconContainer) iconContainer.style.display = 'none';
+  }
+}
+
+function selectCryptoAndResetZelle(c){
+  selectedPayMethod = 'crypto';
+  // Reset zelle chip style
+  const zelleChip = document.querySelector('[onclick*="selectPayMethodZelle"]');
+  if(zelleChip){
+    zelleChip.classList.remove('selected');
+    zelleChip.style.borderColor='var(--stroke)';zelleChip.style.background='#fff';zelleChip.style.color='var(--text)';
+  }
+  const iconContainer = document.querySelector('#btn-pay .crypto-icon-container');
+  if(iconContainer) iconContainer.style.display = '';
+  selectCrypto(c);
 }
 
 function syncPayBtnIcon(){
@@ -5883,6 +5927,79 @@ async function submitOrder(){
 
   // Auto-subscribe email at checkout
   try { await sb.from('email_subscribers').upsert({email, source:'checkout'},{onConflict:'email'}); } catch(e){}
+
+  // ZELLE flow - save order and show Discord ticket screen
+  if(selectedPayMethod === 'zelle'){
+    try {
+      // Save order to Supabase
+      const {data:custData} = await sb.from('customers').upsert({email,first_name:fname,last_name:lname,phone,address_street:street,address_apt:apt,address_city:city,address_state:state,address_zip:zip},{onConflict:'email'}).select().single();
+      await sb.from('orders').insert({
+        order_number:orderNum, customer_id:custData?.id, status:'awaiting_payment',
+        payment_method:'zelle', subtotal:sub, shipping, discount_amount:disc,
+        discount_code:discountCode||null, processing_fee:processingFee, total,
+        items, discreet_packaging:discreetPackaging
+      });
+    } catch(e){ console.warn('[zelle] db save error', e); }
+
+    // Build order summary text for clipboard
+    const orderSummary = [
+      `ORDER: ${orderNum}`,
+      `---`,
+      ...items.map(i => `${i.quantity}x ${i.name} - $${i.lineTotal.toFixed(2)}`),
+      `---`,
+      `Subtotal: $${sub.toFixed(2)}`,
+      `Processing Fee (5%): $${processingFee.toFixed(2)}`,
+      `Shipping: ${shipping===0?'FREE':'$'+shipping.toFixed(2)}`,
+      `TOTAL: $${total.toFixed(2)}`,
+      `---`,
+      `Ship to: ${fname} ${lname}`,
+      `${street}${apt?' '+apt:''}`,
+      `${city}, ${state} ${zip}`,
+      `Email: ${email}`,
+    ].join('\n');
+
+    // Show Zelle payment screen
+    const payCard = document.querySelector('.payment-card');
+    if(!window._payCardOriginal) window._payCardOriginal = payCard.innerHTML;
+    payCard.innerHTML = `
+      <div style="padding:24px;text-align:center">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#000" stroke-width="1.5" style="margin-bottom:16px"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+        <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Pay with Zelle</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:20px">Send payment, then open a Discord ticket to confirm</div>
+
+        <div style="background:#000;color:#fff;border-radius:16px;padding:20px;margin-bottom:16px;text-align:left">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.6">Order Total</span>
+            <span style="font-size:1.6rem;font-weight:900">$${total.toFixed(2)}</span>
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:12px">
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.6;margin-bottom:6px">Send Zelle to</div>
+            <div style="font-size:1.1rem;font-weight:800;font-family:var(--mono)">(702) 742-8016</div>
+          </div>
+        </div>
+
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:16px;line-height:1.5">Include your order number <strong>${orderNum}</strong> in the Zelle memo</div>
+
+        <button onclick="navigator.clipboard?.writeText(${JSON.stringify(orderSummary)});showToast('Order details copied','success')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #000;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:10px">Copy Order Details</button>
+
+        <a href="https://discord.gg/WDYVkgt5dB" target="_blank" style="display:block;width:100%;padding:14px;background:#5865F2;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;text-align:center;box-sizing:border-box">Open Discord Ticket</a>
+
+        <div style="margin-top:20px;padding:14px;background:#f9f9f9;border:1px solid var(--stroke);border-radius:12px;font-size:0.72rem;color:var(--muted);line-height:1.6;text-align:left">
+          <strong>How it works:</strong><br>
+          1. Send $${total.toFixed(2)} via Zelle to (702) 742-8016<br>
+          2. Copy your order details above<br>
+          3. Open Discord and create a ticket<br>
+          4. Paste your order details in the ticket<br>
+          5. We confirm payment and ship within 24 hours
+        </div>
+      </div>
+    `;
+    payCard.scrollIntoView({block:'start',behavior:'smooth'});
+    cart.clear(); saveCart(); updateBadge();
+    payBtn.disabled = false;
+    payBtn.classList.remove('btn-loading');
+    return;
+  }
 
   // Crypto only - billing server → get unique address + monitor
   try {
