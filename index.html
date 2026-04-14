@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414a9';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260414b1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -17,10 +17,11 @@
     var pay=params.get('payment');
     var ord=params.get('order');
     if(pay && ord){
+      // Strip any trailing ?REQUEST_ACTION fragment from Bankful
+      ord = ord.split('?')[0];
       localStorage.setItem('hyl_card_result',JSON.stringify({status:pay,order:ord,t:Date.now()}));
-      // Strip query params
-      var clean=location.pathname+(location.hash||'');
-      history.replaceState(null,'',clean);
+      // Clean URL and navigate to confirmation screen
+      history.replaceState(null,'',location.pathname+'#card-return');
     }
   }catch(e){}
 })();
@@ -2386,6 +2387,17 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   </div>
 </div>
 
+<!-- ═══════════════ SCREEN: CARD RETURN (Bankful redirect) ═══════════════ -->
+<div class="screen" id="screen-card-return">
+  <div class="container" style="padding-top:120px;max-width:600px;margin:0 auto;text-align:center">
+    <div id="card-return-body">
+      <div style="margin-bottom:24px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="spinner" style="animation:spin 1s linear infinite;opacity:0.6"><circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="30"/></svg></div>
+      <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Confirming Payment...</div>
+      <div id="card-return-msg" style="color:var(--muted);font-size:0.9rem;line-height:1.6;max-width:420px;margin:0 auto">Checking with our payment processor. This usually takes a few seconds.</div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════ SCREEN: PAYMENT CONFIRMED ═══════════════ -->
 <div class="screen" id="screen-payment-confirmed">
   <div class="container" style="padding-top:120px;max-width:640px;margin:0 auto">
@@ -4086,7 +4098,7 @@ function handleRoute(){
     hash = 'help';
     history.replaceState(null, '', '#help');
   }
-  const screens = ['home','catalog','product','order','payment-confirmed','help','terms','coa','tracking','research'];
+  const screens = ['home','catalog','product','order','payment-confirmed','card-return','help','terms','coa','tracking','research'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
     if(el) el.classList.toggle('active', s===hash);
@@ -4098,6 +4110,9 @@ function handleRoute(){
   else if(hash==='research') renderResearch();
   else if(hash==='coa') renderCOAArchive();
   else if(hash==='catalog') renderCatalog();
+  else if(hash==='card-return'){
+    renderCardReturn();
+  }
   else if(hash==='payment-confirmed'){
     // Populate tx hash block if we have a paid invoice in memory
     try {
@@ -4838,6 +4853,51 @@ function renderCatalog(){
 /* ═════════════════════════════════════════════════════
    ORDER / CHECKOUT SCREEN
    ═════════════════════════════════════════════════════ */
+async function renderCardReturn(){
+  const body = document.getElementById('card-return-body');
+  const msgEl = document.getElementById('card-return-msg');
+  if(!body) return;
+  let result;
+  try { result = JSON.parse(localStorage.getItem('hyl_card_result')||'null'); } catch(e){}
+  if(!result || !result.order){
+    body.innerHTML = '<div style="font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:8px">No payment info</div><div style="color:var(--muted);margin-bottom:24px">Returning to home...</div>';
+    setTimeout(() => navigate('home'), 2000);
+    return;
+  }
+  if(result.status === 'cancel'){
+    body.innerHTML = '<div style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;margin-bottom:8px">Payment cancelled</div><div style="color:var(--muted);margin-bottom:24px">Your order is still saved. You can try again or choose a different payment method.</div><button onclick="navigate(\'order\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Back to checkout</button>';
+    return;
+  }
+  if(result.status === 'failed'){
+    body.innerHTML = '<div style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;margin-bottom:8px">Payment failed</div><div style="color:var(--muted);margin-bottom:24px">Your card was declined. Please try a different card or payment method.</div><button onclick="navigate(\'order\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Try again</button>';
+    return;
+  }
+  // Success - poll DB for status confirmation (webhook updates it)
+  let attempts = 0;
+  const maxAttempts = 20; // 40 seconds total at 2s intervals
+  const poll = async () => {
+    attempts++;
+    try {
+      const { data } = await sb.from('orders').select('status,paid_at,payment_reference').eq('order_number', result.order).maybeSingle();
+      if(data && data.status === 'paid'){
+        localStorage.removeItem('hyl_card_result');
+        localStorage.removeItem('hyl_card_pending');
+        cart.clear(); saveCart(); updateBadge();
+        window._lastPaidInvoice = { tx_hash: data.payment_reference, network: 'card' };
+        navigate('payment-confirmed');
+        return;
+      }
+    } catch(e){ console.warn('[card-return] poll error', e); }
+    if(attempts >= maxAttempts){
+      body.innerHTML = '<div style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div style="font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:8px">Payment submitted</div><div style="color:var(--muted);margin-bottom:24px;max-width:420px;margin:0 auto 24px">Your card payment was submitted. Confirmation may take a few minutes. You\'ll receive an email once it\'s processed. Order: <strong>'+result.order+'</strong></div><button onclick="navigate(\'home\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Continue shopping</button>';
+      return;
+    }
+    if(msgEl) msgEl.textContent = 'Checking with our payment processor... ('+attempts+'s)';
+    setTimeout(poll, 2000);
+  };
+  poll();
+}
+
 function renderOrder(){
   const screen = document.getElementById('screen-order');
   if(!screen) return;
