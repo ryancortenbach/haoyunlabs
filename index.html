@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416b6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260416b7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -5199,18 +5199,26 @@ function renderCartItems(){
   el.innerHTML = html;
 }
 
+function getProcessingRate(){
+  if(selectedPayMethod==='crypto') return 0.03;
+  return 0.10;
+}
 function renderReceipt(){
   const sub = getSubtotal();
   const shipping = sub > 0 ? (sub >= 250 ? 0 : 15) : 0;
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
-  const processingFee = Math.round(afterDisc * 0.10 * 100) / 100;
+  const feeRate = getProcessingRate();
+  const feePct = Math.round(feeRate * 100);
+  const processingFee = Math.round(afterDisc * feeRate * 100) / 100;
   const total = afterDisc + shipping + processingFee;
+  const isCrypto = selectedPayMethod === 'crypto';
+  const savedAmount = isCrypto ? Math.round(afterDisc * 0.07 * 100) / 100 : 0;
   const tbl = document.getElementById('receipt-table');
   tbl.innerHTML = `
     <tr><td>Subtotal</td><td>$${sub.toFixed(2)}</td></tr>
     ${discountPct>0?`<tr><td>Discount (${discountPct}%)</td><td>-$${disc.toFixed(2)}</td></tr>`:''}
-    <tr><td>Processing Fee (10%)</td><td>$${processingFee.toFixed(2)}</td></tr>
+    <tr><td>Processing Fee (${feePct}%)${isCrypto?'<span style="color:#22c55e;font-size:0.65rem;margin-left:6px;font-weight:700">saving $'+savedAmount.toFixed(2)+'</span>':''}</td><td>$${processingFee.toFixed(2)}</td></tr>
     <tr><td>Shipping${sub>=250?' (FREE over $250)':''}</td><td>${shipping===0&&sub>0?'FREE':'$'+shipping.toFixed(2)}</td></tr>
     <tr class="total-row"><td>TOTAL</td><td>$${total.toFixed(2)}</td></tr>
   `;
@@ -5327,11 +5335,11 @@ function renderPayMethods(){
       <div class="cc-name">${o.name}</div>
       <div class="cc-chain">${o.chain}</div>
     </div>`;
-  const methodChip = (id, label, sub, icon, sel) => `
+  const methodChip = (id, label, sub, icon, sel, badge) => `
     <div onclick="selectPayCategory('${id}')" style="cursor:pointer;padding:18px;border-radius:14px;border:1.5px solid ${sel?'var(--brand)':'var(--stroke)'};background:${sel?'#000':'#fff'};color:${sel?'#fff':'var(--text)'};display:flex;align-items:center;gap:12px;transition:all 0.3s">
       ${icon}
       <div style="flex:1">
-        <div style="font-weight:800;font-size:0.88rem;letter-spacing:0.04em">${label}</div>
+        <div style="font-weight:800;font-size:0.88rem;letter-spacing:0.04em">${label}${badge||''}</div>
         <div style="font-size:0.62rem;opacity:0.7">${sub}</div>
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.4;flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
@@ -5339,9 +5347,9 @@ function renderPayMethods(){
   el.innerHTML = `
     <div class="pm-subhead">Choose Payment Method</div>
     <div style="display:flex;flex-direction:column;gap:10px">
-      ${methodChip('crypto','Cryptocurrency','BTC, ETH, SOL, USDT','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 8.5c0-.83 1.79-1.5 4-1.5s4 .67 4 1.5M8 15.5c0 .83 1.79 1.5 4 1.5s4-.67 4-1.5"/></svg>',isExpCrypto)}
-      ${methodChip('card','Credit / Debit Card','Visa, Mastercard','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><rect x="5" y="14" width="4" height="2" rx="0.5" fill="currentColor" opacity="0.3"/></svg>',selectedPayMethod==='card')}
-      ${methodChip('zelle','Zelle','Bank-to-bank transfer','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 16h8M8 8l8 8"/></svg>',selectedPayMethod==='zelle')}
+      ${methodChip('crypto','Cryptocurrency','BTC, ETH, SOL, USDT — 3% fee','<img src="crypto-icons/btc.svg" width="28" height="28" style="border-radius:50%">',isExpCrypto,'<span style="background:#22c55e;color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">SAVE 7%</span>')}
+      ${methodChip('card','Credit / Debit Card','Visa, Mastercard — 10% fee','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><rect x="5" y="14" width="4" height="2" rx="0.5" fill="currentColor" opacity="0.3"/></svg>',selectedPayMethod==='card','')}
+      ${methodChip('zelle','Zelle','Bank-to-bank — 10% fee','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#6d28d9" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3" fill="#6d28d9"/><path d="M8 8h8M8 16h8M8 8l8 8" stroke="#fff" stroke-width="2"/></svg>',selectedPayMethod==='zelle','')}
     </div>
     ${isExpCrypto ? `
     <div style="margin-top:14px;padding:16px;background:#fafafa;border:1px solid var(--stroke);border-radius:14px">
@@ -5383,6 +5391,7 @@ function selectPayCategory(cat){
     _setPayBtn('COMPLETE ORDER',true);
   }
   renderPayMethods();
+  renderReceipt();
 }
 
 function _resetAltPayChips(){
@@ -6189,7 +6198,8 @@ async function submitOrder(){
   const shipping = sub >= 250 ? 0 : 15;
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
-  const processingFee = Math.round(afterDisc * 0.10 * 100) / 100;
+  const feeRate = getProcessingRate();
+  const processingFee = Math.round(afterDisc * feeRate * 100) / 100;
   const total = afterDisc + shipping + processingFee;
 
   const fname = document.getElementById('f-fname').value.trim();
@@ -6281,7 +6291,7 @@ async function submitOrder(){
       ...items.map(i => `${i.quantity}x ${i.name} - $${i.lineTotal.toFixed(2)}`),
       `---`,
       `Subtotal: $${sub.toFixed(2)}`,
-      `Processing Fee (10%): $${processingFee.toFixed(2)}`,
+      `Processing Fee: $${processingFee.toFixed(2)}`,
       `Shipping: ${shipping===0?'FREE':'$'+shipping.toFixed(2)}`,
       `TOTAL: $${total.toFixed(2)}`,
       `---`,
@@ -6364,7 +6374,7 @@ async function submitOrder(){
       items.forEach(it=>{ detailHTML += `<div class="confirmed-detail-row"><span>${it.name} x${it.quantity}</span><span>$${it.lineTotal.toFixed(2)}</span></div>`; });
       detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
       if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
-      detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (10%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee</span><span>$${processingFee.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
@@ -6408,7 +6418,7 @@ async function submitOrder(){
   });
   detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
   if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
-  detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (10%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
+  detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee</span><span>$${processingFee.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
