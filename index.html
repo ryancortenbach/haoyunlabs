@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260414b4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -304,16 +304,40 @@ ul{list-style:none}
   .tilt-card video,.tilt-card div[style*="width:130px"]{width:96px!important;height:96px!important}
   .tilt-card .hero-btn-invert-dark{padding:9px 18px!important;font-size:0.68rem!important}
 
+  /* NAV SHRINK: smaller icons when scrolled */
+  .nav.shrunk .nav-btn{width:38px!important;height:38px!important}
+  .nav.shrunk .nav-btn svg{width:20px!important;height:20px!important}
+  .nav.shrunk .nav-hamburger{width:38px!important;height:38px!important}
+  .nav.shrunk .nav-hamburger svg{width:22px!important;height:22px!important}
+  .nav.shrunk .nav-brand{font-size:1rem!important}
+  .nav.shrunk .nav-inner{height:48px!important}
+  /* BANNER: force animation on iOS */
+  .sticky-banner .banner-track{-webkit-animation:banner-scroll 90s linear infinite!important;animation:banner-scroll 90s linear infinite!important}
+  /* Research Peptides card: square */
+  .tilt-card[onclick*="peptides"]{aspect-ratio:1/1!important;min-height:auto!important}
+  /* Purity heading: fit one line */
+  .big-feature-card .shimmer-title{font-size:1.5rem!important;white-space:nowrap}
+  /* Category pill vials: bigger */
+  .shop-pill-img{width:52px!important;height:52px!important;border-radius:12px!important}
+  .shop-pill-img img{transform:scale(1.2)!important}
+  /* FEATURED dropdown: black text */
+  .sort-select{color:#000!important;-webkit-appearance:none}
+  /* Mobile menu: slide from left */
+  .mobile-menu{transform:translateX(-100%)!important;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease!important}
+  .mobile-menu.open{transform:translateX(0)!important;opacity:1!important}
   /* CATALOG */
   .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
-  .toolbar{flex-direction:column;align-items:stretch;gap:10px}
-  .cat-tabs{font-size:0.66rem;flex-wrap:wrap;gap:6px;justify-content:center}
-  .cat-tab{padding:7px 12px;font-size:0.66rem;letter-spacing:0.06em}
-  .search-sort{width:100%;flex-wrap:wrap;gap:8px!important}
-  .search-sort>div[style*="position:relative"]{flex:1 1 60%;min-width:0}
+  .toolbar{flex-direction:column;align-items:stretch;gap:8px}
+  /* Category tabs: horizontal scroll, no wrap */
+  .cat-tabs{font-size:0.62rem;flex-wrap:nowrap!important;gap:4px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+  .cat-tabs::-webkit-scrollbar{display:none}
+  .cat-tab{padding:6px 10px;font-size:0.62rem;letter-spacing:0.04em;white-space:nowrap;flex-shrink:0}
+  /* Search + Featured: same line */
+  .search-sort{width:100%;flex-wrap:nowrap!important;gap:6px!important;align-items:center}
+  .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0}
   .search-sort>div[style*="position:relative"] input{width:100%!important;font-size:16px!important}
-  .search-sort .sort-select{flex:1 1 100%;font-size:12px!important;width:100%}
-  .search-sort .pricing-toggle{flex:1 1 100%;justify-content:center;order:-1}
+  .search-sort .sort-select{flex:0 0 auto;font-size:11px!important;width:auto!important;min-width:90px;color:#000!important}
+  .search-sort .pricing-toggle{flex:0 0 auto;order:0}
   .search-input{flex:1;min-width:0}
 
   /* PRODUCT CARD */
@@ -2051,8 +2075,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 <!-- STICKY MOBILE CART CTA -->
 <button id="mobile-cart-cta" onclick="navigate('order')">
   <span>View Cart</span>
-  <span class="mcta-count" id="mcta-count">0</span>
-  <span>→</span>
+  <span class="mcta-count" id="mcta-count"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span id="mcta-num">0</span></span>
 </button>
 
 <!-- MOBILE MENU OVERLAY -->
@@ -3182,7 +3205,6 @@ const CATALOG_SPRAYS = [
 ];
 
 const CATALOG_SUPPLIES = [
-  { sku:'TEST01', name:'Sepolia Test Product', price:0.01, description:'Test product for Sepolia testnet payment testing. $0.01 USD. Use test mode in admin panel.' },
   { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:6, description:'3ml sterile bacteriostatic water - the standard solvent for reconstituting lyophilized peptides. Single-use vial.' },
   { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:10, description:'10ml bacteriostatic water for multi-vial research setups. 0.9% benzyl alcohol preservative for extended stability after reconstitution.' },
   { sku:'NEEDLE31G8MM10PK', name:'Insulin Syringes (10 pack)', price:4.99, description:'Box of 10 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
@@ -3195,7 +3217,7 @@ const CATALOG_SUPPLIES = [
 
 // Only show products that have a real mockup image in site/media/products/
 const VALID_SKUS = new Set([
-  'TEST01','10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
+  '10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
   'ACTH1-39-5MGSV','ADAMAX10SV','ADAMAX5SV','AE1','AE1SV','AHK-CU-100MGSV','AHK-CU-50MGSV','AOD2',
   'AOD2SV','AOD5','AOD5SV','AP10','AP10SV','AP5','AP5SV','AQUA8','AR50','AR50SV','Adamax10','Adamax5',
   'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC3SV','BAC10SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
@@ -3405,11 +3427,11 @@ function updateBadge(){
   cart.forEach(v => total += v);
   if(badge) badge.textContent = total > 0 ? total : '';
   const mcta = document.getElementById('mobile-cart-cta');
-  const mctaCount = document.getElementById('mcta-count');
+  const mctaNum = document.getElementById('mcta-num');
   if(mcta){
-    const hide = total === 0 || location.hash === '#order' || location.hash === '#payment-confirmed';
+    const hide = total === 0 || ['#order','#payment-confirmed','#card-return'].includes(location.hash);
     mcta.classList.toggle('visible', !hide);
-    if(mctaCount) mctaCount.textContent = total;
+    if(mctaNum) mctaNum.textContent = total;
   }
 }
 function getProduct(sku){
@@ -6628,10 +6650,11 @@ function renderResearch(){
     const sku = RESEARCH_SKU_MAP[r.compound.toLowerCase()] || '';
     const hasImg = sku && ALL_PRODUCTS.some(p=>p.sku===sku);
     return `
-    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease;display:grid;grid-template-columns:1fr ${hasImg?'100px':''};gap:0" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-      <div style="padding:24px">
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      ${hasImg ? `<div style="background:#f7f7f7;display:flex;align-items:center;justify-content:center;padding:16px;cursor:pointer;aspect-ratio:4/3" onclick="navigateToProduct('${sku}')"><img src="media/products/${sku}.png" alt="${r.compound}" style="width:100%;max-width:160px;height:auto;object-fit:contain;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform=''"></div>` : ''}
+      <div style="padding:16px 18px">
         <div style="font-family:var(--display);font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px${hasImg?';cursor:pointer':''}" ${hasImg?`onclick="navigateToProduct('${sku}')"`:''}>${r.compound}</div>
-        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">${r.desc}</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">${r.desc}</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           ${r.studies.map((s,i)=>`
             <div class="research-link-wrap" style="position:relative">
@@ -6649,7 +6672,7 @@ function renderResearch(){
           `).join('')}
         </div>
       </div>
-      ${hasImg ? `<div style="background:#f7f7f7;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="navigateToProduct('${sku}')"><img src="media/products/${sku}.png" alt="${r.compound}" style="width:70px;height:auto;object-fit:contain;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform=''"></div>` : ''}
+      ${hasImg ? `<div style="padding:0 18px 16px"><button onclick="event.stopPropagation();addToCart('${sku}')" class="btn-add" style="width:100%;padding:10px;font-size:0.72rem">ADD TO CART</button></div>` : ''}
     </div>`;
   }).join('');
 }
