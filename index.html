@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260415a7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415a8';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -4680,7 +4680,19 @@ function openProduct(sku){
   const others = ALL_PRODUCTS.filter(x=>x.sku!==sku).slice(0,3);
 
   document.getElementById('pdp-layout').innerHTML = `
-    <div class="pdp-image">${imgHTML}</div>
+    <div class="pdp-image" style="position:relative;overflow:hidden">
+      <div class="pdp-slider" id="pdp-slider" style="display:flex;transition:transform 0.4s ease;width:200%">
+        <div style="width:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
+        ${(()=>{
+          const coaM = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes(compound.toLowerCase()));
+          return coaM ? '<div style="width:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">' + coaM.c + '</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">' + coaM.pu + ' Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ' + coaM.l + '</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ' + coaM.r + '</div><a href="coa/' + coaM.c + '.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>' : '';
+        })()}
+      </div>
+      <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px">
+        <button onclick="document.getElementById('pdp-slider').style.transform='translateX(0)';this.style.background='#000';this.nextElementSibling.style.background='#ccc'" style="width:8px;height:8px;border-radius:50%;border:none;background:#000;cursor:pointer;padding:0"></button>
+        <button onclick="document.getElementById('pdp-slider').style.transform='translateX(-50%)';this.style.background='#000';this.previousElementSibling.style.background='#ccc'" style="width:8px;height:8px;border-radius:50%;border:none;background:#ccc;cursor:pointer;padding:0"></button>
+      </div>
+    </div>
     <div class="pdp-info">
       <div class="pdp-back" onclick="history.back()">&#8592; Back</div>
       <div class="pdp-name">${(() => {
@@ -4733,6 +4745,7 @@ function openProduct(sku){
         <button class="pdp-tab active" type="button" role="tab" onclick="switchPdpTab(\'desc\',this)" aria-selected="true">Description</button>
         <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'specs\',this)" aria-selected="false">Specifications</button>
         <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'shipping\',this)" aria-selected="false">Shipping</button>
+        <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'testing\',this)" aria-selected="false">Testing</button>
       </div>
       <div class="pdp-tab-content active" id="pdp-tab-desc">
         <p>${desc}</p>
@@ -4743,6 +4756,32 @@ function openProduct(sku){
       <div class="pdp-tab-content" id="pdp-tab-shipping">
         <p><span class="term-tip" data-tip="Freeze-dried for stability during transport">Lyophilized</span> products are packaged for transport stability. Orders over $250 ship free; standard shipping is a $15 flat rate. Processing and delivery timing depends on order volume, verification, and carrier schedules.</p>
         <p style="margin-top:8px">Every lot is HPLC-verified and the corresponding Certificate of Analysis is available to look up anytime via our <a onclick="navigate('coa')" style="cursor:pointer;text-decoration:underline">COA archive</a>.</p>
+      </div>
+
+      <div class="pdp-tab-content" id="pdp-tab-testing">
+        ${(()=>{
+          const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes(compound.toLowerCase()));
+          if(coaMatch){
+            return '<div style="background:#fff;border:1px solid var(--stroke);border-radius:10px;padding:16px;margin-bottom:12px">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+                '<span style="font-weight:700;font-size:0.82rem">Certificate of Analysis</span>' +
+                '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--muted)">' + coaMatch.c + '</span>' +
+              '</div>' +
+              '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.75rem;margin-bottom:12px">' +
+                '<div><span style="color:var(--muted)">Purity:</span> <strong>' + coaMatch.pu + '</strong></div>' +
+                '<div><span style="color:var(--muted)">Lot:</span> <strong>' + coaMatch.l + '</strong></div>' +
+                '<div><span style="color:var(--muted)">Reported:</span> ' + coaMatch.r + '</div>' +
+                '<div><span style="color:var(--muted)">Compound:</span> ' + coaMatch.p + '</div>' +
+              '</div>' +
+              '<div style="display:flex;gap:8px">' +
+                '<a href="coa/' + coaMatch.c + '.pdf" target="_blank" style="flex:1;padding:10px;text-align:center;background:#000;color:#fff;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a>' +
+                '<a href="coa/' + coaMatch.c + '.pdf" download style="flex:1;padding:10px;text-align:center;border:1.5px solid #000;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;color:#000">Download</a>' +
+              '</div>' +
+            '</div>' +
+            '<a onclick="navigate(\\\'coa\\\')" style="display:block;text-align:center;font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;margin-top:8px">Browse full COA archive</a>';
+          }
+          return '<p style="color:var(--muted)">No COA available for this product yet. Check our <a onclick="navigate(\\\'coa\\\')" style="cursor:pointer;text-decoration:underline">COA archive</a> for the latest certificates.</p>';
+        })()}
       </div>
 
       <!-- TRUST BADGES -->
