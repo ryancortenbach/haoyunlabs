@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260415a3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415a4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -316,10 +316,10 @@ ul{list-style:none}
   /* Research Peptides card: square */
   .tilt-card[onclick*="peptides"]{aspect-ratio:1/1!important;min-height:auto!important}
   /* Purity heading: fit one line */
-  .big-feature-card .shimmer-title{font-size:1.5rem!important;white-space:nowrap}
+  .big-feature-card .shimmer-title{font-size:1.3rem!important;white-space:nowrap}
   /* Category pill vials: bigger */
-  .shop-pill-img{width:52px!important;height:52px!important;border-radius:12px!important}
-  .shop-pill-img img{transform:scale(1.2)!important}
+  .shop-pill-img{width:56px!important;height:56px!important;border-radius:12px!important}
+  .shop-pill-img img{transform:scale(1.4)!important}
   /* FEATURED dropdown: black text */
   .sort-select{color:#000!important;-webkit-appearance:none}
   /* Mobile menu: slide from left */
@@ -414,11 +414,11 @@ ul{list-style:none}
     min-height:100%;
   }
   .product-card .prod-img img{
-    position:absolute!important;top:0!important;left:0!important;
-    width:100%!important;height:100%!important;
+    position:absolute!important;top:5%!important;left:5%!important;
+    width:90%!important;height:90%!important;
     max-width:none!important;max-height:none!important;
-    object-fit:cover!important;object-position:center!important;
-    transform:scale(1.35)!important;transform-origin:center!important;
+    object-fit:contain!important;object-position:center!important;
+    transform:none!important;
   }
   /* Size dropdown: keep within card, opens upward when space above, bounded width */
   .product-card .hyl-select-content{
@@ -665,11 +665,12 @@ ul{list-style:none}
 .card-desc{font-size:0.75rem;color:var(--muted);margin-top:6px;line-height:1.4}
 .card-components{font-size:0.7rem;color:var(--muted);margin-top:6px;font-family:var(--mono);line-height:1.4}
 .card-details-toggle{
-  font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;
-  margin-top:10px;cursor:pointer;color:var(--muted);font-weight:600;
-  background:none;border:none;padding:0;text-align:left;
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;
+  margin-top:10px;cursor:pointer;color:#000;font-weight:700;
+  background:none;border:1.5px solid #000;border-radius:999px;padding:8px 14px;text-align:center;
+  display:block;width:100%;transition:all 0.2s;
 }
-.card-details-toggle:hover{color:var(--brand)}
+.card-details-toggle:hover{background:#000;color:#fff}
 .card-details{display:none;padding:8px 0 0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
 .card-details.open{display:block}
 /* ── CUSTOM SIZE SELECT (shadcn-style) ── */
@@ -822,7 +823,7 @@ ul{list-style:none}
 /* ── SHOP YOUR WAY PILLS ── */
 .shop-pill{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#fff;border:1px solid var(--stroke);border-radius:999px;cursor:pointer;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
 .shop-pill:hover{background:#fafafa;transform:translateY(-2px)}
-.shop-pill-img{width:56px;height:56px;background:#f5f5f5;border-radius:14px;flex-shrink:0;overflow:hidden;transform:scale(0.85);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill-img{width:64px;height:64px;background:#f5f5f5;border-radius:14px;flex-shrink:0;overflow:hidden;transform:scale(1);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
 .shop-pill-img img{width:100%;height:100%;object-fit:cover;display:block}
 .shop-pill:hover .shop-pill-img{transform:scale(1)}
 .shop-pill-name{font-size:1.3rem;font-weight:800;flex:1;letter-spacing:0.01em}
@@ -2576,7 +2577,13 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 <!-- ═══════════════ SCREEN: COA VERIFICATION ═══════════════ -->
 <div class="screen" id="screen-coa" style="background:#fff">
   <div class="container" style="padding-top:120px;max-width:1100px;margin:0 auto">
-    <!-- HERO + SEARCH -->
+    <!-- HERO TITLE -->
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Certificates of Analysis</div>
+      <div class="shimmer-title" style="font-size:2.8rem;margin-bottom:12px">Purity You Can Prove</div>
+      <div style="font-size:0.88rem;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.6">Every lot is independently tested via reverse-phase HPLC. Search by compound, SKU, or lot number to find the matching certificate.</div>
+    </div>
+    <!-- SEARCH -->
     <div class="coa-search-head" style="display:grid;grid-template-columns:1fr minmax(0,520px);gap:24px;align-items:end;margin-bottom:32px;border-bottom:1px solid var(--stroke);padding-bottom:32px">
       <div>
         <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Archive Search</div>
