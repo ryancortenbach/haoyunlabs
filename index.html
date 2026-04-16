@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260415a9';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415b1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -47,6 +47,7 @@
 button,a,input,select,textarea{touch-action:manipulation}
 input,select,textarea{font-size:16px!important}
 body.modal-open{position:fixed;width:100%;overflow:hidden}
+html,body{overflow-x:hidden;max-width:100vw}
 body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button,input,select,textarea{font-family:inherit;border-radius:var(--radius);border:1px solid var(--stroke);outline:none}
@@ -313,8 +314,10 @@ ul{list-style:none}
   .nav.shrunk .nav-inner{height:48px!important}
   /* BANNER: force animation on iOS */
   .sticky-banner .banner-track{-webkit-animation:banner-scroll 90s linear infinite!important;animation:banner-scroll 90s linear infinite!important}
-  /* Research Peptides card: square */
-  .tilt-card[onclick*="peptides"]{aspect-ratio:1/1!important;min-height:auto!important}
+  /* Research Peptides card: rectangular (not square) */
+  .tilt-card[onclick*="peptides"]{aspect-ratio:auto!important;min-height:280px!important}
+  /* COA + Pinterest image panels: square */
+  .big-feature-card .card-3d-wrap{aspect-ratio:1/1!important}
   /* Purity heading: fit one line */
   .big-feature-card .shimmer-title{font-size:1.3rem!important;white-space:nowrap}
   /* Category pill vials: bigger */
