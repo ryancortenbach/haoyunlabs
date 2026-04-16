@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416b2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260416b3';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -259,8 +259,10 @@ ul{list-style:none}
 }
 /* ── MOBILE (≤820px) ── */
 @media(max-width:820px){
-  /* STICKY BANNER: hidden on mobile */
+  /* STICKY BANNER: hidden on mobile, replaced by inline banner */
   .sticky-banner{display:none!important}
+  #home-inline-banner{display:block!important}
+  .banner-track-inline span{white-space:nowrap;padding:6px 32px;font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff}
   /* NAV: flush to top since no banner on mobile */
   .nav{top:0}
   .nav-inner{height:64px;padding:0 14px}
@@ -298,8 +300,9 @@ ul{list-style:none}
   .shop-pill-arrow svg{width:13px!important;height:13px!important}
   /* Section title shrink */
   #screen-home div[style*="Instrument Serif"][style*="2.4rem"]{font-size:1.6rem!important;margin-bottom:18px!important}
-  .tilt-card{padding:28px 20px!important;min-height:220px!important}
-  .tilt-card[style*="grid-template-columns:1fr auto"]{grid-template-columns:1fr auto!important;gap:14px!important;padding:24px 18px!important}
+  .tilt-card{padding:18px 16px!important;min-height:auto!important}
+  .tilt-card[style*="grid-template-columns:1fr auto"]{grid-template-columns:1fr auto!important;gap:12px!important;padding:16px 14px!important}
+  .tilt-card[style*="grid-template-columns:auto 1fr"]{grid-template-columns:auto 1fr!important;gap:12px!important;padding:16px 14px!important}
   .tilt-card video,.tilt-card div[style*="width:130px"]{width:96px!important;height:96px!important}
   .tilt-card .hero-btn-invert-dark{padding:9px 18px!important;font-size:0.68rem!important}
 
@@ -2144,6 +2147,10 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);line-height:1.5">GLP-1 agonists, secretagogues, nootropics, and more. Each vial is lyophilized, HPLC-verified, and sealed for integrity.</div>
         <div style="margin-top:16px"><span class="hero-btn-invert-dark" style="display:inline-block;padding:10px 22px;border:1.5px solid rgba(255,255,255,0.5);background:transparent;border-radius:999px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;transition:all 0.3s ease">Browse Peptides &rarr;</span></div>
         </div>
+      </div>
+      <!-- INLINE BANNER (mobile only) -->
+      <div id="home-inline-banner" style="display:none;background:#000;border-radius:12px;padding:6px 0;overflow:hidden;grid-column:1/-1">
+        <div class="banner-track-inline" style="display:flex;width:max-content;-webkit-animation:banner-scroll 60s linear infinite;animation:banner-scroll 60s linear infinite;will-change:transform"></div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:14px">
         <!-- Bulk Packs (compact) -->
@@ -6440,10 +6447,12 @@ async function submitOrder(){
    MARQUEE
    ═════════════════════════════════════════════════════ */
 function buildMarquee(){
-  const track = document.getElementById('banner-track');
-  if(!track) return;
   const text = 'FREE SHIPPING ON ORDERS $250+  |  99%+ HPLC PURITY  |  LOT-VERIFIED  |  DISCREET PACKAGING  |  HAO YUN LABS';
-  track.innerHTML = Array(8).fill(`<span>${text}</span>`).join('');
+  const spans = Array(8).fill(`<span>${text}</span>`).join('');
+  const track = document.getElementById('banner-track');
+  if(track) track.innerHTML = spans;
+  const inlineTrack = document.querySelector('.banner-track-inline');
+  if(inlineTrack) inlineTrack.innerHTML = spans;
 }
 
 /* ═════════════════════════════════════════════════════
