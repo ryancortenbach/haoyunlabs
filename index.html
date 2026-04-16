@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260415a6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415a7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -827,7 +827,7 @@ ul{list-style:none}
 .shop-pill-img img{width:100%;height:100%;object-fit:cover;display:block}
 .shop-pill:hover .shop-pill-img{transform:scale(1)}
 .shop-pill-name{font-size:1.3rem;font-weight:800;flex:1;letter-spacing:0.01em}
-.shop-pill-arrow{width:36px;height:36px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.3s ease-in-out}
+.shop-pill-arrow{width:36px;height:36px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto;transition:transform 0.3s ease-in-out}
 .shop-pill-arrow svg{width:18px;height:18px;stroke:#fff;transition:transform 0.3s ease-in-out}
 .shop-pill:hover .shop-pill-arrow svg{transform:translateX(3px)}
 
@@ -1846,15 +1846,15 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .pdp-price-old{font-family:var(--mono);font-size:0.88rem;color:#707070;text-decoration:line-through}
 .pdp-price{font-family:var(--mono);font-size:2rem;font-weight:800}
 .pdp-meta{border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden}
-.pdp-meta-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;font-size:0.82rem;border-bottom:1px solid var(--stroke)}
-.pdp-meta-row:last-child{border-bottom:none}
+.pdp-meta-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;font-size:0.82rem;border-bottom:1px solid var(--stroke);background:#fff;border-radius:10px;margin-bottom:4px;border:1px solid var(--stroke)}
+.pdp-meta-row:last-child{margin-bottom:0}
 .pdp-meta-label{font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-size:0.75rem}
 .pdp-meta-value{font-family:var(--mono);font-size:0.82rem}
 .pdp-status{color:#16a34a;font-weight:700}
 .pdp-qty-row{display:flex;gap:12px;align-items:center;margin-top:8px}
 .pdp-qty{display:flex;align-items:center;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden}
-.pdp-qty button{width:44px;height:44px;border:none;background:var(--bg);font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.1s}
-.pdp-qty button:hover{background:#f0f0f0}
+.pdp-qty button{width:44px;height:44px;border:none;background:#000;color:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.1s}
+.pdp-qty button:hover{background:#222}
 .pdp-qty span{width:44px;text-align:center;font-family:var(--mono);font-size:0.88rem;font-weight:700}
 .pdp-add-btn{flex:1;padding:14px;background:var(--brand);color:var(--bg);border:none;font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:opacity 0.15s}
 .pdp-add-btn:hover{opacity:0.8}
@@ -4709,7 +4709,7 @@ function openProduct(sku){
           ${PRODUCT_SIZES[p.sku].map((s,i)=>{
             const dose = (p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0];
             const isActive = s.label.toLowerCase() === dose.toLowerCase();
-            return `<button onclick="selectPdpSize('${p.sku}',${i})" class="pdp-size-btn ${isActive?'active':''}" style="padding:8px 18px;border-radius:999px;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);border:1.5px solid ${isActive?'var(--brand)':'var(--stroke)'};background:${isActive?'var(--brand)':'var(--bg)'};color:${isActive?'#fff':'var(--text)'}">${s.label}</button>`;
+            return `<button onclick="selectPdpSize('${p.sku}',${i})" class="pdp-size-btn ${isActive?'active':''}" style="padding:10px 24px;border-radius:999px;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);border:1.5px solid ${isActive?'var(--brand)':'var(--stroke)'};background:${isActive?'var(--brand)':'var(--bg)'};color:${isActive?'#fff':'var(--text)'}">${s.label}</button>`;
           }).join('')}
         </div>
       </div>` : ''}
