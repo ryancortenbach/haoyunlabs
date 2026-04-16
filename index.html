@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416b5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260416b6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -987,17 +987,14 @@ ul{list-style:none}
 .coa-action:hover{letter-spacing:0.18em;opacity:0.7}
 .coa-label{display:none}
 .coa-info{display:contents}
-.coa-mini-report{display:none}
+.coa-thumb{display:none}
 .coa-empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:0.85rem}
 @media(max-width:820px){
   .coa-row{display:grid!important;grid-template-columns:1fr 90px;gap:12px;padding:16px 0;margin-bottom:0;border:none!important;border-bottom:none!important;border-radius:0}
   .coa-row-header{display:none}
   .coa-info{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .coa-mini-report{display:flex!important;flex-direction:column;align-self:center;background:#f8f8f8;border-radius:8px;padding:8px;cursor:pointer;gap:4px;width:90px}
-  .coa-mini-header{font-size:0.45rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:3px;border-bottom:1px solid #e0e0e0}
-  .coa-mini-field{display:flex;justify-content:space-between;font-size:0.45rem;color:var(--muted)}
-  .coa-mini-field strong{font-weight:700;color:#000;font-family:var(--mono);font-size:0.48rem}
-  .coa-mini-code{font-size:0.42rem;font-family:var(--mono);text-align:center;color:var(--muted);letter-spacing:0.06em;margin-top:2px}
+  .coa-thumb{display:block!important;width:90px;align-self:center;cursor:pointer;border-radius:6px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+  .coa-thumb img{width:100%;height:auto;display:block}
   .coa-label{display:inline!important;font-weight:600;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
   .coa-code{font-size:0.9rem!important}
   .coa-compound{font-size:0.82rem!important;font-weight:700!important}
@@ -6548,11 +6545,8 @@ function renderCOAArchive(){
           <a class="coa-action" href="coa/${r.c}.pdf" download="${r.c}.pdf">Download</a>
         </div>
       </div>
-      <div class="coa-mini-report" onclick="window.open('coa/${r.c}.pdf','_blank')">
-        <div class="coa-mini-header">TEST REPORT</div>
-        <div class="coa-mini-field"><span>Purity</span><strong>${r.pu}</strong></div>
-        <div class="coa-mini-field"><span>Lot</span><strong>${r.l.split('-').pop()}</strong></div>
-        <div class="coa-mini-code">${r.c}</div>
+      <div class="coa-thumb" onclick="window.open('coa/${r.c}.pdf','_blank')">
+        <img src="coa/thumbs/${r.c}.png" alt="${r.p} COA" loading="lazy">
       </div>
     </div>`;
   }).join('');
