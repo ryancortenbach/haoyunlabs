@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416b1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260416b2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -259,12 +259,10 @@ ul{list-style:none}
 }
 /* ── MOBILE (≤820px) ── */
 @media(max-width:820px){
-  /* STICKY BANNER: shrink on mobile */
-  .sticky-banner .banner-track span{
-    padding:5px 32px!important;font-size:0.52rem!important;letter-spacing:0.12em!important;
-  }
-  /* NAV: hide desktop links + search bar, show hamburger */
-  .nav{top:22px}
+  /* STICKY BANNER: hidden on mobile */
+  .sticky-banner{display:none!important}
+  /* NAV: flush to top since no banner on mobile */
+  .nav{top:0}
   .nav-inner{height:64px;padding:0 14px}
   .nav-brand{font-size:1.25rem!important}
   .nav-center{display:none!important}
