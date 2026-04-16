@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260415a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415a2';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -468,8 +468,8 @@ ul{list-style:none}
     border-radius:12px!important;
     flex:1;
   }
-  .product-card .btn-add-full{display:inline!important}
-  .product-card .btn-add-short{display:none!important}
+  .product-card .btn-add-full{display:inline}
+  .product-card .btn-add-short{display:none}
   .product-card .card-footer>div>div{border-radius:12px!important}
   .badge-bestseller,.badge-purity{font-size:0.55rem!important;padding:3px 8px!important}
   /* Best seller overlay reposition — top-right of image */
@@ -1935,10 +1935,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
         <span class="nav-cart-badge" id="cart-badge"></span>
       </button>
-      <button class="nav-connect-btn" id="nav-connect-btn" onclick="connectWallet()" aria-label="Connect wallet">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-        <span class="nav-connect-label">Connect</span>
-      </button>
+      <!-- Connect wallet removed -->
     </div>
   </div>
 </nav>
@@ -5092,13 +5089,13 @@ function renderReceipt(){
   const shipping = sub > 0 ? (sub >= 250 ? 0 : 15) : 0;
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
-  const processingFee = Math.round(afterDisc * 0.05 * 100) / 100;
+  const processingFee = Math.round(afterDisc * 0.10 * 100) / 100;
   const total = afterDisc + shipping + processingFee;
   const tbl = document.getElementById('receipt-table');
   tbl.innerHTML = `
     <tr><td>Subtotal</td><td>$${sub.toFixed(2)}</td></tr>
     ${discountPct>0?`<tr><td>Discount (${discountPct}%)</td><td>-$${disc.toFixed(2)}</td></tr>`:''}
-    <tr><td>Processing Fee (5%)</td><td>$${processingFee.toFixed(2)}</td></tr>
+    <tr><td>Processing Fee (10%)</td><td>$${processingFee.toFixed(2)}</td></tr>
     <tr><td>Shipping${sub>=250?' (FREE over $250)':''}</td><td>${shipping===0&&sub>0?'FREE':'$'+shipping.toFixed(2)}</td></tr>
     <tr class="total-row"><td>TOTAL</td><td>$${total.toFixed(2)}</td></tr>
   `;
@@ -5192,9 +5189,8 @@ function showPaymentStep(){
 
 function renderPayMethods(){
   const el = document.getElementById('pay-methods');
-  selectedPayMethod = 'crypto';
-  // Two rows: natives and stablecoins. Stablecoins get their own block so users
-  // see they're paying a stable USD amount instead of a volatile crypto quote.
+  if(!selectedPayMethod) selectedPayMethod = 'crypto';
+  const isExpCrypto = selectedPayMethod === 'crypto';
   const natives = [
     {c:'BTC', name:'Bitcoin', chain:'Bitcoin Network'},
     {c:'ETH', name:'Ethereum', chain:'Mainnet'},
@@ -5216,41 +5212,62 @@ function renderPayMethods(){
       <div class="cc-name">${o.name}</div>
       <div class="cc-chain">${o.chain}</div>
     </div>`;
-  el.innerHTML = `
-    <div class="pm-subhead">Crypto</div>
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px">
-      ${natives.map(chipHtml).join('')}
-    </div>
-    <div class="pm-subhead">Stablecoins · $1 USD locked</div>
-    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
-      ${stables.map(chipHtml).join('')}
-    </div>
-    <div style="margin-top:12px;padding:10px 14px;background:#fef3c7;border:1px solid #fcd34d;border-left:3px solid #f59e0b;border-radius:10px;font-size:0.7rem;color:#78350f;line-height:1.5;display:flex;gap:8px;align-items:flex-start">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:1px;color:#f59e0b"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Each coin is accepted on <strong>one specific network only</strong>. Sending USDT on the wrong chain (ERC-20 vs TRC-20 vs BEP-20) will permanently lose funds. Double-check your wallet's network before sending.</span>
-    </div>
-    <div style="margin-top:20px;border-top:1px solid var(--stroke);padding-top:16px">
-      <div class="pm-subhead">Card & Bank</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="crypto-chip ${selectedPayMethod==='card'?'selected':''}" onclick="selectPayMethodCard()" style="cursor:pointer;padding:16px;border-radius:14px;border:1.5px solid ${selectedPayMethod==='card'?'var(--brand)':'var(--stroke)'};background:${selectedPayMethod==='card'?'#000':'#fff'};color:${selectedPayMethod==='card'?'#fff':'var(--text)'};display:flex;align-items:center;gap:10px;transition:all 0.3s">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          <div>
-            <div style="font-weight:800;font-size:0.82rem;letter-spacing:0.04em">CARD</div>
-            <div style="font-size:0.62rem;opacity:0.7">Credit / Debit</div>
-          </div>
-        </div>
-        <div class="crypto-chip ${selectedPayMethod==='zelle'?'selected':''}" onclick="selectPayMethodZelle()" style="cursor:pointer;padding:16px;border-radius:14px;border:1.5px solid ${selectedPayMethod==='zelle'?'var(--brand)':'var(--stroke)'};background:${selectedPayMethod==='zelle'?'#000':'#fff'};color:${selectedPayMethod==='zelle'?'#fff':'var(--text)'};display:flex;align-items:center;gap:10px;transition:all 0.3s">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
-          <div>
-            <div style="font-weight:800;font-size:0.82rem;letter-spacing:0.04em">ZELLE</div>
-            <div style="font-size:0.62rem;opacity:0.7">Bank transfer</div>
-          </div>
-        </div>
+  const methodChip = (id, label, sub, icon, sel) => `
+    <div onclick="selectPayCategory('${id}')" style="cursor:pointer;padding:18px;border-radius:14px;border:1.5px solid ${sel?'var(--brand)':'var(--stroke)'};background:${sel?'#000':'#fff'};color:${sel?'#fff':'var(--text)'};display:flex;align-items:center;gap:12px;transition:all 0.3s">
+      ${icon}
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:0.88rem;letter-spacing:0.04em">${label}</div>
+        <div style="font-size:0.62rem;opacity:0.7">${sub}</div>
       </div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.4;flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`;
+  el.innerHTML = `
+    <div class="pm-subhead">Choose Payment Method</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${methodChip('crypto','Cryptocurrency','BTC, ETH, SOL, USDT','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 8.5c0-.83 1.79-1.5 4-1.5s4 .67 4 1.5M8 15.5c0 .83 1.79 1.5 4 1.5s4-.67 4-1.5"/></svg>',isExpCrypto)}
+      ${methodChip('card','Credit / Debit Card','Visa, Mastercard','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><rect x="5" y="14" width="4" height="2" rx="0.5" fill="currentColor" opacity="0.3"/></svg>',selectedPayMethod==='card')}
+      ${methodChip('zelle','Zelle','Bank-to-bank transfer','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 16h8M8 8l8 8"/></svg>',selectedPayMethod==='zelle')}
     </div>
+    ${isExpCrypto ? `
+    <div style="margin-top:14px;padding:16px;background:#fafafa;border:1px solid var(--stroke);border-radius:14px">
+      <div class="pm-subhead" style="margin-bottom:10px">Select Currency</div>
+      <div style="border:1px solid var(--stroke);border-radius:12px;overflow:hidden;background:#fff">
+        ${[...natives,...stables].map((o,i,arr) => `
+          <div onclick="selectCryptoAndResetZelle('${o.c}')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;${i<arr.length-1?'border-bottom:1px solid var(--stroke);':''}background:${selectedCryptoCurrency===o.c?'#f5f5f5':'#fff'};transition:background 0.2s" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background='${selectedCryptoCurrency===o.c?'#f5f5f5':'#fff'}'">
+            <img src="crypto-icons/${o.c.toLowerCase()}.svg" alt="${o.c}" style="width:24px;height:24px;flex-shrink:0" onerror="this.style.display='none'">
+            <div style="flex:1">
+              <span style="font-weight:700;font-size:0.85rem">${o.name} </span>
+              <span style="color:var(--muted);font-size:0.75rem">${o.c === 'TRON' ? 'USDT' : o.c}</span>
+            </div>
+            <span style="font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em">${o.chain}</span>
+            ${o.badge ? `<span style="background:#22c55e;color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:999px;font-weight:700;letter-spacing:0.06em">${o.badge}</span>` : ''}
+            ${selectedCryptoCurrency===o.c ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;font-size:0.62rem;color:#78350f;line-height:1.4;display:flex;gap:6px;align-items:flex-start">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:2px;color:#f59e0b"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Each coin is accepted on <strong>one specific network only</strong>. Wrong chain = permanently lost funds.</span>
+      </div>
+    </div>` : ''}
   `;
-  // Sync pay button icon to selected currency
   syncPayBtnIcon();
+}
+function selectPayCategory(cat){
+  if(cat==='crypto'){
+    selectedPayMethod='crypto';
+    if(!selectedCryptoCurrency) selectedCryptoCurrency='BTC';
+    _setPayBtn('COMPLETE ORDER',false);
+  } else if(cat==='card'){
+    selectedPayMethod='card';
+    selectedCryptoCurrency=null;
+    _setPayBtn('PAY WITH CARD',true);
+  } else if(cat==='zelle'){
+    selectedPayMethod='zelle';
+    selectedCryptoCurrency=null;
+    _setPayBtn('COMPLETE ORDER',true);
+  }
+  renderPayMethods();
 }
 
 function _resetAltPayChips(){
@@ -6057,7 +6074,7 @@ async function submitOrder(){
   const shipping = sub >= 250 ? 0 : 15;
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
-  const processingFee = Math.round(afterDisc * 0.05 * 100) / 100;
+  const processingFee = Math.round(afterDisc * 0.10 * 100) / 100;
   const total = afterDisc + shipping + processingFee;
 
   const fname = document.getElementById('f-fname').value.trim();
@@ -6149,7 +6166,7 @@ async function submitOrder(){
       ...items.map(i => `${i.quantity}x ${i.name} - $${i.lineTotal.toFixed(2)}`),
       `---`,
       `Subtotal: $${sub.toFixed(2)}`,
-      `Processing Fee (5%): $${processingFee.toFixed(2)}`,
+      `Processing Fee (10%): $${processingFee.toFixed(2)}`,
       `Shipping: ${shipping===0?'FREE':'$'+shipping.toFixed(2)}`,
       `TOTAL: $${total.toFixed(2)}`,
       `---`,
@@ -6227,7 +6244,7 @@ async function submitOrder(){
       items.forEach(it=>{ detailHTML += `<div class="confirmed-detail-row"><span>${it.name} x${it.quantity}</span><span>$${it.lineTotal.toFixed(2)}</span></div>`; });
       detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
       if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
-      detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (5%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
+      detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (10%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
       detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
@@ -6271,7 +6288,7 @@ async function submitOrder(){
   });
   detailHTML += `<div class="confirmed-detail-row" style="border-top:1px solid var(--stroke);padding-top:8px;margin-top:8px"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>`;
   if(discountPct>0) detailHTML += `<div class="confirmed-detail-row"><span>Discount (${discountPct}%)</span><span>-$${disc.toFixed(2)}</span></div>`;
-  detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (5%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
+  detailHTML += `<div class="confirmed-detail-row"><span>Processing Fee (10%)</span><span>$${processingFee.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-detail-row"><span>Shipping</span><span>${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-detail-row" style="font-weight:800;font-size:0.95rem;border-top:2px solid var(--brand);padding-top:8px;margin-top:8px"><span>TOTAL</span><span>$${total.toFixed(2)}</span></div>`;
   detailHTML += `<div class="confirmed-address"><strong>Shipping to:</strong><br>${fname} ${lname}<br>${street}${apt?' '+apt:''}<br>${city}, ${state} ${zip}<br>USA</div>`;
