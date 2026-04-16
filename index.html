@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416a4';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260416a5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -552,13 +552,17 @@ ul{list-style:none}
 }
 .banner-track{
   display:flex;width:max-content;
+  -webkit-animation:banner-scroll 90s linear infinite;
   animation:banner-scroll 90s linear infinite;
+  will-change:transform;
 }
-.sticky-banner:hover .banner-track{animation-play-state:paused}
+.sticky-banner:hover .banner-track{-webkit-animation-play-state:paused;animation-play-state:paused}
 .banner-track span{
   white-space:nowrap;padding:8px 48px;
   font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;
+  color:#fff;
 }
+@-webkit-keyframes banner-scroll{0%{-webkit-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translateX(-50%);transform:translateX(-50%)}}
 @keyframes banner-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ── MAIN CONTAINER ── */
@@ -6441,7 +6445,7 @@ async function submitOrder(){
 function buildMarquee(){
   const track = document.getElementById('banner-track');
   if(!track) return;
-  const text = 'FREE SHIPPING ON ORDERS $250+ \u2014 99%+ HPLC PURITY \u2014 LOT-VERIFIED \u2014 DISCREET PACKAGING \u2014 HAO YUN LABS';
+  const text = 'FREE SHIPPING ON ORDERS $250+  |  99%+ HPLC PURITY  |  LOT-VERIFIED  |  DISCREET PACKAGING  |  HAO YUN LABS';
   track.innerHTML = Array(8).fill(`<span>${text}</span>`).join('');
 }
 
