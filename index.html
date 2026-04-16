@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416a6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260416a7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -2132,7 +2132,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
         <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">View COAs <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
       </div>
       <!-- INLINE BANNER (mobile only, replaces sticky) -->
-      <div id="home-inline-banner" style="display:none;background:#000;border-radius:0;padding:10px 0;overflow:hidden;margin-top:24px;position:relative;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%)"
+      <div id="home-inline-banner" style="display:none;background:#000;border-radius:0;padding:4px 0;overflow:hidden;margin-top:12px;position:relative;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%)"
         <div class="banner-track-inline" style="display:flex;width:max-content;-webkit-animation:banner-scroll 60s linear infinite;animation:banner-scroll 60s linear infinite;will-change:transform"></div>
       </div>
     </div>
