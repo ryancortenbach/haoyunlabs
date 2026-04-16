@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260415a5';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260415a6';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -2628,7 +2628,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     <!-- HERO -->
     <div style="text-align:center;margin-bottom:48px">
       <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Our Research</div>
-      <div style="font-family:'Instrument Serif',serif;font-size:2.8rem;font-weight:400;line-height:1.1;margin-bottom:12px">The science <em style="font-style:italic">behind</em> every <span id="research-flip-word" class="hero-colourful"></span></div>
+      <div style="font-family:'Instrument Serif',serif;font-size:3.4rem;font-weight:400;line-height:1.05;margin-bottom:12px">The science <em style="font-style:italic">behind</em> every<br><span id="research-flip-word" class="hero-colourful" style="margin-top:-4px;display:inline-block"></span></div>
       <div style="font-size:0.88rem;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.6">We focus on synthesis quality, repeatability, and analytical confidence for advanced research workflows.</div>
     </div>
 
@@ -3339,7 +3339,7 @@ function addToCartQty(sku, qty){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `${p.name} x${qty} added to cart` : 'Added to cart');
+  showToast(p ? `${p.name} x${qty} added to cart <a onclick="navigate('order')" style="color:#000;font-weight:800;text-decoration:underline;cursor:pointer;margin-left:6px">View Cart</a>` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
   if(!supplySkus.includes(sku)){
@@ -3359,7 +3359,7 @@ function addToCart(sku, btn){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `${p.name} added to cart` : 'Added to cart');
+  showToast(p ? `${p.name} added to cart <a onclick="navigate('order')" style="color:#000;font-weight:800;text-decoration:underline;cursor:pointer;margin-left:6px">View Cart</a>` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   // Animate button: green checkmark then revert
   try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
@@ -4996,6 +4996,27 @@ function renderOrder(){
   renderSuggested();
   renderReceipt();
   renderPayMethods();
+  // Restore cached shipping info
+  try {
+    const cached = JSON.parse(localStorage.getItem('hyl_shipping')||'{}');
+    ['f-fname','f-lname','f-street','f-apt','f-city','f-state','f-zip','f-phone','f-email'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && cached[id] && !el.value) el.value = cached[id];
+    });
+  } catch(e){}
+  // Auto-save shipping fields on blur
+  document.querySelectorAll('#f-fname,#f-lname,#f-street,#f-apt,#f-city,#f-state,#f-zip,#f-phone,#f-email').forEach(el => {
+    if(!el._hylCacheBound){
+      el._hylCacheBound = true;
+      el.addEventListener('blur', () => {
+        try {
+          const obj = JSON.parse(localStorage.getItem('hyl_shipping')||'{}');
+          obj[el.id] = el.value;
+          localStorage.setItem('hyl_shipping', JSON.stringify(obj));
+        } catch(e){}
+      });
+    }
+  });
 }
 
 window._suggestedQty = window._suggestedQty || {};
@@ -6208,35 +6229,40 @@ async function submitOrder(){
     const payCard = document.querySelector('.payment-card');
     if(!window._payCardOriginal) window._payCardOriginal = payCard.innerHTML;
     payCard.innerHTML = `
-      <div style="padding:24px;text-align:center">
-        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#000" stroke-width="1.5" style="margin-bottom:16px"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
-        <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Pay with Zelle</div>
-        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:20px">Send payment, then open a Discord ticket to confirm</div>
+      <div style="padding:32px 24px;text-align:center">
+        <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:24px;text-align:left;display:flex;gap:10px;align-items:flex-start">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div>
+            <div style="font-weight:800;font-size:0.85rem;color:#78350f;margin-bottom:2px">Your order isn't confirmed yet</div>
+            <div style="font-size:0.72rem;color:#92400e;line-height:1.5">Complete the steps below to finalize your purchase.</div>
+          </div>
+        </div>
 
-        <div style="background:#000;color:#fff;border-radius:16px;padding:20px;margin-bottom:16px;text-align:left">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <span style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.6">Order Total</span>
+        <div style="background:#000;color:#fff;border-radius:16px;padding:24px;margin-bottom:20px;text-align:left">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <span style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.6">Send via Zelle</span>
             <span style="font-size:1.6rem;font-weight:900">$${total.toFixed(2)}</span>
           </div>
-          <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:12px">
+          <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:14px">
             <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.6;margin-bottom:6px">Send Zelle to</div>
             <div style="font-size:1.1rem;font-weight:800;font-family:var(--mono)">(702) 742-8016</div>
           </div>
         </div>
 
-        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:16px;line-height:1.5">Include your order number <strong>${orderNum}</strong> in the Zelle memo</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:16px;line-height:1.5">Send $${total.toFixed(2)} via Zelle, then open a Discord ticket to confirm your order.</div>
 
-        <button onclick="navigator.clipboard?.writeText(${JSON.stringify(orderSummary)});showToast('Order details copied','success')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #000;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:10px">Copy Order Details</button>
+        <button onclick="navigator.clipboard?.writeText(${JSON.stringify(orderSummary)});showToast('Order details copied','success')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #000;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:10px">Copy Ticket Info</button>
 
         <a href="https://discord.gg/WDYVkgt5dB" target="_blank" style="display:block;width:100%;padding:14px;background:#5865F2;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;text-align:center;box-sizing:border-box">Open Discord Ticket</a>
 
-        <div style="margin-top:20px;padding:14px;background:#f9f9f9;border:1px solid var(--stroke);border-radius:12px;font-size:0.72rem;color:var(--muted);line-height:1.6;text-align:left">
-          <strong>How it works:</strong><br>
-          1. Send $${total.toFixed(2)} via Zelle to (702) 742-8016<br>
-          2. Copy your order details above<br>
-          3. Open Discord and create a ticket<br>
-          4. Paste your order details in the ticket<br>
-          5. We confirm payment and ship within 24 hours
+        <div style="margin-top:20px;padding:16px;background:#f9f9f9;border:1px solid var(--stroke);border-radius:12px;font-size:0.75rem;color:var(--text);line-height:1.7;text-align:left">
+          <strong style="font-size:0.82rem">Next Steps:</strong><br><br>
+          <strong>1.</strong> Send <strong>$${total.toFixed(2)}</strong> via Zelle to <strong>(702) 742-8016</strong><br>
+          <strong>2.</strong> Take a <strong>screenshot</strong> of the Zelle confirmation<br>
+          <strong>3.</strong> Click "Copy Ticket Info" above to copy your order details<br>
+          <strong>4.</strong> Open our Discord and <strong>create a new ticket</strong><br>
+          <strong>5.</strong> Paste your order details + attach the Zelle screenshot<br>
+          <strong>6.</strong> We verify payment and ship within 24 hours
         </div>
       </div>
     `;
