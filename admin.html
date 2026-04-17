@@ -117,28 +117,30 @@ td{font-family:var(--mono);font-size:0.8rem}
 .badge-payouts{background:#dcfce7;color:#16a34a}
 .badge-fulfillment{background:#fef3c7;color:#d97706}
 .badge-other{background:#f3f4f6;color:#6b7280}
-.badge-admin{background:#000;color:#fff}
+.badge-admin{background:#111827;color:#fff;border-radius:4px}
 .badge-manager{background:#1e1b4b;color:#c7d2fe}
 .badge-affiliate_manager{background:#1e1b4b;color:#c7d2fe}
 .badge-affiliate{background:#ede9fe;color:#7c3aed}
 .badge-employee{background:#f3f4f6;color:#6b7280}
 .badge-order_entry{background:#dbeafe;color:#2563eb}
-.toast-warning{background:#fff;border-left:4px solid var(--warning);color:var(--text)}
+.toast-warning{background:var(--surface);border-left:4px solid var(--warning);color:var(--text)}
 
 /* ── BUTTONS ── */
-.btn{padding:7px 16px;font-size:0.78rem;letter-spacing:0.06em;font-weight:600;text-transform:uppercase}
-.btn-primary{background:var(--brand);color:#fff;border:none}
-.btn-primary:hover{opacity:0.85}
-.btn-sm{padding:5px 10px;font-size:0.72rem}
-.btn-danger{background:var(--danger);color:#fff;border:none}
-.btn-danger:hover{opacity:0.85}
+.btn{padding:8px 18px;font-size:0.78rem;letter-spacing:0.06em;font-weight:600;text-transform:uppercase;border-radius:var(--radius-sm);transition:all var(--transition)}
+.btn-primary{background:var(--brand);color:#fff;border:none;box-shadow:0 1px 2px rgba(0,0,0,0.12)}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn-primary:active{transform:translateY(0);box-shadow:none}
+.btn-sm{padding:5px 12px;font-size:0.72rem}
+.btn-danger{background:var(--danger);color:#fff;border:none;box-shadow:0 1px 2px rgba(220,38,38,0.2)}
+.btn-danger:hover{opacity:0.88;transform:translateY(-1px);box-shadow:0 2px 6px rgba(220,38,38,0.25)}
+.btn-danger:active{transform:translateY(0)}
 .btn-outline{background:transparent;border:1px solid var(--stroke)}
-.btn-outline:hover{border-color:var(--brand)}
+.btn-outline:hover{border-color:var(--brand);background:rgba(0,0,0,0.02)}
 
 /* ── EXPANDED ROW ── */
-.detail-row{background:#fafafa;display:none}
-.detail-row.open{display:table-row}
-.detail-content{padding:20px 24px}
+.detail-row{background:#f8f9fb;display:none}
+.detail-row.open{display:table-row;animation:fadeIn 0.2s ease}
+.detail-content{padding:24px 28px}
 .detail-content h4{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;font-weight:600}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px}
 .detail-section{margin-bottom:16px}
@@ -149,18 +151,21 @@ td{font-family:var(--mono);font-size:0.8rem}
 .detail-actions .btn{margin-top:0}
 
 /* ── PAGINATION ── */
-.pagination{display:flex;gap:8px;margin-top:20px;align-items:center;justify-content:center}
-.pagination button{padding:6px 14px;font-size:0.78rem}
+.pagination{display:flex;gap:8px;margin-top:24px;align-items:center;justify-content:center}
+.pagination button{padding:6px 14px;font-size:0.78rem;border-radius:var(--radius-sm)}
+.pagination button:disabled{opacity:0.4;cursor:not-allowed}
 .pagination span{font-size:0.78rem;color:var(--muted);font-family:var(--mono)}
 
 /* ── MODAL ── */
 .modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;
+  position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:200;
   display:flex;align-items:center;justify-content:center;
+  animation:fadeIn 0.15s ease;
 }
 .modal-overlay.hidden{display:none}
-.modal{background:#fff;width:480px;max-width:90vw;max-height:90vh;overflow-y:auto;padding:32px}
-.modal h3{font-size:1rem;font-weight:700;margin-bottom:16px}
+.modal{background:var(--surface);width:480px;max-width:90vw;max-height:90vh;overflow-y:auto;padding:36px;border-radius:var(--radius);box-shadow:var(--shadow-lg);animation:modalIn 0.2s ease}
+.modal h3{font-size:1.05rem;font-weight:700;margin-bottom:16px}
+@keyframes modalIn{from{transform:translateY(10px) scale(0.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 .modal label{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:4px;font-weight:600;margin-top:12px}
 .modal input,.modal select,.modal textarea{width:100%;margin-bottom:4px}
 .modal textarea{min-height:80px;resize:vertical}
@@ -170,54 +175,58 @@ td{font-family:var(--mono);font-size:0.8rem}
 .toast-container{position:fixed;top:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
 .toast{
   padding:14px 20px;font-size:0.82rem;font-weight:500;
-  border-left:4px solid var(--brand);background:#fff;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);min-width:280px;
-  animation:slideIn 0.2s ease;
+  border-left:4px solid var(--brand);background:var(--surface);
+  box-shadow:var(--shadow-lg);min-width:280px;border-radius:var(--radius-sm);
+  animation:slideIn 0.25s cubic-bezier(0.16,1,0.3,1);
 }
 .toast-success{border-left-color:var(--success)}
 .toast-error{border-left-color:var(--danger)}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
 /* ── CHART ── */
-.chart-wrap{border:1px solid var(--stroke);padding:20px;margin-bottom:24px}
+.chart-wrap{background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);padding:24px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
 .chart-wrap canvas{width:100%;height:250px}
 
 /* ── LOADING / EMPTY ── */
-.loading,.empty{text-align:center;padding:40px;color:var(--muted);font-size:0.88rem}
+.loading,.empty{text-align:center;padding:48px 40px;color:var(--muted);font-size:0.88rem}
+.loading{position:relative}
+.loading::after{content:'';display:block;width:24px;height:24px;margin:12px auto 0;border:2px solid var(--stroke);border-top-color:var(--brand);border-radius:50%;animation:spin 0.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
 /* ── INLINE FORM ── */
-.inline-form{border:1px solid var(--stroke);padding:20px;margin-bottom:20px;background:#fafafa}
+.inline-form{border:1px solid var(--stroke);padding:24px;margin-bottom:20px;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
 .inline-form .form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px}
 .inline-form label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600;display:block;margin-bottom:4px}
 .inline-form .form-group{display:flex;flex-direction:column}
 
 /* ── SETTINGS ── */
-.settings-section{border:1px solid var(--stroke);padding:24px;margin-bottom:20px}
-.settings-section h3{font-size:0.88rem;font-weight:700;margin-bottom:16px;letter-spacing:0.04em}
+.settings-section{background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);padding:28px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+.settings-section h3{font-size:0.92rem;font-weight:700;margin-bottom:18px;letter-spacing:0.02em;padding-bottom:12px;border-bottom:1px solid var(--stroke)}
 .settings-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
 .settings-row label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);font-weight:600;min-width:160px}
 .settings-row input,.settings-row select{width:200px}
 .toggle{position:relative;width:44px;height:24px;display:inline-block}
 .toggle input{opacity:0;width:0;height:0}
 .toggle-slider{
-  position:absolute;inset:0;background:#ccc;cursor:pointer;transition:0.2s;
+  position:absolute;inset:0;background:#d1d5db;cursor:pointer;transition:0.2s;border-radius:12px;
 }
 .toggle-slider::before{
   content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;
-  background:#fff;transition:0.2s;
+  background:#fff;transition:0.2s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.15);
 }
 .toggle input:checked+.toggle-slider{background:var(--brand)}
 .toggle input:checked+.toggle-slider::before{transform:translateX(20px)}
 
 /* ── HIDE SECTIONS ── */
 .section{display:none}
-.section.active{display:block}
+.section.active{display:block;animation:fadeIn 0.2s ease}
 
 /* ── HAMBURGER TOGGLE ── */
 .sidebar-toggle{
   display:none;position:fixed;top:12px;left:12px;z-index:150;
-  background:#000;color:#fff;border:none;width:44px;height:44px;
-  font-size:1.4rem;line-height:1;cursor:pointer;padding:0;
+  background:#0f0f14;color:#fff;border:none;width:44px;height:44px;border-radius:var(--radius-sm);
+  font-size:1.4rem;line-height:1;cursor:pointer;padding:0;box-shadow:var(--shadow-md);
 }
 .sidebar-overlay{
   display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:90;
@@ -298,7 +307,7 @@ td{font-family:var(--mono);font-size:0.8rem}
   .pagination{flex-wrap:wrap}
 
   /* -- Modal -- */
-  .modal{padding:20px 16px;width:100%;max-width:100vw;max-height:100vh;border-radius:0}
+  .modal{padding:20px 16px;width:100%;max-width:100vw;max-height:90vh;border-radius:var(--radius) var(--radius) 0 0}
   .modal-overlay{align-items:flex-end}
 
   /* -- Inline forms (discounts, etc.) -- */
@@ -458,11 +467,11 @@ td{font-family:var(--mono);font-size:0.8rem}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
       <div>
         <h4 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:12px">Top 10 Products</h4>
-        <div id="top-products-table"><div class="loading">Loading...</div></div>
+        <div id="top-products-table" class="table-scroll"><div class="loading">Loading...</div></div>
       </div>
       <div>
         <h4 style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:12px">Top 5 Affiliates</h4>
-        <div id="top-affiliates-table"><div class="loading">Loading...</div></div>
+        <div id="top-affiliates-table" class="table-scroll"><div class="loading">Loading...</div></div>
       </div>
     </div>
   </div>
@@ -571,11 +580,11 @@ td{font-family:var(--mono);font-size:0.8rem}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
       <div>
         <h3 style="font-size:0.9rem;margin-bottom:12px">Top Products</h3>
-        <div id="stats-top-products"></div>
+        <div id="stats-top-products" class="table-scroll"></div>
       </div>
       <div>
         <h3 style="font-size:0.9rem;margin-bottom:12px">Top Affiliate Codes</h3>
-        <div id="stats-top-affiliates"></div>
+        <div id="stats-top-affiliates" class="table-scroll"></div>
       </div>
     </div>
   </div>
@@ -1497,32 +1506,44 @@ function drawBarChart(canvasId, dayMap) {
 
   ctx.clearRect(0, 0, W, H);
 
-  // Y axis labels
-  ctx.fillStyle = '#999';
-  ctx.font = '10px SF Mono, Fira Code, monospace';
+  // Y axis labels + grid
+  ctx.fillStyle = '#9ca3af';
+  ctx.font = '10px -apple-system, SF Mono, Fira Code, monospace';
   ctx.textAlign = 'right';
   for (let i = 0; i <= 4; i++) {
     const y = padT + chartH - (chartH * i / 4);
     const val = (maxVal * i / 4);
     ctx.fillText('$' + val.toFixed(0), padL - 8, y + 3);
-    ctx.strokeStyle = '#eee';
+    ctx.strokeStyle = '#f0f0f0';
+    ctx.lineWidth = 0.5;
     ctx.beginPath();
     ctx.moveTo(padL, y);
     ctx.lineTo(W - padR, y);
     ctx.stroke();
   }
 
-  // Bars
-  ctx.fillStyle = '#000';
+  // Bars with gradient
+  const grad = ctx.createLinearGradient(0, padT, 0, padT + chartH);
+  grad.addColorStop(0, '#3b82f6');
+  grad.addColorStop(1, '#1d4ed8');
   days.forEach((d, i) => {
     const x = padL + i * (chartW / days.length) + 1;
     const h = (values[i] / maxVal) * chartH;
     const y = padT + chartH - h;
-    ctx.fillRect(x, y, barW, h);
+    const r = Math.min(3, barW / 2);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.arcTo(x + barW, y, x + barW, y + r, r);
+    ctx.lineTo(x + barW, padT + chartH);
+    ctx.lineTo(x, padT + chartH);
+    ctx.closePath();
+    ctx.fill();
   });
 
   // X axis labels (every 5 days)
-  ctx.fillStyle = '#999';
+  ctx.fillStyle = '#9ca3af';
   ctx.textAlign = 'center';
   days.forEach((d, i) => {
     if (i % 5 === 0) {

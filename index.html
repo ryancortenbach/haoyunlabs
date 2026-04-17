@@ -1033,10 +1033,11 @@ ul{list-style:none}
 }
 /* ═══════════════ ADMIN PANEL ═══════════════ */
 #admin-toggle{
+  display:none!important; /* HIDDEN IN PRODUCTION — remove this line to re-enable */
   position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));right:18px;z-index:9500;
   width:54px;height:54px;border-radius:50%;
   background:#000;color:#fff;border:2px solid #fff;
-  display:flex;align-items:center;justify-content:center;
+  /* display:flex; */ align-items:center;justify-content:center;
   box-shadow:0 8px 28px rgba(0,0,0,0.35);cursor:pointer;
   transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),background 0.2s;
 }
