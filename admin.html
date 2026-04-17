@@ -4,13 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HYL Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0a0a0f;--surface:#111118;--text:#e5e5e5;--muted:#6b7280;--stroke:rgba(255,255,255,0.08);--brand:#fff;
-  --mono:'SF Mono','Fira Code','Courier New',monospace;
-  --sans:-apple-system,'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mono:'Inter','Helvetica Neue',sans-serif;
+  --sans:'Instrument Sans','Helvetica Neue',sans-serif;
+  --display:'Oswald','Helvetica Neue',sans-serif;
   --sidebar-w:240px;
   --danger:#dc2626;--success:#16a34a;--warning:#d97706;--info:#2563eb;
   --radius:10px;--radius-sm:6px;
@@ -34,7 +38,7 @@ tbody tr{transition:background var(--transition)}
 tbody tr:hover td{background:rgba(255,255,255,0.03)}
 tbody tr:nth-child(4n+1):not(.detail-row) td{background:rgba(255,255,255,0.01)}
 tbody tr:nth-child(4n+1):not(.detail-row):hover td{background:rgba(255,255,255,0.03)}
-td{font-family:var(--mono);font-size:0.8rem}
+td{font-family:var(--sans);font-size:0.82rem}
 
 /* ── SIDEBAR ── */
 .sidebar{
@@ -42,7 +46,7 @@ td{font-family:var(--mono);font-size:0.8rem}
   background:#0f0f14;color:#fff;display:flex;flex-direction:column;z-index:100;
   box-shadow:2px 0 20px rgba(0,0,0,0.15);
 }
-.sidebar-logo{padding:28px 24px 24px;font-weight:800;font-size:1.15rem;letter-spacing:0.15em;border-bottom:1px solid rgba(255,255,255,0.06)}
+.sidebar-logo{padding:28px 24px 24px;font-family:var(--display);font-weight:800;font-size:1.15rem;letter-spacing:0.15em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.06)}
 .sidebar-nav{flex:1;padding:16px 0;overflow-y:auto}
 .sidebar-nav a{
   display:flex;align-items:center;gap:12px;padding:11px 24px;font-size:0.82rem;
@@ -69,7 +73,7 @@ td{font-family:var(--mono);font-size:0.8rem}
   display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);
 }
 .login-box{width:380px;padding:44px;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:var(--shadow-lg)}
-.login-box h1{font-weight:800;font-size:1.6rem;letter-spacing:0.15em;margin-bottom:8px}
+.login-box h1{font-family:var(--display);font-weight:800;font-size:1.8rem;letter-spacing:0.15em;margin-bottom:8px;text-transform:uppercase}
 .login-box p{color:var(--muted);font-size:0.84rem;margin-bottom:28px}
 .login-box label{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;font-weight:600}
 .login-box input{width:100%;margin-bottom:16px;padding:12px}
@@ -79,7 +83,7 @@ td{font-family:var(--mono);font-size:0.8rem}
 
 /* ── PAGE HEADER ── */
 .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-.page-header h2{font-size:1.4rem;font-weight:800;letter-spacing:0.02em;color:var(--text)}
+.page-header h2{font-family:var(--display);font-size:1.6rem;font-weight:700;letter-spacing:0.02em;color:var(--text);text-transform:uppercase}
 
 /* ── CARDS ── */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
