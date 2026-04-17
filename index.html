@@ -325,9 +325,7 @@ ul{list-style:none}
   .shop-pill-img img{transform:none!important}
   /* FEATURED dropdown: black text */
   .sort-select{color:#000!important;-webkit-appearance:none}
-  /* Mobile menu: slide from left */
-  .mobile-menu{transform:translateX(-100%)!important;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease!important}
-  .mobile-menu.open{transform:translateX(0)!important;opacity:1!important}
+  /* Mobile menu: slide transition handled in base .mobile-menu rules */
   /* CATALOG */
   .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
   .toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:16px 0 12px!important}
@@ -454,6 +452,8 @@ ul{list-style:none}
   }
   .product-card .card-details-toggle{font-size:0.62rem!important;margin-top:6px!important}
   .product-card .card-details{display:none!important}
+  /* On mobile, "More Details" navigates to PDP instead of expanding inline */
+  .product-card .card-details-toggle.mobile-pdp-link{}
   .product-card>div[onclick][style*="padding:0 16px 8px"]{
     grid-area:size;
     padding:0 14px 10px!important;
@@ -522,11 +522,12 @@ ul{list-style:none}
 .mobile-menu{
   position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;
   background:rgba(255,255,255,0.98);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  display:none;flex-direction:column;padding:72px 24px 32px;
-  transform:translateY(-12px);opacity:0;pointer-events:none;
-  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1);
+  display:flex;flex-direction:column;padding:72px 24px 32px;
+  transform:translateX(-100%);opacity:0;pointer-events:none;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.25s ease;
+  will-change:transform,opacity;
 }
-.mobile-menu.open{display:flex;opacity:1;transform:translateY(0);pointer-events:auto}
+.mobile-menu.open{transform:translateX(0);opacity:1;pointer-events:auto}
 .mobile-menu-close{
   position:absolute;top:20px;right:18px;width:44px;height:44px;
   border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
@@ -1033,14 +1034,16 @@ ul{list-style:none}
 }
 /* ═══════════════ ADMIN PANEL ═══════════════ */
 #admin-toggle{
-  display:none!important; /* HIDDEN IN PRODUCTION — remove this line to re-enable */
   position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));right:18px;z-index:9500;
   width:54px;height:54px;border-radius:50%;
   background:#000;color:#fff;border:2px solid #fff;
-  /* display:flex; */ align-items:center;justify-content:center;
+  display:none;align-items:center;justify-content:center;
   box-shadow:0 8px 28px rgba(0,0,0,0.35);cursor:pointer;
   transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1),background 0.2s;
+  pointer-events:none;
 }
+/* Show admin toggle only when ?admin is in URL (JS adds this class) */
+body.admin-enabled #admin-toggle{display:flex;pointer-events:auto}
 #admin-toggle:hover{transform:scale(1.08);background:#1a1a1a}
 #admin-toggle:active{transform:scale(0.94)}
 #admin-toggle svg{opacity:0.95}
@@ -1929,7 +1932,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     <div class="ag-legal">By entering, you confirm you are 21+ and agree to our terms. For research use only.</div>
   </div>
 </div>
-<script>if(localStorage.getItem('hyl_age_verified')==='true')document.getElementById('age-gate').classList.add('hidden');</script>
+<script>
+if(localStorage.getItem('hyl_age_verified')==='true')document.getElementById('age-gate').classList.add('hidden');
+// Admin toggle: only show when ?admin is in URL
+if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enabled');
+</script>
 
 
 <!-- NAV -->
@@ -4150,7 +4157,7 @@ function mobileMenuNav(screen){
   setTimeout(()=>navigate(screen), 220);
 }
 function mobileMenuSearch(q){
-  // Reuse navSearch render logic: navigate to catalog with filter
+  // Navigate to catalog with search filter pre-filled
   q = (q||'').trim();
   if(q.length < 2) return;
   if(q.length >= 3){
@@ -4159,7 +4166,7 @@ function mobileMenuSearch(q){
     setTimeout(()=>{
       navigate('catalog');
       setTimeout(()=>{
-        const si = document.getElementById('search-input');
+        const si = document.getElementById('cat-search');
         if(si){ si.value = q; si.dispatchEvent(new Event('input')); }
       }, 150);
     }, 220);
@@ -4173,6 +4180,13 @@ function handleRoute(){
     hash = 'help';
     history.replaceState(null, '', '#help');
   }
+  // Safety: always unlock scroll on navigation (fixes stuck body from modals/menus)
+  document.body.style.overflow='';document.body.style.position='';document.body.style.width='';document.body.style.top='';
+  document.body.classList.remove('admin-open');
+  // Close mobile menu if still open
+  const mobileMenu = document.getElementById('mobile-menu');
+  if(mobileMenu && mobileMenu.classList.contains('open')) mobileMenu.classList.remove('open');
+
   const screens = ['home','catalog','product','order','payment-confirmed','card-return','help','terms','coa','tracking','research'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
@@ -4507,6 +4521,14 @@ function cardAdd(sku, btn){
 }
 
 function toggleDetails(id, btn){
+  // On mobile (<540px), card-details is display:none!important, so navigate to PDP instead
+  if(window.innerWidth <= 540){
+    const card = btn.closest('.product-card');
+    if(card && card.getAttribute('onclick')){
+      const m = card.getAttribute('onclick').match(/openProduct\(['"]([^'"]+)['"]\)/);
+      if(m){ openProduct(m[1]); return; }
+    }
+  }
   const el = document.getElementById(id);
   const open = el.classList.toggle('open');
   btn.textContent = open ? '- Hide Details' : '+ More Details';
@@ -5271,8 +5293,8 @@ function renderOrderSearch(){
   if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
   el.innerHTML = matches.map(p=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--stroke);font-size:0.78rem">
-      <div><span style="font-weight:700;text-transform:uppercase">${p.name}</span> <span style="font-family:var(--mono);color:var(--muted);font-size:0.7rem;margin-left:6px">${p.sku}</span></div>
-      <div style="display:flex;align-items:center;gap:10px">
+      <div style="cursor:pointer;min-width:0;flex:1;margin-right:8px" onclick="openProduct('${p.sku}')"><span style="font-weight:700;text-transform:uppercase;text-decoration:underline;text-underline-offset:2px">${p.name}</span> <span style="font-family:var(--mono);color:var(--muted);font-size:0.7rem;margin-left:6px">${p.sku}</span></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
         <span style="font-family:var(--mono);font-weight:700">$${p.price.toFixed(2)}</span>
         <button class="btn-add" style="width:auto;padding:6px 14px;font-size:0.68rem" onclick="addToCart('${p.sku}');renderOrder()">ADD</button>
       </div>
@@ -5500,6 +5522,16 @@ function toggleCatKitView(){
 }
 
 function toggleNavSearch(){
+  // On mobile, nav search bar is hidden; open mobile menu with search focused instead
+  if(window.innerWidth <= 820){
+    const menu = document.getElementById('mobile-menu');
+    if(!menu.classList.contains('open')) toggleMobileMenu();
+    setTimeout(()=>{
+      const inp = document.getElementById('mobile-menu-search-input');
+      if(inp) inp.focus();
+    }, 350);
+    return;
+  }
   const bar = document.getElementById('nav-search-bar');
   bar.classList.toggle('open');
   if(bar.classList.contains('open')) document.getElementById('nav-search').focus();
@@ -5512,7 +5544,7 @@ function navSearch(q){
   const matches = ALL_PRODUCTS.filter(p=>p.name.toLowerCase().includes(s)||p.sku.toLowerCase().includes(s)).slice(0,8);
   if(!matches.length){ el.innerHTML='<div style="padding:14px;font-size:0.8rem;color:var(--muted);text-align:center">No products found</div>'; el.classList.add('open'); return; }
   el.innerHTML = matches.map(p=>`
-    <div class="nav-search-result" onclick="addToCart('${p.sku}');document.getElementById('nav-search').value='';navSearch('');">
+    <div class="nav-search-result" onclick="openProduct('${p.sku}');document.getElementById('nav-search').value='';navSearch('');">
       <span class="sr-name">${p.name}</span>
       <span class="sr-price">$${p.price.toFixed(2)}</span>
     </div>
