@@ -5252,7 +5252,7 @@ function renderReceipt(){
 async function applyCode(){
   const code = document.getElementById('discount-input').value.trim().toUpperCase();
   const msg = document.getElementById('discount-msg');
-  if(!code){msg.textContent='';return;}
+  if(!code){discountCode=null;discountPct=0;window._affiliateCode=null;msg.textContent='Discount removed.';msg.className='discount-msg';renderReceipt();return;}
   let foundDiscount = false;
   // Try server-side validation via edge function
   try {
