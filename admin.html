@@ -1417,8 +1417,8 @@ async function editDiscount(id) {
 async function saveDiscount() {
   const row = {
     code: $('dc-code').value.trim().toUpperCase(),
-    percent_off: parseInt($('dc-percent').value) || 10,
-    max_uses: parseInt($('dc-max-uses').value) || 0,
+    percent_off: parseFloat($('dc-percent').value) || 10,
+    max_uses: parseInt($('dc-max-uses').value) || null,
     active: $('dc-active').value === 'true',
   };
 
