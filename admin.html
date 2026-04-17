@@ -215,6 +215,11 @@ td{font-family:var(--mono);font-size:0.8rem}
     <a href="#analytics" data-section="analytics"><span class="icon">&#9670;</span>Analytics</a>
     <a href="#discounts" data-section="discounts"><span class="icon">&#9733;</span>Discounts</a>
     <a href="#affiliates" data-section="affiliates"><span class="icon">&#9830;</span>Affiliates</a>
+    <a href="#fulfillment" data-section="fulfillment"><span class="icon">&#9992;</span>Fulfillment</a>
+    <a href="#expenses" data-section="expenses"><span class="icon">&#9783;</span>Expenses</a>
+    <a href="#statistics" data-section="statistics"><span class="icon">&#9673;</span>Statistics</a>
+    <a href="#liabilities" data-section="liabilities"><span class="icon">&#9888;</span>Liabilities</a>
+    <a href="#employees" data-section="employees"><span class="icon">&#9822;</span>Employees</a>
     <a href="#settings" data-section="settings"><span class="icon">&#9878;</span>Settings</a>
   </nav>
   <div class="sidebar-bottom">
@@ -316,6 +321,113 @@ td{font-family:var(--mono);font-size:0.8rem}
       <h2>Affiliates</h2>
     </div>
     <div id="affiliates-table-wrap"><div class="loading">Loading...</div></div>
+  </div>
+
+  <!-- FULFILLMENT -->
+  <div class="section" id="section-fulfillment">
+    <div class="page-header">
+      <h2>Fulfillment</h2>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="fulfillBulk('finalize')">Finalize Selected</button>
+        <button class="btn btn-sm" onclick="fulfillBulk('send-tracking')">Send Tracking</button>
+        <button class="btn btn-sm" onclick="fulfillBulk('print')">Print Packing</button>
+      </div>
+    </div>
+    <div class="filters">
+      <select id="fulfill-filter" onchange="loadFulfillment()">
+        <option value="">All Statuses</option>
+        <option value="pending" selected>Pending</option>
+        <option value="finalized">Finalized</option>
+        <option value="shipped">Shipped</option>
+      </select>
+      <span id="fulfill-count" style="color:var(--muted);font-size:0.82rem"></span>
+    </div>
+    <div id="fulfillment-table-wrap"><div class="loading">Loading...</div></div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="section" id="section-expenses">
+    <div class="page-header">
+      <h2>Expenses</h2>
+    </div>
+    <div class="cards" id="expense-cards"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:12px">Log Expense</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <input type="date" id="exp-date" value="">
+          <select id="exp-type">
+            <option value="inventory">Inventory</option>
+            <option value="shipping">Shipping</option>
+            <option value="advertising">Advertising</option>
+            <option value="payouts">Payouts</option>
+            <option value="fulfillment">Fulfillment</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="number" id="exp-amount" placeholder="Amount" step="0.01">
+          <textarea id="exp-notes" placeholder="Notes..." rows="2" style="resize:vertical"></textarea>
+          <button class="btn btn-primary" onclick="saveExpense()">Save Expense</button>
+        </div>
+      </div>
+      <div>
+        <canvas id="expense-chart" height="200"></canvas>
+      </div>
+    </div>
+    <h3 style="font-size:0.9rem;margin-bottom:12px">Expense History</h3>
+    <div id="expenses-table-wrap"><div class="loading">Loading...</div></div>
+  </div>
+
+  <!-- STATISTICS -->
+  <div class="section" id="section-statistics">
+    <div class="page-header">
+      <h2>Statistics</h2>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="loadStats('daily')" id="stats-daily">Daily</button>
+        <button class="btn btn-sm btn-primary" onclick="loadStats('monthly')" id="stats-monthly">Monthly</button>
+        <button class="btn btn-sm" onclick="loadStats('all')" id="stats-all">All Time</button>
+      </div>
+    </div>
+    <div class="cards" id="stats-cards"></div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:24px">
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:12px">Revenue Trend</h3>
+        <canvas id="stats-revenue-chart" height="250"></canvas>
+      </div>
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:12px">Current vs Previous</h3>
+        <div id="stats-comparison"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:12px">Top Products</h3>
+        <div id="stats-top-products"></div>
+      </div>
+      <div>
+        <h3 style="font-size:0.9rem;margin-bottom:12px">Top Affiliate Codes</h3>
+        <div id="stats-top-affiliates"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIABILITIES -->
+  <div class="section" id="section-liabilities">
+    <div class="page-header">
+      <h2>Liabilities</h2>
+      <button class="btn btn-primary" onclick="showLiabilityModal()">+ Add Liability</button>
+    </div>
+    <div class="cards" id="liability-cards"></div>
+    <div id="liabilities-table-wrap"><div class="loading">Loading...</div></div>
+  </div>
+
+  <!-- EMPLOYEES -->
+  <div class="section" id="section-employees">
+    <div class="page-header">
+      <h2>Employees</h2>
+      <button class="btn btn-primary" onclick="showEmployeeModal()">+ Add Employee</button>
+    </div>
+    <div class="cards" id="employee-cards"></div>
+    <div id="employees-table-wrap"><div class="loading">Loading...</div></div>
   </div>
 
   <!-- SETTINGS -->
@@ -519,7 +631,7 @@ function showApp() {
 // ============================================================
 // ROUTING
 // ============================================================
-const SECTIONS = ['orders','products','customers','analytics','discounts','affiliates','settings'];
+const SECTIONS = ['orders','products','customers','analytics','discounts','affiliates','fulfillment','expenses','statistics','liabilities','employees','settings'];
 
 function route() {
   let hash = (location.hash || '#orders').replace('#','');
@@ -544,6 +656,11 @@ function route() {
     case 'discounts': loadDiscounts(); break;
     case 'affiliates': loadAffiliates(); break;
     case 'settings': loadSettings(); break;
+    case 'fulfillment': loadFulfillment(); break;
+    case 'expenses': loadExpenses(); break;
+    case 'statistics': loadStats(); break;
+    case 'liabilities': loadLiabilities(); break;
+    case 'employees': loadEmployees(); break;
   }
 }
 
@@ -1606,6 +1723,360 @@ async function init() {
       currentUser = session.user;
     }
   });
+}
+
+init();
+
+// ============================================================
+// FULFILLMENT
+// ============================================================
+async function loadFulfillment() {
+  const wrap = $('fulfillment-table-wrap');
+  const filter = $('fulfill-filter').value;
+  try {
+    let q = sb.from('orders').select('*, order_items(*)').order('created_at', { ascending: false }).limit(100);
+    if (filter) q = q.eq('queue_status', filter);
+    else q = q.in('status', ['paid','processing','shipped']);
+    const { data: orders, error } = await q;
+    if (error) throw error;
+    $('fulfill-count').textContent = `${(orders||[]).length} orders`;
+    if (!orders || !orders.length) { wrap.innerHTML = '<p style="color:var(--muted)">No orders in queue.</p>'; return; }
+    let html = '<table><thead><tr><th><input type="checkbox" id="fulfill-check-all" onchange="toggleFulfillAll(this)"></th><th>Order</th><th>Products</th><th>Status</th><th>Tracking</th><th>Action</th></tr></thead><tbody>';
+    orders.forEach(o => {
+      const items = (o.order_items||[]).map(i => `${i.quantity}x ${i.name}`).join('; ') || '(no items)';
+      const qs = o.queue_status || 'pending';
+      html += `<tr>
+        <td><input type="checkbox" class="fulfill-check" value="${o.id}"></td>
+        <td><strong>${escHtml(o.order_number)}</strong><br><span style="font-size:0.72rem;color:var(--muted)">${formatDateTime(o.created_at)}</span></td>
+        <td style="font-family:var(--sans);font-size:0.78rem;max-width:300px">${escHtml(items)}</td>
+        <td>${badge(qs)}</td>
+        <td>${o.tracking_number ? `<a href="https://tools.usps.com/go/TrackConfirmAction?tLabels=${o.tracking_number}" target="_blank" style="color:var(--info)">${o.tracking_number}</a>` : '<span style="color:var(--muted)">--</span>'}<br>
+          <input type="text" placeholder="Tracking #" style="width:160px;font-size:0.75rem;margin-top:4px" id="trk-${o.id}" value="${o.tracking_number||''}">
+        </td>
+        <td>
+          <button class="btn btn-sm" onclick="fulfillSingle('${o.id}')">Finalize</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+}
+
+function toggleFulfillAll(el) {
+  document.querySelectorAll('.fulfill-check').forEach(cb => cb.checked = el.checked);
+}
+
+async function fulfillSingle(orderId) {
+  const tracking = $('trk-'+orderId)?.value?.trim();
+  try {
+    const updates = { queue_status: 'finalized' };
+    if (tracking) { updates.tracking_number = tracking; updates.tracking_carrier = 'USPS'; updates.status = 'shipped'; }
+    const { error } = await sb.from('orders').update(updates).eq('id', orderId);
+    if (error) throw error;
+    toast('Order finalized');
+    loadFulfillment();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function fulfillBulk(action) {
+  const checked = Array.from(document.querySelectorAll('.fulfill-check:checked')).map(cb => cb.value);
+  if (!checked.length) { toast('Select orders first', 'warning'); return; }
+  if (action === 'finalize') {
+    for (const id of checked) { await fulfillSingle(id); }
+  } else if (action === 'send-tracking') {
+    toast(`Tracking emails for ${checked.length} orders (not wired to Resend yet)`, 'warning');
+  } else if (action === 'print') {
+    toast(`Packing sheets for ${checked.length} orders (print integration pending)`, 'warning');
+  }
+}
+
+// ============================================================
+// EXPENSES
+// ============================================================
+async function loadExpenses() {
+  const wrap = $('expenses-table-wrap');
+  const cards = $('expense-cards');
+  $('exp-date').value = new Date().toISOString().slice(0,10);
+  try {
+    const { data: expenses, error } = await sb.from('expenses').select('*').order('date', { ascending: false }).limit(100);
+    if (error) throw error;
+    // Cards
+    const total = (expenses||[]).reduce((s,e) => s + parseFloat(e.amount), 0);
+    const today = new Date().toISOString().slice(0,10);
+    const todayTotal = (expenses||[]).filter(e => e.date === today).reduce((s,e) => s + parseFloat(e.amount), 0);
+    const types = {};
+    (expenses||[]).forEach(e => { types[e.type] = (types[e.type]||0) + parseFloat(e.amount); });
+    const topType = Object.entries(types).sort((a,b) => b[1]-a[1])[0];
+    cards.innerHTML = `
+      <div class="card"><div class="card-label">Today</div><div class="card-value">${formatMoney(todayTotal)}</div></div>
+      <div class="card"><div class="card-label">All Time</div><div class="card-value">${formatMoney(total)}</div></div>
+      <div class="card"><div class="card-label">Entries</div><div class="card-value">${(expenses||[]).length}</div></div>
+      <div class="card"><div class="card-label">Top Category</div><div class="card-value" style="font-size:1rem">${topType ? topType[0] : 'None'}</div></div>
+    `;
+    // Table
+    if (!expenses || !expenses.length) { wrap.innerHTML = '<p style="color:var(--muted)">No expenses logged yet.</p>'; return; }
+    let html = '<table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Notes</th><th>Action</th></tr></thead><tbody>';
+    expenses.forEach(e => {
+      html += `<tr><td>${e.date}</td><td>${badge(e.type)}</td><td>${formatMoney(e.amount)}</td><td style="font-family:var(--sans);font-size:0.78rem">${escHtml(e.notes||'')}</td><td><button class="btn btn-sm btn-danger" onclick="deleteExpense('${e.id}')">Del</button></td></tr>`;
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+}
+
+async function saveExpense() {
+  const date = $('exp-date').value;
+  const type = $('exp-type').value;
+  const amount = parseFloat($('exp-amount').value);
+  const notes = $('exp-notes').value.trim();
+  if (!amount || amount <= 0) { toast('Enter valid amount', 'error'); return; }
+  try {
+    const { error } = await sb.from('expenses').insert({ date, type, amount, notes, created_by: currentUser?.email || 'admin' });
+    if (error) throw error;
+    toast('Expense saved');
+    $('exp-amount').value = '';
+    $('exp-notes').value = '';
+    loadExpenses();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function deleteExpense(id) {
+  if (!confirm('Delete this expense?')) return;
+  try {
+    const { error } = await sb.from('expenses').delete().eq('id', id);
+    if (error) throw error;
+    toast('Expense deleted');
+    loadExpenses();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+// ============================================================
+// STATISTICS
+// ============================================================
+let statsMode = 'monthly';
+async function loadStats(mode) {
+  if (mode) statsMode = mode;
+  document.querySelectorAll('[id^="stats-"]').forEach(b => { if (b.tagName === 'BUTTON') b.classList.remove('btn-primary'); });
+  $('stats-' + statsMode)?.classList.add('btn-primary');
+  const cards = $('stats-cards');
+  const comp = $('stats-comparison');
+  try {
+    const { data: orders } = await sb.from('orders').select('total, created_at, status, discount_code').in('status', ['paid','processing','shipped','delivered']).order('created_at', { ascending: false });
+    const { data: expenses } = await sb.from('expenses').select('amount, date, type').order('date', { ascending: false });
+    const allOrders = orders || [];
+    const allExpenses = expenses || [];
+    const totalRev = allOrders.reduce((s,o) => s + parseFloat(o.total||0), 0);
+    const totalExp = allExpenses.reduce((s,e) => s + parseFloat(e.amount||0), 0);
+    const netProfit = totalRev - totalExp;
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0,10);
+    const todayOrders = allOrders.filter(o => o.created_at?.slice(0,10) === todayStr);
+    const todayRev = todayOrders.reduce((s,o) => s + parseFloat(o.total||0), 0);
+    const todayExp = allExpenses.filter(e => e.date === todayStr).reduce((s,e) => s + parseFloat(e.amount||0), 0);
+
+    // Previous period
+    const yesterday = new Date(now); yesterday.setDate(yesterday.getDate()-1);
+    const yStr = yesterday.toISOString().slice(0,10);
+    const yRev = allOrders.filter(o => o.created_at?.slice(0,10) === yStr).reduce((s,o) => s + parseFloat(o.total||0), 0);
+    const yOrders = allOrders.filter(o => o.created_at?.slice(0,10) === yStr).length;
+
+    cards.innerHTML = `
+      <div class="card"><div class="card-label">Today Revenue</div><div class="card-value">${formatMoney(todayRev)}</div></div>
+      <div class="card"><div class="card-label">Today Net</div><div class="card-value" style="color:var(--success)">${formatMoney(todayRev - todayExp)}</div></div>
+      <div class="card"><div class="card-label">Today Orders</div><div class="card-value">${todayOrders.length}</div></div>
+      <div class="card"><div class="card-label">All-Time Revenue</div><div class="card-value">${formatMoney(totalRev)}</div></div>
+      <div class="card"><div class="card-label">All-Time Expenses</div><div class="card-value">${formatMoney(totalExp)}</div></div>
+      <div class="card"><div class="card-label">Net Profit</div><div class="card-value" style="color:${netProfit>=0?'var(--success)':'var(--danger)'}">${formatMoney(netProfit)}</div></div>
+    `;
+    comp.innerHTML = `
+      <table><thead><tr><th>Metric</th><th>Today</th><th>Yesterday</th></tr></thead><tbody>
+      <tr><td>Revenue</td><td>${formatMoney(todayRev)}</td><td>${formatMoney(yRev)}</td></tr>
+      <tr><td>Orders</td><td>${todayOrders.length}</td><td>${yOrders}</td></tr>
+      <tr><td>Net</td><td>${formatMoney(todayRev-todayExp)}</td><td>--</td></tr>
+      </tbody></table>
+    `;
+    // Top products from order_items
+    const { data: items } = await sb.from('order_items').select('name, quantity, line_total');
+    const prodMap = {};
+    (items||[]).forEach(i => {
+      if (!prodMap[i.name]) prodMap[i.name] = { qty: 0, rev: 0 };
+      prodMap[i.name].qty += i.quantity;
+      prodMap[i.name].rev += parseFloat(i.line_total||0);
+    });
+    const topProds = Object.entries(prodMap).sort((a,b) => b[1].rev - a[1].rev).slice(0,10);
+    let tpHtml = '<table><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th></tr></thead><tbody>';
+    topProds.forEach(([name, d]) => { tpHtml += `<tr><td style="font-family:var(--sans)">${escHtml(name)}</td><td>${d.qty}</td><td>${formatMoney(d.rev)}</td></tr>`; });
+    tpHtml += '</tbody></table>';
+    $('stats-top-products').innerHTML = topProds.length ? tpHtml : '<p style="color:var(--muted)">No data yet</p>';
+
+    // Top affiliate codes
+    const codeMap = {};
+    allOrders.forEach(o => {
+      if (o.discount_code) {
+        if (!codeMap[o.discount_code]) codeMap[o.discount_code] = { orders: 0, rev: 0 };
+        codeMap[o.discount_code].orders++;
+        codeMap[o.discount_code].rev += parseFloat(o.total||0);
+      }
+    });
+    const topCodes = Object.entries(codeMap).sort((a,b) => b[1].rev - a[1].rev).slice(0,10);
+    let tcHtml = '<table><thead><tr><th>Code</th><th>Orders</th><th>Revenue</th></tr></thead><tbody>';
+    topCodes.forEach(([code, d]) => { tcHtml += `<tr><td>${escHtml(code)}</td><td>${d.orders}</td><td>${formatMoney(d.rev)}</td></tr>`; });
+    tcHtml += '</tbody></table>';
+    $('stats-top-affiliates').innerHTML = topCodes.length ? tcHtml : '<p style="color:var(--muted)">No affiliate data yet</p>';
+  } catch(e) { cards.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+}
+
+// ============================================================
+// LIABILITIES
+// ============================================================
+async function loadLiabilities() {
+  const wrap = $('liabilities-table-wrap');
+  const cards = $('liability-cards');
+  try {
+    const { data, error } = await sb.from('liabilities').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    const open = (data||[]).filter(l => l.status === 'open');
+    const weOwe = open.filter(l => l.type === 'we_owe').reduce((s,l) => s + parseFloat(l.amount), 0);
+    const theyOwe = open.filter(l => l.type === 'they_owe').reduce((s,l) => s + parseFloat(l.amount), 0);
+    cards.innerHTML = `
+      <div class="card"><div class="card-label">Open</div><div class="card-value">${open.length}</div></div>
+      <div class="card"><div class="card-label">We Owe</div><div class="card-value" style="color:var(--danger)">${formatMoney(weOwe)}</div></div>
+      <div class="card"><div class="card-label">They Owe</div><div class="card-value" style="color:var(--success)">${formatMoney(theyOwe)}</div></div>
+    `;
+    if (!data || !data.length) { wrap.innerHTML = '<p style="color:var(--muted)">No liabilities.</p>'; return; }
+    let html = '<table><thead><tr><th>Type</th><th>Customer</th><th>Amount</th><th>Note</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+    data.forEach(l => {
+      html += `<tr>
+        <td>${badge(l.type)}</td>
+        <td>${escHtml(l.customer_name||'')} <span style="color:var(--muted)">${escHtml(l.customer_email||'')}</span></td>
+        <td>${formatMoney(l.amount)}</td>
+        <td style="font-family:var(--sans);font-size:0.78rem">${escHtml(l.internal_note||'')}</td>
+        <td>${badge(l.status)}</td>
+        <td>${l.status==='open' ? `<button class="btn btn-sm" onclick="resolveLiability('${l.id}')">Resolve</button>` : ''}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+}
+
+function showLiabilityModal() {
+  openModal(`
+    <h3 style="margin-bottom:16px">Add Liability</h3>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <select id="lia-type"><option value="we_owe">We Owe Customer</option><option value="they_owe">Customer Owes Us</option></select>
+      <input type="text" id="lia-name" placeholder="Customer Name">
+      <input type="email" id="lia-email" placeholder="Customer Email">
+      <input type="number" id="lia-amount" placeholder="Amount" step="0.01">
+      <textarea id="lia-note" placeholder="Internal note..." rows="2"></textarea>
+      <button class="btn btn-primary" onclick="saveLiability()">Save</button>
+    </div>
+  `);
+}
+
+async function saveLiability() {
+  try {
+    const { error } = await sb.from('liabilities').insert({
+      type: $('lia-type').value,
+      customer_name: $('lia-name').value,
+      customer_email: $('lia-email').value,
+      amount: parseFloat($('lia-amount').value),
+      internal_note: $('lia-note').value,
+    });
+    if (error) throw error;
+    toast('Liability added');
+    closeModal();
+    loadLiabilities();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function resolveLiability(id) {
+  if (!confirm('Mark this liability as resolved?')) return;
+  try {
+    const { error } = await sb.from('liabilities').update({ status: 'resolved', resolved_at: new Date().toISOString() }).eq('id', id);
+    if (error) throw error;
+    toast('Liability resolved');
+    loadLiabilities();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+// ============================================================
+// EMPLOYEES
+// ============================================================
+async function loadEmployees() {
+  const wrap = $('employees-table-wrap');
+  const cards = $('employee-cards');
+  try {
+    const { data, error } = await sb.from('employees').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    const active = (data||[]).filter(e => e.active);
+    const roles = {};
+    (data||[]).forEach(e => { roles[e.role] = (roles[e.role]||0) + 1; });
+    cards.innerHTML = `
+      <div class="card"><div class="card-label">Total</div><div class="card-value">${(data||[]).length}</div></div>
+      <div class="card"><div class="card-label">Active</div><div class="card-value">${active.length}</div></div>
+      <div class="card"><div class="card-label">Admins</div><div class="card-value">${roles['admin']||0}</div></div>
+      <div class="card"><div class="card-label">Affiliates</div><div class="card-value">${roles['affiliate']||0}</div></div>
+    `;
+    if (!data || !data.length) { wrap.innerHTML = '<p style="color:var(--muted)">No employees yet.</p>'; return; }
+    let html = '<table><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Active</th><th>Action</th></tr></thead><tbody>';
+    data.forEach(e => {
+      html += `<tr>
+        <td>${escHtml(e.username)}</td>
+        <td>${escHtml(e.display_name||'')} <span style="color:var(--muted)">${escHtml(e.email||'')}</span></td>
+        <td>${badge(e.role)}</td>
+        <td>${e.active ? '<span style="color:var(--success)">Active</span>' : '<span style="color:var(--danger)">Inactive</span>'}</td>
+        <td><button class="btn btn-sm" onclick="toggleEmployee('${e.id}', ${e.active})">${e.active ? 'Deactivate' : 'Activate'}</button></td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+}
+
+function showEmployeeModal() {
+  openModal(`
+    <h3 style="margin-bottom:16px">Add Employee</h3>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <input type="text" id="emp-username" placeholder="Username">
+      <input type="text" id="emp-name" placeholder="Display Name">
+      <input type="email" id="emp-email" placeholder="Email">
+      <select id="emp-role">
+        <option value="employee">Employee</option>
+        <option value="admin">Admin</option>
+        <option value="manager">Manager</option>
+        <option value="affiliate_manager">Affiliate Manager</option>
+        <option value="affiliate">Affiliate</option>
+        <option value="order_entry">Order Entry</option>
+      </select>
+      <button class="btn btn-primary" onclick="saveEmployee()">Create</button>
+    </div>
+  `);
+}
+
+async function saveEmployee() {
+  try {
+    const { error } = await sb.from('employees').insert({
+      username: $('emp-username').value.trim(),
+      display_name: $('emp-name').value.trim(),
+      email: $('emp-email').value.trim(),
+      role: $('emp-role').value,
+    });
+    if (error) throw error;
+    toast('Employee created');
+    closeModal();
+    loadEmployees();
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function toggleEmployee(id, currentActive) {
+  try {
+    const { error } = await sb.from('employees').update({ active: !currentActive, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) throw error;
+    toast(currentActive ? 'Employee deactivated' : 'Employee activated');
+    loadEmployees();
+  } catch(e) { toast(e.message, 'error'); }
 }
 
 init();
