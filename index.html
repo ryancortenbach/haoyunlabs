@@ -9,7 +9,7 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260416b7';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260417a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -5349,7 +5349,7 @@ function renderPayMethods(){
     <div style="display:flex;flex-direction:column;gap:10px">
       ${methodChip('crypto','Cryptocurrency','BTC, ETH, SOL, USDT — 3% fee','<img src="crypto-icons/btc.svg" width="28" height="28" style="border-radius:50%">',isExpCrypto,'<span style="background:#22c55e;color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:999px;font-weight:700;margin-left:6px">SAVE 7%</span>')}
       ${methodChip('card','Credit / Debit Card','Visa, Mastercard — 10% fee','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><rect x="5" y="14" width="4" height="2" rx="0.5" fill="currentColor" opacity="0.3"/></svg>',selectedPayMethod==='card','')}
-      ${methodChip('zelle','Zelle','Bank-to-bank — 10% fee','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#6d28d9" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3" fill="#6d28d9"/><path d="M8 8h8M8 16h8M8 8l8 8" stroke="#fff" stroke-width="2"/></svg>',selectedPayMethod==='zelle','')}
+      ${methodChip('zelle','Zelle','Bank-to-bank — 10% fee','<div style="width:28px;height:28px;border-radius:6px;background:#6c1cd3;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="crypto-icons/zelle.svg" width="18" height="18" style="filter:brightness(0) invert(1)" alt="Zelle"></div>',selectedPayMethod==='zelle','')}
     </div>
     ${isExpCrypto ? `
     <div style="margin-top:14px;padding:16px;background:#fafafa;border:1px solid var(--stroke);border-radius:14px">
