@@ -91,6 +91,25 @@ td{font-family:var(--mono);font-size:0.8rem}
 .badge-archived{background:#fee2e2;color:#dc2626}
 .badge-approved{background:#dcfce7;color:#16a34a}
 .badge-suspended{background:#fee2e2;color:#dc2626}
+.badge-finalized{background:#dbeafe;color:#2563eb}
+.badge-processing{background:#fef3c7;color:#d97706}
+.badge-we_owe{background:#fee2e2;color:#dc2626}
+.badge-they_owe{background:#dcfce7;color:#16a34a}
+.badge-resolved{background:#f3f4f6;color:#6b7280}
+.badge-open{background:#fef3c7;color:#d97706}
+.badge-inventory{background:#ede9fe;color:#7c3aed}
+.badge-shipping{background:#dbeafe;color:#2563eb}
+.badge-advertising{background:#fce7f3;color:#db2777}
+.badge-payouts{background:#dcfce7;color:#16a34a}
+.badge-fulfillment{background:#fef3c7;color:#d97706}
+.badge-other{background:#f3f4f6;color:#6b7280}
+.badge-admin{background:#000;color:#fff}
+.badge-manager{background:#1e1b4b;color:#c7d2fe}
+.badge-affiliate_manager{background:#1e1b4b;color:#c7d2fe}
+.badge-affiliate{background:#ede9fe;color:#7c3aed}
+.badge-employee{background:#f3f4f6;color:#6b7280}
+.badge-order_entry{background:#dbeafe;color:#2563eb}
+.toast-warning{background:#fff;border-left:4px solid var(--warning);color:var(--text)}
 
 /* ── BUTTONS ── */
 .btn{padding:7px 16px;font-size:0.78rem;letter-spacing:0.06em;font-weight:600;text-transform:uppercase}
@@ -527,13 +546,13 @@ function formatMoney(v) {
 }
 
 function badge(status) {
-  const s = (status || 'pending').toLowerCase();
+  const s = escHtml((status || 'pending').toLowerCase().replace(/[^a-z0-9_-]/g,''));
   return `<span class="badge badge-${s}">${s}</span>`;
 }
 
 function escHtml(str) {
   if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 // ============================================================
@@ -621,7 +640,21 @@ function showLogin() {
   $('main-content').style.display = 'none';
 }
 
-function showApp() {
+async function showApp() {
+  // Verify user is admin before showing panel
+  try {
+    const { data: admins, error } = await sb.from('admin_users').select('role').eq('auth_user_id', currentUser.id);
+    if (error || !admins || admins.length === 0) {
+      toast('Access denied: not an admin', 'error');
+      await sb.auth.signOut();
+      showLogin();
+      return;
+    }
+  } catch(e) {
+    toast('Admin check failed', 'error');
+    showLogin();
+    return;
+  }
   $('login-screen').style.display = 'none';
   $('sidebar').style.display = 'flex';
   $('main-content').style.display = 'block';
@@ -1750,8 +1783,8 @@ async function loadFulfillment() {
         <td><strong>${escHtml(o.order_number)}</strong><br><span style="font-size:0.72rem;color:var(--muted)">${formatDateTime(o.created_at)}</span></td>
         <td style="font-family:var(--sans);font-size:0.78rem;max-width:300px">${escHtml(items)}</td>
         <td>${badge(qs)}</td>
-        <td>${o.tracking_number ? `<a href="https://tools.usps.com/go/TrackConfirmAction?tLabels=${o.tracking_number}" target="_blank" style="color:var(--info)">${o.tracking_number}</a>` : '<span style="color:var(--muted)">--</span>'}<br>
-          <input type="text" placeholder="Tracking #" style="width:160px;font-size:0.75rem;margin-top:4px" id="trk-${o.id}" value="${o.tracking_number||''}">
+        <td>${o.tracking_number ? `<a href="https://tools.usps.com/go/TrackConfirmAction?tLabels=${escHtml(o.tracking_number)}" target="_blank" style="color:var(--info)">${escHtml(o.tracking_number)}</a>` : '<span style="color:var(--muted)">--</span>'}<br>
+          <input type="text" placeholder="Tracking #" style="width:160px;font-size:0.75rem;margin-top:4px" id="trk-${o.id}" value="${escHtml(o.tracking_number||'')}">
         </td>
         <td>
           <button class="btn btn-sm" onclick="fulfillSingle('${o.id}')">Finalize</button>
@@ -1760,7 +1793,7 @@ async function loadFulfillment() {
     });
     html += '</tbody></table>';
     wrap.innerHTML = html;
-  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${escHtml(e.message)}</p>`; }
 }
 
 function toggleFulfillAll(el) {
@@ -1822,7 +1855,7 @@ async function loadExpenses() {
     });
     html += '</tbody></table>';
     wrap.innerHTML = html;
-  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${escHtml(e.message)}</p>`; }
 }
 
 async function saveExpense() {
@@ -1924,7 +1957,7 @@ async function loadStats(mode) {
     topCodes.forEach(([code, d]) => { tcHtml += `<tr><td>${escHtml(code)}</td><td>${d.orders}</td><td>${formatMoney(d.rev)}</td></tr>`; });
     tcHtml += '</tbody></table>';
     $('stats-top-affiliates').innerHTML = topCodes.length ? tcHtml : '<p style="color:var(--muted)">No affiliate data yet</p>';
-  } catch(e) { cards.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+  } catch(e) { cards.innerHTML = `<p style="color:var(--danger)">${escHtml(e.message)}</p>`; }
 }
 
 // ============================================================
@@ -1958,7 +1991,7 @@ async function loadLiabilities() {
     });
     html += '</tbody></table>';
     wrap.innerHTML = html;
-  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${escHtml(e.message)}</p>`; }
 }
 
 function showLiabilityModal() {
@@ -1976,13 +2009,16 @@ function showLiabilityModal() {
 }
 
 async function saveLiability() {
+  const amount = parseFloat($('lia-amount').value);
+  if (!amount || amount <= 0) { toast('Enter valid amount', 'error'); return; }
   try {
     const { error } = await sb.from('liabilities').insert({
       type: $('lia-type').value,
       customer_name: $('lia-name').value,
       customer_email: $('lia-email').value,
-      amount: parseFloat($('lia-amount').value),
+      amount: amount,
       internal_note: $('lia-note').value,
+      status: 'open',
     });
     if (error) throw error;
     toast('Liability added');
@@ -2032,7 +2068,7 @@ async function loadEmployees() {
     });
     html += '</tbody></table>';
     wrap.innerHTML = html;
-  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${e.message}</p>`; }
+  } catch(e) { wrap.innerHTML = `<p style="color:var(--danger)">${escHtml(e.message)}</p>`; }
 }
 
 function showEmployeeModal() {
@@ -2056,12 +2092,15 @@ function showEmployeeModal() {
 }
 
 async function saveEmployee() {
+  const username = $('emp-username').value.trim();
+  if (!username) { toast('Username is required', 'error'); return; }
   try {
     const { error } = await sb.from('employees').insert({
-      username: $('emp-username').value.trim(),
+      username: username,
       display_name: $('emp-name').value.trim(),
       email: $('emp-email').value.trim(),
       role: $('emp-role').value,
+      active: true,
     });
     if (error) throw error;
     toast('Employee created');
@@ -2079,7 +2118,7 @@ async function toggleEmployee(id, currentActive) {
   } catch(e) { toast(e.message, 'error'); }
 }
 
-init();
+// NOTE: init() is called ONCE at end of original script block (line ~1728). Do NOT call again here.
 </script>
 </body>
 </html>
