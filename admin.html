@@ -1681,7 +1681,7 @@ async function loadAffiliates() {
   const wrap = $('affiliates-table-wrap');
   try {
     const { data: affiliates, error } = await sb.from('affiliates')
-      .select('*, discount_codes(code), affiliate_commissions(id, order_id, amount, status, created_at), affiliate_payouts(id, amount, method, reference, created_at)')
+      .select('*, affiliate_commissions(id, order_id, commission_amount, status, created_at), affiliate_payouts(id, amount, payment_method, payment_reference, created_at)')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -1696,10 +1696,10 @@ async function loadAffiliates() {
     </tr></thead><tbody>`;
 
     for (const a of affiliates) {
-      const name = `${a.first_name || ''} ${a.last_name || ''}`.trim() || '—';
-      const code = a.discount_codes?.code || a.discount_code || '—';
+      const name = a.name || '—';
+      const code = a.code || '—';
       const comms = a.affiliate_commissions || [];
-      const pendingComm = comms.filter(c => c.status === 'pending').reduce((s,c) => s + Number(c.amount || 0), 0);
+      const pendingComm = comms.filter(c => c.status === 'pending').reduce((s,c) => s + Number(c.commission_amount || 0), 0);
 
       // Count orders by discount code
       let orderCount = 0;
