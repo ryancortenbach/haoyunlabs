@@ -1961,7 +1961,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <button class="nav-btn" onclick="toggleNavSearch()" aria-label="Search">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
       </button>
-      <button class="nav-btn" onclick="showToast('Account coming soon','info')" aria-label="Account">
+      <button class="nav-btn" onclick="window.location.href='https://admin.haoyunlabs.com'" aria-label="Account">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
       </button>
       <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
@@ -6214,6 +6214,60 @@ async function submitOrder(){
     showToast('Please enter a valid email address','error');
     return;
   }
+
+  // Shipping address validation via Shippo (silently accepts ZIP+4 corrections; prompts on bigger changes)
+  if(!window._skipAddressValidation){
+    try {
+      const vr = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/shippo-validate-address',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},
+        body:JSON.stringify({
+          name: (document.getElementById('f-fname').value.trim()+' '+document.getElementById('f-lname').value.trim()).trim(),
+          street1: document.getElementById('f-street').value.trim(),
+          street2: document.getElementById('f-apt').value.trim(),
+          city: document.getElementById('f-city').value.trim(),
+          state: document.getElementById('f-state').value.trim().toUpperCase(),
+          zip: document.getElementById('f-zip').value.trim(),
+        })
+      });
+      if(vr.ok){
+        const v = await vr.json();
+        const c = v.corrected || {};
+        const streetEl = document.getElementById('f-street');
+        const cityEl = document.getElementById('f-city');
+        const stateEl = document.getElementById('f-state');
+        const zipEl = document.getElementById('f-zip');
+        const norm = s => (s||'').trim().toLowerCase();
+        const changed =
+          (c.street1 && norm(c.street1)!==norm(streetEl.value)) ||
+          (c.city && norm(c.city)!==norm(cityEl.value)) ||
+          (c.state && norm(c.state)!==norm(stateEl.value)) ||
+          (c.zip && norm(c.zip.split('-')[0])!==norm(zipEl.value.split('-')[0]));
+        if(!v.is_valid){
+          const msgs = (v.messages||[]).map(m=>m.text||m.code||'').filter(Boolean).join('\n') || 'Address could not be verified.';
+          showToast('Address unverified: '+msgs,'error');
+          streetEl.focus();
+          return;
+        }
+        if(changed){
+          const suggested = [c.street1, c.street2, c.city+', '+c.state+' '+c.zip].filter(Boolean).join('\n');
+          if(confirm('We found a corrected address:\n\n'+suggested+'\n\nUse this corrected address?')){
+            if(c.street1) streetEl.value = c.street1;
+            if(c.street2) document.getElementById('f-apt').value = c.street2;
+            if(c.city) cityEl.value = c.city;
+            if(c.state) stateEl.value = c.state;
+            if(c.zip) zipEl.value = c.zip;
+          } else {
+            window._skipAddressValidation = true;
+          }
+        } else if(c.zip && c.zip!==zipEl.value){
+          // Silent: just ZIP+4 enrichment
+          zipEl.value = c.zip;
+        }
+      }
+    } catch(e){ /* validation is advisory — don't block on network error */ }
+  }
+  window._skipAddressValidation = false;
 
   const payBtn = document.getElementById('btn-pay');
   if(!payBtn) return;
