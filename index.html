@@ -2929,6 +2929,50 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   </div>
 </footer>
 
+<!-- FLOATING EMAIL CAPTURE BAR (task #52) -->
+<style>
+#hyl-email-bar{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:230;
+  max-width:720px;margin:0 auto;
+  background:#fff;border:1px solid var(--stroke);border-radius:16px;
+  box-shadow:0 12px 36px rgba(0,0,0,0.12);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+  transform:translateY(140%);transition:transform 0.45s cubic-bezier(0.22,1,0.36,1);
+  font-family:var(--sans);
+}
+#hyl-email-bar.open{transform:translateY(0)}
+#hyl-email-bar .hyl-eb-copy{flex:1;min-width:0}
+#hyl-email-bar .hyl-eb-title{font-family:'Instrument Serif',serif;font-size:1.05rem;line-height:1.2;color:#000}
+#hyl-email-bar .hyl-eb-sub{font-size:0.7rem;color:var(--muted);margin-top:2px;line-height:1.3}
+#hyl-email-bar .hyl-eb-form{display:flex;gap:6px;flex:1.2;min-width:0}
+#hyl-email-bar input{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--stroke);border-radius:10px;font-size:0.82rem;background:#fff;font-family:var(--sans);color:#000}
+#hyl-email-bar button.hyl-eb-submit{padding:10px 18px;background:#000;color:#fff;border:none;border-radius:10px;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;flex-shrink:0}
+#hyl-email-bar button.hyl-eb-close{background:transparent;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:4px 6px;line-height:1;flex-shrink:0;border-radius:50%}
+#hyl-email-bar button.hyl-eb-close:hover{background:#f3f4f6;color:#000}
+#hyl-email-bar .hyl-eb-msg{font-size:0.7rem;margin-top:4px;min-height:1em}
+body.no-footer #hyl-email-bar{display:none !important}
+@media (max-width: 640px){
+  #hyl-email-bar{flex-wrap:wrap;gap:8px;padding:12px 14px}
+  #hyl-email-bar .hyl-eb-copy{flex-basis:calc(100% - 36px)}
+  #hyl-email-bar .hyl-eb-form{flex-basis:100%;order:3}
+  #hyl-email-bar .hyl-eb-close{position:absolute;top:8px;right:8px}
+  #hyl-email-bar .hyl-eb-title{font-size:0.95rem}
+}
+</style>
+<div id="hyl-email-bar" role="region" aria-label="Email signup" aria-hidden="true">
+  <div class="hyl-eb-copy">
+    <div class="hyl-eb-title">Get peptide drops before anyone else.</div>
+    <div class="hyl-eb-sub">New lots, restocks, and research updates.</div>
+  </div>
+  <div class="hyl-eb-form">
+    <input type="email" id="hyl-email-bar-input" placeholder="Enter your email..." autocomplete="email">
+    <button type="button" class="hyl-eb-submit" onclick="subscribeEmailBar()">&rarr;</button>
+  </div>
+  <button type="button" class="hyl-eb-close" aria-label="Dismiss" onclick="dismissEmailBar()">&times;</button>
+  <div id="hyl-email-bar-msg" class="hyl-eb-msg" style="position:absolute;bottom:-18px;left:18px"></div>
+</div>
+
 <script async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=pk_87626803657fa394fbb4beecd94baa7e4d"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script defer src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
@@ -2941,7 +2985,10 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 const SUPABASE_URL = 'https://dicliathtgxtbraerphb.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpY2xpYXRodGd4dGJyYWVycGhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMTgxMzIsImV4cCI6MjA4OTg5NDEzMn0.oB_iG-lC87b1iKz8oXxMwSntFRaxEzH5xJCPMqoZeso';
 const BILLING_SERVER = 'https://haoyunlabs-billing-production.up.railway.app';
-const API_KEY = 'cfdb001166e1c717a53d8547f43089f9a29de27ce9b03777d46efef9798bac63';
+// NOTE: Billing server's shared-secret API key was previously hardcoded here and
+// leaked to every visitor. Removed. Billing endpoints should authenticate via a
+// Supabase edge function (which can hold the secret server-side) or the billing
+// server must be updated to accept the anon JWT + rely on RLS/session instead.
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ═════════════════════════════════════════════════════
@@ -2955,6 +3002,101 @@ function kl(eventName, data) {
 function klIdentify(email) {
   try {
     if (window.klaviyo) window.klaviyo.push(['identify', { email }]);
+  } catch(e){}
+}
+
+/* ═════════════════════════════════════════════════════
+   HYL ANALYTICS (track-event edge function)
+   ═════════════════════════════════════════════════════ */
+function _hylSid(){
+  try {
+    let sid = localStorage.getItem('hyl_sid');
+    if(!sid){
+      sid = (crypto && crypto.randomUUID) ? crypto.randomUUID() :
+            ('sid-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,10));
+      localStorage.setItem('hyl_sid', sid);
+    }
+    return sid;
+  } catch(e){ return 'sid-anon'; }
+}
+function track(event, props){
+  try {
+    const body = {
+      event,
+      props: props || {},
+      session_id: _hylSid(),
+      path: location.pathname + location.search + location.hash,
+      ts: new Date().toISOString(),
+    };
+    // Fire and forget — edge function may not exist yet.
+    fetch(SUPABASE_URL + '/functions/v1/track-event', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify(body),
+      keepalive: true,
+    }).catch(()=>{});
+  } catch(e){}
+}
+
+/* ═════════════════════════════════════════════════════
+   AFFILIATE CLICK TRACKING
+   ═════════════════════════════════════════════════════ */
+function _hylReadAffCode(){
+  try {
+    const p = new URLSearchParams(location.search);
+    return (p.get('ref') || p.get('aff') || '').trim();
+  } catch(e){ return ''; }
+}
+function _hylGetCookie(name){
+  try {
+    const m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  } catch(e){ return ''; }
+}
+function _hylHandleAffiliateClick(){
+  const code = _hylReadAffCode();
+  if(code){
+    try {
+      document.cookie = 'hyl_ref=' + encodeURIComponent(code) + '; max-age=7776000; path=/; samesite=lax';
+    } catch(e){}
+    try {
+      fetch(SUPABASE_URL + '/functions/v1/track-click', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          code,
+          landing_page: location.pathname + location.search,
+          referrer: document.referrer || '',
+        }),
+        keepalive: true,
+      }).catch(()=>{});
+    } catch(e){}
+  }
+}
+// Run click tracking immediately (before DOMContentLoaded) so we capture
+// even if the user navigates away quickly.
+try { _hylHandleAffiliateClick(); } catch(e){}
+
+// Called later from the init block: if on #order with an empty affiliate
+// input and a hyl_ref cookie exists, auto-fill + applyCode() once.
+function _hylAutofillAffiliateFromCookie(){
+  try {
+    if(location.hash !== '#order') return;
+    const code = _hylGetCookie('hyl_ref');
+    if(!code) return;
+    const input = document.getElementById('discount-input');
+    if(!input) return;
+    if(input.value && input.value.trim()) return; // don't overwrite
+    input.value = code;
+    if(typeof applyCode === 'function') applyCode();
   } catch(e){}
 }
 
@@ -3424,6 +3566,7 @@ function addToCartQty(sku, qty){
   const p = getProduct(sku);
   showToast(p ? `<span style="white-space:nowrap">${p.name} x${qty}</span> added <a onclick="navigate('order')" style="color:#000;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:6px;white-space:nowrap">View Cart</a>` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
+  if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
   if(!supplySkus.includes(sku)){
     const shown = sessionStorage.getItem('hyl_upsell_shown');
@@ -3444,6 +3587,7 @@ function addToCart(sku, btn){
   const p = getProduct(sku);
   showToast(p ? `<span style="white-space:nowrap">${p.name}</span> added <a onclick="navigate('order')" style="color:#000;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:6px;white-space:nowrap">View Cart</a>` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
+  if(p) try { track('add_to_cart', { sku: p.sku, qty: 1, price: p.price }); } catch(e){}
   // Animate button: green checkmark then revert
   try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
   // Show supplies upsell if adding a peptide (not supplies themselves)
@@ -3502,7 +3646,10 @@ let _removeAlertSku = null;
 let _removeAlertSkip = false;
 function removeFromCart(sku){
   if(_removeAlertSkip){
-    cart.delete(sku);saveCart();renderOrder();return;
+    const _p = getProduct(sku);
+    cart.delete(sku);saveCart();renderOrder();
+    if(_p) try { track('remove_from_cart', { sku: _p.sku, price: _p.price, qty: 0 }); } catch(e){}
+    return;
   }
   _removeAlertSku = sku;
   const p = getProduct(sku);
@@ -3512,7 +3659,9 @@ function removeFromCart(sku){
 }
 function confirmRemoveItem(){
   if(_removeAlertSku){
+    const _p = getProduct(_removeAlertSku);
     cart.delete(_removeAlertSku);saveCart();renderOrder();
+    if(_p) try { track('remove_from_cart', { sku: _p.sku, price: _p.price, qty: 0 }); } catch(e){}
     if(document.getElementById('remove-alert-dontshow').checked) _removeAlertSkip = true;
   }
   closeRemoveAlert();
@@ -3524,7 +3673,11 @@ function closeRemoveAlert(){
 function setQty(sku, delta){
   const cur = cart.get(sku) || 0;
   const next = cur + delta;
-  if(next <= 0) cart.delete(sku);
+  if(next <= 0){
+    cart.delete(sku);
+    const _p = getProduct(sku);
+    if(_p) try { track('remove_from_cart', { sku: _p.sku, price: _p.price, qty: 0 }); } catch(e){}
+  }
   else cart.set(sku, next);
   saveCart();
   renderOrder();
@@ -4228,6 +4381,7 @@ function handleRoute(){
     hash = 'help';
     history.replaceState(null, '', '#help');
   }
+  try { track('page_view', { hash }); } catch(e){}
   // Safety: always unlock scroll on navigation (fixes stuck body from modals/menus)
   document.body.style.overflow='';document.body.style.position='';document.body.style.width='';document.body.style.top='';
   document.body.classList.remove('admin-open');
@@ -4254,6 +4408,20 @@ function handleRoute(){
     renderCardReturn();
   }
   else if(hash==='payment-confirmed'){
+    // Fire purchase_complete exactly once per order (guard against re-renders
+    // from hash changes/back nav by stashing the order id we've already reported).
+    try {
+      const pp = window._lastPaidInvoice || {};
+      const orderId = pp.order_id || pp.orderNumber || pp.tx_hash || '';
+      if(orderId && window._hylLastReportedPurchase !== orderId){
+        track('purchase_complete', {
+          order_id: orderId,
+          total: pp.total || null,
+          method: pp.network || pp.method || null,
+        });
+        window._hylLastReportedPurchase = orderId;
+      }
+    } catch(e){}
     // Populate tx hash block if we have a paid invoice in memory
     try {
       const p = window._lastPaidInvoice;
@@ -4299,7 +4467,16 @@ function handleRoute(){
     if(cart.size > 0){
       const items = []; cart.forEach((qty,sku)=>{ const p=getProduct(sku); if(p) items.push({ProductName:p.name,ProductID:p.sku,Price:p.price,Quantity:qty}); });
       kl('Started Checkout', { ItemNames: items.map(i=>i.ProductName), Items: items, Total: getSubtotal() });
+      try {
+        track('begin_checkout', {
+          items: items.map(i => ({ sku: i.ProductID, name: i.ProductName, price: i.Price, qty: i.Quantity })),
+          total: getSubtotal(),
+          cart_size: cart.size,
+        });
+      } catch(e){}
     }
+    // If arriving with ?ref=CODE cookie present and no code entered, auto-apply.
+    try { _hylAutofillAffiliateFromCookie(); } catch(e){}
   }
 }
 
@@ -5051,6 +5228,18 @@ function renderCatalog(){
   } else {
     grid.innerHTML = items.map(cardHTML).join('');
   }
+  // Debounced search tracking — only fire when the query is meaningful and
+  // the user has paused typing for 600ms. Avoid spamming per-keystroke events.
+  try {
+    const searchEl = document.getElementById('cat-search');
+    const q = searchEl ? searchEl.value.trim() : '';
+    if(q.length >= 2){
+      if(window._hylSearchTimer) clearTimeout(window._hylSearchTimer);
+      window._hylSearchTimer = setTimeout(() => {
+        try { track('search', { query: q, category: catCategory, result_count: items.length }); } catch(e){}
+      }, 600);
+    }
+  } catch(e){}
 }
 
 /* ═════════════════════════════════════════════════════
@@ -5305,6 +5494,8 @@ async function applyCode(){
   const msg = document.getElementById('discount-msg');
   if(!code){discountCode=null;discountPct=0;window._affiliateCode=null;msg.textContent='Discount removed.';msg.className='discount-msg';renderReceipt();return;}
   let foundDiscount = false;
+  let _appliedType = null;
+  let _appliedPct = 0;
   // Try server-side validation via edge function
   try {
     const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/validate-code?code=' + encodeURIComponent(code), {
@@ -5314,23 +5505,25 @@ async function applyCode(){
     if(d.ok && d.type === 'discount'){
       discountCode=d.code;discountPct=d.percent_off;
       msg.textContent=`Code ${d.code} applied - ${d.percent_off}% off!`;msg.className='discount-msg success';
-      foundDiscount=true;
+      foundDiscount=true; _appliedType='discount'; _appliedPct=d.percent_off;
     } else if(d.ok && d.type === 'affiliate'){
       window._affiliateCode=d.code;
       msg.textContent=`Affiliate ${d.name||d.code} linked!`;msg.className='discount-msg success';
-      foundDiscount=true;
+      foundDiscount=true; _appliedType='affiliate'; _appliedPct=0;
     }
   } catch(e){ console.warn('[applyCode] validation error', e); }
   // Hardcoded fallback codes
   if(!foundDiscount){
-    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied - 10% off!';msg.className='discount-msg success';foundDiscount=true;}
-    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied - 15% off!';msg.className='discount-msg success';foundDiscount=true;}
-    else if(code==='SUG20'){discountCode='SUG20';discountPct=20;msg.textContent='Code SUG20 applied - 20% off!';msg.className='discount-msg success';foundDiscount=true;}
-    else if(code==='CHRIS20'){discountCode='CHRIS20';discountPct=20;msg.textContent='Code CHRIS20 applied - 20% off!';msg.className='discount-msg success';foundDiscount=true;}
+    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied - 10% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=10;}
+    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied - 15% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=15;}
+    else if(code==='SUG20'){discountCode='SUG20';discountPct=20;msg.textContent='Code SUG20 applied - 20% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=20;}
+    else if(code==='CHRIS20'){discountCode='CHRIS20';discountPct=20;msg.textContent='Code CHRIS20 applied - 20% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=20;}
   }
   if(!foundDiscount){
     discountCode=null;discountPct=0;window._affiliateCode=null;
     msg.textContent='Invalid code.';msg.className='discount-msg error';
+  } else {
+    try { track('apply_code', { code, percent: _appliedPct, type: _appliedType }); } catch(e){}
   }
   renderReceipt();
 }
@@ -6038,9 +6231,10 @@ function showCryptoPayment(data){
 
   cryptoPollInterval = setInterval(async () => {
     try {
-      const resp = await fetch(BILLING_SERVER + '/api/crypto-status/' + data.invoiceId, {
-        headers: {'X-API-Key': API_KEY}
-      });
+      // TODO: route this through a Supabase edge function that holds the
+      // billing-server shared secret server-side. X-API-Key header removed
+      // because the value was leaking to every visitor in page source.
+      const resp = await fetch(BILLING_SERVER + '/api/crypto-status/' + data.invoiceId);
       const st = await resp.json();
       if(!st.ok) return;
 
@@ -6364,6 +6558,7 @@ async function submitOrder(){
   // CARD flow (Bankful Hosted Payment Page)
   if(selectedPayMethod === 'card'){
     try {
+      try { track('initiate_payment', { method: 'card', total }); } catch(e){}
       const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/bankful-invoice', {
         method:'POST',
         headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},
@@ -6492,9 +6687,13 @@ async function submitOrder(){
 
   // Crypto only - billing server → get unique address + monitor
   try {
+    try { track('initiate_payment', { method: 'crypto', currency: selectedCryptoCurrency, total }); } catch(e){}
+    // TODO: route this through a Supabase edge function that holds the
+    // billing-server shared secret server-side. X-API-Key header removed
+    // because the value was leaking to every visitor in page source.
     const resp = await fetch(BILLING_SERVER + '/api/crypto-invoice', {
       method:'POST',
-      headers:{'Content-Type':'application/json','X-API-Key':API_KEY},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         orderNumber: orderNum,
         amount: total,
@@ -6831,6 +7030,76 @@ async function subscribeFooterEmail(){
     msg.textContent='You\'re in! Watch your inbox.';msg.style.color='#16a34a';
     klIdentify(email);input.value='';
   } catch(e){msg.textContent='Something went wrong.';msg.style.color='#dc2626';}
+}
+
+/* ══ FLOATING EMAIL CAPTURE BAR (task #52) ══ */
+async function subscribeEmailBar(){
+  const input = document.getElementById('hyl-email-bar-input');
+  const msg = document.getElementById('hyl-email-bar-msg');
+  if(!input) return;
+  const email = input.value.trim().toLowerCase();
+  if(!email || !email.includes('@')){
+    if(msg){ msg.textContent='Please enter a valid email.'; msg.style.color='#dc2626'; }
+    return;
+  }
+  try {
+    await sb.from('email_subscribers').upsert({email, source:'scroll_bar'},{onConflict:'email'});
+    if(msg){ msg.textContent='You\'re in! Watch your inbox.'; msg.style.color='#16a34a'; }
+    klIdentify(email); input.value='';
+    // Auto-dismiss + remember success so we don't nag again.
+    try { localStorage.setItem('hyl_email_bar_dismissed', '1'); } catch(e){}
+    setTimeout(() => {
+      const bar = document.getElementById('hyl-email-bar');
+      if(bar) bar.classList.remove('open');
+    }, 1400);
+  } catch(e){
+    if(msg){ msg.textContent='Something went wrong.'; msg.style.color='#dc2626'; }
+  }
+}
+function dismissEmailBar(){
+  const bar = document.getElementById('hyl-email-bar');
+  if(bar) bar.classList.remove('open');
+  try { localStorage.setItem('hyl_email_bar_dismissed', '1'); } catch(e){}
+}
+function initEmailBar(){
+  let dismissed = false;
+  try { dismissed = localStorage.getItem('hyl_email_bar_dismissed') === '1'; } catch(e){}
+  if(dismissed) return;
+  const bar = document.getElementById('hyl-email-bar');
+  if(!bar) return;
+  let shown = false;
+  function shouldBeEligible(){
+    // Only on home screen, never during checkout / order / admin overlays.
+    const hash = location.hash.replace('#','') || 'home';
+    if(hash !== 'home') return false;
+    if(document.body.classList.contains('no-footer')) return false;
+    return true;
+  }
+  function onScroll(){
+    if(shown) return;
+    if(!shouldBeEligible()) return;
+    const scrolled = window.scrollY;
+    const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+    const pct = scrolled / maxScroll;
+    if(pct >= 0.4){
+      shown = true;
+      bar.classList.add('open');
+      bar.setAttribute('aria-hidden','false');
+      window.removeEventListener('scroll', onScroll);
+    }
+  }
+  // Hide immediately when user navigates onto a non-home screen so it doesn't
+  // linger on checkout after being shown on home.
+  window.addEventListener('hashchange', () => {
+    if(!shouldBeEligible()){
+      bar.classList.remove('open');
+    } else if(shown && !dismissed){
+      // Re-show if they come back to home after it was shown.
+      bar.classList.add('open');
+    }
+  });
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
 }
 
 /* ── ORDER TRACKING ── */
@@ -7310,6 +7579,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     });
   })();
   initEmailPopup();
+  initEmailBar();
 
   const grid = document.getElementById('home-grid');
   showSkeleton(grid, 8);
