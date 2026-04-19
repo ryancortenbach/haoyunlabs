@@ -2259,7 +2259,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         </div>
         <div style="position:relative">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.3;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-          <input type="text" placeholder="Search..." id="home-search" oninput="renderHome()" style="padding:8px 12px 8px 32px;font-size:0.78rem;border:1px solid var(--stroke);border-radius:999px;width:160px;font-family:var(--sans);background:var(--bg)">
+          <input type="text" placeholder="Search..." id="home-search" oninput="renderHome()" style="padding:10px 12px 10px 32px;font-size:16px;border:1px solid var(--stroke);border-radius:999px;width:100%;max-width:240px;font-family:var(--sans);background:var(--bg)" inputmode="search" enterkeyhint="search">
         </div>
         <select class="sort-select" id="home-sort" onchange="renderHome()">
           <option value="featured">FEATURED</option>
@@ -2293,7 +2293,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         </div>
         <div style="position:relative">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.3;pointer-events:none"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-          <input type="text" placeholder="Search..." id="cat-search" oninput="renderCatalog()" style="padding:8px 12px 8px 32px;font-size:0.78rem;border:1px solid var(--stroke);border-radius:999px;width:160px;font-family:var(--sans);background:var(--bg)">
+          <input type="text" placeholder="Search..." id="cat-search" oninput="renderCatalog()" style="padding:10px 12px 10px 32px;font-size:16px;border:1px solid var(--stroke);border-radius:999px;width:100%;max-width:240px;font-family:var(--sans);background:var(--bg)" inputmode="search" enterkeyhint="search">
         </div>
         <select class="sort-select" id="cat-sort" onchange="renderCatalog()">
           <option value="featured">FEATURED</option>
@@ -3085,18 +3085,28 @@ function _hylHandleAffiliateClick(){
 // even if the user navigates away quickly.
 try { _hylHandleAffiliateClick(); } catch(e){}
 
-// Called later from the init block: if on #order with an empty affiliate
-// input and a hyl_ref cookie exists, auto-fill + applyCode() once.
+// If a hyl_ref cookie exists, auto-fill + applyCode() once per session,
+// regardless of the current screen — so the discount lands the moment the
+// user reaches #order. Uses sessionStorage to avoid re-running on every route.
 function _hylAutofillAffiliateFromCookie(){
   try {
-    if(location.hash !== '#order') return;
     const code = _hylGetCookie('hyl_ref');
     if(!code) return;
+    if(sessionStorage.getItem('hyl_ref_applied') === code) return;
     const input = document.getElementById('discount-input');
-    if(!input) return;
-    if(input.value && input.value.trim()) return; // don't overwrite
-    input.value = code;
-    if(typeof applyCode === 'function') applyCode();
+    if(input){
+      if(input.value && input.value.trim()) return;
+      input.value = code;
+    }
+    if(typeof applyCode === 'function'){
+      // applyCode reads #discount-input; run async so sibling init doesn't race
+      setTimeout(() => {
+        try {
+          applyCode();
+          sessionStorage.setItem('hyl_ref_applied', code);
+        } catch(e){}
+      }, 0);
+    }
   } catch(e){}
 }
 
@@ -4399,7 +4409,18 @@ function handleRoute(){
   document.body.classList.toggle('no-footer', hideFooterOn.includes(hash));
   window.scrollTo(0,0);
 
-  if(hash==='product' && !window._pdpSku){ navigate('home'); return; }
+  if(hash==='product' && !window._pdpSku){
+    // Recover from page reload: sessionStorage holds the last-viewed SKU.
+    try {
+      const saved = sessionStorage.getItem('hyl_pdp_sku');
+      if(saved && typeof openProduct === 'function'){
+        openProduct(saved);
+        return;
+      }
+    } catch(e){}
+    navigate('home');
+    return;
+  }
   if(hash==='home') renderHome();
   else if(hash==='research') renderResearch();
   else if(hash==='coa') renderCOAArchive();
@@ -4949,6 +4970,7 @@ function openProduct(sku){
   const p = getProduct(sku);
   if(!p) return;
   window._pdpSku = sku;
+  try { sessionStorage.setItem('hyl_pdp_sku', sku); } catch(e){}
   pdpQty = 1;
   const oldPrice = (Math.floor(p.price * 1.8) - 0.01).toFixed(2);
   const imgHTML = getProductImageHTML(p);
@@ -5593,7 +5615,7 @@ function renderPayMethods(){
   ];
   const stables = [
     {c:'USDT', name:'Tether', chain:'Ethereum · ERC-20'},
-    {c:'TRON', name:'Tether', chain:'Tron · TRC-20', badge:'LOW FEES'},
+    {c:'TRON', name:'Tether', chain:'Tron · TRC-20', badge:''},
   ];
   const chipHtml = (o) => `
     <div class="crypto-chip ${selectedCryptoCurrency===o.c?'selected':''}"
