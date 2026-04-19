@@ -5038,7 +5038,7 @@ function openProduct(sku){
 
       <div class="pdp-tab-content" id="pdp-tab-testing">
         ${(()=>{
-          const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes(compound.toLowerCase()));
+          const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes((p.name || '').toLowerCase()));
           if(coaMatch){
             return '<div style="background:#fff;border:1px solid var(--stroke);border-radius:10px;padding:16px;margin-bottom:12px">' +
               '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
