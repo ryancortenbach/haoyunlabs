@@ -4962,7 +4962,7 @@ function openProduct(sku){
       <div class="pdp-slider" id="pdp-slider" style="display:flex;transition:transform 0.4s ease;width:200%">
         <div style="width:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
         ${(()=>{
-          const coaM = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes(compound.toLowerCase()));
+          const coaM = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes((p.name || '').toLowerCase()));
           return coaM ? '<div style="width:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">' + coaM.c + '</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">' + coaM.pu + ' Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ' + coaM.l + '</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ' + coaM.r + '</div><a href="coa/' + coaM.c + '.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>' : '';
         })()}
       </div>
@@ -5508,8 +5508,11 @@ async function applyCode(){
       foundDiscount=true; _appliedType='discount'; _appliedPct=d.percent_off;
     } else if(d.ok && d.type === 'affiliate'){
       window._affiliateCode=d.code;
-      msg.textContent=`Affiliate ${d.name||d.code} linked!`;msg.className='discount-msg success';
-      foundDiscount=true; _appliedType='affiliate'; _appliedPct=0;
+      const pct = Number(d.discount_percent) || 10;
+      discountCode=d.code;
+      discountPct=pct;
+      msg.textContent=`Affiliate ${d.name||d.code} linked — ${pct}% off!`;msg.className='discount-msg success';
+      foundDiscount=true; _appliedType='affiliate'; _appliedPct=pct;
     }
   } catch(e){ console.warn('[applyCode] validation error', e); }
   // Hardcoded fallback codes
@@ -7062,21 +7065,21 @@ function dismissEmailBar(){
   try { localStorage.setItem('hyl_email_bar_dismissed', '1'); } catch(e){}
 }
 function initEmailBar(){
-  let dismissed = false;
-  try { dismissed = localStorage.getItem('hyl_email_bar_dismissed') === '1'; } catch(e){}
-  if(dismissed) return;
+  function isDismissed(){
+    try { return localStorage.getItem('hyl_email_bar_dismissed') === '1'; } catch(e){ return false; }
+  }
+  if(isDismissed()) return;
   const bar = document.getElementById('hyl-email-bar');
   if(!bar) return;
   let shown = false;
   function shouldBeEligible(){
-    // Only on home screen, never during checkout / order / admin overlays.
     const hash = location.hash.replace('#','') || 'home';
     if(hash !== 'home') return false;
     if(document.body.classList.contains('no-footer')) return false;
     return true;
   }
   function onScroll(){
-    if(shown) return;
+    if(shown || isDismissed()) return;
     if(!shouldBeEligible()) return;
     const scrolled = window.scrollY;
     const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
@@ -7088,13 +7091,10 @@ function initEmailBar(){
       window.removeEventListener('scroll', onScroll);
     }
   }
-  // Hide immediately when user navigates onto a non-home screen so it doesn't
-  // linger on checkout after being shown on home.
   window.addEventListener('hashchange', () => {
-    if(!shouldBeEligible()){
+    if(!shouldBeEligible() || isDismissed()){
       bar.classList.remove('open');
-    } else if(shown && !dismissed){
-      // Re-show if they come back to home after it was shown.
+    } else if(shown){
       bar.classList.add('open');
     }
   });
