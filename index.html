@@ -5041,6 +5041,21 @@ const PRODUCT_SIZES = {
 };
 let _pdpSelectedSize = null;
 
+// PDP slider navigation — works for any number of slides (image + N COA tiles).
+window.pdpSliderGo = function(idx){
+  const slider = document.getElementById('pdp-slider');
+  if(!slider) return;
+  const count = window._pdpSliderCount || 1;
+  const next = Math.max(0, Math.min(count - 1, idx));
+  window._pdpSliderIdx = next;
+  slider.style.transform = 'translateX(-' + (100 / count * next) + '%)';
+  document.querySelectorAll('.pdp-dot').forEach((d, i) => {
+    d.style.background = i === next ? '#000' : '#ccc';
+  });
+};
+window.pdpSliderPrev = function(){ window.pdpSliderGo((window._pdpSliderIdx || 0) - 1); };
+window.pdpSliderNext = function(){ window.pdpSliderGo((window._pdpSliderIdx || 0) + 1); };
+
 function openProduct(sku){
   const p = getProduct(sku);
   if(!p) return;
@@ -5054,18 +5069,34 @@ function openProduct(sku){
 
   const others = ALL_PRODUCTS.filter(x=>x.sku!==sku).slice(0,3);
 
+  // --- COA carousel: find all COAs for the compound (all doses/lots) ---
+  const _compoundForCoa = (p.name || '')
+    .replace(/\s*\d+\s*(?:mg|iu|ml|mcg|tabs?|caps?|pk).*$/i, '')
+    .trim()
+    .toLowerCase();
+  const _coaMatches = (typeof COA_DATA !== 'undefined' && _compoundForCoa)
+    ? COA_DATA
+        .filter(r => r.p && r.p.toLowerCase().startsWith(_compoundForCoa))
+        .slice(0, 10)
+    : [];
+  const _totalSlides = 1 + _coaMatches.length;
+  const _slideW = (100 / _totalSlides).toFixed(4) + '%';
+  const _trackW = (_totalSlides * 100) + '%';
+  window._pdpSliderIdx = 0;
+  window._pdpSliderCount = _totalSlides;
+
   document.getElementById('pdp-layout').innerHTML = `
     <div class="pdp-image" style="position:relative;overflow:hidden">
-      <div class="pdp-slider" id="pdp-slider" style="display:flex;transition:transform 0.4s ease;width:200%">
-        <div style="width:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
-        ${(()=>{
-          const coaM = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes((p.name || '').toLowerCase()));
-          return coaM ? '<div style="width:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">' + coaM.c + '</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">' + coaM.pu + ' Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ' + coaM.l + '</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ' + coaM.r + '</div><a href="coa/' + coaM.c + '.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>' : '';
-        })()}
+      <div class="pdp-slider" id="pdp-slider" style="display:flex;transition:transform 0.4s ease;width:${_trackW}">
+        <div style="width:${_slideW};flex-shrink:0;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
+        ${_coaMatches.map(c => `<div style="width:${_slideW};flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">${c.c}</div><div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:6px">${c.p}</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">${c.pu} Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ${c.l}</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ${c.r}</div><a href="coa/${c.c}.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>`).join('')}
       </div>
+      ${_totalSlides > 1 ? `
+      <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;padding:0 0 3px 0">&#8249;</button>
+      <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;padding:0 0 3px 0">&#8250;</button>
+      ` : ''}
       <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px">
-        <button onclick="document.getElementById('pdp-slider').style.transform='translateX(0)';this.style.background='#000';this.nextElementSibling.style.background='#ccc'" style="width:8px;height:8px;border-radius:50%;border:none;background:#000;cursor:pointer;padding:0"></button>
-        <button onclick="document.getElementById('pdp-slider').style.transform='translateX(-50%)';this.style.background='#000';this.previousElementSibling.style.background='#ccc'" style="width:8px;height:8px;border-radius:50%;border:none;background:#ccc;cursor:pointer;padding:0"></button>
+        ${Array.from({length: _totalSlides}, (_, i) => `<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" style="width:8px;height:8px;border-radius:50%;border:none;background:${i===0?'#000':'#ccc'};cursor:pointer;padding:0"></button>`).join('')}
       </div>
     </div>
     <div class="pdp-info">
