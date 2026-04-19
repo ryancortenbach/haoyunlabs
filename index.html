@@ -1790,7 +1790,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .footer{border-top:1px solid var(--stroke);padding:60px 24px 32px;background:#fafafa;position:relative;z-index:2}
 .footer::after{content:'';position:absolute;left:0;right:0;top:100%;height:100vh;background:#fafafa;z-index:-1}
 .footer-social a:hover{background:#000!important}
-.footer-social a:hover svg{stroke:#fff!important;fill:#fff!important}
+.footer-social a:hover svg{stroke:#fff!important;fill:none!important;color:#fff!important}
 .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr) 1.4fr;gap:40px}
 .footer-col-title{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px}
 .footer-col a{display:block;font-size:0.78rem;color:var(--muted);margin-bottom:10px;cursor:pointer;transition:color 0.15s}
@@ -1801,7 +1801,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .footer-social{display:flex;gap:12px;margin-top:4px}
 .footer-social a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:var(--stroke);transition:background 0.15s}
 .footer-social a:hover{background:var(--brand);color:#fff}
-.footer-social a:hover svg{stroke:#fff!important;fill:#fff!important;color:#fff!important}
+.footer-social a:hover svg{stroke:#fff!important;fill:none!important;color:#fff!important}
 .footer-social a svg{width:16px;height:16px;stroke:var(--muted);color:var(--muted)}
 .footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--stroke);display:flex;justify-content:space-between;align-items:center;font-size:0.7rem;color:var(--muted)}
 .footer-subscribe-row{display:flex;gap:8px}
@@ -2338,7 +2338,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="form-row">
             <div>
               <label class="form-label">Country</label>
-              <select class="form-input" disabled><option>United States</option></select>
+              <select class="form-input" id="f-country" name="country" autocomplete="country-name"></select>
             </div>
           </div>
           <div class="form-row col-2">
@@ -2392,9 +2392,56 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="discreet-check checked" id="billing-same-check"></div>
           <div>Billing address same as shipping</div>
         </div>
+        <div id="billing-section" style="display:none;margin-top:12px;padding:16px;border:1px solid var(--stroke);border-radius:12px;background:#fafafa">
+          <div class="checkout-section-title" style="margin-bottom:12px">Billing Address</div>
+          <div class="form-grid">
+            <div class="form-row">
+              <div>
+                <label class="form-label">Country</label>
+                <select class="form-input" id="b-country" name="b-country"></select>
+              </div>
+            </div>
+            <div class="form-row col-2">
+              <div>
+                <label class="form-label">First Name *</label>
+                <input class="form-input" type="text" id="b-fname" autocomplete="billing given-name">
+              </div>
+              <div>
+                <label class="form-label">Last Name *</label>
+                <input class="form-input" type="text" id="b-lname" autocomplete="billing family-name">
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="form-label">Street Address *</label>
+                <input class="form-input" type="text" id="b-street" autocomplete="billing street-address">
+              </div>
+            </div>
+            <div class="form-row col-2">
+              <div>
+                <label class="form-label">City *</label>
+                <input class="form-input" type="text" id="b-city" autocomplete="billing address-level2">
+              </div>
+              <div>
+                <label class="form-label">State/Region *</label>
+                <input class="form-input" type="text" id="b-state" autocomplete="billing address-level1">
+              </div>
+            </div>
+            <div class="form-row col-2">
+              <div>
+                <label class="form-label">ZIP/Postal *</label>
+                <input class="form-input" type="text" id="b-zip" autocomplete="billing postal-code">
+              </div>
+              <div>
+                <label class="form-label">Phone</label>
+                <input class="form-input" type="tel" id="b-phone" autocomplete="billing tel">
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="discreet-toggle" id="discreet-toggle" onclick="toggleDiscreet()">
           <div class="discreet-check" id="discreet-check"></div>
-          <div>Ship in plain packaging <span style="color:var(--muted);font-size:0.7rem">(no branding on box)</span></div>
+          <div>Ship in plain packaging <span style="color:var(--muted);font-size:0.7rem">(+$5 surcharge, no branding on box)</span></div>
         </div>
 
         <div style="margin-top:32px">
@@ -2550,7 +2597,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I place an order?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What payment methods do you accept?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How long does shipping take?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</div></div></div>
-      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Do you ship internationally?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Currently, we primarily serve customers within the United States. International shipping may be available for select kit orders. Contact us for details.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Do you ship internationally?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Yes — we ship worldwide. Shipping rates and transit time vary by destination. Customs duties and import taxes are the recipient's responsibility.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What is your purity guarantee?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Can I get a refund?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I store my peptides?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</div></div></div>
@@ -2600,7 +2647,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <h3 style="margin:20px 0 8px;color:var(--text)">Orders & Payment</h3>
       <p>All sales are final once payment is confirmed on the blockchain. Prices are in USD and converted to cryptocurrency at the time of checkout. We are not responsible for price fluctuations after invoice creation.</p>
       <h3 style="margin:20px 0 8px;color:var(--text)">Shipping & Returns</h3>
-      <p>We ship within the United States. Handling time is 2-5 business days. Returns are accepted only for damaged or incorrect items within 48 hours of delivery. Contact support for resolution.</p>
+      <p>We ship worldwide. Handling time is 2-5 business days. International orders may be subject to customs duties and import taxes, which are the recipient's responsibility. Returns are accepted only for damaged or incorrect items within 48 hours of delivery. Contact support for resolution.</p>
       <h3 style="margin:20px 0 8px;color:var(--text)">Research Use Only</h3>
       <p>All compounds are sold strictly for research purposes. By purchasing, you confirm you are 21+ and that products will be used in a laboratory setting only. Hao Yun Labs is not liable for misuse.</p>
       <h3 style="margin:20px 0 8px;color:var(--text)">Privacy</h3>
@@ -3374,7 +3421,7 @@ function addToCartQty(sku, qty){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `${p.name} x${qty} added to cart <a onclick="navigate('order')" style="color:#000;font-weight:800;text-decoration:underline;cursor:pointer;margin-left:6px">View Cart</a>` : 'Added to cart');
+  showToast(p ? `<span style="white-space:nowrap">${p.name} x${qty}</span> added <a onclick="navigate('order')" style="color:#000;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:6px;white-space:nowrap">View Cart</a>` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
   if(!supplySkus.includes(sku)){
@@ -3394,7 +3441,7 @@ function addToCart(sku, btn){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `${p.name} added to cart <a onclick="navigate('order')" style="color:#000;font-weight:800;text-decoration:underline;cursor:pointer;margin-left:6px">View Cart</a>` : 'Added to cart');
+  showToast(p ? `<span style="white-space:nowrap">${p.name}</span> added <a onclick="navigate('order')" style="color:#000;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:6px;white-space:nowrap">View Cart</a>` : 'Added to cart');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   // Animate button: green checkmark then revert
   try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
@@ -5223,7 +5270,6 @@ function renderCartItems(){
 }
 
 function getProcessingRate(){
-  if(selectedPayMethod==='crypto') return 0.03;
   return 0.10;
 }
 function renderReceipt(){
@@ -5234,15 +5280,16 @@ function renderReceipt(){
   const feeRate = getProcessingRate();
   const feePct = Math.round(feeRate * 100);
   const processingFee = Math.round(afterDisc * feeRate * 100) / 100;
-  const total = afterDisc + shipping + processingFee;
-  const isCrypto = selectedPayMethod === 'crypto';
-  const savedAmount = isCrypto ? Math.round(afterDisc * 0.07 * 100) / 100 : 0;
+  const discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
+  const total = afterDisc + shipping + processingFee + discreetSurcharge;
+  const isAffiliate = !!window._affiliateCode;
   const tbl = document.getElementById('receipt-table');
   tbl.innerHTML = `
     <tr><td>Subtotal</td><td>$${sub.toFixed(2)}</td></tr>
-    ${discountPct>0?`<tr><td>Discount (${discountPct}%)</td><td>-$${disc.toFixed(2)}</td></tr>`:''}
-    <tr><td>Processing Fee (${feePct}%)${isCrypto?'<span style="color:#22c55e;font-size:0.65rem;margin-left:6px;font-weight:700">saving $'+savedAmount.toFixed(2)+'</span>':''}</td><td>$${processingFee.toFixed(2)}</td></tr>
+    ${discountPct>0?`<tr><td>Discount (${discountPct}%)${isAffiliate?'<span style="color:#22c55e;font-size:0.65rem;margin-left:6px;font-weight:700">saving $'+disc.toFixed(2)+'</span>':''}</td><td>-$${disc.toFixed(2)}</td></tr>`:''}
+    <tr><td>Processing Fee (${feePct}%)</td><td>$${processingFee.toFixed(2)}</td></tr>
     <tr><td>Shipping${sub>=250?' (FREE over $250)':''}</td><td>${shipping===0&&sub>0?'FREE':'$'+shipping.toFixed(2)}</td></tr>
+    ${discreetSurcharge>0?`<tr><td>Discreet packaging</td><td>$${discreetSurcharge.toFixed(2)}</td></tr>`:''}
     <tr class="total-row"><td>TOTAL</td><td>$${total.toFixed(2)}</td></tr>
   `;
   const payBtn = document.getElementById('btn-pay');
@@ -6966,12 +7013,28 @@ let billingSameAsShipping = true;
 function toggleBillingSame(){
   billingSameAsShipping = !billingSameAsShipping;
   document.getElementById('billing-same-check').classList.toggle('checked', billingSameAsShipping);
+  const bs = document.getElementById('billing-section');
+  if(bs) bs.style.display = billingSameAsShipping ? 'none' : 'block';
 }
+
+/* ── COUNTRY LIST ── */
+const HYL_COUNTRIES = [
+  'United States','Canada','United Kingdom','Australia','New Zealand','Ireland','Germany','France','Spain','Italy','Netherlands','Belgium','Sweden','Norway','Denmark','Finland','Switzerland','Austria','Portugal','Poland','Czech Republic','Greece','Japan','South Korea','Singapore','Hong Kong','Taiwan','Mexico','Brazil','Argentina','Chile','South Africa','United Arab Emirates','Israel','India','Thailand','Malaysia','Philippines','Indonesia','Vietnam','Turkey','Saudi Arabia','Other'
+];
+function populateCountrySelects(){
+  ['f-country','b-country'].forEach(function(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = HYL_COUNTRIES.map(c => '<option value="'+c+'"'+(c==='United States'?' selected':'')+'>'+c+'</option>').join('');
+  });
+}
+document.addEventListener('DOMContentLoaded', populateCountrySelects);
 
 function toggleDiscreet(){
   discreetPackaging = !discreetPackaging;
   const check = document.getElementById('discreet-check');
   check.classList.toggle('checked', discreetPackaging);
+  try { renderReceipt(); } catch(e){}
 }
 
 /* ── INTERNATIONAL SHIPPING NOTICE ── */
