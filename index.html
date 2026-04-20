@@ -928,6 +928,9 @@ ul{list-style:none}
 .research-link-wrap:hover .research-hover-card{opacity:1;pointer-events:auto;transform:translateY(0)}
 .discord-fly-btn:hover .discord-fly-text{transform:translateX(5em)}
 .discord-fly-btn:active{transform:scale(0.95)}
+.discord-fly-btn{border:2px solid #5865F2!important}
+.discord-fly-btn:hover{background:#fff!important;color:#5865F2!important}
+.discord-fly-btn:hover svg{fill:#5865F2!important}
 .spinner.lg{width:24px;height:24px;border-width:2.5px}
 
 .btn-loading{pointer-events:none;opacity:0.75}
@@ -1976,6 +1979,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <a onclick="navigate('research')">Research</a>
       <a onclick="navigate('coa')">COAs</a>
       <a onclick="navigate('help')">Help Center</a>
+      <a href="/jobs.html">Careers</a>
     </div>
     <div class="nav-right">
       <div class="nav-search-bar" id="nav-search-bar">
@@ -3014,6 +3018,7 @@ body.no-footer #hyl-email-bar{display:none !important}
    SUPABASE CLIENT
    ═════════════════════════════════════════════════════ */
 const SUPABASE_URL = 'https://dicliathtgxtbraerphb.supabase.co';
+const COA_BASE = SUPABASE_URL + '/storage/v1/object/public/coa/';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpY2xpYXRodGd4dGJyYWVycGhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMTgxMzIsImV4cCI6MjA4OTg5NDEzMn0.oB_iG-lC87b1iKz8oXxMwSntFRaxEzH5xJCPMqoZeso';
 const BILLING_SERVER = 'https://haoyunlabs-billing-production.up.railway.app';
 // NOTE: Billing server's shared-secret API key was previously hardcoded here and
@@ -5101,7 +5106,7 @@ function openProduct(sku){
     <div class="pdp-image" style="position:relative;overflow:hidden">
       <div class="pdp-slider" id="pdp-slider" style="display:flex;transition:transform 0.4s ease;width:${_trackW}">
         <div style="width:${_slideW};flex-shrink:0;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
-        ${_coaMatches.map(c => `<div style="width:${_slideW};flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">${c.c}</div><div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:6px">${c.p}</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">${c.pu} Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ${c.l}</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ${c.r}</div><a href="coa/${c.c}.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>`).join('')}
+        ${_coaMatches.map(c => `<div style="width:${_slideW};flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">${c.c}</div><div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:6px">${c.p}</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">${c.pu} Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ${c.l}</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ${c.r}</div><a href="${COA_BASE}${c.c}.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>`).join('')}
       </div>
       ${_totalSlides > 1 ? `
       <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;padding:0 0 3px 0">&#8249;</button>
@@ -5192,8 +5197,8 @@ function openProduct(sku){
                 '<div><span style="color:var(--muted)">Compound:</span> ' + coaMatch.p + '</div>' +
               '</div>' +
               '<div style="display:flex;gap:8px">' +
-                '<a href="coa/' + coaMatch.c + '.pdf" target="_blank" style="flex:1;padding:10px;text-align:center;background:#000;color:#fff;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a>' +
-                '<a href="coa/' + coaMatch.c + '.pdf" download style="flex:1;padding:10px;text-align:center;border:1.5px solid #000;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;color:#000">Download</a>' +
+                '<a href="' + COA_BASE + coaMatch.c + '.pdf" target="_blank" style="flex:1;padding:10px;text-align:center;background:#000;color:#fff;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a>' +
+                '<a href="' + COA_BASE + coaMatch.c + '.pdf" download style="flex:1;padding:10px;text-align:center;border:1.5px solid #000;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;color:#000">Download</a>' +
               '</div>' +
             '</div>' +
             '<a onclick="navigate(\\\'coa\\\')" style="display:block;text-align:center;font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;margin-top:8px">Browse full COA archive</a>';
@@ -7045,11 +7050,11 @@ function renderCOAArchive(){
         <div class="coa-purity"><span class="coa-label">Purity:</span> ${r.pu}</div>
         <div class="coa-reported"><span class="coa-label">Reported:</span> ${formatCOADate(r.r)}</div>
         <div class="coa-actions">
-          <a class="coa-action" href="coa/${r.c}.pdf" target="_blank" rel="noopener">Open</a>
-          <a class="coa-action" href="coa/${r.c}.pdf" download="${r.c}.pdf">Download</a>
+          <a class="coa-action" href="${COA_BASE}${r.c}.pdf" target="_blank" rel="noopener">Open</a>
+          <a class="coa-action" href="${COA_BASE}${r.c}.pdf" download="${r.c}.pdf">Download</a>
         </div>
       </div>
-      <div class="coa-thumb" onclick="window.open('coa/${r.c}.pdf','_blank')">
+      <div class="coa-thumb" onclick="window.open(COA_BASE+'${r.c}.pdf','_blank')">
         <img src="coa/thumbs/${r.c}.png" alt="${r.p} COA" loading="lazy">
       </div>
     </div>`;

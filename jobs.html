@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hao Yun Labs — Jobs</title>
+<meta name="description" content="Open roles at Hao Yun Labs across research, quality, operations, customer experience, and growth.">
+<link rel="icon" href="favicon.png">
+<style>
+:root{
+  --bg:#ffffff; --panel:#ffffff; --text:#000000; --muted:#444444;
+  --stroke:#000000; --tag-bg:#ffffff; --shadow:none;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; color:var(--text); background:var(--bg); }
+.page{ max-width:1220px; margin:0 auto; padding:30px 16px 46px; }
+.top{ display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid var(--stroke); padding-bottom:14px; margin-bottom:22px; }
+.brand{ font-weight:900; letter-spacing:.75px; text-transform:uppercase; font-size:14px; }
+.back{ border:1px solid #000; color:#000; text-decoration:none; padding:10px 12px; font-size:12px; text-transform:uppercase; font-weight:800; letter-spacing:.3px; display:inline-flex; align-items:center; justify-content:center; min-height:44px; background:#fff; }
+h1{ margin:0; font-size:32px; line-height:1.05; letter-spacing:.35px; text-transform:uppercase; }
+.sub{ margin:10px 0 22px; color:var(--muted); font-weight:600; line-height:1.6; font-size:15px; max-width:860px; }
+.job-block{ margin-top:24px; }
+.block-title{ margin:0 0 12px; font-size:13px; letter-spacing:.4px; text-transform:uppercase; font-weight:900; color:#000; }
+.jobs-grid{ display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); align-items:start; }
+.jobs-grid.featured-grid{ grid-template-columns:minmax(0,1fr); }
+.job-card{ display:flex; flex-direction:column; justify-content:flex-start; gap:1em; border:1px solid var(--stroke); border-radius:0; padding:1em; background:var(--panel); min-height:100%; }
+.job-card.featured{ border-width:2px; }
+.text-title{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:1.08em; font-weight:800; margin:0; line-height:1.35; letter-spacing:.1px; }
+.post-date{ margin:.3em 0 0; color:#000; font-size:.88em; font-weight:700; letter-spacing:.2px; text-transform:uppercase; }
+.budget-exp{ display:flex; gap:2.6em; flex-wrap:wrap; }
+.budget-exp .value{ font-size:.98em; font-weight:700; margin:0; line-height:1.35; color:#000; }
+.budget-exp .label{ font-size:.86em; color:#000; text-transform:uppercase; font-weight:800; letter-spacing:.35px; margin:.25em 0 0; opacity:.7; }
+.text-body{ display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; letter-spacing:.2px; line-height:1.56; font-size:14px; color:#000; margin:0; }
+.job-card.featured .text-body{ -webkit-line-clamp:10; }
+.tags article{ display:flex; flex-wrap:wrap; gap:.55em; }
+.tags p{ border-radius:0; padding:.24em .62em; background-color:var(--tag-bg); color:#000; border:1px solid #000; font-size:12px; font-weight:700; margin:0; line-height:1.4; }
+.card-btn{ border:1px solid #000; font-size:.94rem; background-color:#000; color:#fff; cursor:pointer; border-radius:0; padding:.66em 1.02em; width:100%; font-weight:700; letter-spacing:.1px; line-height:1.35; }
+.card-btn:hover{ background-color:#fff; color:#000; }
+.card-link{ text-decoration:none; display:block; }
+.note{ margin-top:24px; border:1px solid var(--stroke); background:#fff; padding:14px; font-size:13px; line-height:1.6; color:#000; font-weight:600; border-radius:0; }
+@media (max-width:640px){ .budget-exp{ gap:1.1em; } .card-btn{ font-size:.86rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <div class="brand">Hao Yun Labs</div>
+    <a class="back" href="/">Back to Home</a>
+  </div>
+  <h1>Jobs</h1>
+  <p class="sub">Join our team supporting peptide research operations, quality systems, customer experience, and growth.</p>
+
+  <section class="job-block">
+    <h2 class="block-title">Featured Role</h2>
+    <div class="jobs-grid featured-grid">
+      <div class="job-card featured">
+        <h3 class="text-title">Become An Affiliate</h3>
+        <p class="post-date">Featured</p>
+        <div class="budget-exp">
+          <div><p class="value">20% of revenue on every sale + Free peptides monthly</p><p class="label">Pay</p></div>
+          <div><p class="value">Brand Ambassador</p><p class="label">Experience</p></div>
+        </div>
+        <p class="text-body">Monetize your audience by sharing what you love. You will receive a unique discount code (e.g., "YOURNAME10") to share with your followers. In exchange for linking our website in your bio and creating content, you earn aggressive commissions on every order and receive free peptides every month to fuel your research.</p>
+        <div class="tags"><article><p>featured</p><p>affiliate</p><p>passive income</p><p>commissions</p></article></div>
+        <a class="card-link" href="mailto:affiliates@haoyunlabs.com?subject=Affiliate%20Application"><button class="card-btn">Email Application</button></a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const SECTION_LABEL_MAP = {};
+    const SECTIONS = [
+      ["Research & Laboratory Roles", [
+        ["Research Operations Associate","$60,000 - $80,000","Intermediate","Supports day-to-day peptide research operations including sample handling, experiment coordination, documentation, and cross-team communication between lab, QC, and ops.",["research ops","documentation","coordination"]],
+        ["Peptide Synthesis Technician","$70,000 - $95,000","Intermediate","Performs solid-phase peptide synthesis (SPPS), cleavage, purification prep, and basic analytical verification under SOPs.",["SPPS","synthesis","purification"]],
+        ["Laboratory Technician (Wet Lab)","$55,000 - $75,000","Entry","Executes routine lab tasks, maintains equipment, prepares buffers and solutions, and assists scientists with experiments.",["wet lab","equipment","experiments"]],
+        ["Analytical Chemist (HPLC / LC-MS)","$85,000 - $115,000","Senior","Runs and interprets HPLC, LC-MS, and purity assays on peptides; prepares COAs and supports release testing.",["HPLC","LC-MS","release testing"]],
+        ["Formulation Scientist (Lyophilization & Stability)","$95,000 - $130,000","Senior","Develops peptide formulations, lyophilization cycles, stability protocols, and storage conditions.",["formulation","lyophilization","stability"]],
+        ["R&D Scientist - Peptide Chemistry","$110,000 - $150,000","Senior","Leads peptide design, synthesis optimization, and novel research initiatives while mentoring junior staff.",["R&D","peptide chemistry","mentorship"]],
+        ["Research Associate (Bench Scientist)","$75,000 - $105,000","Intermediate","Conducts experiments, analyzes data, documents results, and contributes to process improvements.",["bench","data analysis","process"]],
+      ]],
+      ["Quality & Compliance", [
+        ["Quality Control Analyst","$65,000 - $90,000","Intermediate","Performs analytical testing, verifies purity and identity, maintains QC records, and flags deviations.",["QC","purity","deviations"]],
+        ["Quality Assurance (QA) Specialist","$80,000 - $115,000","Senior","Maintains SOPs, batch records, deviations, CAPAs, and audit readiness for research-use materials.",["QA","CAPA","audit readiness"]],
+        ["Documentation & Batch Records Coordinator","$60,000 - $85,000","Intermediate","Owns document control, batch record review, versioning, and archiving.",["documents","batch records","version control"]],
+        ["Compliance Associate (Research-Use Materials)","$70,000 - $95,000","Intermediate","Ensures labeling, marketing, and operations remain compliant with RUO standards and internal policies.",["compliance","RUO","policy"]],
+        ["Stability & Release Testing Analyst","$75,000 - $105,000","Senior","Manages stability studies, release criteria, trend analysis, and reporting.",["stability","release","reporting"]],
+      ]],
+      ["Operations & Supply Chain", [
+        ["Operations Coordinator","$60,000 - $85,000","Intermediate","Coordinates lab schedules, fulfillment, inventory flow, and cross-functional execution.",["operations","fulfillment","planning"]],
+        ["Inventory & Materials Manager","$75,000 - $105,000","Senior","Oversees raw materials, finished goods inventory, forecasting, and supplier coordination.",["inventory","forecasting","suppliers"]],
+        ["Shipping & Logistics Specialist (Cold Chain)","$55,000 - $80,000","Intermediate","Manages domestic and international shipping, cold-chain packaging, and carrier relationships.",["logistics","cold chain","shipping"]],
+        ["Procurement Associate (Lab Supplies & Reagents)","$60,000 - $90,000","Intermediate","Sources reagents, negotiates vendors, tracks costs, and ensures uninterrupted lab supply.",["procurement","vendors","cost control"]],
+        ["Warehouse Technician (Research Materials)","$45,000 - $65,000","Entry","Handles receiving, storage, picking, packing, and inventory accuracy for peptides.",["warehouse","inventory","packing"]],
+      ]],
+      ["Customer Experience & Sales", [
+        ["Customer Support Specialist","$50,000 - $75,000","Intermediate","Handles order questions, shipping issues, product inquiries, and general support with scientific literacy.",["customer support","orders","shipping"]],
+        ["Technical Support Representative (Peptide Knowledge)","$65,000 - $95,000","Intermediate","Provides detailed product and handling guidance to research clients.",["technical support","peptides","client guidance"]],
+        ["Account Manager (Research Clients)","$80,000 - $120,000 + commission","Senior","Manages key accounts, repeat customers, and long-term research partnerships.",["accounts","retention","partnerships"]],
+        ["Inside Sales Representative","$60,000 - $90,000 base + commission","Intermediate","Converts inbound leads, upsells existing clients, and supports catalog expansion.",["inside sales","lead conversion","upsell"]],
+        ["Client Success Manager","$85,000 - $120,000","Senior","Ensures customer retention, satisfaction, and lifetime value across research clients.",["client success","retention","LTV"]],
+      ]],
+      ["Business, Tech & Growth", [
+        ["Product Manager (Peptide Catalog)","$95,000 - $135,000","Senior","Owns peptide roadmap, pricing, catalog expansion, and lifecycle management.",["product","catalog","pricing"]],
+        ["E-commerce Operations Manager","$85,000 - $120,000","Senior","Manages website operations, checkout flows, fulfillment integration, and conversion optimization.",["e-commerce","checkout","conversion"]],
+        ["Digital Marketing Specialist (Scientific Products)","$70,000 - $105,000","Intermediate","Runs SEO, paid media, email, and content strategies for a scientific audience.",["digital marketing","SEO","paid media"]],
+        ["Content & Technical Writer (Peptide Education)","$65,000 - $95,000","Intermediate","Creates technically accurate product content, guides, and educational materials.",["technical writing","education","content"]],
+        ["CRM / Data Operations Specialist","$75,000 - $105,000","Senior","Manages customer data, analytics, segmentation, and automation.",["CRM","analytics","automation"]],
+      ]],
+      ["Leadership & Senior Roles", [
+        ["Laboratory Manager","$95,000 - $130,000","Lead","Oversees lab staff, workflows, equipment, and safety.",["leadership","lab operations","safety"]],
+        ["Director of Research Operations","$130,000 - $175,000","Director","Owns end-to-end research execution, scale-up, and cross-department alignment.",["director","scale-up","cross-functional"]],
+        ["Head of Quality Systems","$120,000 - $165,000","Head","Leads QA and QC strategy, compliance frameworks, and audit readiness.",["quality systems","compliance","audits"]],
+        ["Chief Scientific Officer (CSO)","$160,000 - $220,000 + equity","Executive","Sets scientific vision, research priorities, and technical credibility of the company.",["executive","scientific vision","strategy"]],
+      ]],
+      ["Core Marketing Roles", [
+        ["Marketing Manager (Growth & Brand)","$90,000 - $130,000","Senior","Leads overall marketing strategy across content, paid media, partnerships, and funnels.",["marketing","growth","brand"]],
+        ["Performance Marketing Manager","$95,000 - $140,000 + performance bonus","Senior","Owns paid acquisition, CAC optimization, funnel testing, and ROAS.",["performance","ROAS","acquisition"]],
+        ["Content Marketing Manager","$80,000 - $120,000","Senior","Oversees editorial calendar, creator output, blogs, landing pages, and educational content.",["content","editorial","landing pages"]],
+        ["Social Media Manager","$65,000 - $95,000","Intermediate","Manages daily posting, engagement, DMs, community building, and trend monitoring.",["social","community","engagement"]],
+        ["Email & Lifecycle Marketing Manager","$75,000 - $115,000","Senior","Builds automated flows, newsletters, retention campaigns, and reactivation sequences.",["email","retention","lifecycle"]],
+        ["SEO & Organic Growth Specialist","$70,000 - $105,000","Intermediate","Owns keyword strategy, on-page SEO, backlinks, and long-form educational traffic.",["SEO","organic","keywords"]],
+        ["Affiliate & Creator Partnerships Manager","$75,000 - $115,000 + commission","Senior","Recruits and manages affiliates, influencers, labs, and content partners.",["affiliate","creator partnerships","commission"]],
+      ]],
+      ["Creative & Content Roles", [
+        ["Short-Form Video Editor","$60,000 - $90,000 (or $40-$75/hr freelance)","Intermediate","Edits high-performing short-form content for TikTok, Reels, and Shorts.",["video editing","short-form","creative"]],
+        ["Long-Form Video Producer","$70,000 - $110,000","Intermediate","Creates YouTube content, educational explainers, interviews, and brand storytelling.",["video production","YouTube","storytelling"]],
+        ["Scientific Content Writer","$65,000 - $95,000","Intermediate","Writes technically accurate blog posts, product pages, and research explainers.",["scientific writing","blogs","product pages"]],
+        ["Copywriter (Direct Response)","$75,000 - $115,000","Senior","Writes high-conversion landing pages, ads, emails, and CTAs.",["copywriting","direct response","conversion"]],
+        ["Graphic Designer (Digital)","$65,000 - $100,000","Intermediate","Creates ad creatives, social graphics, educational visuals, and web assets.",["design","ad creative","web assets"]],
+      ]],
+      ["Data, Strategy & Ops (Marketing)", [
+        ["Growth Analyst","$85,000 - $120,000","Senior","Tracks funnels, attribution, LTV, cohort performance, and experiments.",["analytics","attribution","LTV"]],
+        ["Marketing Operations Manager","$90,000 - $130,000","Senior","Owns tooling, workflows, and reporting infrastructure across CRM, email, and analytics.",["marketing ops","CRM","reporting"]],
+        ["Conversion Rate Optimization (CRO) Specialist","$85,000 - $125,000","Senior","Runs A/B tests across landing pages, checkout, and funnels.",["CRO","A/B testing","funnels"]],
+      ]],
+      ["Entry / Junior Marketing Roles", [
+        ["Junior Content Creator","$50,000 - $70,000","Entry","Assists with content production, captions, edits, and posting.",["junior","content","editing"]],
+        ["Marketing Assistant","$45,000 - $65,000","Entry","Supports scheduling, coordination, reporting, and campaign execution.",["assistant","coordination","campaigns"]],
+        ["Community Manager","$55,000 - $80,000","Intermediate","Manages Discord, comments, DMs, and brand engagement.",["community","Discord","engagement"]],
+      ]],
+      ["Optional High-Upside Roles", [
+        ["Head of Growth","$130,000 - $180,000 + equity","Head","Leads full-funnel growth strategy, experimentation, and revenue acceleration.",["growth","leadership","equity"]],
+        ["Creative Director","$120,000 - $170,000","Director","Owns visual and narrative direction across brand, campaigns, and content systems.",["creative direction","brand","campaigns"]],
+        ["VP of Marketing","$150,000 - $220,000 + equity","Executive","Owns marketing strategy, team performance, budget allocation, and growth outcomes.",["VP","marketing strategy","equity"]],
+      ]],
+    ];
+
+    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const html = SECTIONS.map(([name, roles]) => {
+      const sectionLabel = name.toUpperCase();
+      const cards = roles.map(([title, pay, exp, body, tags]) => `
+        <div class="job-card">
+          <h3 class="text-title">${esc(title)}</h3>
+          <p class="post-date">${esc(sectionLabel)}</p>
+          <div class="budget-exp">
+            <div><p class="value">${esc(pay)}</p><p class="label">Pay</p></div>
+            <div><p class="value">${esc(exp)}</p><p class="label">Experience</p></div>
+          </div>
+          <p class="text-body">${esc(body)}</p>
+          <div class="tags"><article>${tags.map(t=>`<p>${esc(t)}</p>`).join("")}</article></div>
+          <a class="card-link" href="mailto:jobs@haoyunlabs.com?subject=${encodeURIComponent('Application: '+title)}"><button class="card-btn">Email a CV to jobs@haoyunlabs.com</button></a>
+        </div>`).join("");
+      return `<section class="job-block"><h2 class="block-title">${esc(name)}</h2><div class="jobs-grid">${cards}</div></section>`;
+    }).join("");
+    document.write(html);
+  </script>
+
+  <div class="note">Apply for any role by emailing your CV and target role to jobs@haoyunlabs.com.</div>
+</div>
+</body>
+</html>
