@@ -3658,7 +3658,7 @@ function addToCartQty(sku, qty){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `<span style="white-space:nowrap;font-size:15px">${p.name} x${qty}</span><span style="font-size:15px">&nbsp;added&nbsp;</span><a onclick="navigate('order')" style="color:#000;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:6px;white-space:nowrap;font-size:15px">View Cart</a>` : 'Added to cart');
+  showToast(p ? `${p.name} x${qty} added` : 'Added to cart', 'success', {action:{label:'View Cart',onClick:()=>navigate('order')}});
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
   if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
@@ -3679,7 +3679,7 @@ function addToCart(sku, btn){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `<span style="white-space:nowrap;font-size:15px">${p.name}</span><span style="font-size:15px">&nbsp;added&nbsp;</span><a onclick="navigate('order')" style="color:#000;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:6px;white-space:nowrap;font-size:15px">View Cart</a>` : 'Added to cart');
+  showToast(p ? `${p.name} added` : 'Added to cart', 'success', {action:{label:'View Cart',onClick:()=>navigate('order')}});
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   if(p) try { track('add_to_cart', { sku: p.sku, qty: 1, price: p.price }); } catch(e){}
   // Animate button: green checkmark then revert
@@ -3823,12 +3823,12 @@ function getSubtotal(){
 /* ═════════════════════════════════════════════════════
    TOAST
    ═════════════════════════════════════════════════════ */
-function showToast(msg, type){
+function showToast(msg, type, extra){
   try {
     const t = window._sonnerToast;
     if(t){
       try{t.dismiss();}catch(e){}
-      const opts = {duration:3000};
+      const opts = Object.assign({duration:3000}, extra || {});
       if(type==='error') t.error(msg,opts);
       else if(type==='warning') t.warning(msg,opts);
       else if(type==='info') t.info(msg,opts);
