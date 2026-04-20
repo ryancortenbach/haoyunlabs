@@ -2283,6 +2283,11 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="shop-pill-name">Kits</div>
           <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
         </a>
+        <a class="shop-pill" onclick="goToCategory('sprays')">
+          <div class="shop-pill-img"><img src="media/products/OXY10NS.png" alt="Nasal Sprays" loading="lazy"></div>
+          <div class="shop-pill-name">Nasal Sprays</div>
+          <div class="shop-pill-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></div>
+        </a>
         <a class="shop-pill" onclick="goToCategory('supplies')">
           <div class="shop-pill-img"><img src="media/products/BAC3SV.png" alt="Supplies" loading="lazy"></div>
           <div class="shop-pill-name">Supplies</div>
@@ -2944,6 +2949,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div class="footer-col-title">Shop</div>
       <a onclick="goToCategory('peptides')">Peptides</a>
       <a onclick="goToCategory('kits')">Kits</a>
+      <a onclick="goToCategory('sprays')">Nasal Sprays</a>
       <a onclick="goToCategory('supplies')">Supplies</a>
     </div>
     <div class="footer-col">
@@ -3492,25 +3498,25 @@ const CATALOG_BUNDLES = [
 ];
 
 const CATALOG_SPRAYS = [
-  { sku:'ZYL-NS-OXY-02', name:'Oxytocin 2mg Nasal Spray', price:30 },
-  { sku:'ZYL-NS-OXY-10', name:'Oxytocin 10mg Nasal Spray', price:45 },
-  { sku:'ZYL-NS-DSIP-02', name:'DSIP 2mg Nasal Spray', price:40 },
-  { sku:'ZYL-NS-DSIP-05', name:'DSIP 5mg Nasal Spray', price:35 },
-  { sku:'ZYL-NS-DSIP-10', name:'DSIP 10mg Nasal Spray', price:55 },
-  { sku:'ZYL-NS-SLK-05', name:'Selank 5mg Nasal Spray', price:35 },
-  { sku:'ZYL-NS-SLK-10', name:'Selank 10mg Nasal Spray', price:45 },
-  { sku:'ZYL-NS-PIN-10', name:'Pinealon 10mg Nasal Spray', price:45 },
-  { sku:'ZYL-NS-PE22-10', name:'PE-22-28 10mg Nasal Spray', price:55 },
-  { sku:'ZYL-NS-MT2-10', name:'Melanotan II 10mg Nasal Spray', price:55 },
-  { sku:'ZYL-NS-ADX-10', name:'Adamax 10mg Nasal Spray', price:65 },
-  { sku:'ZYL-NS-SMX-05', name:'Semax 5mg Nasal Spray', price:35 },
-  { sku:'ZYL-NS-ADX-05', name:'Adamax 5mg Nasal Spray', price:45 },
-  { sku:'ZYL-NS-P21-05', name:'P21 (P021) 5mg Nasal Spray', price:145 },
-  { sku:'ZYL-NS-PIN-05', name:'Pinealon 5mg Nasal Spray', price:35 },
-  { sku:'ZYL-NS-OXY-05', name:'Oxytocin Acetate 5mg Nasal Spray', price:35 },
-  { sku:'ZYL-NS-PT141-10', name:'PT-141 10mg Nasal Spray', price:45 },
-  { sku:'ZYL-NS-PE22-05', name:'PE-22-28 5mg Nasal Spray', price:35 },
-  { sku:'ZYL-NS-SMX-10', name:'Semax 10mg Nasal Spray', price:45 },
+  { sku:'OXY2NS', name:'Oxytocin 2mg Nasal Spray', price:30, dosage:'2mg' },
+  { sku:'OXY5NS', name:'Oxytocin Acetate 5mg Nasal Spray', price:35, dosage:'5mg' },
+  { sku:'OXY10NS', name:'Oxytocin 10mg Nasal Spray', price:45, dosage:'10mg' },
+  { sku:'DSIP2NS', name:'DSIP 2mg Nasal Spray', price:40, dosage:'2mg' },
+  { sku:'DSIP5NS', name:'DSIP 5mg Nasal Spray', price:35, dosage:'5mg' },
+  { sku:'DSIP10NS', name:'DSIP 10mg Nasal Spray', price:55, dosage:'10mg' },
+  { sku:'SK5NS', name:'Selank 5mg Nasal Spray', price:35, dosage:'5mg' },
+  { sku:'SK10NS', name:'Selank 10mg Nasal Spray', price:45, dosage:'10mg' },
+  { sku:'PIN5NS', name:'Pinealon 5mg Nasal Spray', price:35, dosage:'5mg' },
+  { sku:'PIN10NS', name:'Pinealon 10mg Nasal Spray', price:45, dosage:'10mg' },
+  { sku:'PE22-5NS', name:'PE-22-28 5mg Nasal Spray', price:35, dosage:'5mg' },
+  { sku:'PE22-10NS', name:'PE-22-28 10mg Nasal Spray', price:55, dosage:'10mg' },
+  { sku:'MT2-10NS', name:'Melanotan II 10mg Nasal Spray', price:55, dosage:'10mg' },
+  { sku:'ADAMAX5NS', name:'Adamax 5mg Nasal Spray', price:45, dosage:'5mg' },
+  { sku:'ADAMAX10NS', name:'Adamax 10mg Nasal Spray', price:65, dosage:'10mg' },
+  { sku:'XA5NS', name:'Semax 5mg Nasal Spray', price:35, dosage:'5mg' },
+  { sku:'XA10NS', name:'Semax 10mg Nasal Spray', price:45, dosage:'10mg' },
+  { sku:'PT141-10NS', name:'PT-141 10mg Nasal Spray', price:45, dosage:'10mg' },
+  { sku:'P21-5NS', name:'P21 (P021) 5mg Nasal Spray', price:145, dosage:'5mg' },
 ];
 
 const CATALOG_SUPPLIES = [
@@ -3553,12 +3559,16 @@ const VALID_SKUS = new Set([
   'TA2SV','TA5','TA5SV','TESA10PLUSIP5SV','TESTE10SV','TR10','TR100','TR100SV','TR10SV','TR15',
   'TR15SV','TR20','TR20SV','TR30','TR30SV','TR40','TR40SV','TR5','TR50','TR50SV','TR5SV','TR60',
   'TR60SV','TR80','TR80SV','TSM10','TSM10SV','TSM2','TSM20','TSM20SV','TSM2SV','TY','TY1SV',
-  'VESUGEN10SV','VIP10','VIP10SV','VIP5SV','Ves','XA10','XA10SV','XA5','XA5SV','XT100','XT100SV'
+  'VESUGEN10SV','VIP10','VIP10SV','VIP5SV','Ves','XA10','XA10SV','XA5','XA5SV','XT100','XT100SV',
+  // Nasal sprays (19)
+  'OXY2NS','OXY5NS','OXY10NS','DSIP2NS','DSIP5NS','DSIP10NS','SK5NS','SK10NS','PIN5NS','PIN10NS',
+  'PE22-5NS','PE22-10NS','MT2-10NS','ADAMAX5NS','ADAMAX10NS','XA5NS','XA10NS','PT141-10NS','P21-5NS'
 ]);
 
 const ALL_PRODUCTS = [
   ...CATALOG_INDIVIDUAL.map(p=>({...p,cat:'peptides'})),
   ...CATALOG_KITS.map(p=>({...p,cat:'kits'})),
+  ...CATALOG_SPRAYS.map(p=>({...p,cat:'sprays'})),
   ...CATALOG_SUPPLIES.map(p=>({...p,cat:'supplies'})),
 ].filter(p => VALID_SKUS.has(p.sku));
 
@@ -4733,6 +4743,7 @@ function autoDesc(p){
   const n=p.name.toLowerCase();
   const compound=p.name.replace(/\s*\d+\s*(mg|iu|ml|mcg|tabs?|caps?|pk|pack|x\s*\d+\s*vials?)/gi,'').replace(/\s*\(.*?\)/g,'').trim();
   if(p.cat==='kits') return compound+' bulk research kit containing 10 vials per kit, designed for extended research protocols requiring consistent lot-to-lot supply. Each vial is individually sealed and verified against the same COA. Stored lyophilized for maximum shelf stability.';
+  if(p.cat==='sprays') return compound.replace(/\s*Nasal Spray\s*$/i,'')+' research nasal spray, pre-formulated in sterile buffered solution for intranasal administration in preclinical protocols. Each unit includes a metered-dose amber glass bottle with spray pump atomizer. Lot-level HPLC COA available. Store refrigerated. For research use only.';
   if(p.cat==='supplies') return 'Laboratory supply item for peptide reconstitution, handling, and storage. Designed for use alongside lyophilized research compounds to maintain sterility and accuracy during preparation.';
   if(n.includes('semaglutide')) return 'Semaglutide is a GLP-1 receptor agonist with a 94% structural homology to native GLP-1. It binds to and activates the GLP-1 receptor, which is expressed in pancreatic beta cells and multiple CNS regions involved in appetite regulation. Published clinical trials (STEP program) have demonstrated significant effects on body weight and glycemic parameters. Supplied as lyophilized powder for reconstitution in research settings.';
   if(n.includes('tirzepatide')) return 'Tirzepatide is a dual GIP and GLP-1 receptor agonist built on a 39-amino acid peptide backbone. It activates both incretin receptor pathways simultaneously, a mechanism studied in the SURPASS and SURMOUNT clinical trial programs. Research has shown notable effects on insulin sensitivity and body composition parameters. Supplied lyophilized for research use only.';
@@ -4920,6 +4931,7 @@ function buildCatTabs(containerId, activeVar, clickFn){
     html += `<button class="cat-tab" data-cat="bestsellers" onclick="${clickFn}('bestsellers')">Best Sellers</button>`;
     html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Peptides</button>`;
     html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
+    html += `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`;
     html += `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`;
     c.innerHTML = html;
   }
