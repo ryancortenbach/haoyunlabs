@@ -620,9 +620,12 @@ ul{list-style:none}
 /* ── TOOLBAR: CATEGORIES + SEARCH ── */
 .toolbar{padding:24px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .cat-tabs{
+  display:inline-flex;align-items:center;gap:12px;
+  position:relative;font-size:0.82rem;
+}
+.cat-tabs-inner{
   display:inline-flex;align-items:center;gap:2px;padding:6px;
-  background:#f3f3f3;border-radius:999px;position:relative;
-  font-size:0.82rem;
+  background:#f3f3f3;border-radius:999px;
 }
 .cat-tabs-slider{display:none}
 .cat-tab{
@@ -2313,11 +2316,6 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="toolbar">
       <div class="cat-tabs" id="home-cat-tabs"></div>
       <div class="search-sort">
-        <div class="pricing-toggle">
-          <span>Singles</span>
-          <div class="pricing-switch" id="kit-toggle" onclick="toggleKitView()"></div>
-          <span>Kits</span>
-        </div>
         <div class="zyl-search-wrap">
           <input type="text" class="zyl-search-input" placeholder="Peptides, kits, sprays" id="home-search" oninput="renderHome()" inputmode="search" enterkeyhint="search">
           <svg class="zyl-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
@@ -2347,11 +2345,6 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="toolbar">
       <div class="cat-tabs" id="cat-cat-tabs"></div>
       <div class="search-sort">
-        <div class="pricing-toggle">
-          <span>Singles</span>
-          <div class="pricing-switch" id="cat-kit-toggle" onclick="toggleCatKitView()"></div>
-          <span>Kits</span>
-        </div>
         <div class="zyl-search-wrap">
           <input type="text" class="zyl-search-input" placeholder="Peptides, kits, sprays" id="cat-search" oninput="renderCatalog()" inputmode="search" enterkeyhint="search">
           <svg class="zyl-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
@@ -4950,16 +4943,20 @@ let homeShown = 12;
 
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
-  if(!c.querySelector('.cat-tabs-slider')){
-    let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
-    html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Singles</button>`;
-    html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
-    html += `<button class="cat-tab" data-cat="steroids" onclick="${clickFn}('steroids')">Steroids</button>`;
-    html += `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`;
-    html += `<button class="cat-tab" data-cat="nootropics" onclick="${clickFn}('nootropics')">Nootropics</button>`;
-    html += `<button class="cat-tab" data-cat="bundles" onclick="${clickFn}('bundles')">Bundles</button>`;
-    html += `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`;
-    c.innerHTML = html;
+  if(!c.querySelector('.cat-tabs-inner')){
+    // Two separated pill-rail groups on the same line:
+    //   Group 1: compounds (Singles | Kits | Steroids)
+    //   Group 2: other formats (Sprays | Supplies)
+    const g1 = `<div class="cat-tabs-inner">`
+      + `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Singles</button>`
+      + `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`
+      + `<button class="cat-tab" data-cat="steroids" onclick="${clickFn}('steroids')">Steroids</button>`
+      + `</div>`;
+    const g2 = `<div class="cat-tabs-inner">`
+      + `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`
+      + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`
+      + `</div>`;
+    c.innerHTML = g1 + g2;
   }
   c.querySelectorAll('.cat-tab').forEach(t=>{
     t.classList.toggle('active', t.dataset.cat === activeVar);
