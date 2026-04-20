@@ -329,10 +329,10 @@ ul{list-style:none}
   /* CATALOG */
   .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
   .toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:16px 0 12px!important}
-  /* Category tabs: horizontal scroll, no wrap */
-  .cat-tabs{font-size:0.62rem;flex-wrap:nowrap!important;gap:6px;justify-content:flex-start;overflow-x:scroll!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px;padding-right:32px;touch-action:pan-x;width:100%;display:flex!important}
+  /* Category tabs: horizontal scroll pill-rail on mobile */
+  .cat-tabs{font-size:0.72rem;flex-wrap:nowrap!important;gap:2px;justify-content:flex-start;overflow-x:auto!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;width:100%;display:inline-flex!important;padding:5px!important}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tab{padding:8px 14px;font-size:0.68rem;letter-spacing:0.04em;white-space:nowrap;flex-shrink:0;min-width:max-content}
+  .cat-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   /* Search + Featured: same line */
   .search-sort{width:100%;flex-wrap:nowrap!important;gap:6px!important;align-items:center}
   .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0}
@@ -620,18 +620,24 @@ ul{list-style:none}
 /* ── TOOLBAR: CATEGORIES + SEARCH ── */
 .toolbar{padding:24px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .cat-tabs{
-  display:flex;gap:8px;font-size:0.78rem;position:relative;
+  display:inline-flex;align-items:center;gap:2px;padding:6px;
+  background:#f3f3f3;border-radius:999px;position:relative;
+  font-size:0.82rem;
 }
 .cat-tabs-slider{display:none}
 .cat-tab{
   text-align:center;white-space:nowrap;position:relative;z-index:1;
-  padding:8px 18px;font-size:0.72rem;letter-spacing:0.1em;
-  text-transform:uppercase;font-weight:600;cursor:pointer;
-  border:1px solid var(--stroke);background:var(--bg);color:var(--muted);
-  border-radius:999px;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  padding:10px 22px;font-size:0.88rem;letter-spacing:0;
+  text-transform:none;font-weight:500;cursor:pointer;
+  border:none;background:transparent;color:#6b6b6b;
+  border-radius:999px;transition:all 0.2s ease;
 }
-.cat-tab:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
-.cat-tab.active{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:800;transform:scale(1.02)}
+.cat-tab:hover{color:#111;transform:none}
+.cat-tab.active{
+  background:#fff;color:#111;font-weight:600;
+  box-shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  transform:none;
+}
 .cat-tab .tab-count{font-family:var(--mono);font-size:0.65rem;margin-left:4px;opacity:0.7}
 
 /* ── DYNAMIC PRICING TOGGLE ── */
@@ -4929,7 +4935,7 @@ function buildCatTabs(containerId, activeVar, clickFn){
     let html = `<div class="cat-tabs-slider" id="${containerId}-slider"></div>`;
     html += `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`;
     html += `<button class="cat-tab" data-cat="bestsellers" onclick="${clickFn}('bestsellers')">Best Sellers</button>`;
-    html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Peptides</button>`;
+    html += `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Singles</button>`;
     html += `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`;
     html += `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`;
     html += `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`;
