@@ -2313,6 +2313,11 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="toolbar">
       <div class="cat-tabs" id="home-cat-tabs"></div>
       <div class="search-sort">
+        <div class="pricing-toggle">
+          <span>Singles</span>
+          <div class="pricing-switch" id="kit-toggle" onclick="toggleKitView()"></div>
+          <span>Kits</span>
+        </div>
         <div class="zyl-search-wrap">
           <input type="text" class="zyl-search-input" placeholder="Peptides, kits, sprays" id="home-search" oninput="renderHome()" inputmode="search" enterkeyhint="search">
           <svg class="zyl-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
@@ -2342,6 +2347,11 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="toolbar">
       <div class="cat-tabs" id="cat-cat-tabs"></div>
       <div class="search-sort">
+        <div class="pricing-toggle">
+          <span>Singles</span>
+          <div class="pricing-switch" id="cat-kit-toggle" onclick="toggleCatKitView()"></div>
+          <span>Kits</span>
+        </div>
         <div class="zyl-search-wrap">
           <input type="text" class="zyl-search-input" placeholder="Peptides, kits, sprays" id="cat-search" oninput="renderCatalog()" inputmode="search" enterkeyhint="search">
           <svg class="zyl-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
