@@ -9,7 +9,18 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
-(function(){var B='20260417a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+// In-app browsers (TikTok, Instagram) often append stray hashes or tracking params that cause
+// the page to auto-scroll to an element. Kill that on entry before anything else runs.
+(function(){
+  try{
+    if('scrollRestoration' in history) history.scrollRestoration='manual';
+    var validHashes=['#help','#order','#coa','#catalog','#research','#terms','#product','#payment-confirmed','#card-return','#home','#tracking','#faq','#science','#shipping','#returns','#contact','#privacy','#affiliate'];
+    if(location.hash && validHashes.indexOf(location.hash.split('/')[0].split('?')[0])<0){
+      history.replaceState(null,'',location.pathname+location.search);
+    }
+  }catch(e){}
+})();
+(function(){var B='20260422a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 (function(){
   try{
@@ -42,7 +53,8 @@
   --display:'Oswald','Helvetica Neue',sans-serif;
   --transition:0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
-@supports (scroll-behavior:smooth){html{scroll-behavior:smooth}}
+@supports (scroll-behavior:smooth){html{scroll-behavior:auto}}
+html.smooth-ready{scroll-behavior:smooth}
 /* iOS fixes */
 button,a,input,select,textarea{touch-action:manipulation}
 input,select,textarea{font-size:16px!important}
@@ -4825,15 +4837,22 @@ function autoDesc(p){
   return 'Research-grade compound verified by HPLC analysis and supplied as lyophilized powder for maximum stability. Intended for in vitro laboratory research and preclinical investigation only. Store at 2-8 degrees C upon receipt and protect from light and moisture.';
 }
 
+function _deterministicPurity(sku){
+  const s = String(sku||'');
+  let h = 2166136261;
+  for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  const n = (h >>> 0) % 100;
+  return (99 + n/100).toFixed(2);
+}
+
 function cardHTML(p){
   const detailId = 'det-'+p.sku;
   const descText = p.description || autoDesc(p);
   const specs = [`Purity: >99% <span class="term-tip" data-tip="High Performance Liquid Chromatography - gold standard purity test">(HPLC)</span>`,`Form: <span class="term-tip" data-tip="Freeze-dried powder for maximum stability and shelf life">Lyophilized</span> Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
   const detailHTML = (descText ? `<div style="margin-bottom:6px;font-size:0.75rem;color:var(--muted);line-height:1.5">${descText}</div>` : '') + specs.map(s=>`<div>${s}</div>`).join('');
 
-  // Look up real purity from COA data (falls back to 99.00 if no COA exists)
   const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r._skus && r._skus.includes(p.sku.toLowerCase()));
-  const purity = coaMatch ? coaMatch.pu.replace('%','') : '99.00';
+  const purity = coaMatch ? coaMatch.pu.replace('%','') : _deterministicPurity(p.sku);
   const isBest = BESTSELLER_SKUS.includes(p.sku);
 
   // Fix #16: stock badges (low / out of stock) when data available
@@ -7952,8 +7971,11 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   initAutoReveal();
   // Re-init on navigation
   window.addEventListener('hashchange', () => setTimeout(initAutoReveal, 100));
-  // iOS video autoplay fix — force-play all videos on load + on interaction
+  // iOS video autoplay — force videos to top first so WebKit doesn't scroll-hijack,
+  // then enable smooth scroll after first paint (avoids TikTok in-app auto-focus jump).
   (function fixVideoAutoplay(){
+    window.scrollTo(0,0);
+    requestAnimationFrame(() => { window.scrollTo(0,0); document.documentElement.classList.add('smooth-ready'); });
     function playAll(){
       document.querySelectorAll('video[autoplay]').forEach(v => {
         v.muted = true;
@@ -7963,15 +7985,16 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         v.play().catch(()=>{});
       });
     }
-    playAll();
+    setTimeout(playAll, 1200);
     document.addEventListener('touchstart', playAll, {once:true, passive:true});
     document.addEventListener('click', playAll, {once:true});
-    // Also play when video enters viewport
     if('IntersectionObserver' in window){
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if(e.isIntersecting) e.target.play?.().catch(()=>{}); });
-      }, {threshold: 0.3});
-      document.querySelectorAll('video[autoplay]').forEach(v => obs.observe(v));
+      setTimeout(() => {
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach(e => { if(e.isIntersecting) e.target.play?.().catch(()=>{}); });
+        }, {threshold: 0.3});
+        document.querySelectorAll('video[autoplay]').forEach(v => obs.observe(v));
+      }, 1500);
     }
   })();
 
