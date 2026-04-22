@@ -341,11 +341,11 @@ ul{list-style:none}
   /* CATALOG */
   .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
   .toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:16px 0 12px!important}
-  /* Category tabs: single horizontal scroll rail on mobile (merge both groups, no auto-center) */
-  .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;overflow-x:auto!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;width:100%;display:flex!important;flex-wrap:nowrap!important;padding:5px 0!important;scroll-snap-type:none;scroll-behavior:auto}
-  .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner{flex:0 0 auto;gap:0;padding:4px}
-  .cat-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content;scroll-margin-left:0;scroll-margin-right:0}
+  /* Category tabs on mobile: stack two grouped tracks vertically so nothing clips off-screen */
+  .cat-tabs{font-size:0.72rem;gap:10px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow:visible!important;align-items:stretch}
+  .cat-tabs .cat-tabs-inner{display:flex!important;flex:0 0 auto;gap:2px;padding:5px;justify-content:center;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .cat-tabs .cat-tabs-inner::-webkit-scrollbar{display:none}
+  .cat-tab{padding:9px 16px;font-size:0.8rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   .cat-tab:focus{outline:none}
   /* Search + Featured: same line */
   .search-sort{width:100%;flex-wrap:nowrap!important;gap:6px!important;align-items:center}
@@ -3023,7 +3023,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 
 <!-- FLOATING EMAIL CAPTURE BAR (task #52) -->
 <style>
-#hyl-email-bar{
+#hyl-email-bar{display:none!important;
   position:fixed;left:16px;right:16px;bottom:16px;z-index:230;
   max-width:720px;margin:0 auto;
   background:#fff;border:1px solid var(--stroke);border-radius:16px;
@@ -4987,16 +4987,17 @@ let homeShown = 12;
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
   if(!c.querySelector('.cat-tabs-inner')){
-    // Single pill-rail with all categories (was two groups — caused layout overflow on mobile).
-    const inner = `<div class="cat-tabs-inner">`
+    const g1 = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Singles</button>`
       + `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`
       + `<button class="cat-tab" data-cat="steroids" onclick="${clickFn}('steroids')">Steroids</button>`
+      + `</div>`;
+    const g2 = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`
       + `<button class="cat-tab" data-cat="nootropics" onclick="${clickFn}('nootropics')">Nootropics</button>`
       + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`
       + `</div>`;
-    c.innerHTML = inner;
+    c.innerHTML = g1 + g2;
   }
   c.querySelectorAll('.cat-tab').forEach(t=>{
     t.classList.toggle('active', t.dataset.cat === activeVar);
@@ -7068,7 +7069,8 @@ async function verifyAge(isYes){
   }
   localStorage.setItem('hyl_age_verified','true');
   document.getElementById('age-gate').classList.add('hidden');
-  // Log to Supabase (fire and forget)
+  // Fire the mystery-vial popup shortly after the age gate closes on first visit.
+  setTimeout(() => { if(typeof showEmailPopup === 'function' && !sessionStorage.getItem('hyl_popup_shown_session')){ sessionStorage.setItem('hyl_popup_shown_session','1'); showEmailPopup(); } }, 1500);
   try { await sb.from('age_verifications').insert({dob:'2000-01-01',verified:true,user_agent:navigator.userAgent}); } catch(e){}
 }
 
@@ -7258,12 +7260,13 @@ function initEmailPopup(){
     }
   } catch(e){}
 
-  // Gate: don't show more than once per tab session, and respect a 24h dismiss
-  // cooldown (down from 7 days so users see it again on a normal revisit).
-  const dismissed = localStorage.getItem('hyl_popup_dismissed');
+  // Don't show twice in the same tab session. No long-term dismiss gate —
+  // users opening the site fresh should see the offer.
   const shownSession = sessionStorage.getItem('hyl_popup_shown_session');
   if(shownSession === '1') return;
-  if(dismissed && Date.now() - parseInt(dismissed) < 24*60*60*1000) return;
+  // Don't fire while the age gate is still covering the screen.
+  const ageGate = document.getElementById('age-gate');
+  if(ageGate && !ageGate.classList.contains('hidden')) return;
 
   let popupTriggered = false;
   function fire(){
