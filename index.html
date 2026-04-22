@@ -9,6 +9,24 @@
 <script>
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
+// Owner opt-out from all analytics. Visit ?hide_me=1 once per device to enable, ?hide_me=0 to clear.
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    if(p.get('hide_me')==='1'){ localStorage.setItem('hyl_hide_me','1'); try{alert('Analytics opt-out enabled for this device.');}catch(_){} }
+    else if(p.get('hide_me')==='0'){ localStorage.removeItem('hyl_hide_me'); try{alert('Analytics opt-out cleared.');}catch(_){} }
+    if(localStorage.getItem('hyl_hide_me')==='1'){
+      window.__hylHideMe=true;
+      // Block the CF Web Analytics beacon (auto-injected at the edge) by swallowing its outbound
+      // sendBeacon / fetch to static.cloudflareinsights.com and cloudflareinsights.com.
+      var match=function(u){ try{return String(u||'').indexOf('cloudflareinsights.com')>=0;}catch(_){return false;} };
+      var origSB=navigator.sendBeacon && navigator.sendBeacon.bind(navigator);
+      if(origSB){ navigator.sendBeacon=function(url,data){ if(match(url)) return true; return origSB(url,data); }; }
+      var origFetch=window.fetch && window.fetch.bind(window);
+      if(origFetch){ window.fetch=function(input,init){ var u=(typeof input==='string')?input:(input&&input.url)||''; if(match(u)) return Promise.resolve(new Response(null,{status:204})); return origFetch(input,init); }; }
+    }
+  }catch(e){}
+})();
 // In-app browsers (TikTok, Instagram) often append stray hashes or tracking params that cause
 // the page to auto-scroll to an element. Kill that on entry before anything else runs.
 (function(){
@@ -3116,6 +3134,7 @@ function _hylSid(){
 }
 function track(event, props){
   try {
+    if(window.__hylHideMe || localStorage.getItem('hyl_hide_me')==='1') return;
     const body = {
       event,
       props: props || {},
