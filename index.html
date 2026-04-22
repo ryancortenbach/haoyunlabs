@@ -1161,6 +1161,22 @@ body.admin-open{overflow:hidden}
     font-family:var(--mono);font-size:0.72rem;
   }
 }
+/* ── Mobile: product images are NOT tappable (prevents auto-scroll/focus when returning from TikTok etc.) ── */
+@media(max-width:768px){
+  .product-card .prod-img,
+  .product-card .prod-img *,
+  .shop-pill-img,
+  .shop-pill-img *,
+  [onclick*="navigateToProduct"] img,
+  .cat-tile img,
+  img[src*="product-images"],
+  img[src*="media/products"]{
+    pointer-events:none!important;
+    -webkit-touch-callout:none!important;
+    -webkit-user-select:none!important;
+    user-select:none!important;
+  }
+}
 /* ── Mobile typography + tap target bumps (a11y) ── */
 @media(max-width:768px){
   .faq-answer-inner{font-size:14.5px!important}
@@ -2257,7 +2273,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <!-- COA / PURITY (text card wraps image card, alternated: images left) -->
     <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="navigate('coa')">
       <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none">
-        <video autoplay muted loop playsinline webkit-playsinline="true" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none" tabindex="-1"><source src="media/coa-v4.mp4" type="video/mp4"></video>
+        <img src="media/coa-v4.gif" alt="" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" tabindex="-1">
       </div>
       <div>
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
@@ -3788,6 +3804,9 @@ function updateBadge(){
     }
     mcta.classList.toggle('visible', !hide);
     if(mctaNum) mctaNum.textContent = total;
+    document.body.classList.toggle('has-cart-items', !hide);
+  } else {
+    document.body.classList.toggle('has-cart-items', total > 0);
   }
 }
 // Fix #15: scroll listener to re-evaluate mobile cart CTA visibility on home/catalog
