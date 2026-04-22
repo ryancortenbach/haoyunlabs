@@ -341,10 +341,12 @@ ul{list-style:none}
   /* CATALOG */
   .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
   .toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:16px 0 12px!important}
-  /* Category tabs: horizontal scroll pill-rail on mobile */
-  .cat-tabs{font-size:0.72rem;flex-wrap:nowrap!important;gap:2px;justify-content:flex-start;overflow-x:auto!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;width:100%;display:inline-flex!important;padding:5px!important}
+  /* Category tabs: single horizontal scroll rail on mobile (merge both groups, no auto-center) */
+  .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;overflow-x:auto!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;width:100%;display:flex!important;flex-wrap:nowrap!important;padding:5px 0!important;scroll-snap-type:none;scroll-behavior:auto}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
+  .cat-tabs .cat-tabs-inner{flex:0 0 auto;gap:0;padding:4px}
+  .cat-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content;scroll-margin-left:0;scroll-margin-right:0}
+  .cat-tab:focus{outline:none}
   /* Search + Featured: same line */
   .search-sort{width:100%;flex-wrap:nowrap!important;gap:6px!important;align-items:center}
   .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0}
@@ -3042,7 +3044,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 #hyl-email-bar button.hyl-eb-close:hover{background:#f3f4f6;color:#000}
 #hyl-email-bar .hyl-eb-msg{font-size:0.7rem;margin-top:4px;min-height:1em}
 body.no-footer #hyl-email-bar{display:none !important}
-body.has-cart-items #hyl-email-bar{bottom:calc(76px + max(12px, env(safe-area-inset-bottom, 12px)))}
+body.has-cart-items #hyl-email-bar,
+body:has(#mobile-cart-cta.visible) #hyl-email-bar{bottom:calc(92px + max(12px, env(safe-area-inset-bottom, 12px)))!important}
 @media (max-width: 640px){
   #hyl-email-bar{flex-wrap:wrap;gap:8px;padding:12px 14px}
   #hyl-email-bar .hyl-eb-copy{flex-basis:calc(100% - 36px)}
@@ -4984,20 +4987,16 @@ let homeShown = 12;
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
   if(!c.querySelector('.cat-tabs-inner')){
-    // Two separated pill-rail groups on the same line:
-    //   Group 1: compounds (Singles | Kits | Steroids)
-    //   Group 2: other formats (Sprays | Supplies)
-    const g1 = `<div class="cat-tabs-inner">`
+    // Single pill-rail with all categories (was two groups — caused layout overflow on mobile).
+    const inner = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="peptides" onclick="${clickFn}('peptides')">Singles</button>`
       + `<button class="cat-tab" data-cat="kits" onclick="${clickFn}('kits')">Kits</button>`
       + `<button class="cat-tab" data-cat="steroids" onclick="${clickFn}('steroids')">Steroids</button>`
-      + `</div>`;
-    const g2 = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`
       + `<button class="cat-tab" data-cat="nootropics" onclick="${clickFn}('nootropics')">Nootropics</button>`
       + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`
       + `</div>`;
-    c.innerHTML = g1 + g2;
+    c.innerHTML = inner;
   }
   c.querySelectorAll('.cat-tab').forEach(t=>{
     t.classList.toggle('active', t.dataset.cat === activeVar);
