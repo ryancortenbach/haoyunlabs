@@ -1238,7 +1238,8 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .discreet-check.checked::after{content:'\2713';color:#fff;font-size:0.7rem;font-weight:700}
 
 /* ── SUPPLIES UPSELL POPUP ── */
-.upsell-overlay{position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:flex-end;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1)}
+.upsell-overlay{position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1)}
+@media(max-width:640px){.upsell-overlay{padding:16px;align-items:flex-end}.upsell-overlay .upsell-card{max-width:100%;margin-bottom:0}}
 .upsell-overlay.open{opacity:1;pointer-events:auto}
 .upsell-card{background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;max-width:400px;width:100%;transform:translateY(30px) scale(0.95);transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
 .upsell-overlay.open .upsell-card{transform:translateY(0) scale(1)}
@@ -4993,6 +4994,7 @@ function buildCatTabs(containerId, activeVar, clickFn){
       + `</div>`;
     const g2 = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="sprays" onclick="${clickFn}('sprays')">Sprays</button>`
+      + `<button class="cat-tab" data-cat="nootropics" onclick="${clickFn}('nootropics')">Nootropics</button>`
       + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`
       + `</div>`;
     c.innerHTML = g1 + g2;
@@ -7265,32 +7267,20 @@ function initEmailPopup(){
   if(dismissed && Date.now() - parseInt(dismissed) < 24*60*60*1000) return;
 
   let popupTriggered = false;
-  function attempt(){
+  function fire(){
     if(popupTriggered) return;
     const hash = location.hash.replace('#','') || 'home';
     if(hash === 'order' || hash === 'payment-confirmed' || hash === 'card-return') return;
     if(document.getElementById('crypto-payment-screen')?.style.display !== 'none') return;
-    // Fire at 40% viewport scroll OR after 12s on the page, whichever first
-    const hitScroll = window.scrollY > window.innerHeight * 0.4;
-    if(hitScroll){
-      popupTriggered = true;
-      sessionStorage.setItem('hyl_popup_shown_session', '1');
-      showEmailPopup();
-      window.removeEventListener('scroll', onScroll);
-    }
-  }
-  function onScroll(){ attempt(); }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  // Safety net: if the user hangs on the home screen without scrolling, still show it.
-  setTimeout(() => {
-    if(popupTriggered) return;
-    const hash = location.hash.replace('#','') || 'home';
-    if(hash !== 'home') return;
     popupTriggered = true;
     sessionStorage.setItem('hyl_popup_shown_session', '1');
     showEmailPopup();
-    window.removeEventListener('scroll', onScroll);
-  }, 12000);
+  }
+  // Fire ~4s after load so users actually see it (was 12s / 40% scroll gate).
+  setTimeout(fire, 4000);
+  // Or immediately if they scroll past 20% viewport.
+  function onScroll(){ if(window.scrollY > window.innerHeight * 0.2){ fire(); window.removeEventListener('scroll', onScroll); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
 }
 
 async function submitSupport(){
