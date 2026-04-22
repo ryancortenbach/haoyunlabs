@@ -5537,7 +5537,25 @@ async function renderCardReturn(){
       }
     } catch(e){ console.warn('[card-return] poll error', e); }
     if(attempts >= maxAttempts){
-      body.innerHTML = '<div style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div style="font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:8px">Payment submitted</div><div style="color:var(--muted);margin-bottom:24px;max-width:420px;margin:0 auto 24px">Your card payment was submitted. Confirmation may take a few minutes. You\'ll receive an email once it\'s processed. Order: <strong>'+result.order+'</strong></div><button onclick="navigate(\'home\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Continue shopping</button>';
+      body.innerHTML = `
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;background:#fef3c7;border:2px solid #f59e0b;margin-bottom:20px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 15 14"/></svg>
+        </div>
+        <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px">Payment Submitted</div>
+        <div style="color:var(--muted);font-size:0.88rem;line-height:1.6;max-width:440px;margin:0 auto 20px">Your card was charged and we're confirming with the processor. This can take a few minutes. We'll email you the moment it clears.</div>
+        <div style="display:inline-block;padding:10px 18px;background:#f7f7f7;border:1px solid var(--stroke);border-radius:999px;font-family:var(--mono);font-size:0.8rem;font-weight:700;margin-bottom:28px">Order <span style="color:#16a34a">#${result.order}</span></div>
+        <div style="background:#f7f7f7;border-radius:14px;padding:22px 20px;max-width:420px;margin:0 auto 20px;text-align:left">
+          <div style="font-family:var(--display);font-weight:800;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">What happens next</div>
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px"><div style="width:22px;height:22px;background:#16a34a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.7rem;flex-shrink:0">1</div><div style="font-size:0.82rem;line-height:1.5"><strong>Processor confirms your charge</strong><div style="color:var(--muted);font-size:0.74rem">Usually under 5 minutes.</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px"><div style="width:22px;height:22px;background:#000;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.7rem;flex-shrink:0">2</div><div style="font-size:0.82rem;line-height:1.5"><strong>Email receipt sent</strong><div style="color:var(--muted);font-size:0.74rem">To the address on your order.</div></div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;background:#000;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.7rem;flex-shrink:0">3</div><div style="font-size:0.82rem;line-height:1.5"><strong>Lot prep + discreet ship</strong><div style="color:var(--muted);font-size:0.74rem">1–2 business days, tracking emailed.</div></div></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:18px">
+          <button onclick="navigate('tracking')" style="padding:13px 26px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Track Order</button>
+          <button onclick="navigate('home')" style="padding:13px 26px;background:#fff;color:#000;border:1.5px solid #000;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Continue Shopping</button>
+        </div>
+        <div style="font-size:0.74rem;color:var(--muted);line-height:1.6">Something wrong? Email <a href="mailto:support@haoyunlabs.com" style="color:#000;font-weight:700;text-decoration:underline">support@haoyunlabs.com</a> or join our <a href="https://discord.gg/WDYVkgt5dB" target="_blank" style="color:#5865F2;font-weight:700;text-decoration:underline">Discord</a>.</div>
+      `;
       return;
     }
     if(msgEl) msgEl.textContent = 'Checking with our payment processor... ('+attempts+'s)';
