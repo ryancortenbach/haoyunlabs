@@ -5731,7 +5731,8 @@ function renderReceipt(){
     if(diff){ cart = lsMap; try { updateBadge(); } catch(e){} }
   } catch(e){}
   const sub = getSubtotal();
-  const shipping = sub > 0 ? (sub >= 250 ? 0 : 15) : 0;
+  const isPennyTest = discountCode === 'PENNY';
+  const shipping = isPennyTest ? 0 : (sub > 0 ? (sub >= 250 ? 0 : 15) : 0);
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
   const feeRate = getProcessingRate();
@@ -5757,10 +5758,12 @@ async function applyCode(){
   const code = document.getElementById('discount-input').value.trim().toUpperCase();
   const msg = document.getElementById('discount-msg');
   if(!code){discountCode=null;discountPct=0;window._affiliateCode=null;msg.textContent='Discount removed.';msg.className='discount-msg';renderReceipt();return;}
+  // Enforce one-code-at-a-time: remember what was active, clear state, then try to apply new.
+  const previousCode = discountCode;
+  discountCode = null; discountPct = 0; window._affiliateCode = null;
   let foundDiscount = false;
   let _appliedType = null;
   let _appliedPct = 0;
-  // Try server-side validation via edge function
   try {
     const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/validate-code?code=' + encodeURIComponent(code), {
       headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
@@ -5768,27 +5771,31 @@ async function applyCode(){
     const d = await resp.json();
     if(d.ok && d.type === 'discount'){
       discountCode=d.code;discountPct=d.percent_off;
-      msg.textContent=`Code ${d.code} applied - ${d.percent_off}% off!`;msg.className='discount-msg success';
+      msg.textContent=previousCode && previousCode!==d.code
+        ? `Replaced ${previousCode} → ${d.code} (${d.percent_off}% off)`
+        : `Code ${d.code} applied - ${d.percent_off}% off!`;
+      msg.className='discount-msg success';
       foundDiscount=true; _appliedType='discount'; _appliedPct=d.percent_off;
     } else if(d.ok && d.type === 'affiliate'){
       window._affiliateCode=d.code;
       const pct = Number(d.discount_percent) || 10;
       discountCode=d.code;
       discountPct=pct;
-      msg.textContent=`Affiliate ${d.name||d.code} linked — ${pct}% off!`;msg.className='discount-msg success';
+      msg.textContent=previousCode && previousCode!==d.code
+        ? `Replaced ${previousCode} → ${d.name||d.code} (${pct}% off)`
+        : `Affiliate ${d.name||d.code} linked — ${pct}% off!`;
+      msg.className='discount-msg success';
       foundDiscount=true; _appliedType='affiliate'; _appliedPct=pct;
     }
   } catch(e){ console.warn('[applyCode] validation error', e); }
-  // Hardcoded fallback codes
   if(!foundDiscount){
+    // Minimal offline fallback for evergreen promos only — all affiliate/real codes must resolve via DB.
     if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied - 10% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=10;}
     else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied - 15% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=15;}
-    else if(code==='SUG20'){discountCode='SUG20';discountPct=20;msg.textContent='Code SUG20 applied - 20% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=20;}
-    else if(code==='CHRIS20'){discountCode='CHRIS20';discountPct=20;msg.textContent='Code CHRIS20 applied - 20% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=20;}
   }
   if(!foundDiscount){
-    discountCode=null;discountPct=0;window._affiliateCode=null;
-    msg.textContent='Invalid code.';msg.className='discount-msg error';
+    msg.textContent = previousCode ? `Invalid code. Previous code (${previousCode}) removed.` : 'Invalid code.';
+    msg.className='discount-msg error';
   } else {
     try { track('apply_code', { code, percent: _appliedPct, type: _appliedType }); } catch(e){}
   }
@@ -6796,7 +6803,7 @@ async function submitOrder(){
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
-  const shipping = sub >= 250 ? 0 : 15;
+  const shipping = (discountCode === 'PENNY') ? 0 : (sub >= 250 ? 0 : 15);
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
   const feeRate = getProcessingRate();
