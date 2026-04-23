@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HYL · Checkout v2 preview</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --ink:#0a0a0a; --muted:#64748b; --soft:#94a3b8; --line:#e2e8f0;
+    --bg:#f8fafc; --surface:#ffffff; --accent:#0f172a;
+    --radius:14px;
+    --sans:-apple-system,BlinkMacSystemFont,Inter,'Segoe UI',Arial,sans-serif;
+    --mono:ui-monospace,'JetBrains Mono','SF Mono',Menlo,monospace;
+  }
+  *,*:before,*:after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:32px 16px 96px}
+  .banner{background:#fef3c7;border:1px solid #fde68a;color:#78350f;padding:10px 14px;border-radius:10px;font-size:12px;margin-bottom:20px;text-align:center;font-weight:600;letter-spacing:.03em}
+  h1{font-family:var(--sans);font-weight:700;font-size:22px;margin:0 0 12px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px}
+  .card + .card{margin-top:14px}
+  .rowhead{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin-bottom:10px}
+  .receiptLine{display:grid;grid-template-columns:1fr 48px 80px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .receiptLine:first-of-type{border-top:0}
+  .receiptLine .sku{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+  .receiptLine .name{font-weight:600}
+  .receiptLine .qty{text-align:center;font-family:var(--mono);color:#475569}
+  .receiptLine .line{text-align:right;font-weight:700;font-family:var(--mono)}
+
+  .codeBox{margin-top:4px}
+  .codeBox .hint{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .codeBox label{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .codeRow{display:flex;gap:8px}
+  .codeRow input{flex:1;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:14px;background:#fff;color:#0f172a}
+  .codeRow input::placeholder{color:#94a3b8}
+  .codeRow input:focus{outline:none;border-color:#000;box-shadow:0 0 0 3px rgba(15,23,42,.1)}
+  .codeRow button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 18px;font-size:14px;font-weight:600;color:#334155;cursor:pointer;transition:all .15s ease}
+  .codeRow button:hover{border-color:#000;color:#000}
+  .codeRow button.clear{display:none}
+  .codeStatus{font-size:12px;color:#64748b;margin-top:8px}
+  .codeStatus.success{color:#15803d;font-weight:600}
+  .codeStatus.error{color:#b91c1c;font-weight:600}
+
+  .totals{display:flex;flex-direction:column;gap:8px;font-size:14px;color:#334155;margin-top:16px}
+  .totals .row{display:flex;justify-content:space-between}
+  .totals .row strong{color:var(--ink);font-weight:600}
+  .totals .row.discount{color:#15803d}
+  .totals .row.fee{color:#334155}
+  .totals .row.fee.hidden,.totals .row.discount.hidden{display:none}
+  .totals .divider{border-top:1px solid var(--line);margin:6px 0 0}
+  .totals .total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:#0a0a0a;padding-top:8px}
+
+  .emailCard{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px}
+  .emailCard label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:8px}
+  .emailCard input{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;background:#fff;color:#0f172a}
+  .emailCard input:focus{outline:none;border-color:#000;box-shadow:0 0 0 3px rgba(15,23,42,.1)}
+  .emailCard .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .emailWarn{display:none;margin-top:10px;gap:10px;align-items:flex-start;background:#fffbeb;border:1px solid #fde68a;color:#78350f;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.5}
+  .emailWarn.show{display:flex}
+  .emailWarn svg{flex-shrink:0;margin-top:2px}
+
+  .toggleCard{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;gap:14px;align-items:center}
+  .toggleCard .track{position:relative;width:40px;height:22px;border-radius:999px;background:#cbd5e1;cursor:pointer;flex-shrink:0;transition:background .2s}
+  .toggleCard .track::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s}
+  .toggleCard.on .track{background:#0f172a}
+  .toggleCard.on .track::after{left:21px}
+  .toggleCard .copy .title{font-weight:700;font-size:14px;color:#0a0a0a}
+  .toggleCard .copy .desc{font-size:12.5px;color:#64748b;margin-top:2px;line-height:1.4}
+
+  .finalCard{background:#fff;border:1px solid #cbd5e1;border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+  .finalCard .finalRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .finalCard .finalRow .lbl{font-size:14px;color:#475569;font-weight:500}
+  .finalCard .finalRow .amt{font-size:22px;font-weight:700;color:#0a0a0a;font-family:var(--mono)}
+  .finalCard .hostedHint{background:#f1f5f9;border:1px solid #e2e8f0;color:#475569;font-size:13px;padding:10px 12px;border-radius:8px;margin-bottom:14px}
+  .payBtns{display:flex;flex-direction:column;gap:10px}
+  .payBtn{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;border:1px solid #0a0a0a;background:#0a0a0a;color:#fff;cursor:pointer;transition:transform .1s ease,box-shadow .15s ease,background .15s ease;text-align:left;font-family:var(--sans);width:100%}
+  .payBtn:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(15,23,42,.15)}
+  .payBtn:active{transform:translateY(0)}
+  .payBtn .icon{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .payBtn .labels{flex:1;min-width:0}
+  .payBtn .primary{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .payBtn .secondary{font-size:12px;opacity:.75;margin-top:2px;font-weight:500}
+  .payBtn .chev{opacity:.6;flex-shrink:0}
+  .payBtn.alt{background:#fff;color:#0a0a0a}
+  .payBtn.alt .icon{background:#f1f5f9}
+  .payBtn.alt .secondary{color:#64748b;opacity:1}
+  .payBtn.alt:hover{background:#f8fafc}
+  .payBtn.unavailable{cursor:not-allowed;opacity:.55}
+  .payBtn.unavailable:hover{transform:none;box-shadow:none}
+
+  .trust{display:grid;gap:10px;margin-top:16px;font-size:12.5px;color:#475569}
+  .trust .tr{display:flex;align-items:center;gap:10px}
+  .trust svg{color:#334155;flex-shrink:0}
+
+  .toggleRow{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--muted)}
+  .toggleRow button{border:1px solid var(--line);background:#fff;padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;color:#475569}
+  .toggleRow button:hover{border-color:#000;color:#000}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">PREVIEW ONLY · <code>/test-checkout.html</code> · not linked from live site</div>
+  <h1>Order Review</h1>
+
+  <!-- ITEMS -->
+  <div class="card">
+    <div class="rowhead">Your items</div>
+    <div id="receiptBody">
+      <div class="receiptLine">
+        <div><div class="name">Retatrutide 10mg</div><div class="sku">RT10SV · $59.99</div></div>
+        <div class="qty">×2</div>
+        <div class="line">$119.98</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCOUNT / AFFILIATE -->
+  <div class="card">
+    <div class="codeBox">
+      <label>Discount / Affiliate Code</label>
+      <div class="codeRow">
+        <input id="discountCodeInput" type="text" maxlength="32" autocomplete="off" placeholder="Enter code (ex: RANK20)">
+        <button id="applyBtn" type="button">Apply</button>
+        <button id="clearBtn" class="clear" type="button">Clear</button>
+      </div>
+      <div class="codeStatus" id="codeStatus">Enter a discount / affiliate code and press apply.</div>
+    </div>
+
+    <!-- TOTALS -->
+    <div class="totals">
+      <div class="row"><div>Items subtotal</div><div id="tSubtotal"><strong>$119.98</strong></div></div>
+      <div class="row discount hidden" id="rowDiscount"><div id="discountLabel">Discount</div><div id="tDiscount"><strong>-$0.00</strong></div></div>
+      <div class="row"><div>Shipping</div><div id="tShipping"><strong>$12.00</strong></div></div>
+      <div class="row fee" id="rowFee"><div id="feeLabel">Card processing fee (10%)</div><div id="tFee"><strong>$13.20</strong></div></div>
+      <div class="divider"></div>
+      <div class="total"><div>Total due</div><div id="tTotal">$145.18</div></div>
+    </div>
+  </div>
+
+  <!-- EMAIL FOR RECEIPT -->
+  <div class="card">
+    <div class="emailCard">
+      <label for="receiptEmail">Email for receipt</label>
+      <input id="receiptEmail" type="email" autocomplete="email" placeholder="you@example.com">
+      <div class="hint">We send receipts and tracking updates here.</div>
+      <div class="emailWarn" id="emailWarn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div>Please use a non-Apple email if you can. Some iCloud, me.com, and mac.com messages have bounced.</div>
+      </div>
+    </div>
+
+    <!-- DISCREET PACKAGING -->
+    <div class="toggleCard" id="discreetToggle" style="margin-top:12px" onclick="toggleDiscreet()">
+      <div class="track"></div>
+      <div class="copy">
+        <div class="title">Use discreet packaging</div>
+        <div class="desc">Low-profile handling for researchers who prefer additional privacy.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL TOTAL + PAY -->
+  <div class="card">
+    <div class="finalCard">
+      <div class="finalRow">
+        <div class="lbl">Final total</div>
+        <div class="amt" id="finalAmt">$145.18</div>
+      </div>
+      <div class="hostedHint">Secure checkout hosted through Square (provided by PayByBankful). Confirmation arrives once the processor callback completes.</div>
+
+      <div class="payBtns">
+        <button class="payBtn" id="cardBtn">
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M3.5 10h17"/><path d="M7.25 14.25h2.5"/></svg>
+          </span>
+          <span class="labels">
+            <span class="primary">Pay by Card</span>
+            <span class="secondary" id="cardSecondary">Secure Square checkout (via PayByBankful) · <span id="cardBtnTotal">$145.18</span></span>
+          </span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="payBtn alt" id="zelleBtn">
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18-9-9 18-2-8z"/></svg>
+          </span>
+          <span class="labels">
+            <span class="primary">Zelle / CashApp</span>
+            <span class="secondary">10% off. Manual confirmation via Discord ticket.</span>
+          </span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="payBtn alt" id="cryptoBtn">
+          <span class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"/><path d="M10 9.75h3a1.75 1.75 0 1 1 0 3.5h-2a1.75 1.75 0 1 0 0 3.5h3"/><path d="M12 7.5v9"/></svg>
+          </span>
+          <span class="labels">
+            <span class="primary">Crypto (BTC / ETH / SOL)</span>
+            <span class="secondary">No card processing fee. ~10–20 min confirmations.</span>
+          </span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="trust">
+        <div class="tr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/></svg><span>256-bit secure encryption · PCI-compliant processor</span></div>
+        <div class="tr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M7 12h10M7 17h7"/></svg><span>Tracking updates by email after label creation</span></div>
+        <div class="tr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h13l5 5v5H3z"/><circle cx="8" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg><span>Typical handling: 1–2 business days · HPLC-verified lot</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toggleRow">
+    <button onclick="simulate('none')">No code</button>
+    <button onclick="simulate('SUG20')">Apply SUG20 (20% off)</button>
+    <button onclick="simulate('PENNY')">Apply PENNY (99.99% off)</button>
+  </div>
+</div>
+<script>
+(function(){
+  const SUBTOTAL = 119.98;
+  const SHIP = 12;
+  const FEE_RATE = 0.10;
+  let discountPct = 0;
+  let discountCode = '';
+  const money = (n) => '$' + (Math.max(0,n)).toFixed(2);
+
+  function render(){
+    const disc = SUBTOTAL * (discountPct/100);
+    const afterDisc = SUBTOTAL - disc;
+    const fee = +(afterDisc * FEE_RATE).toFixed(2);
+    const total = afterDisc + SHIP + fee;
+    document.getElementById('tSubtotal').innerHTML = '<strong>'+money(SUBTOTAL)+'</strong>';
+    document.getElementById('tShipping').innerHTML = '<strong>'+money(SHIP)+'</strong>';
+    document.getElementById('tFee').innerHTML = '<strong>'+money(fee)+'</strong>';
+    document.getElementById('tTotal').textContent = money(total);
+    document.getElementById('finalAmt').textContent = money(total);
+    document.getElementById('cardBtnTotal').textContent = money(total);
+    const rowD = document.getElementById('rowDiscount');
+    if(discountPct>0){
+      rowD.classList.remove('hidden');
+      document.getElementById('discountLabel').textContent = 'Discount ('+discountCode+' · '+discountPct+'% off)';
+      document.getElementById('tDiscount').innerHTML = '<strong>-'+money(disc)+'</strong>';
+    } else {
+      rowD.classList.add('hidden');
+    }
+  }
+
+  window.simulate = function(kind){
+    if(kind==='SUG20'){ discountCode='SUG20'; discountPct=20; document.getElementById('codeStatus').textContent='Code SUG20 applied — 20% off.'; document.getElementById('codeStatus').className='codeStatus success'; document.getElementById('clearBtn').style.display='inline-block'; }
+    else if(kind==='PENNY'){ discountCode='PENNY'; discountPct=99.99; document.getElementById('codeStatus').textContent='Code PENNY applied — 99.99% off.'; document.getElementById('codeStatus').className='codeStatus success'; document.getElementById('clearBtn').style.display='inline-block'; }
+    else { discountCode=''; discountPct=0; document.getElementById('codeStatus').textContent='Enter a discount / affiliate code and press apply.'; document.getElementById('codeStatus').className='codeStatus'; document.getElementById('clearBtn').style.display='none'; document.getElementById('discountCodeInput').value=''; }
+    render();
+  };
+
+  document.getElementById('applyBtn').addEventListener('click', () => {
+    const v = (document.getElementById('discountCodeInput').value||'').trim().toUpperCase();
+    if(!v){ document.getElementById('codeStatus').textContent='Enter a code.'; document.getElementById('codeStatus').className='codeStatus error'; return; }
+    if(v==='SUG20'||v==='EVN20'||v==='MIKAEL20'||v==='DWIN20'||v==='KATI20'||v==='ALDEN20'||v==='RANK20'){ window.simulate('SUG20'); document.getElementById('codeStatus').textContent='Code '+v+' applied — 20% off.'; return; }
+    if(v==='PENNY'){ window.simulate('PENNY'); return; }
+    if(v==='HAOYUN10'){ discountCode='HAOYUN10'; discountPct=10; document.getElementById('codeStatus').textContent='Code HAOYUN10 applied — 10% off.'; document.getElementById('codeStatus').className='codeStatus success'; document.getElementById('clearBtn').style.display='inline-block'; render(); return; }
+    if(v==='WELCOME15'){ discountCode='WELCOME15'; discountPct=15; document.getElementById('codeStatus').textContent='Code WELCOME15 applied — 15% off.'; document.getElementById('codeStatus').className='codeStatus success'; document.getElementById('clearBtn').style.display='inline-block'; render(); return; }
+    document.getElementById('codeStatus').textContent='Invalid code.';
+    document.getElementById('codeStatus').className='codeStatus error';
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => window.simulate('none'));
+
+  document.getElementById('receiptEmail').addEventListener('input', (e) => {
+    const v = (e.target.value||'').toLowerCase();
+    const apple = /(icloud\.com|me\.com|mac\.com)\s*$/i.test(v);
+    document.getElementById('emailWarn').classList.toggle('show', apple);
+  });
+
+  window.toggleDiscreet = function(){ document.getElementById('discreetToggle').classList.toggle('on'); };
+
+  render();
+})();
+</script>
+</body>
+</html>
