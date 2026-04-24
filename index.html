@@ -32,7 +32,7 @@
 (function(){
   try{
     if('scrollRestoration' in history) history.scrollRestoration='manual';
-    var validHashes=['#help','#order','#coa','#catalog','#research','#terms','#product','#payment-confirmed','#card-return','#home','#tracking','#faq','#science','#shipping','#returns','#contact','#privacy','#affiliate'];
+    var validHashes=['#help','#order','#coa','#catalog','#research','#terms','#product','#payment-confirmed','#card-return','#home','#tracking','#faq','#science','#shipping','#returns','#contact','#privacy','#affiliate','#delivered','#lost-package'];
     if(location.hash && validHashes.indexOf(location.hash.split('/')[0].split('?')[0])<0){
       history.replaceState(null,'',location.pathname+location.search);
     }
@@ -3085,19 +3085,308 @@ function pcPopulateReorder(){
   </div>
 </div>
 
-<!-- ORDER TRACKING -->
-<div class="screen" id="screen-tracking">
-  <div class="container" style="padding-top:100px;max-width:600px;margin:0 auto">
-    <h1 style="font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;text-align:center">Track Your Order</h1>
-    <p style="text-align:center;color:var(--muted);margin:8px 0 32px;font-size:0.85rem">Enter your order number to check the status.</p>
-    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px">
-      <div style="display:flex;gap:8px">
-        <input class="form-input" type="text" id="tracking-input" placeholder="e.g. HYL-M1234A-BC56" style="text-transform:uppercase;flex:1">
-        <button class="btn-add" style="padding:12px 24px;border-radius:var(--radius);white-space:nowrap" onclick="lookupOrder()">TRACK</button>
-      </div>
-      <div id="tracking-result" style="margin-top:20px"></div>
+<!-- ═══════════════ SCREEN: ORDER TRACKING (v2 — design handoff port) ═══════════════ -->
+<style>
+  .tk-v2{--tk-ink:#0a0a0a;--tk-t2:#4a4a4a;--tk-t3:#8a8a8a;--tk-t4:#b5b5b0;--tk-line:#e8e8e3;--tk-bg-soft:#fafaf7;--tk-cream:#f0efe9;--tk-blue:#1d4ed8;--tk-blue-bg:#eff3ff;background:#fff;font-family:'Instrument Sans',system-ui,sans-serif;color:var(--tk-ink);font-size:15px;line-height:1.5}
+  .tk-v2 .tk-eyebrow{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--tk-t3);font-weight:600}
+  .tk-v2 h1{font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:-0.01em;text-transform:uppercase;margin:0;color:var(--tk-ink)}
+  .tk-v2 .tk-ital{font-family:'Instrument Serif',serif;font-style:italic;text-transform:none;font-weight:400;letter-spacing:-0.01em}
+  .tk-v2 .tk-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:9999px;border:1px solid #1a1a1a;background:var(--tk-ink);color:#fff;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s;text-decoration:none}
+  .tk-v2 .tk-btn:hover{background:#2a2a2a}
+  .tk-v2 .tk-btn-outline{background:#fff;color:var(--tk-ink)}
+  .tk-v2 .tk-btn-outline:hover{background:var(--tk-bg-soft)}
+  .tk-v2 .tk-btn-sm{padding:8px 14px;font-size:10.5px}
+  .tk-v2 .tk-btn-full{width:100%;padding:15px 26px;font-size:13px}
+  .tk-v2 .tk-card{background:#fff;border:1px solid var(--tk-line);border-radius:14px}
+  .tk-v2 .tk-card-pad{padding:22px}
+  .tk-v2 .tk-input{width:100%;padding:12px 14px;border:1px solid var(--tk-line);border-radius:10px;font-family:inherit;font-size:14px;color:var(--tk-ink);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+  .tk-v2 .tk-input:focus{border-color:var(--tk-ink);box-shadow:0 0 0 3px rgba(0,0,0,0.05)}
+  .tk-v2 .tk-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:500;border:1px solid var(--tk-line);background:#fff;color:var(--tk-t2)}
+  .tk-v2 .tk-pill-blue{background:var(--tk-blue-bg);color:var(--tk-blue);border-color:#c5d2fa}
+  .tk-v2 .tk-pill-blue::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--tk-blue)}
+  .tk-v2 .tk-dot{width:10px;height:10px;border-radius:50%;background:#d6d6d0;flex-shrink:0}
+  .tk-v2 .tk-dot.done,.tk-v2 .tk-dot.active{background:var(--tk-ink);box-shadow:0 0 0 3px rgba(0,0,0,0.08)}
+  .tk-v2 .tk-checker{background-image:linear-gradient(45deg,#f0efe9 25%,transparent 25%),linear-gradient(-45deg,#f0efe9 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#f0efe9 75%),linear-gradient(-45deg,transparent 75%,#f0efe9 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+  .tk-v2 .tk-code{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+  @media(max-width:900px){.tk-v2 .tk-body{grid-template-columns:1fr!important}.tk-v2 .tk-step-row>div:nth-child(n){}}
+</style>
+
+<div class="screen tk-v2" id="screen-tracking">
+  <!-- LOOKUP view (no order loaded yet) -->
+  <section id="tk-lookup" style="max-width:560px;margin:0 auto;padding:80px 40px 120px">
+    <div style="text-align:center">
+      <div class="tk-eyebrow">Package Tracking</div>
+      <h1 style="font-size:44px;line-height:1.05;margin-top:14px">Where's my <span class="tk-ital">order?</span></h1>
+      <p style="color:var(--tk-t2);margin-top:12px;font-size:15.5px">Enter your order number and the email you used at checkout. We'll pull up the latest status. No login needed.</p>
     </div>
+    <div class="tk-card" style="margin-top:32px;padding:28px">
+      <label style="display:block;font-size:12px;font-weight:500;color:var(--tk-t2);margin-bottom:6px">Order Number</label>
+      <input class="tk-input" id="tracking-input" placeholder="HYL-XXXX" style="text-transform:uppercase">
+      <label style="display:block;font-size:12px;font-weight:500;color:var(--tk-t2);margin-bottom:6px;margin-top:14px">Email</label>
+      <input class="tk-input" id="tracking-email" type="email" placeholder="you@example.com">
+      <button class="tk-btn tk-btn-full" style="margin-top:20px" onclick="lookupOrder()">Track Order <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      <div style="text-align:center;margin-top:16px;font-size:12.5px;color:var(--tk-t3)">Can't find it? <a href="mailto:support@haoyunlabs.com" style="color:var(--tk-ink);font-weight:500">Contact support</a>.</div>
+    </div>
+    <div style="display:flex;gap:24px;justify-content:center;margin-top:28px;font-size:12.5px;color:var(--tk-t3);flex-wrap:wrap">
+      <span style="display:inline-flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V7l8-4z"/></svg> Secure lookup</span>
+      <span style="display:inline-flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Email verification</span>
+      <span style="display:inline-flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13l5 5v5H3z"/><circle cx="8" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg> USPS · UPS · FedEx</span>
+    </div>
+    <div id="tracking-result" style="margin-top:28px"></div>
+  </section>
+
+  <!-- DETAIL view (populated by lookupOrder on success) -->
+  <div id="tk-detail" style="display:none">
+    <section style="border-bottom:1px solid var(--tk-line);background:linear-gradient(180deg,#fafaf7 0%,#fff 100%)">
+      <div style="max-width:1120px;margin:0 auto;padding:40px 40px 32px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span class="tk-pill tk-pill-blue" id="tk-status-pill">In Transit</span>
+              <span style="font-size:12.5px;color:var(--tk-t3)" id="tk-updated">Updated just now</span>
+            </div>
+            <h1 style="font-size:38px;line-height:1.1">Order <span class="tk-ital" id="tk-order-num">—</span></h1>
+            <div style="color:var(--tk-t2);font-size:14.5px;margin-top:8px" id="tk-delivery-line">Delivery window and carrier details will appear once the label prints.</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="tk-btn tk-btn-outline tk-btn-sm" onclick="lookupOrder()">Refresh</button>
+            <button class="tk-btn tk-btn-outline tk-btn-sm" onclick="tkCopyShare(this)"><span class="tk-copy-label">Share link</span></button>
+            <button class="tk-btn tk-btn-outline tk-btn-sm" onclick="tkBackToLookup()">Look up another</button>
+          </div>
+        </div>
+
+        <!-- Progress rail -->
+        <div style="margin-top:36px">
+          <div class="tk-step-row" id="tk-step-row" style="display:grid;grid-template-columns:repeat(5,1fr);position:relative"></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width:1120px;margin:0 auto;padding:36px 40px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px" class="tk-body">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <!-- Shipment log -->
+        <div class="tk-card" style="padding:0">
+          <div style="padding:16px 22px;border-bottom:1px solid var(--tk-line);display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="tk-eyebrow">Shipment Log</div>
+              <div style="font-size:13.5px;color:var(--tk-t2);margin-top:2px">Every scan from the carrier, live.</div>
+            </div>
+            <a id="tk-carrier-link" href="#" target="_blank" rel="noopener" style="font-size:12px;color:var(--tk-ink);text-decoration:none;border-bottom:1px solid var(--tk-ink);display:none">View on carrier ↗</a>
+          </div>
+          <div id="tk-events" style="padding:10px 22px 22px">
+            <div style="padding:18px 0;color:var(--tk-t2);font-size:13px;text-align:center">Scan events will appear here once the carrier picks up your package.</div>
+          </div>
+        </div>
+      </div>
+
+      <aside style="display:flex;flex-direction:column;gap:16px">
+        <!-- Delivery summary -->
+        <div class="tk-card tk-card-pad">
+          <div class="tk-eyebrow">Delivery</div>
+          <div style="margin-top:12px;display:flex;gap:16px;align-items:flex-start">
+            <div style="width:44px;height:44px;border-radius:10px;background:var(--tk-bg-soft);display:grid;place-items:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+            <div style="flex:1">
+              <div id="tk-customer" style="font-weight:500">—</div>
+              <div id="tk-address" style="font-size:13px;color:var(--tk-t2);margin-top:3px;line-height:1.5">—</div>
+              <div style="margin-top:10px"><span class="tk-pill">Address locked</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Line items recap -->
+        <div class="tk-card" style="padding:0">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--tk-line);display:flex;justify-content:space-between;align-items:center">
+            <div class="tk-eyebrow">What's in the box</div>
+            <span id="tk-item-count" style="font-size:11.5px;color:var(--tk-t3)">—</span>
+          </div>
+          <div id="tk-items" style="padding:4px 20px 16px"></div>
+          <div style="padding:12px 20px;border-top:1px solid var(--tk-line);background:var(--tk-bg-soft);border-radius:0 0 14px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12.5px;color:var(--tk-t2)">Reorder the same items</span>
+            <button class="tk-btn tk-btn-outline tk-btn-sm" onclick="tkReorder()">Reorder</button>
+          </div>
+        </div>
+
+        <!-- Discreet packaging -->
+        <div class="tk-card tk-card-pad tk-checker" style="background-color:var(--tk-bg-soft)">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:8px;background:#fff;border:1px solid var(--tk-line);display:grid;place-items:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+            <div>
+              <div style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600">Shipped Discreetly</div>
+              <div style="font-size:12.5px;color:var(--tk-t2);margin-top:3px;line-height:1.5">Unmarked plain carton. No brand on the outside. No compound names.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support / Delivered / Lost / Returns -->
+        <div class="tk-card tk-card-pad" style="background:var(--tk-ink);color:#fff;border:none">
+          <div class="tk-eyebrow" style="color:#c0c0b8">Need a hand?</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px">We respond in under 2 hours.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+            <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="tk-btn tk-btn-sm" style="background:#fff;color:var(--tk-ink);border:1px solid #fff;width:100%">AI Chat / Discord</a>
+            <a href="mailto:support@haoyunlabs.com" class="tk-btn tk-btn-sm tk-btn-outline" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);width:100%">Email support</a>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+            <a onclick="navigate('lost-package')" style="font-size:12px;color:#c0c0b8;border-bottom:1px solid rgba(255,255,255,0.3);text-decoration:none;cursor:pointer">Package seems lost?</a>
+            <a onclick="navigate('returns')" style="font-size:12px;color:#c0c0b8;border-bottom:1px solid rgba(255,255,255,0.3);text-decoration:none;cursor:pointer">Request return</a>
+          </div>
+        </div>
+      </aside>
+    </section>
   </div>
+</div>
+
+<!-- ═══════════════ SCREEN: DELIVERED / POST-DELIVERY ═══════════════ -->
+<div class="screen pc-v2" id="screen-delivered">
+  <section class="pc-hero">
+    <div class="pc-hero-inner">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="pc-check-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg></div>
+        <span class="pc-kicker">Delivered</span>
+      </div>
+      <h1 class="pc-h1">It's in your hands.<br><span class="pc-ital">Happy researching.</span></h1>
+      <p class="pc-lead">Your package was left at your door. Each lot's COA is linked below. Store lyophilized vials at 2 to 8 °C until you're ready to reconstitute.</p>
+      <div class="pc-cta-row" style="margin-top:24px">
+        <button class="pc-btn" onclick="showToast('Receipt confirmed. Thanks!','success')">Confirm receipt</button>
+        <button class="pc-btn pc-btn-outline" onclick="navigate('lost-package')">I didn't receive this</button>
+        <button class="pc-btn pc-btn-outline" onclick="navigate('returns')">Package looks wrong</button>
+      </div>
+    </div>
+  </section>
+  <section class="pc-body">
+    <div class="pc-col-left">
+      <!-- Leave a review -->
+      <div class="pc-card pc-card-pad" style="background:var(--pc-bg-soft)">
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1;min-width:260px">
+            <div class="pc-kicker" style="margin-bottom:6px">Share your experience</div>
+            <h3 style="font-family:'Oswald',sans-serif;font-size:20px;margin:0 0 6px;text-transform:uppercase;font-weight:600">How was your order?</h3>
+            <div style="font-size:13.5px;color:var(--pc-t2)">Leave a review. Earn a 10% code for your next order.</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center" id="pc-stars">
+            <button onclick="pcRate(this,1)" class="pc-star" data-n="1">★</button>
+            <button onclick="pcRate(this,2)" class="pc-star" data-n="2">★</button>
+            <button onclick="pcRate(this,3)" class="pc-star" data-n="3">★</button>
+            <button onclick="pcRate(this,4)" class="pc-star" data-n="4">★</button>
+            <button onclick="pcRate(this,5)" class="pc-star" data-n="5">★</button>
+            <button class="pc-btn pc-btn-sm" style="margin-left:10px" onclick="showToast('Thanks for the review!','success')">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Care + handling -->
+      <div class="pc-card pc-card-pad">
+        <div class="pc-kicker" style="margin-bottom:10px">Care & Handling</div>
+        <ul style="margin:0;padding-left:18px;font-size:13.5px;color:var(--pc-t2);line-height:1.7">
+          <li>Refrigerate lyophilized vials at 2 to 8 °C.</li>
+          <li>Once reconstituted, use within 30 days.</li>
+          <li>Keep away from direct light and humidity.</li>
+          <li>Research use only. Not for human consumption.</li>
+        </ul>
+      </div>
+    </div>
+    <aside>
+      <!-- Reorder CTA -->
+      <div class="pc-card pc-card-pad" style="background:var(--pc-ink);color:#fff;border:none">
+        <div class="pc-kicker" style="color:#c0c0b8">One-tap reorder</div>
+        <div style="font-family:'Oswald',sans-serif;font-size:22px;text-transform:uppercase;letter-spacing:0.02em;margin-top:4px;line-height:1.15">Running low? Restock with 15% off.</div>
+        <div style="font-size:12.5px;color:#c0c0b8;margin-top:8px">Code <span class="pc-code-pill">WELCOME15</span> auto-applies at checkout.</div>
+        <button class="pc-btn" style="background:#fff;color:var(--pc-ink);border:1px solid #fff;margin-top:14px;width:100%" onclick="navigate('catalog')">Shop the catalog</button>
+      </div>
+    </aside>
+  </section>
+</div>
+<style>
+  .pc-star{background:none;border:none;padding:0 2px;cursor:pointer;color:var(--pc-t4);font-size:28px;line-height:1;transition:color .15s}
+  .pc-star.on{color:var(--pc-ink)}
+</style>
+
+<!-- ═══════════════ SCREEN: RETURNS / REFUND REQUEST ═══════════════ -->
+<div class="screen pc-v2" id="screen-returns">
+  <section class="pc-hero">
+    <div class="pc-hero-inner">
+      <span class="pc-kicker">Returns & Refunds</span>
+      <h1 class="pc-h1" style="font-size:42px">Something <span class="pc-ital">not right?</span></h1>
+      <p class="pc-lead">Wrong item, damaged vial, or purity concern? Tell us what happened and we'll resolve within 24 hours, usually with a replacement or credit.</p>
+    </div>
+  </section>
+  <section class="pc-body" style="grid-template-columns:1fr">
+    <div class="pc-card pc-card-pad">
+      <form onsubmit="event.preventDefault();pcSubmitReturn();return false" style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Order Number</label>
+          <input id="ret-order" class="tk-input" placeholder="HYL-XXXX" style="text-transform:uppercase">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Email on the order</label>
+          <input id="ret-email" type="email" class="tk-input" placeholder="you@example.com">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">What went wrong?</label>
+          <select id="ret-kind" class="tk-input" style="appearance:auto">
+            <option value="wrong_item">Wrong item received</option>
+            <option value="damaged">Damaged vial</option>
+            <option value="purity">Purity / labeling concern</option>
+            <option value="missing">Missing item from order</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Describe the issue</label>
+          <textarea id="ret-notes" class="tk-input" rows="4" placeholder="Tell us exactly what happened so we can make it right." style="resize:vertical"></textarea>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Preferred resolution</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;padding:8px 14px;border:1px solid var(--pc-line);border-radius:999px;cursor:pointer"><input type="radio" name="ret-res" value="replace" checked> Replace the item</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;padding:8px 14px;border:1px solid var(--pc-line);border-radius:999px;cursor:pointer"><input type="radio" name="ret-res" value="credit"> Store credit</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;padding:8px 14px;border:1px solid var(--pc-line);border-radius:999px;cursor:pointer"><input type="radio" name="ret-res" value="refund"> Refund to card</label>
+          </div>
+        </div>
+        <button type="submit" class="pc-btn" style="align-self:flex-start;margin-top:6px">Submit request</button>
+        <div style="font-size:12px;color:var(--pc-t3)">We answer every request within 24 hours, often faster on weekdays.</div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ SCREEN: LOST / DELAYED PACKAGE ═══════════════ -->
+<div class="screen pc-v2" id="screen-lost-package">
+  <section class="pc-hero">
+    <div class="pc-hero-inner">
+      <span class="pc-kicker">Lost or Delayed</span>
+      <h1 class="pc-h1" style="font-size:42px">Tracking says <span class="pc-ital">nothing.</span></h1>
+      <p class="pc-lead">If your tracking hasn't moved in 4+ days, or your package shows "delivered" but you never received it, file a claim. We open a carrier investigation and ship a replacement if nothing turns up within 5 business days.</p>
+    </div>
+  </section>
+  <section class="pc-body" style="grid-template-columns:1fr">
+    <div class="pc-card pc-card-pad">
+      <form onsubmit="event.preventDefault();pcSubmitLost();return false" style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Order Number</label>
+          <input id="lost-order" class="tk-input" placeholder="HYL-XXXX" style="text-transform:uppercase">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Email on the order</label>
+          <input id="lost-email" type="email" class="tk-input" placeholder="you@example.com">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Situation</label>
+          <select id="lost-kind" class="tk-input" style="appearance:auto">
+            <option value="stalled">Tracking hasn't updated in 4+ days</option>
+            <option value="delivered_missing">Shows delivered, but never received</option>
+            <option value="carrier_error">Carrier returned / wrong address</option>
+            <option value="other">Other delivery issue</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--pc-t2);margin-bottom:6px">Any extra context?</label>
+          <textarea id="lost-notes" class="tk-input" rows="4" placeholder="Neighbor, front porch camera, USPS message, etc." style="resize:vertical"></textarea>
+        </div>
+        <button type="submit" class="pc-btn" style="align-self:flex-start;margin-top:6px">File investigation</button>
+        <div style="font-size:12px;color:var(--pc-t3)">You'll get a case number by email within an hour.</div>
+      </form>
+    </div>
+  </section>
 </div>
 
 <!-- EMAIL CAPTURE POPUP -->
@@ -4765,7 +5054,7 @@ function handleRoute(){
   const mobileMenu = document.getElementById('mobile-menu');
   if(mobileMenu && mobileMenu.classList.contains('open')) mobileMenu.classList.remove('open');
 
-  const screens = ['home','catalog','product','order','payment-confirmed','card-return','help','terms','coa','tracking','research'];
+  const screens = ['home','catalog','product','order','payment-confirmed','card-return','help','terms','coa','tracking','research','delivered','returns','lost-package'];
   screens.forEach(s=>{
     const el = document.getElementById('screen-'+s);
     if(el) el.classList.toggle('active', s===hash);
@@ -7763,33 +8052,195 @@ function initSlideshow(selector, interval){
 initSlideshow('.pin-slide',3000);
 initSlideshow('.kit-slide',3000);
 
+/* ── TRACKING v2: render detail view ── */
+function tkBackToLookup(){
+  document.getElementById('tk-detail').style.display = 'none';
+  document.getElementById('tk-lookup').style.display = '';
+}
+function tkCopyShare(btn){
+  const num = document.getElementById('tk-order-num')?.textContent?.trim() || '';
+  const url = 'https://haoyunlabs.com/#tracking' + (num ? '?order=' + encodeURIComponent(num) : '');
+  try { navigator.clipboard?.writeText(url); } catch(e){}
+  const label = btn?.querySelector('.tk-copy-label');
+  if(label){ const orig = label.textContent; label.textContent = 'Copied'; setTimeout(() => label.textContent = orig, 1800); }
+}
+function tkReorder(){
+  const items = window.__tkItems || [];
+  if(!items.length){ showToast('No items found to reorder','error'); return; }
+  items.forEach(it => { try { addToCart(it.sku, it.qty || 1); } catch(e){} });
+  showToast('Added to cart. Proceed to checkout.', 'success');
+  navigate('order');
+}
 async function lookupOrder(){
-  const num = document.getElementById('tracking-input').value.trim().toUpperCase();
-  const el = document.getElementById('tracking-result');
+  const num = (document.getElementById('tracking-input')?.value || '').trim().toUpperCase();
+  const email = (document.getElementById('tracking-email')?.value || '').trim().toLowerCase();
+  const resultEl = document.getElementById('tracking-result');
   if(!num){ showToast('Enter an order number','error'); return; }
+  if(resultEl) resultEl.innerHTML = '<div style="padding:14px;text-align:center;color:var(--muted);font-size:0.85rem">Looking up…</div>';
   try {
-    const {data,error} = await sb.from('orders').select('order_number,status,created_at,total,items').eq('order_number',num).maybeSingle();
+    const {data,error} = await sb
+      .from('orders')
+      .select('id,order_number,status,created_at,paid_at,shipped_at,delivered_at,total,items,tracking_number,tracking_carrier,tracking_status,customers(email,first_name,last_name,street,apt,city,state,zip)')
+      .eq('order_number',num).maybeSingle();
     if(error || !data){
-      el.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:0.85rem">No order found: ${num}</div>`;
+      if(resultEl) resultEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:0.85rem">No order found: ${num}</div>`;
       return;
     }
-    const steps = ['pending','paid','shipped','delivered'];
-    const idx = Math.max(0, steps.indexOf(data.status));
-    const timeline = steps.map((s,i) => {
-      const cls = i < idx ? 'done' : i === idx ? 'active' : '';
-      const icon = i < idx ? '&#10003;' : (i+1);
-      return `<div class="tracking-step ${cls}"><div class="tracking-dot">${icon}</div><div class="tracking-label">${s}</div></div>`;
-    }).join('');
-    el.innerHTML = `
-      <div style="border:1px solid var(--stroke);border-radius:var(--radius);padding:20px;margin-top:16px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:16px">
-          <div><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:var(--muted)">Order</div><div style="font-family:var(--mono);font-weight:700;margin-top:2px">${data.order_number}</div></div>
-          <div style="text-align:right"><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:var(--muted)">Total</div><div style="font-weight:700;margin-top:2px">$${parseFloat(data.total).toFixed(2)}</div></div>
-        </div>
-        <div class="tracking-timeline">${timeline}</div>
-        <div style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:8px">Placed: ${new Date(data.created_at).toLocaleDateString()}</div>
-      </div>`;
-  } catch(e){ el.innerHTML = '<div style="color:#dc2626;font-size:0.85rem">Lookup failed. Try again.</div>'; }
+    if(email && data.customers && data.customers.email && data.customers.email.toLowerCase() !== email){
+      if(resultEl) resultEl.innerHTML = `<div style="padding:20px;text-align:center;color:#dc2626;font-size:0.85rem">Email doesn't match this order. Check the address used at checkout.</div>`;
+      return;
+    }
+    // Derive stage: 0 placed, 1 packing (paid), 2 shipped (in_transit), 3 out_for_delivery, 4 delivered
+    const status = (data.status || '').toLowerCase();
+    let currentIdx = 0;
+    if(['paid','packed','processing'].includes(status)) currentIdx = 1;
+    else if(['shipped','in_transit'].includes(status)) currentIdx = 2;
+    else if(['out_for_delivery'].includes(status)) currentIdx = 3;
+    else if(['delivered'].includes(status)) currentIdx = 4;
+    // Populate detail view
+    if(resultEl) resultEl.innerHTML = '';
+    document.getElementById('tk-lookup').style.display = 'none';
+    const detail = document.getElementById('tk-detail');
+    detail.style.display = '';
+    const pill = document.getElementById('tk-status-pill');
+    const statusLabels = ['Placed','Packing','Shipped','Out for Delivery','Delivered'];
+    if(pill) pill.textContent = statusLabels[currentIdx] || 'Processing';
+    const updated = document.getElementById('tk-updated');
+    const tRef = data.delivered_at || data.shipped_at || data.paid_at || data.created_at;
+    if(updated && tRef){
+      const ago = Math.max(1, Math.round((Date.now() - new Date(tRef).getTime()) / 60000));
+      const pretty = ago < 60 ? `${ago} min ago` : ago < 24*60 ? `${Math.round(ago/60)} h ago` : `${Math.round(ago/1440)} days ago`;
+      updated.textContent = `Updated ${pretty}`;
+    }
+    const numEl = document.getElementById('tk-order-num'); if(numEl) numEl.textContent = data.order_number;
+    const line = document.getElementById('tk-delivery-line');
+    if(line){
+      if(currentIdx >= 4) line.textContent = 'Delivered. Thanks for trusting HYL.';
+      else if(currentIdx >= 2){
+        const start = new Date(Date.now() + 1*86400000), end = new Date(Date.now() + 3*86400000);
+        const fmt = d => d.toLocaleString('en-US',{month:'short',day:'numeric'});
+        line.textContent = `Expected ${fmt(start)} to ${fmt(end)}. ${data.tracking_carrier || 'USPS Priority'}.`;
+      } else if(currentIdx === 1) line.textContent = 'Your lot is being HPLC-verified and packed. Expect a shipment email within 1-2 business days.';
+      else line.textContent = 'Payment confirmed. Packing will begin shortly.';
+    }
+    // Progress rail
+    const steps = [
+      {l:'Placed',icon:'<polyline points="20 6 9 17 4 12"/>'},
+      {l:'Packing',icon:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>'},
+      {l:'Shipped',icon:'<path d="M3 7h13l5 5v5H3z"/><circle cx="8" cy="17" r="2"/><circle cx="18" cy="17" r="2"/>'},
+      {l:'Out for Delivery',icon:'<circle cx="12" cy="10" r="3"/><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>'},
+      {l:'Delivered',icon:'<circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/>'},
+    ];
+    const row = document.getElementById('tk-step-row');
+    if(row){
+      row.innerHTML = `
+        <div style="position:absolute;left:10%;right:10%;top:22px;height:2px;background:var(--tk-line)"></div>
+        <div style="position:absolute;left:10%;width:${(currentIdx/4)*80}%;top:22px;height:2px;background:var(--tk-ink)"></div>
+        ${steps.map((s,i) => {
+          const done = i < currentIdx, active = i === currentIdx;
+          const style = (done||active)
+            ? `background:var(--tk-ink);color:#fff;border:1px solid var(--tk-ink)` + (active ? ';box-shadow:0 0 0 5px rgba(0,0,0,0.06)' : '')
+            : `background:#fff;color:var(--tk-t3);border:1px solid var(--tk-line)`;
+          const labelColor = (done||active) ? 'var(--tk-ink)' : 'var(--tk-t3)';
+          return `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1">
+            <div style="width:46px;height:46px;border-radius:50%;display:grid;place-items:center;${style}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${s.icon}</svg></div>
+            <div style="font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:${labelColor}">${s.l}</div>
+            <div style="font-size:10.5px;color:var(--tk-t3)">${done?'Done':active?'Now':'Pending'}</div>
+          </div>`;
+        }).join('')}`;
+    }
+    // Events log (synthetic when no carrier data)
+    const events = [];
+    events.push({t:'Order placed', meta:'Payment received', at: data.created_at, status:'done'});
+    if(data.paid_at) events.push({t:'Paid', meta:'Payment captured', at: data.paid_at, status:'done'});
+    if(data.shipped_at) events.push({t:'Shipped', meta: (data.tracking_carrier||'') + ' ' + (data.tracking_number||''), at: data.shipped_at, status: currentIdx === 2 ? 'active':'done'});
+    if(data.delivered_at) events.push({t:'Delivered', meta:'Left at door', at: data.delivered_at, status:'done'});
+    const evEl = document.getElementById('tk-events');
+    if(evEl){
+      evEl.innerHTML = events.map((e,i) => {
+        const dotCls = e.status === 'done' ? 'done' : e.status === 'active' ? 'active' : '';
+        const when = new Date(e.at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+        return `<div style="display:grid;grid-template-columns:20px 160px 1fr;gap:16px;padding:12px 0;border-bottom:${i===events.length-1?'none':'1px solid var(--tk-line)'};align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:5px"><span class="tk-dot ${dotCls}"></span>${i!==events.length-1?'<div style=\"width:1px;flex:1;background:var(--tk-line);min-height:18px\"></div>':''}</div>
+          <div class="tk-code" style="font-size:12px;color:var(--tk-t3)">${when}</div>
+          <div><div style="font-size:14px;font-weight:500;color:${e.status!=='pending'?'var(--tk-ink)':'var(--tk-t3)'}">${e.t}</div><div style="font-size:12.5px;color:var(--tk-t2);margin-top:2px">${e.meta||''}</div></div>
+        </div>`;
+      }).join('');
+    }
+    // Carrier link
+    const carrierLink = document.getElementById('tk-carrier-link');
+    if(carrierLink){
+      if(data.tracking_number && data.tracking_carrier){
+        const carrierUrls = { USPS:'https://tools.usps.com/go/TrackConfirmAction?tLabels=', UPS:'https://www.ups.com/track?tracknum=', FedEx:'https://www.fedex.com/fedextrack/?trknbr=' };
+        const base = carrierUrls[data.tracking_carrier] || carrierUrls.USPS;
+        carrierLink.href = base + encodeURIComponent(data.tracking_number);
+        carrierLink.style.display = '';
+        carrierLink.textContent = `View on ${data.tracking_carrier} ↗`;
+      } else carrierLink.style.display = 'none';
+    }
+    // Customer + address
+    const cust = data.customers || {};
+    const custName = [cust.first_name, cust.last_name].filter(Boolean).join(' ');
+    const custEl = document.getElementById('tk-customer'); if(custEl) custEl.textContent = custName || '—';
+    const addrEl = document.getElementById('tk-address');
+    if(addrEl){
+      addrEl.innerHTML = cust.street
+        ? `${cust.street}${cust.apt ? '<br>' + cust.apt : ''}<br>${cust.city||''}${cust.state ? ', ' + cust.state : ''} ${cust.zip||''}`
+        : '—';
+    }
+    // Items
+    const items = Array.isArray(data.items) ? data.items : [];
+    window.__tkItems = items;
+    const itemCount = items.reduce((a,i) => a + (i.quantity || i.qty || 1), 0);
+    const countEl = document.getElementById('tk-item-count');
+    if(countEl) countEl.textContent = `${itemCount} item${itemCount===1?'':'s'} · ${data.order_number}`;
+    const itemsEl = document.getElementById('tk-items');
+    if(itemsEl){
+      itemsEl.innerHTML = items.length ? items.map((it,i) => `
+        <div style="display:flex;gap:12px;padding:12px 0;border-bottom:${i===items.length-1?'none':'1px solid var(--tk-line)'};align-items:center">
+          <div style="width:36px;height:36px;background:var(--tk-bg-soft);border-radius:6px;display:grid;place-items:center;color:var(--tk-t3);flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2v6L4 18a2 2 0 0 0 1.8 3h12.4A2 2 0 0 0 20 18L15 8V2"/><line x1="9" y1="2" x2="15" y2="2"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">${it.name || it.sku}</div><div style="font-size:11px;color:var(--tk-t3)">×${it.quantity || it.qty || 1}${it.lot ? ' · Lot <span class=\"tk-code\">' + it.lot + '</span>' : ''}</div></div>
+          <a href="coas/${it.sku}.pdf" target="_blank" style="font-size:11.5px;color:var(--tk-ink);text-decoration:none;display:inline-flex;align-items:center;gap:4px;border-bottom:1px solid var(--tk-ink);padding-bottom:1px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> COA</a>
+        </div>`).join('') : '<div style="padding:18px 0;text-align:center;color:var(--tk-t3);font-size:13px">No items on this order</div>';
+    }
+  } catch(e){
+    console.warn('[lookupOrder]', e);
+    if(resultEl) resultEl.innerHTML = '<div style="color:#dc2626;font-size:0.85rem">Lookup failed. Try again.</div>';
+  }
+}
+
+function pcRate(btn, n){
+  document.querySelectorAll('#pc-stars .pc-star').forEach(s => s.classList.toggle('on', parseInt(s.dataset.n,10) <= n));
+  window.__pcRating = n;
+}
+async function pcSubmitReturn(){
+  const orderNum = document.getElementById('ret-order').value.trim().toUpperCase();
+  const email = document.getElementById('ret-email').value.trim().toLowerCase();
+  const kind = document.getElementById('ret-kind').value;
+  const notes = document.getElementById('ret-notes').value.trim();
+  const resolution = document.querySelector('input[name="ret-res"]:checked')?.value || 'replace';
+  if(!orderNum || !email){ showToast('Order number and email required','error'); return; }
+  try {
+    const payload = { kind, resolution, state:'open', payload:{ order_number:orderNum, email, notes, submitted_at:new Date().toISOString() } };
+    try { await sb.from('support_tickets').insert(Object.assign({order_id:orderNum}, payload)); } catch(e){ console.warn('[returns] supabase fallback', e); }
+    try { await fetch(SUPABASE_URL + '/functions/v1/track-event', {method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({event:'return_request',props:payload.payload,session_id:_hylSid(),path:location.pathname+location.hash,ts:new Date().toISOString()})}); } catch(e){}
+    showToast('Return request submitted. Check your email for a case number.','success');
+    ['ret-order','ret-email','ret-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  } catch(e){ showToast('Submit failed. Email support@haoyunlabs.com directly.','error'); }
+}
+async function pcSubmitLost(){
+  const orderNum = document.getElementById('lost-order').value.trim().toUpperCase();
+  const email = document.getElementById('lost-email').value.trim().toLowerCase();
+  const kind = document.getElementById('lost-kind').value;
+  const notes = document.getElementById('lost-notes').value.trim();
+  if(!orderNum || !email){ showToast('Order number and email required','error'); return; }
+  try {
+    const payload = { kind:'lost', resolution: kind==='delivered_missing' ? 'replace' : 'investigate', state:'open', payload:{ order_number:orderNum, email, situation:kind, notes, submitted_at:new Date().toISOString() } };
+    try { await sb.from('support_tickets').insert(Object.assign({order_id:orderNum}, payload)); } catch(e){ console.warn('[lost] supabase fallback', e); }
+    try { await fetch(SUPABASE_URL + '/functions/v1/track-event', {method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({event:'lost_package',props:payload.payload,session_id:_hylSid(),path:location.pathname+location.hash,ts:new Date().toISOString()})}); } catch(e){}
+    showToast('Investigation opened. We\'ll email a case number shortly.','success');
+    ['lost-order','lost-email','lost-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  } catch(e){ showToast('Submit failed. Email support@haoyunlabs.com directly.','error'); }
 }
 
 /* ── DISCREET PACKAGING ── */
