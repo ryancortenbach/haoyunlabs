@@ -7813,14 +7813,10 @@ async function submitOrder(){
       });
       const data = await resp.json();
       if(data.ok && data.redirect_url){
-        // DON'T clear the cart yet — only clear once Bankful confirms the
-        // redirect URL was successfully returned. Otherwise a flaky API call
-        // would empty the cart but never hand the customer a checkout page.
-        cart.clear(); saveCart(); updateBadge();
-        // Persist pending order number for return-from-Bankful detection
+        // Don't clear the cart on redirect — wait for paid confirmation in
+        // card-return. Otherwise cancelling at Bankful empties the cart.
         try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total}));}catch(e){}
         hidePayLoadingToast();
-        // Redirect to Bankful hosted page
         window.location.href = data.redirect_url;
         return;
       }

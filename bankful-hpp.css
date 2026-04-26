@@ -1,0 +1,298 @@
+/* ============================================================
+   HAO YUN LABS — Bankful Hosted Payment Page custom CSS
+   Targets the real .pw-*, Bootstrap, and Bankful Square-input
+   classes that ship with paybybankful.com. Uploaded via
+   Bankful merchant portal → Customize the payment page → Custom CSS.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&family=Inter:wght@400;500;600;700&display=swap');
+
+:root,
+.pw-body-tag {
+  --hyl-bg: #f6f6f5;
+  --hyl-card: #ffffff;
+  --hyl-text: #0a0a0a;
+  --hyl-muted: #6b6b6b;
+  --hyl-stroke: #e5e5e3;
+  --hyl-brand: #0a0a0a;
+  --hyl-radius: 14px;
+  --hyl-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  --hyl-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --hyl-serif: 'Instrument Serif', Georgia, serif;
+  --hyl-mono: 'Inter', sans-serif;
+}
+
+/* ── Page background + base typography ───────────────────── */
+html, body, .pw-body-tag {
+  background: var(--hyl-bg) !important;
+  color: var(--hyl-text) !important;
+  font-family: var(--hyl-sans) !important;
+  font-size: 0.92rem !important;
+  letter-spacing: 0.005em !important;
+}
+
+/* ── Container: center content, cap width ────────────────── */
+.pw-container,
+.o-shopify {
+  max-width: 540px !important;
+  margin: 32px auto !important;
+  padding: 0 16px !important;
+}
+
+/* ── White card wraps (merchant info, customer info, card) ─ */
+.card-wrap,
+.pw-merchant-info,
+.paymentbox {
+  background: var(--hyl-card) !important;
+  border: 1px solid var(--hyl-stroke) !important;
+  border-radius: var(--hyl-radius) !important;
+  box-shadow: var(--hyl-shadow) !important;
+  padding: 22px !important;
+  margin-bottom: 14px !important;
+}
+
+/* ── Logo: tighten spacing, keep crisp ───────────────────── */
+.pw-logo,
+.powered-logo,
+.site-logo {
+  margin: 0 0 12px !important;
+  max-height: 36px !important;
+  background: transparent !important;
+  filter: none !important;
+}
+.header-bg-color { background: transparent !important; }
+
+/* ── Side / integration links: hide noise ───────────────── */
+.pw-integration-links,
+.btnholder.nav-pills {
+  display: none !important;
+}
+
+/* ── Form field wrappers ─────────────────────────────────── */
+.form-group,
+.o-form-group,
+.pw-customer-info,
+.pw-card-info,
+.pw-customer-first-name,
+.pw-customer-last-name,
+.pw-customer-email,
+.pw-customer-phone {
+  margin-bottom: 12px !important;
+}
+
+.o-form-group__inner {
+  margin-top: 0 !important;
+}
+
+/* ── Inputs (Bankful uses .sq-input, plus normal inputs) ── */
+.sq-input,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select {
+  width: 100% !important;
+  padding: 10px 12px !important;
+  border: 1px solid var(--hyl-stroke) !important;
+  border-radius: var(--hyl-radius) !important;
+  font-size: 0.9rem !important;
+  font-family: var(--hyl-sans) !important;
+  background: var(--hyl-card) !important;
+  color: var(--hyl-text) !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+  box-shadow: none !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+}
+
+.sq-input:focus,
+input:focus,
+select:focus {
+  border-color: var(--hyl-brand) !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06) !important;
+  outline: none !important;
+}
+
+/* ── Field labels: HYL uppercase microtype ───────────────── */
+label,
+.form-group label,
+.o-form-group label {
+  font-size: 0.66rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--hyl-text) !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+/* ── Card section header ─────────────────────────────────── */
+.pw-card-info {
+  border-top: 1px solid var(--hyl-stroke);
+  padding-top: 14px !important;
+  margin-top: 6px !important;
+}
+
+/* ── Submit / Pay button ─────────────────────────────────── */
+.payment-btn,
+.button-credit-card,
+button[type="submit"],
+input[type="submit"],
+.btn-primary {
+  width: 100% !important;
+  padding: 14px 18px !important;
+  background: var(--hyl-brand) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 11px !important;
+  font-family: var(--hyl-sans) !important;
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: none !important;
+  cursor: pointer !important;
+  transition: background 0.2s, transform 0.15s !important;
+  box-shadow: none !important;
+  margin: 8px 0 !important;
+}
+
+.payment-btn:hover,
+.button-credit-card:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover,
+.btn-primary:hover {
+  background: #1a1a1a !important;
+  transform: translateY(-1px) !important;
+}
+
+.payment-btn:active,
+.button-credit-card:active,
+button[type="submit"]:active,
+input[type="submit"]:active,
+.btn-primary:active {
+  transform: translateY(0) !important;
+}
+
+/* ── Secure / messaging row ──────────────────────────────── */
+.secure,
+.secure__summary,
+.pw-message-1,
+.pw-message-2,
+.pw-message-3 {
+  font-size: 0.74rem !important;
+  color: var(--hyl-muted) !important;
+  letter-spacing: 0.02em !important;
+}
+
+.secure {
+  margin-top: 12px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid var(--hyl-stroke) !important;
+}
+
+.secure__icon img,
+.icon.lock-icon img,
+.icon.protect-icon img {
+  filter: grayscale(1) opacity(0.6) !important;
+}
+
+/* ── Terms checkbox row ──────────────────────────────────── */
+.term,
+.term-check,
+.term__txt {
+  font-size: 0.78rem !important;
+  color: var(--hyl-muted) !important;
+}
+
+.term input[type="checkbox"] {
+  accent-color: var(--hyl-brand) !important;
+}
+
+/* ── Redirect message + countdown timer ──────────────────── */
+.pw-redirect-msg,
+.pg-redirectback-msg,
+.redirectbx {
+  font-size: 0.78rem !important;
+  color: var(--hyl-muted) !important;
+  text-align: center !important;
+  margin-top: 12px !important;
+}
+
+.timer_pause,
+.time_pause {
+  font-family: var(--hyl-mono) !important;
+  font-weight: 700 !important;
+  color: var(--hyl-text) !important;
+}
+
+/* ── Errors ──────────────────────────────────────────────── */
+.error-message,
+.pw-card-error,
+.pw-customer-error,
+.error-sms,
+.error-p,
+.pg-error-msg {
+  background: rgba(220, 38, 38, 0.06) !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+  border-radius: 10px !important;
+  color: #b91c1c !important;
+  padding: 8px 12px !important;
+  font-size: 0.78rem !important;
+  margin: 8px 0 !important;
+}
+
+.error-message__title { font-weight: 700 !important; }
+.error-message__summary { font-weight: 500 !important; }
+
+/* ── Card brand icons: subtle, not branded background ────── */
+img[alt*="Visa"],
+img[alt*="Master"],
+img[alt*="Amex"],
+img[alt*="Discover"],
+.payment-col img {
+  filter: grayscale(0.2) opacity(0.85) !important;
+  height: 22px !important;
+  margin: 0 4px !important;
+}
+
+/* ── Headings ────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--hyl-serif) !important;
+  font-weight: 400 !important;
+  color: var(--hyl-text) !important;
+  letter-spacing: -0.01em !important;
+}
+h1 { font-size: 1.6rem !important; }
+h2 { font-size: 1.25rem !important; }
+h3 { font-size: 1rem !important; }
+
+/* ── Topbar back / close: HYL-style minimal icon ─────────── */
+.topbar-back,
+.topbar-close {
+  background: transparent !important;
+  border: 1px solid var(--hyl-stroke) !important;
+  border-radius: 10px !important;
+  width: 36px !important;
+  height: 36px !important;
+  color: var(--hyl-text) !important;
+}
+
+/* ── Spinners pick up brand color ───────────────────────── */
+.spinner-border,
+.spinner-border-sm {
+  color: var(--hyl-brand) !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pw-container,
+  .o-shopify {
+    margin: 16px auto !important;
+    padding: 0 12px !important;
+  }
+  .card-wrap,
+  .pw-merchant-info,
+  .paymentbox {
+    padding: 18px !important;
+  }
+}
