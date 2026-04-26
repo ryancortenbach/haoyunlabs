@@ -1333,14 +1333,19 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .checkout-layout>div{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
 .checkout-card{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
 .checkout-section-title{font-size:0.74rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;border-bottom:2px solid var(--brand);padding-bottom:6px}
-.form-grid{display:grid;gap:8px}
-.form-row{display:grid;gap:8px}
+.form-grid{display:grid;gap:14px}
+.form-row{display:grid;gap:14px}
 .form-row.col-2{grid-template-columns:1fr 1fr}
 .form-label{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1px;display:block}
 .form-input{
   width:100%;padding:7px 10px;border:1px solid var(--stroke);
   font-size:0.8rem;background:var(--bg);border-radius:var(--radius);
   transition:border-color 0.2s,box-shadow 0.2s;
+}
+select.form-input{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:12px;padding-right:30px;
 }
 .form-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,0,0,0.06);outline:none}
 .form-input:invalid:not(:placeholder-shown){border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.08)}
@@ -1984,8 +1989,8 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-rp-totals-row .rp-tot-label{font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text)}
 .hyl-rp-totals-row .rp-tot-val{font-family:var(--mono);font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
 .hyl-rp-totals-row.muted .rp-tot-val{color:var(--muted)}
-.hyl-rp-totals-row.is-discreet{overflow:hidden;max-height:40px;opacity:1;transition:max-height 0.32s ease,opacity 0.28s ease,padding 0.32s ease}
-.hyl-rp-totals-row.is-discreet.is-hidden{max-height:0;opacity:0;padding-top:0;padding-bottom:0;pointer-events:none}
+.hyl-rp-totals-row.is-discreet{overflow:hidden;max-height:40px;opacity:1;transition:max-height 0.32s ease,opacity 0.28s ease,padding 0.32s ease,margin 0.32s ease}
+.hyl-rp-totals-row.is-discreet.is-hidden{max-height:0!important;opacity:0!important;padding-top:0!important;padding-bottom:0!important;margin-top:0!important;margin-bottom:0!important;border:0!important;pointer-events:none;visibility:hidden}
 .hyl-rp-totals-row.divider{border-top:1px solid var(--stroke);padding-top:8px;margin-top:2px}
 .hyl-rp-totals-row.total .rp-tot-label{font-size:0.86rem}
 .hyl-rp-totals-row.total .rp-tot-val{font-size:1rem}
@@ -2621,11 +2626,13 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <input class="form-input" type="text" id="f-lname" name="family-name" autocomplete="family-name" required>
             </div>
           </div>
-          <div class="form-row col-2">
+          <div class="form-row">
             <div>
               <label class="form-label">Street Address *</label>
               <input class="form-input" type="text" id="f-street" name="address-line1" autocomplete="address-line1" required>
             </div>
+          </div>
+          <div class="form-row">
             <div>
               <label class="form-label">Apt / Suite</label>
               <input class="form-input" type="text" id="f-apt" name="address-line2" autocomplete="address-line2">
@@ -2713,7 +2720,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:12px">Search by name, SKU, or category, then review the cart below.</div>
           <!-- Mini search to add more products -->
           <div style="display:flex;gap:8px;margin-bottom:16px">
-            <input class="form-input" type="text" placeholder="Search products to add..." id="order-product-search" oninput="renderOrderSearch()" style="flex:1">
+            <input class="form-input" type="text" placeholder="Search products to add..." id="order-product-search" oninput="renderOrderSearch()" onfocus="renderOrderSearch(true)" onclick="renderOrderSearch(true)" style="flex:1">
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
           <div id="cart-items-list"></div>
@@ -6762,11 +6769,16 @@ async function applyCode(){
 }
 
 /* ── ORDER PRODUCT SEARCH (inline add) ── */
-function renderOrderSearch(){
+function renderOrderSearch(showAll){
   const q = document.getElementById('order-product-search').value.toLowerCase().trim();
   const el = document.getElementById('order-search-results');
-  if(!q){el.innerHTML='';return;}
-  const matches = ALL_PRODUCTS.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q)).slice(0,6);
+  let matches;
+  if(!q){
+    if(!showAll){el.innerHTML='';return;}
+    matches = ALL_PRODUCTS.slice(0,8);
+  } else {
+    matches = ALL_PRODUCTS.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q)).slice(0,8);
+  }
   if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
   el.innerHTML = matches.map(p=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--stroke);font-size:0.78rem">
