@@ -1991,6 +1991,7 @@ select.form-input{
 .hyl-rp-totals-row.muted .rp-tot-val{color:var(--muted)}
 .hyl-rp-totals-row.is-discreet{opacity:1;transition:opacity 0.32s ease,visibility 0.32s ease}
 .hyl-rp-totals-row.is-discreet.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+@keyframes hyl-spin{to{transform:rotate(360deg)}}
 .hyl-rp-totals-row.divider{border-top:1px solid var(--stroke);padding-top:8px;margin-top:2px}
 .hyl-rp-totals-row.total .rp-tot-label{font-size:0.86rem}
 .hyl-rp-totals-row.total .rp-tot-val{font-size:1rem}
@@ -4642,6 +4643,24 @@ function getSubtotal(){
 // label on the left, a black GO TO CART CTA, and a close X. Stacks
 // independently of the generic showToast container so multiple adds
 // queue cleanly.
+function showPayLoadingToast(){
+  hidePayLoadingToast();
+  const el = document.createElement('div');
+  el.id = 'pay-loading-toast';
+  el.setAttribute('role','status');
+  el.style.cssText = 'position:fixed;top:max(20px,env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%) translateY(-12px);z-index:10000;background:#1a1a1a;color:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,0.28);padding:14px 22px;display:flex;align-items:center;gap:14px;font-family:var(--sans);font-size:0.92rem;font-weight:600;opacity:0;transition:opacity 0.25s ease,transform 0.35s cubic-bezier(0.22,1,0.36,1);max-width:min(420px,calc(100vw - 32px))';
+  el.innerHTML = '<span style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:hyl-spin 0.7s linear infinite;flex-shrink:0"></span><span>Setting up secure checkout&hellip;</span>';
+  document.body.appendChild(el);
+  requestAnimationFrame(() => { el.style.transform='translateX(-50%) translateY(0)'; el.style.opacity='1'; });
+}
+function hidePayLoadingToast(){
+  const el = document.getElementById('pay-loading-toast');
+  if(!el) return;
+  el.style.opacity='0';
+  el.style.transform='translateX(-50%) translateY(-12px)';
+  setTimeout(()=>el.remove(), 280);
+}
+
 function showAddedToCartToast(itemName){
   // Suppress if user is already viewing the cart/checkout screen.
   try {
@@ -6670,6 +6689,7 @@ function renderReceipt(){
   }
 
   const preEl = document.getElementById('hyl-rp-totals-pre');
+  const discRow = document.getElementById('hyl-rp-discreet-row');
   if(preEl){
     const rows = [];
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Items Subtotal</span><span class="rp-tot-val">$'+sub.toFixed(2)+'</span></div>');
@@ -6682,8 +6702,8 @@ function renderReceipt(){
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">'+shipLabel+'</span><span class="rp-tot-val">'+shipVal+'</span></div>');
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Card Processing Fee ('+feePct+'%)</span><span class="rp-tot-val">$'+processingFee.toFixed(2)+'</span></div>');
     preEl.innerHTML = rows.join('');
+    if(discRow) preEl.appendChild(discRow);
   }
-  const discRow = document.getElementById('hyl-rp-discreet-row');
   const discValEl = document.getElementById('hyl-rp-discreet-val');
   if(discRow && discValEl){
     discValEl.textContent = '$'+(discreetSurcharge||0).toFixed(2);
@@ -7723,13 +7743,8 @@ async function submitOrder(){
   payBtn.classList.add('btn-loading');
   const btnText = payBtn.querySelector('.crypto-btn-text');
   if(btnText) btnText.innerHTML = '<span class="spinner" style="margin-right:10px"></span> Processing...';
-  // Loading toast — visible feedback while we set up the hosted payment page.
-  try {
-    const t = window._sonnerToast;
-    if(t && typeof t.loading === 'function'){
-      window._payLoadingToastId = t.loading('Setting up secure checkout…', { position:'top-center', duration: Infinity });
-    }
-  } catch(e){}
+  // Custom DOM loading toast — visible feedback while we set up the hosted payment page.
+  showPayLoadingToast();
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
@@ -7791,16 +7806,16 @@ async function submitOrder(){
         cart.clear(); saveCart(); updateBadge();
         // Persist pending order number for return-from-Bankful detection
         try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total}));}catch(e){}
-        try { const t=window._sonnerToast; if(t && window._payLoadingToastId!=null) t.dismiss(window._payLoadingToastId); } catch(e){}
+        hidePayLoadingToast();
         // Redirect to Bankful hosted page
         window.location.href = data.redirect_url;
         return;
       }
-      try { const t=window._sonnerToast; if(t && window._payLoadingToastId!=null) t.dismiss(window._payLoadingToastId); } catch(e){}
+      hidePayLoadingToast();
       showToast('Payment setup failed: ' + (data.error || 'try again'), 'error');
       console.error('[bankful] error', data);
     } catch(e){
-      try { const t=window._sonnerToast; if(t && window._payLoadingToastId!=null) t.dismiss(window._payLoadingToastId); } catch(e2){}
+      hidePayLoadingToast();
       console.error('[bankful] request failed', e);
       showToast('Payment setup failed. Please try another method.', 'error');
     }
