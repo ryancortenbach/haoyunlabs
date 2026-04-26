@@ -1329,8 +1329,9 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .btn-show-more:hover{background:var(--brand);color:var(--bg)}
 
 /* ── CHECKOUT LAYOUT ── */
-.checkout-layout{display:grid;grid-template-columns:7fr 5fr;gap:32px;padding:40px 0 60px}
+.checkout-layout{display:grid;grid-template-columns:8fr 4fr;gap:24px;padding:40px 0 60px;align-items:start}
 .checkout-layout>div{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.checkout-layout>div:last-child{padding:20px;position:sticky;top:20px}
 .checkout-section-title{font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;border-bottom:2px solid var(--brand);padding-bottom:8px}
 .form-grid{display:grid;gap:12px}
 .form-row{display:grid;gap:12px}
@@ -1872,6 +1873,26 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-icon.active{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
 .crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
 
+/* ── Uiverse Pay Now button (by fthisilak) — used on Pay by Card ── */
+.uv-pay-btn{position:relative;width:100%;padding:14px 22px;font-size:1rem;background:#1a1a1a;color:#fff;border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all 0.3s ease;font-family:var(--sans);letter-spacing:0.04em}
+.uv-pay-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.4)}
+.uv-pay-btn:disabled{background:#9d9da3;cursor:not-allowed;transform:none;box-shadow:none}
+.uv-pay-btn .uv-icon-container{position:relative;width:24px;height:24px;flex:0 0 24px}
+.uv-pay-btn .uv-icon{position:absolute;top:0;left:0;width:24px;height:24px;color:#22c55e;opacity:0;visibility:hidden}
+.uv-pay-btn .uv-default-icon{opacity:1;visibility:visible}
+.uv-pay-btn:hover .uv-icon{animation:none}
+.uv-pay-btn:hover .uv-wallet-icon{opacity:0;visibility:hidden}
+.uv-pay-btn:hover .uv-card-icon{animation:uvIconRotate 2.5s infinite;animation-delay:0s}
+.uv-pay-btn:hover .uv-payment-icon{animation:uvIconRotate 2.5s infinite;animation-delay:0.5s}
+.uv-pay-btn:hover .uv-dollar-icon{animation:uvIconRotate 2.5s infinite;animation-delay:1s}
+.uv-pay-btn:hover .uv-check-icon{animation:uvIconRotate 2.5s infinite;animation-delay:1.5s}
+.uv-pay-btn:active .uv-icon{animation:none;opacity:0;visibility:hidden;transition:all 0.3s ease}
+.uv-pay-btn:active .uv-check-icon{animation:uvCheckmarkAppear 0.6s ease forwards;visibility:visible}
+.uv-pay-btn .uv-btn-text{font-weight:700;font-family:var(--sans);letter-spacing:0.08em;text-transform:uppercase}
+@keyframes uvIconRotate{0%{opacity:0;visibility:hidden;transform:translateY(10px) scale(0.5)}5%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}15%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}20%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}100%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}}
+@keyframes uvCheckmarkAppear{0%{opacity:0;transform:scale(0.5) rotate(-45deg)}50%{opacity:0.5;transform:scale(1.2) rotate(0deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
+@media (prefers-reduced-motion:reduce){.uv-pay-btn,.uv-pay-btn:hover,.uv-pay-btn .uv-icon{transition:none!important;transform:none!important;animation:none!important}}
+
 /* ── HYL PAY BUTTON (Iter 134, uiverse-style) ─────────────────────────
    Replaces the legacy crypto-pay-btn for the card-only checkout. Animated
    black-base button with: lock icon on the left, label center, arrow on
@@ -1932,11 +1953,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-pay-btn:hover .hyl-pay-wallet{transform:translateX(2px) rotate(2deg)}
 
 /* ── ZHUO-YUE REVIEW-AND-PAY RIGHT-COLUMN (Iter 134) ──────────────── */
-.hyl-rp{padding:28px;display:flex;flex-direction:column;gap:18px}
-.hyl-rp-eyebrow{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
-.hyl-rp-headline{font-family:var(--display);font-size:1.55rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-6px}
-.hyl-rp-helper{font-size:0.86rem;color:var(--muted);line-height:1.55;margin-top:-8px}
-.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--stroke)}
+.hyl-rp{padding:0;display:flex;flex-direction:column;gap:14px}
+.hyl-rp-eyebrow{font-size:0.58rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+.hyl-rp-headline{font-family:var(--display);font-size:1.2rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-4px}
+.hyl-rp-helper{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-top:-6px}
+.hyl-rp-table-head{display:grid;grid-template-columns:1fr 56px 38px 60px;gap:8px;font-size:0.58rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--stroke)}
 .hyl-rp-table-head>span:nth-child(2),.hyl-rp-table-head>span:nth-child(3){text-align:right}
 .hyl-rp-table-head>span:nth-child(4){text-align:right}
 .hyl-rp-items{display:flex;flex-direction:column;gap:10px;margin-top:10px}
@@ -1949,9 +1970,9 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-rp-row .rp-line{text-align:right;font-family:var(--mono);font-size:0.92rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
 .hyl-rp-empty-row{padding:22px;border:1px dashed var(--stroke);border-radius:12px;text-align:center;color:var(--muted);font-size:0.82rem;background:#fafafa}
 
-.hyl-rp-section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:6px}
-.hyl-rp-discount-row{display:flex;gap:10px;align-items:stretch}
-.hyl-rp-discount-input{flex:1;padding:14px 16px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.78rem;letter-spacing:0.08em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
+.hyl-rp-section-label{font-size:0.58rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.hyl-rp-discount-row{display:flex;gap:8px;align-items:stretch}
+.hyl-rp-discount-input{flex:1;padding:11px 14px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.74rem;letter-spacing:0.08em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
 .hyl-rp-discount-input:focus{border-color:#000}
 .hyl-rp-discount-btn{padding:0 22px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:10px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
 .hyl-rp-discount-btn:hover{background:#000;color:#fff;border-color:#000}
@@ -2736,18 +2757,16 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <span class="hyl-rp-final-label">Final total</span>
               <span class="hyl-rp-final-value" id="hyl-rp-final-total">$0.00</span>
             </div>
-            <div class="hyl-rp-secure-line">Secure hosted checkout through Bankful.</div>
-            <button class="hyl-pay-btn" id="btn-pay" onclick="submitOrder()" type="button">
-              <span class="crypto-btn-text hyl-pay-label">Pay by Card</span>
-              <span class="hyl-pay-wallet" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
-                  <rect x="2.5" y="6" width="19" height="13" rx="2.5" fill="#22c55e"/>
-                  <rect x="2.5" y="6" width="19" height="13" rx="2.5" stroke="#0a0a0b" stroke-width="1.4"/>
-                  <circle cx="17.5" cy="12.5" r="2" fill="#0a0a0b"/>
-                  <circle cx="17.5" cy="12.5" r="0.7" fill="#22c55e"/>
-                </svg>
-              </span>
-              <span class="hyl-pay-shine" aria-hidden="true"></span>
+            <div class="hyl-rp-secure-line">Secure hosted checkout through Square (powered by Bankful).</div>
+            <button class="uv-pay-btn" id="btn-pay" onclick="submitOrder()" type="button">
+              <span class="uv-btn-text hyl-pay-label">Pay by Card</span>
+              <div class="uv-icon-container">
+                <svg viewBox="0 0 24 24" class="uv-icon uv-card-icon"><path d="M20,8H4V6H20M20,18H4V12H20M20,4H4C2.89,4 2,4.89 2,6V18C2,19.11 2.89,20 4,20H20C21.11,20 22,19.11 22,18V6C22,4.89 21.11,4 20,4Z" fill="currentColor"></path></svg>
+                <svg viewBox="0 0 24 24" class="uv-icon uv-payment-icon"><path d="M2,17H22V21H2V17M6.25,7H9V6H6V3H18V6H15V7H17.75L19,17H5L6.25,7M9,10H15V8H9V10M9,13H15V11H9V13Z" fill="currentColor"></path></svg>
+                <svg viewBox="0 0 24 24" class="uv-icon uv-dollar-icon"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" fill="currentColor"></path></svg>
+                <svg viewBox="0 0 24 24" class="uv-icon uv-wallet-icon uv-default-icon"><path d="M21,18V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V6H12C10.89,6 10,6.9 10,8V16A2,2 0 0,0 12,18M12,16H22V8H12M16,13.5A1.5,1.5 0 0,1 14.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z" fill="currentColor"></path></svg>
+                <svg viewBox="0 0 24 24" class="uv-icon uv-check-icon"><path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z" fill="currentColor"></path></svg>
+              </div>
             </button>
             <ul class="hyl-rp-trust">
               <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>256-bit secure encryption</li>
