@@ -4414,7 +4414,7 @@ const ALL_PRODUCTS = [
    ═════════════════════════════════════════════════════ */
 
 
-const KIT_SKUS_WITH_IMAGES = new Set(['SM2','SM5','SM10','SM15','SM20','SM30','SM50','FMP2','TA2','TA5','TA10','TY','B7-33-2','CU50','CU100','NP810','XT100','GTT','GTT500','Lemon','LC200','LC600','LC1200','MIC','KPV10','ET10','ET50','XA5','XA10','SK5','SK10','Adamax5','Adamax10','DS2','DS10','KS5','KS10','MT2','OT10','P41','PE10','PIN10','Hum','NJ100','NJ500','2S10','2S50','MS10','MS40','5AM','F410','PNC27','FN1','AE1','AR50','GDF8','P21','PTD-1','VIP10','Bron','Cardio','Cartalax','Cortagen','Crystagen','Ves']);
+const KIT_SKUS_WITH_IMAGES = new Set(['SM2','SM5','SM10','SM15','SM20','SM30','SM50','TR5','TR10','TR15','TR20','TR30','TR40','TR50','TR60','TR80','TR100','RT5','RT10','RT15','RT20','RT30','RT40','RT50','RT60','CS10','SUR10','MAZ5','MDT','MAZ20','AP5','AP10','AOD2','AOD5','AOD10','Dula5','Dula10','Lira5','Lira10','Lira30','332','IPS','IP10','TSM2','TSM5','TSM10','TSM20','SMO2','SMO5','SMO10','CND2','CND5','CND10','CD2','CD5','G25','G210','G65','G610','HX2','HX5','G2K','G5K','G75','Gonad','IGF01','IGF1','IGD','BC2','BC5','BC10','BT5','BT10','BB10','BB20','BBG70','KLOW80','LL375','RA10','FM2','FMP2','TA2','TA5','TA10','TY','B7-33-2','CU50','CU100','NP810','XT100','GTT','GTT500','Lemon','LC200','LC600','LC1200','MIC','KPV10','ET10','ET50','XA5','XA10','SK5','SK10','Adamax5','Adamax10','DS2','DS10','KS5','KS10','MT2','OT10','P41','PE10','PIN10','Hum','NJ100','NJ500','2S10','2S50','MS10','MS40','5AM','F410','PNC27','FN1','AE1','AR50','GDF8','P21','PTD-1','VIP10','Bron','Cardio','Cartalax','Cortagen','Crystagen','Ves']);
 function getProductImageHTML(p) {
   // Kit images from Canva bulk renders
   if(p.cat==='kits' && KIT_SKUS_WITH_IMAGES.has(p.sku)){
