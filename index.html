@@ -8361,6 +8361,7 @@ function initEmailPopup(){
       localStorage.removeItem('hyl_popup_subscribed');
       localStorage.removeItem('hyl_popup_dismissed');
       localStorage.removeItem('hyl_popup_seen');
+      localStorage.removeItem('hyl_popup_last_shown_at');
       setTimeout(() => showEmailPopup(), 500);
       return;
     }
@@ -8368,7 +8369,8 @@ function initEmailPopup(){
 
   // Permanent: if user already submitted email, never show again.
   if(localStorage.getItem('hyl_popup_subscribed') === '1') return;
-  // Per-session: if dismissed/shown in this tab already, don't re-fire.
+  // Per-session: once shown/dismissed in this tab, don't re-fire on the same
+  // session. Fresh session (new tab / cleared cookies) shows it again.
   if(sessionStorage.getItem('hyl_popup_shown_session') === '1') return;
   // Don't fire while the age gate is still covering the screen.
   const ageGate = document.getElementById('age-gate');
