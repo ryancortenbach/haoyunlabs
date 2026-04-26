@@ -1984,6 +1984,8 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-rp-totals-row .rp-tot-label{font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text)}
 .hyl-rp-totals-row .rp-tot-val{font-family:var(--mono);font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
 .hyl-rp-totals-row.muted .rp-tot-val{color:var(--muted)}
+.hyl-rp-totals-row.is-discreet{overflow:hidden;max-height:40px;opacity:1;transition:max-height 0.32s ease,opacity 0.28s ease,padding 0.32s ease}
+.hyl-rp-totals-row.is-discreet.is-hidden{max-height:0;opacity:0;padding-top:0;padding-bottom:0;pointer-events:none}
 .hyl-rp-totals-row.divider{border-top:1px solid var(--stroke);padding-top:8px;margin-top:2px}
 .hyl-rp-totals-row.total .rp-tot-label{font-size:0.86rem}
 .hyl-rp-totals-row.total .rp-tot-val{font-size:1rem}
@@ -2741,6 +2743,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="discount-msg" id="discount-msg"></div>
 
           <!-- Totals -->
+          <div class="hyl-rp-totals" id="hyl-rp-totals-pre"></div>
+          <div class="hyl-rp-totals-row is-discreet is-hidden" id="hyl-rp-discreet-row" aria-hidden="true"><span class="rp-tot-label">Discreet packaging</span><span class="rp-tot-val" id="hyl-rp-discreet-val">$0.00</span></div>
           <div class="hyl-rp-totals" id="hyl-rp-totals"></div>
 
           <!-- Email for receipt -->
@@ -6653,8 +6657,8 @@ function renderReceipt(){
     }
   }
 
-  const totalsEl = document.getElementById('hyl-rp-totals');
-  if(totalsEl){
+  const preEl = document.getElementById('hyl-rp-totals-pre');
+  if(preEl){
     const rows = [];
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Items Subtotal</span><span class="rp-tot-val">$'+sub.toFixed(2)+'</span></div>');
     if(discountPct > 0){
@@ -6665,13 +6669,23 @@ function renderReceipt(){
     const shipVal = (shipping===0 && sub>0) ? 'FREE' : '$'+shipping.toFixed(2);
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">'+shipLabel+'</span><span class="rp-tot-val">'+shipVal+'</span></div>');
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Card Processing Fee ('+feePct+'%)</span><span class="rp-tot-val">$'+processingFee.toFixed(2)+'</span></div>');
-    {
-      const discCls = discreetSurcharge > 0 ? '' : ' muted';
-      const discVal = discreetSurcharge > 0 ? '$'+discreetSurcharge.toFixed(2) : '$0.00';
-      rows.push('<div class="hyl-rp-totals-row'+discCls+'"><span class="rp-tot-label">Discreet packaging</span><span class="rp-tot-val">'+discVal+'</span></div>');
+    preEl.innerHTML = rows.join('');
+  }
+  const discRow = document.getElementById('hyl-rp-discreet-row');
+  const discValEl = document.getElementById('hyl-rp-discreet-val');
+  if(discRow && discValEl){
+    discValEl.textContent = '$'+(discreetSurcharge||0).toFixed(2);
+    if(discreetSurcharge > 0){
+      discRow.classList.remove('is-hidden');
+      discRow.setAttribute('aria-hidden','false');
+    } else {
+      discRow.classList.add('is-hidden');
+      discRow.setAttribute('aria-hidden','true');
     }
-    rows.push('<div class="hyl-rp-totals-row total divider"><span class="rp-tot-label">Total Due</span><span class="rp-tot-val">$'+total.toFixed(2)+'</span></div>');
-    totalsEl.innerHTML = rows.join('');
+  }
+  const totalsEl = document.getElementById('hyl-rp-totals');
+  if(totalsEl){
+    totalsEl.innerHTML = '<div class="hyl-rp-totals-row total divider"><span class="rp-tot-label">Total Due</span><span class="rp-tot-val">$'+total.toFixed(2)+'</span></div>';
   }
 
   const finalEl = document.getElementById('hyl-rp-final-total');
