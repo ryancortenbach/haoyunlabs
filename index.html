@@ -6821,20 +6821,24 @@ async function applyCode(){
     const d = await resp.json();
     if(d.ok && d.type === 'discount'){
       discountCode=d.code;discountPct=d.percent_off;
-      msg.textContent=previousCode && previousCode!==d.code
+      const txt = previousCode && previousCode!==d.code
         ? `Replaced ${previousCode} → ${d.code} (${d.percent_off}% off)`
         : `Code ${d.code} applied - ${d.percent_off}% off!`;
+      msg.textContent=txt;
       msg.className='discount-msg success';
+      try { showToast(txt, 'success'); } catch(e){}
       foundDiscount=true; _appliedType='discount'; _appliedPct=d.percent_off;
     } else if(d.ok && d.type === 'affiliate'){
       window._affiliateCode=d.code;
       const pct = Number(d.discount_percent) || 10;
       discountCode=d.code;
       discountPct=pct;
-      msg.textContent=previousCode && previousCode!==d.code
+      const txt = previousCode && previousCode!==d.code
         ? `Replaced ${previousCode} → ${d.name||d.code} (${pct}% off)`
         : `Affiliate ${d.name||d.code} linked — ${pct}% off!`;
+      msg.textContent=txt;
       msg.className='discount-msg success';
+      try { showToast(txt, 'success'); } catch(e){}
       foundDiscount=true; _appliedType='affiliate'; _appliedPct=pct;
     }
   } catch(e){
