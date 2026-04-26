@@ -6780,7 +6780,7 @@ function renderOrderSearch(showAll){
   let matches;
   if(!q){
     if(!showAll){el.innerHTML='';return;}
-    matches = ALL_PRODUCTS.slice(0,8);
+    matches = ALL_PRODUCTS.filter(p => /\b10\s*(mg|ml)\b/i.test(p.name)).slice(0,8);
   } else {
     matches = ALL_PRODUCTS.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q)).slice(0,8);
   }
@@ -7723,6 +7723,13 @@ async function submitOrder(){
   payBtn.classList.add('btn-loading');
   const btnText = payBtn.querySelector('.crypto-btn-text');
   if(btnText) btnText.innerHTML = '<span class="spinner" style="margin-right:10px"></span> Processing...';
+  // Loading toast — visible feedback while we set up the hosted payment page.
+  try {
+    const t = window._sonnerToast;
+    if(t && typeof t.loading === 'function'){
+      window._payLoadingToastId = t.loading('Setting up secure checkout…', { position:'top-center', duration: Infinity });
+    }
+  } catch(e){}
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
@@ -7784,13 +7791,16 @@ async function submitOrder(){
         cart.clear(); saveCart(); updateBadge();
         // Persist pending order number for return-from-Bankful detection
         try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total}));}catch(e){}
+        try { const t=window._sonnerToast; if(t && window._payLoadingToastId!=null) t.dismiss(window._payLoadingToastId); } catch(e){}
         // Redirect to Bankful hosted page
         window.location.href = data.redirect_url;
         return;
       }
+      try { const t=window._sonnerToast; if(t && window._payLoadingToastId!=null) t.dismiss(window._payLoadingToastId); } catch(e){}
       showToast('Payment setup failed: ' + (data.error || 'try again'), 'error');
       console.error('[bankful] error', data);
     } catch(e){
+      try { const t=window._sonnerToast; if(t && window._payLoadingToastId!=null) t.dismiss(window._payLoadingToastId); } catch(e2){}
       console.error('[bankful] request failed', e);
       showToast('Payment setup failed. Please try another method.', 'error');
     }
