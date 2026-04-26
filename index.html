@@ -6536,12 +6536,12 @@ function renderUpsell(){
   if(peptideQty > 0 && bacInCart < bacNeeded){
     const toAdd = bacNeeded - bacInCart;
     const cost = (toAdd * 10.00).toFixed(2);
-    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fff;border:1px solid #000;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
+    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fff;border:1px solid #dc2626;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
       <div>
-        <div style="font-size:0.78rem;font-weight:700;color:#000">BAC Water Recommended</div>
+        <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Recommended</div>
         <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x suggested for ${peptideQty} vial${peptideQty>1?'s':''} - $${cost}</div>
       </div>
-      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#000;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
+      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
     </div>`;
   } else {
     el.innerHTML = '';
