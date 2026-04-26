@@ -2598,8 +2598,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="checkout-layout">
       <!-- LEFT COLUMN -->
       <div id="checkout-shipping-col">
-        <div class="hyl-rp-headline">Shipping information</div>
-        <div class="hyl-rp-helper" style="margin-bottom:14px">We use this to print your label and confirm your address.</div>
+        <div class="hyl-rp-headline" style="margin-top:0">Shipping information</div>
+        <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:14px">We use this to print your label and confirm your address.</div>
         <form id="checkout-form" class="form-grid" onsubmit="return false">
           <div class="form-row">
             <div>
@@ -2702,10 +2702,10 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
             </div>
           </div>
         </div>
-        <div style="margin-top:32px">
+        <div style="margin:24px -18px 0;border-top:1px solid var(--stroke);padding:24px 18px 0">
           <div class="hyl-rp-eyebrow">Items</div>
-          <div class="hyl-rp-headline" style="margin-top:2px">Add items</div>
-          <div class="hyl-rp-helper" style="margin-bottom:10px">Search by name, SKU, or category, then review the cart below.</div>
+          <div class="hyl-rp-headline" style="margin-top:0">Add items</div>
+          <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:12px">Search by name, SKU, or category, then review the cart below.</div>
           <!-- Mini search to add more products -->
           <div style="display:flex;gap:8px;margin-bottom:16px">
             <input class="form-input" type="text" placeholder="Search products to add..." id="order-product-search" oninput="renderOrderSearch()" style="flex:1">
