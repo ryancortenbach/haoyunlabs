@@ -2032,6 +2032,40 @@ select.form-input{
   .hyl-rp{padding:22px}
 }
 
+/* Mobile: stack the line item — name+sku on top, unit/qty/line in a labeled
+   row below — so nothing gets clipped or smushed at narrow widths. */
+@media(max-width:640px){
+  .hyl-rp-table-head{display:none}
+  .hyl-rp-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-template-areas:
+      "name name name"
+      "unit qty line";
+    gap:6px 10px;
+    padding:14px 0;
+  }
+  .hyl-rp-row .rp-name{grid-area:name;flex-direction:column;gap:3px;margin-bottom:4px}
+  .hyl-rp-row .rp-title{white-space:normal;overflow:visible;text-overflow:clip;font-size:0.92rem;line-height:1.3}
+  .hyl-rp-row .rp-sku{font-size:0.62rem}
+  .hyl-rp-row .rp-unit,.hyl-rp-row .rp-qty,.hyl-rp-row .rp-line{
+    font-family:var(--mono);font-variant-numeric:tabular-nums;
+    display:flex;flex-direction:column;gap:2px;text-align:left;
+    font-size:0.88rem;font-weight:700;color:var(--text);
+  }
+  .hyl-rp-row .rp-unit{grid-area:unit}
+  .hyl-rp-row .rp-qty{grid-area:qty}
+  .hyl-rp-row .rp-line{grid-area:line;text-align:right}
+  .hyl-rp-row .rp-unit::before,.hyl-rp-row .rp-qty::before,.hyl-rp-row .rp-line::before{
+    content:attr(data-label);
+    font-family:var(--sans);font-size:0.6rem;font-weight:700;
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);
+  }
+  /* Discount/affiliate code: stack input above apply button on mobile */
+  .hyl-rp-discount-row{flex-direction:column;gap:10px}
+  .hyl-rp-discount-btn{padding:14px 22px;width:100%}
+}
+
 /* ── PAYMENT CONFIRMED ── */
 .confirmed-wrap{text-align:center;padding:80px 0}
 .confirmed-check{
@@ -6708,9 +6742,9 @@ function renderReceipt(){
         rowsHtml.push(
           '<div class="hyl-rp-row">'
           + '<div class="rp-name"><span class="rp-sku">'+escHtml(sku)+'</span><span class="rp-title">'+escHtml(p.name || sku)+'</span></div>'
-          + '<div class="rp-unit">$'+p.price.toFixed(2)+'</div>'
-          + '<div class="rp-qty">'+qty+'</div>'
-          + '<div class="rp-line">$'+lineTotal.toFixed(2)+'</div>'
+          + '<div class="rp-unit" data-label="Unit">$'+p.price.toFixed(2)+'</div>'
+          + '<div class="rp-qty" data-label="Qty">'+qty+'</div>'
+          + '<div class="rp-line" data-label="Line">$'+lineTotal.toFixed(2)+'</div>'
           + '</div>'
         );
       });
