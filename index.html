@@ -2032,29 +2032,46 @@ select.form-input{
   .hyl-rp{padding:22px}
 }
 
-/* Mobile: keep the 4-column ITEM/UNIT/QTY/LINE layout visible, just tighter.
-   Wrap product name to two lines instead of truncating, and shrink type. */
+/* Mobile: hide the table header and stack each row — name+sku on top,
+   then UNIT / QTY / LINE in a labeled three-column row below so they wrap
+   onto a new line and don't fight for space with the product name. */
 @media(max-width:640px){
   .hyl-rp{padding:18px 14px}
-  .hyl-rp-table-head{
-    grid-template-columns:1fr 56px 32px 60px;
-    gap:6px;font-size:0.58rem;letter-spacing:0.12em;padding:8px 0;
-  }
+  .hyl-rp-table-head{display:none}
   .hyl-rp-row{
-    grid-template-columns:1fr 56px 32px 60px;
-    gap:6px;padding:12px 0;align-items:center;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-template-areas:
+      "name name name"
+      "unit qty line";
+    gap:8px 12px;
+    padding:14px 0;
+    background:transparent;
   }
-  .hyl-rp-row .rp-name{gap:1px}
-  .hyl-rp-row .rp-sku{font-size:0.6rem;letter-spacing:0.04em}
+  .hyl-rp-row .rp-name{grid-area:name;display:flex;flex-direction:column;gap:2px;min-width:0}
+  .hyl-rp-row .rp-sku{font-size:0.62rem;letter-spacing:0.06em}
   .hyl-rp-row .rp-title{
-    font-size:0.78rem;line-height:1.2;
-    white-space:normal;overflow:visible;text-overflow:clip;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-    word-break:break-word;
+    font-size:0.92rem;line-height:1.25;
+    white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;
   }
-  .hyl-rp-row .rp-unit{font-size:0.74rem}
-  .hyl-rp-row .rp-qty{font-size:0.78rem}
-  .hyl-rp-row .rp-line{font-size:0.78rem}
+  .hyl-rp-row .rp-unit,
+  .hyl-rp-row .rp-qty,
+  .hyl-rp-row .rp-line{
+    display:flex;flex-direction:column;gap:3px;
+    text-align:left;
+    font-family:var(--mono);font-variant-numeric:tabular-nums;
+    font-size:0.86rem;font-weight:700;color:var(--text);
+  }
+  .hyl-rp-row .rp-unit{grid-area:unit}
+  .hyl-rp-row .rp-qty{grid-area:qty;text-align:center}
+  .hyl-rp-row .rp-line{grid-area:line;text-align:right}
+  .hyl-rp-row .rp-unit::before,
+  .hyl-rp-row .rp-qty::before,
+  .hyl-rp-row .rp-line::before{
+    content:attr(data-label);
+    font-family:var(--sans);font-size:0.58rem;font-weight:700;
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);
+  }
   /* Discount/affiliate code: stack input above apply button on mobile */
   .hyl-rp-discount-row{flex-direction:column;gap:10px}
   .hyl-rp-discount-btn{padding:14px 22px;width:100%}
