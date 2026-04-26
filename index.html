@@ -1956,7 +1956,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-rp-eyebrow{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
 .hyl-rp-headline{font-family:var(--display);font-size:1.2rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-4px}
 .hyl-rp-helper{font-size:0.74rem;color:var(--muted);line-height:1.45;margin-top:-4px}
-.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--stroke)}
+.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--stroke)}
 .hyl-rp-table-head>span:nth-child(2),.hyl-rp-table-head>span:nth-child(3){text-align:right}
 .hyl-rp-table-head>span:nth-child(4){text-align:right}
 .hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:4px}
@@ -2598,7 +2598,9 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="checkout-layout">
       <!-- LEFT COLUMN -->
       <div id="checkout-shipping-col">
-        <div class="checkout-section-title">Shipping Information</div>
+        <div class="hyl-rp-eyebrow">Checkout · Step 1</div>
+        <div class="hyl-rp-headline" style="margin-top:2px">Shipping information</div>
+        <div class="hyl-rp-helper" style="margin-bottom:14px">We use this to print your label and confirm your address.</div>
         <form id="checkout-form" class="form-grid" onsubmit="return false">
           <div class="form-row">
             <div>
@@ -2653,7 +2655,9 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div id="billing-same-label">Billing address same as shipping</div>
         </label>
         <div id="billing-section" style="display:none;margin-top:12px;padding:16px;border:1px solid var(--stroke);border-radius:12px;background:#fafafa">
-          <div class="checkout-section-title" style="margin-bottom:12px">Billing Address</div>
+          <div class="hyl-rp-eyebrow">Billing</div>
+          <div class="hyl-rp-headline" style="margin-top:2px;font-size:1rem">Billing address</div>
+          <div class="hyl-rp-helper" style="margin-bottom:10px">Used only for card verification.</div>
           <div class="form-grid">
             <div class="form-row">
               <div>
@@ -2700,7 +2704,9 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           </div>
         </div>
         <div style="margin-top:32px">
-          <div class="checkout-section-title">Order Summary</div>
+          <div class="hyl-rp-eyebrow">Items</div>
+          <div class="hyl-rp-headline" style="margin-top:2px">Add items</div>
+          <div class="hyl-rp-helper" style="margin-bottom:10px">Search by name, SKU, or category, then review the cart below.</div>
           <!-- Mini search to add more products -->
           <div style="display:flex;gap:8px;margin-bottom:16px">
             <input class="form-input" type="text" placeholder="Search products to add..." id="order-product-search" oninput="renderOrderSearch()" style="flex:1">
