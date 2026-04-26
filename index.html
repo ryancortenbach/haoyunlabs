@@ -1331,7 +1331,7 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 /* ── CHECKOUT LAYOUT ── */
 .checkout-layout{display:grid;grid-template-columns:7fr 5fr;gap:22px;padding:24px 0 40px;align-items:start}
 .checkout-layout>div{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.checkout-card{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.checkout-card{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px 18px 14px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
 .checkout-section-title{font-size:0.74rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;border-bottom:2px solid var(--brand);padding-bottom:6px}
 .form-grid{display:grid;gap:14px}
 .form-row{display:grid;gap:14px}
@@ -1879,7 +1879,7 @@ select.form-input{
 .crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
 
 /* ── Uiverse Pay Now button (by fthisilak) — used on Pay by Card ── */
-.uv-pay-btn{position:relative;width:100%;padding:8px 14px;font-size:0.78rem;background:#1a1a1a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s ease;font-family:var(--sans);letter-spacing:0.04em}
+.uv-pay-btn{position:relative;width:100%;padding:14px 18px;font-size:0.86rem;background:#1a1a1a;color:#fff;border:none;border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s ease;font-family:var(--sans);letter-spacing:0.04em}
 .uv-pay-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.4)}
 .uv-pay-btn:disabled{background:#9d9da3;cursor:not-allowed;transform:none;box-shadow:none}
 .uv-pay-btn .uv-icon-container{position:relative;width:18px;height:18px;flex:0 0 18px}
@@ -2777,7 +2777,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <span class="hyl-rp-final-label">Final total</span>
               <span class="hyl-rp-final-value" id="hyl-rp-final-total">$0.00</span>
             </div>
-            <div class="hyl-rp-secure-line">Secure hosted checkout through Square (powered by Bankful).</div>
+            <div class="hyl-rp-secure-line">Secure hosted checkout through Square (powered by <img src="media/brand/bfll.png" alt="Bankful" style="height:0.95em;vertical-align:-0.15em;display:inline-block">).</div>
             <button class="uv-pay-btn" id="btn-pay" onclick="submitOrder()" type="button">
               <span class="uv-btn-text hyl-pay-label">Pay by Card</span>
               <div class="uv-icon-container">
@@ -4643,6 +4643,11 @@ function getSubtotal(){
 // independently of the generic showToast container so multiple adds
 // queue cleanly.
 function showAddedToCartToast(itemName){
+  // Suppress if user is already viewing the cart/checkout screen.
+  try {
+    const orderScreen = document.getElementById('screen-order');
+    if(orderScreen && orderScreen.classList.contains('active')) return;
+  } catch(e){}
   const container = document.getElementById('atc-toast-container') || (() => {
     const c = document.createElement('div');
     c.id = 'atc-toast-container';
@@ -6512,7 +6517,7 @@ function renderSuggested(){
     .slice(0, 3);
   if(!candidates.length){ el.innerHTML = ''; return; }
   el.innerHTML = `<div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--stroke)">
-    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Customers Also Add</div>
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">You may also like</div>
     <div style="display:flex;flex-direction:column;gap:8px">
       ${candidates.map(p=>{
         const qty = window._suggestedQty[p.sku] || 1;
