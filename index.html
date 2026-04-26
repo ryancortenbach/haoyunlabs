@@ -1329,8 +1329,9 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .btn-show-more:hover{background:var(--brand);color:var(--bg)}
 
 /* ── CHECKOUT LAYOUT ── */
-.checkout-layout{display:grid;grid-template-columns:7fr 5fr;gap:22px;padding:24px 0 40px}
+.checkout-layout{display:grid;grid-template-columns:7fr 5fr;gap:22px;padding:24px 0 40px;align-items:start}
 .checkout-layout>div{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.checkout-card{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
 .checkout-section-title{font-size:0.74rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;border-bottom:2px solid var(--brand);padding-bottom:6px}
 .form-grid{display:grid;gap:8px}
 .form-row{display:grid;gap:8px}
@@ -2597,7 +2598,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     </div>
     <div class="checkout-layout">
       <!-- LEFT COLUMN -->
-      <div id="checkout-shipping-col">
+      <div id="checkout-shipping-col" style="background:transparent;border:none;padding:0;box-shadow:none;display:flex;flex-direction:column;gap:18px">
+        <div class="checkout-card">
         <div class="hyl-rp-headline" style="margin-top:0">Shipping information</div>
         <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:14px">We use this to print your label and confirm your address.</div>
         <form id="checkout-form" class="form-grid" onsubmit="return false">
@@ -2702,7 +2704,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
             </div>
           </div>
         </div>
-        <div style="margin:24px -18px 0;border-top:1px solid var(--stroke);padding:24px 18px 0">
+        </div><!-- /shipping card -->
+        <div class="checkout-card">
           <div class="hyl-rp-eyebrow">Items</div>
           <div class="hyl-rp-headline" style="margin-top:0">Add items</div>
           <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:12px">Search by name, SKU, or category, then review the cart below.</div>
@@ -2712,7 +2715,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
           <div id="cart-items-list"></div>
-        </div>
+        </div><!-- /add items card -->
       </div>
 
       <!-- RIGHT COLUMN — Review and pay (Zhuo-Yue-style) -->
@@ -6662,8 +6665,10 @@ function renderReceipt(){
     const shipVal = (shipping===0 && sub>0) ? 'FREE' : '$'+shipping.toFixed(2);
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">'+shipLabel+'</span><span class="rp-tot-val">'+shipVal+'</span></div>');
     rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Card Processing Fee ('+feePct+'%)</span><span class="rp-tot-val">$'+processingFee.toFixed(2)+'</span></div>');
-    if(discreetSurcharge > 0){
-      rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Discreet packaging</span><span class="rp-tot-val">$'+discreetSurcharge.toFixed(2)+'</span></div>');
+    {
+      const discCls = discreetSurcharge > 0 ? '' : ' muted';
+      const discVal = discreetSurcharge > 0 ? '$'+discreetSurcharge.toFixed(2) : '$0.00';
+      rows.push('<div class="hyl-rp-totals-row'+discCls+'"><span class="rp-tot-label">Discreet packaging</span><span class="rp-tot-val">'+discVal+'</span></div>');
     }
     rows.push('<div class="hyl-rp-totals-row total divider"><span class="rp-tot-label">Total Due</span><span class="rp-tot-val">$'+total.toFixed(2)+'</span></div>');
     totalsEl.innerHTML = rows.join('');
