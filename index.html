@@ -40,6 +40,14 @@
 })();
 (function(){var B='20260422a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
+// Iter 64: validated whitelist on both params. The pre-Iter-64 code stored
+// whatever ?payment= and ?order= the URL carried, then later interpolated
+// result.order into innerHTML at #card-return. That meant any URL of the
+// form ?payment=cancel&order=<img src=x onerror=...> persisted the payload
+// in localStorage and ran it on haoyunlabs.com on the next visit (stored
+// XSS via reflected URL → localStorage → innerHTML chain). Whitelisting
+// on ingest blocks the persistence; renderCardReturn also sanitizes on
+// render for defense-in-depth.
 (function(){
   try{
     var params=new URLSearchParams(location.search);
@@ -48,9 +56,20 @@
     if(pay && ord){
       // Strip any trailing ?REQUEST_ACTION fragment from Bankful
       ord = ord.split('?')[0];
-      localStorage.setItem('hyl_card_result',JSON.stringify({status:pay,order:ord,t:Date.now()}));
-      // Clean URL and navigate to confirmation screen
-      history.replaceState(null,'',location.pathname+'#card-return');
+      // Order numbers in this codebase are uppercase alphanum + dashes /
+      // underscores, e.g. HYL-1745345-AB12. Cap length so a megabyte
+      // payload can't blow up localStorage either.
+      var ordOk = /^[A-Za-z0-9_-]{1,64}$/.test(ord);
+      var payOk = ['success','failed','pending','cancel'].indexOf(pay) >= 0;
+      if(ordOk && payOk){
+        localStorage.setItem('hyl_card_result',JSON.stringify({status:pay,order:ord,t:Date.now()}));
+        // Clean URL and navigate to confirmation screen
+        history.replaceState(null,'',location.pathname+'#card-return');
+      } else {
+        // Invalid params → strip them silently. Don't navigate to
+        // #card-return because there's nothing to confirm.
+        history.replaceState(null,'',location.pathname);
+      }
     }
   }catch(e){}
 })();
@@ -1853,6 +1872,135 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-icon.active{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
 .crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
 
+/* ── HYL PAY BUTTON (Iter 134, uiverse-style) ─────────────────────────
+   Replaces the legacy crypto-pay-btn for the card-only checkout. Animated
+   black-base button with: lock icon on the left, label center, arrow on
+   the right that slides on hover, and a diagonal shine sweep on hover.
+   Uses transform-only animations (GPU-friendly), respects reduced-motion
+   via the existing --hyl-anim guard, and matches the bitter-termite-36
+   uiverse aesthetic the operator referenced.
+*/
+.hyl-pay-btn{
+  width:100%;padding:18px 28px;margin-top:12px;
+  background:#0a0a0b;color:#fff;border:none;border-radius:14px;
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  font-family:var(--sans);font-weight:800;font-size:0.86rem;
+  letter-spacing:0.16em;text-transform:uppercase;
+  cursor:pointer;position:relative;overflow:hidden;isolation:isolate;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),
+             box-shadow 0.35s ease,background 0.3s ease;
+  box-shadow:0 6px 18px rgba(0,0,0,0.18);
+}
+.hyl-pay-btn::before{
+  /* subtle outer glow that intensifies on hover */
+  content:'';position:absolute;inset:-1px;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0) 55%);
+  opacity:0.4;pointer-events:none;z-index:-1;
+  transition:opacity 0.4s ease;
+}
+.hyl-pay-btn:hover{transform:translateY(-2px);background:#15151a;box-shadow:0 14px 32px rgba(0,0,0,0.42)}
+.hyl-pay-btn:hover::before{opacity:0.85}
+.hyl-pay-btn:active{transform:translateY(1px);box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+.hyl-pay-btn:disabled{background:#9d9da3;cursor:not-allowed;transform:none;box-shadow:none}
+.hyl-pay-btn:disabled .hyl-pay-shine{display:none}
+.hyl-pay-lock{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:8px;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  flex-shrink:0;transition:transform 0.45s cubic-bezier(0.22,1,0.36,1),background 0.3s ease;
+}
+.hyl-pay-btn:hover .hyl-pay-lock{background:rgba(255,255,255,0.14);transform:rotate(-6deg) scale(1.04)}
+.hyl-pay-label{flex:0 0 auto}
+.hyl-pay-arrow{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;flex-shrink:0;
+  transition:transform 0.45s cubic-bezier(0.22,1,0.36,1);
+}
+.hyl-pay-btn:hover .hyl-pay-arrow{transform:translateX(6px)}
+.hyl-pay-shine{
+  position:absolute;top:0;left:-130%;width:55%;height:100%;
+  background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);
+  transform:skewX(-22deg);pointer-events:none;
+  transition:left 0.85s cubic-bezier(0.22,1,0.36,1);
+}
+.hyl-pay-btn:hover .hyl-pay-shine{left:160%}
+.hyl-pay-btn.btn-loading{pointer-events:none;opacity:0.85}
+@media (prefers-reduced-motion: reduce){
+  .hyl-pay-btn,.hyl-pay-btn:hover,.hyl-pay-arrow,.hyl-pay-lock,.hyl-pay-shine{transition:none!important;transform:none!important}
+}
+.hyl-pay-wallet{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;transition:transform 0.45s cubic-bezier(0.22,1,0.36,1)}
+.hyl-pay-btn:hover .hyl-pay-wallet{transform:translateX(2px) rotate(2deg)}
+
+/* ── ZHUO-YUE REVIEW-AND-PAY RIGHT-COLUMN (Iter 134) ──────────────── */
+.hyl-rp{padding:28px;display:flex;flex-direction:column;gap:18px}
+.hyl-rp-eyebrow{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+.hyl-rp-headline{font-family:var(--display);font-size:1.55rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-6px}
+.hyl-rp-helper{font-size:0.86rem;color:var(--muted);line-height:1.55;margin-top:-8px}
+.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--stroke)}
+.hyl-rp-table-head>span:nth-child(2),.hyl-rp-table-head>span:nth-child(3){text-align:right}
+.hyl-rp-table-head>span:nth-child(4){text-align:right}
+.hyl-rp-items{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.hyl-rp-row{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;align-items:center;padding:14px;border:1px solid var(--stroke);border-radius:12px;background:#fff}
+.hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
+.hyl-rp-row .rp-title{font-size:0.92rem;font-weight:700;color:var(--text);line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hyl-rp-row .rp-unit{font-family:var(--mono);font-size:0.86rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.hyl-rp-row .rp-qty{text-align:right;font-size:0.92rem;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
+.hyl-rp-row .rp-line{text-align:right;font-family:var(--mono);font-size:0.92rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
+.hyl-rp-empty-row{padding:22px;border:1px dashed var(--stroke);border-radius:12px;text-align:center;color:var(--muted);font-size:0.82rem;background:#fafafa}
+
+.hyl-rp-section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.hyl-rp-discount-row{display:flex;gap:10px;align-items:stretch}
+.hyl-rp-discount-input{flex:1;padding:14px 16px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.78rem;letter-spacing:0.08em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
+.hyl-rp-discount-input:focus{border-color:#000}
+.hyl-rp-discount-btn{padding:0 22px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:10px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
+.hyl-rp-discount-btn:hover{background:#000;color:#fff;border-color:#000}
+.hyl-rp-discount-help{font-size:0.74rem;color:var(--muted);font-weight:500}
+
+.hyl-rp-totals{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.hyl-rp-totals-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:0.78rem}
+.hyl-rp-totals-row .rp-tot-label{font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text)}
+.hyl-rp-totals-row .rp-tot-val{font-family:var(--mono);font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.hyl-rp-totals-row.muted .rp-tot-val{color:var(--muted)}
+.hyl-rp-totals-row.divider{border-top:1px solid var(--stroke);padding-top:14px;margin-top:4px}
+.hyl-rp-totals-row.total .rp-tot-label{font-size:0.86rem}
+.hyl-rp-totals-row.total .rp-tot-val{font-size:1rem}
+
+.hyl-rp-card{padding:18px 20px;border:1px solid var(--stroke);border-radius:14px;background:#fff;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.hyl-rp-card-title{font-size:0.96rem;font-weight:700;color:var(--text);display:block}
+.hyl-rp-email-input{padding:14px 16px;border:1px solid var(--stroke);border-radius:10px;font-size:0.92rem;background:#fff;color:var(--text);outline:none;transition:border-color 0.2s;font-family:var(--sans)}
+.hyl-rp-email-input:focus{border-color:#000}
+.hyl-rp-email-input::placeholder{color:#bbb}
+.hyl-rp-card-help{font-size:0.78rem;color:var(--muted);line-height:1.5}
+
+/* iOS-style switch row */
+.hyl-rp-switch-row{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border:1px solid var(--stroke);border-radius:14px;background:#fafafa;cursor:pointer;transition:background 0.2s}
+.hyl-rp-switch-row:hover{background:#f4f4f4}
+.hyl-sr-only{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.hyl-switch{position:relative;width:44px;height:26px;border-radius:999px;background:#d1d1d6;flex-shrink:0;transition:background 0.25s ease;margin-top:2px}
+.hyl-switch-knob{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.18),0 1px 1px rgba(0,0,0,0.06);transition:transform 0.25s cubic-bezier(0.22,1,0.36,1)}
+.hyl-switch.checked{background:#22c55e}
+.hyl-switch.checked .hyl-switch-knob{transform:translateX(18px)}
+.hyl-rp-switch-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.hyl-rp-switch-title{font-size:0.94rem;font-weight:700;color:var(--text)}
+.hyl-rp-switch-sub{font-size:0.78rem;color:var(--muted);line-height:1.5}
+
+.hyl-rp-final-card{padding:20px;border:1px solid var(--stroke);border-radius:14px;background:#fff;display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.hyl-rp-final-row{display:flex;justify-content:space-between;align-items:baseline}
+.hyl-rp-final-label{font-size:1rem;font-weight:700;color:var(--text)}
+.hyl-rp-final-value{font-family:var(--mono);font-size:1.4rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
+.hyl-rp-secure-line{padding:12px 14px;border:1px solid var(--stroke);border-radius:10px;font-size:0.84rem;color:var(--muted);background:#fafafa;text-align:left}
+.hyl-rp-final-card .hyl-pay-btn{margin-top:0;border-radius:14px;padding:18px 22px;font-size:1.05rem;letter-spacing:0.04em}
+.hyl-rp-final-card .hyl-pay-label{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:0;font-size:1.05rem}
+.hyl-rp-trust{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.hyl-rp-trust li{display:flex;align-items:center;gap:10px;font-size:0.82rem;color:var(--muted)}
+.hyl-rp-trust li svg{flex-shrink:0;color:var(--muted)}
+
+@media(max-width:900px){
+  .hyl-rp-table-head,.hyl-rp-row{grid-template-columns:1fr 70px 40px 70px;gap:8px}
+  .hyl-rp{padding:22px}
+}
+
 /* ── PAYMENT CONFIRMED ── */
 .confirmed-wrap{text-align:center;padding:80px 0}
 .confirmed-check{
@@ -2421,15 +2569,6 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <div class="screen" id="screen-order">
   <div class="container">
     <div class="hero" style="padding-bottom:16px">
-      <div class="checkout-progress" id="checkout-progress">
-        <div class="checkout-step done"><span class="checkout-step-num">&#10003;</span><span>Cart</span></div>
-        <div class="checkout-step-line done"></div>
-        <div class="checkout-step active"><span class="checkout-step-num">2</span><span>Shipping</span></div>
-        <div class="checkout-step-line"></div>
-        <div class="checkout-step"><span class="checkout-step-num">3</span><span>Payment</span></div>
-        <div class="checkout-step-line"></div>
-        <div class="checkout-step"><span class="checkout-step-num">4</span><span>Confirm</span></div>
-      </div>
       <div class="hero-title" style="font-size:2rem">CHECKOUT</div>
       <div class="hero-tag">Complete your order</div>
       <div class="hero-divider"></div>
@@ -2485,12 +2624,6 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel">
             </div>
           </div>
-          <div class="form-row">
-            <div>
-              <label class="form-label">Email for Receipt *</label>
-              <input class="form-input" type="email" id="f-email" name="email" autocomplete="email" required>
-            </div>
-          </div>
         </form>
         <label class="discreet-toggle" id="billing-same-toggle" onclick="toggleBillingSame()" style="margin-top:8px">
           <input type="checkbox" class="discreet-check-input" id="billing-same-check-input" checked style="position:absolute;opacity:0;width:0;height:0;pointer-events:none" tabindex="-1" aria-labelledby="billing-same-label">
@@ -2544,12 +2677,6 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
             </div>
           </div>
         </div>
-        <label class="discreet-toggle" id="discreet-toggle" onclick="toggleDiscreet()">
-          <input type="checkbox" class="discreet-check-input" id="discreet-check-input" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none" tabindex="-1" aria-labelledby="discreet-label">
-          <div class="discreet-check" id="discreet-check"></div>
-          <div id="discreet-label">Ship in plain packaging <span style="color:var(--muted);font-size:0.7rem">(+$5 surcharge, no branding on box)</span></div>
-        </label>
-
         <div style="margin-top:32px">
           <div class="checkout-section-title">Order Summary</div>
           <!-- Mini search to add more products -->
@@ -2561,34 +2688,78 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         </div>
       </div>
 
-      <!-- RIGHT COLUMN -->
+      <!-- RIGHT COLUMN — Review and pay (Zhuo-Yue-style) -->
       <div>
-        <div class="payment-card">
-          <div class="checkout-section-title" style="margin-top:0">Payment &amp; Totals</div>
-          <table class="receipt-table" id="receipt-table"></table>
+        <div class="payment-card hyl-rp">
+          <div class="hyl-rp-eyebrow">Checkout</div>
+          <div class="hyl-rp-headline">Review and pay</div>
+          <div class="hyl-rp-helper">Keep the cart clean, confirm receipt details, and continue to secure hosted checkout.</div>
 
-          <div class="discount-row">
-            <input class="discount-input" type="text" placeholder="DISCOUNT / AFFILIATE CODE" id="discount-input">
-            <button class="btn-discount" onclick="applyCode()">APPLY</button>
+          <!-- Line items table (header + rows rendered by renderReceipt) -->
+          <div class="hyl-rp-table-head">
+            <span>Item</span><span>Unit</span><span>Qty</span><span>Line</span>
           </div>
+          <div class="hyl-rp-items" id="hyl-rp-items"></div>
+
+          <!-- Discount / affiliate code -->
+          <div class="hyl-rp-section-label">Discount / Affiliate Code</div>
+          <div class="hyl-rp-discount-row">
+            <input class="hyl-rp-discount-input" type="text" placeholder="ENTER CODE (EX: BEN10)" id="discount-input">
+            <button class="hyl-rp-discount-btn" onclick="applyCode()">Apply</button>
+          </div>
+          <div class="hyl-rp-discount-help">Enter a discount / affiliate code and press apply.</div>
           <div class="discount-msg" id="discount-msg"></div>
 
-          <button class="crypto-pay-btn" id="btn-continue" onclick="showPaymentStep()" style="background:#000;color:#fff">
-            <span class="crypto-btn-text">CONTINUE TO PAYMENT</span>
-          </button>
+          <!-- Totals -->
+          <div class="hyl-rp-totals" id="hyl-rp-totals"></div>
 
+          <!-- Email for receipt -->
+          <div class="hyl-rp-card">
+            <label class="hyl-rp-card-title" for="f-email">Email for receipt</label>
+            <input class="hyl-rp-email-input" type="email" id="f-email" name="email" autocomplete="email" placeholder="you@example.com" required>
+            <div class="hyl-rp-card-help">We send receipts and verification updates here.</div>
+          </div>
+
+          <!-- Discreet packaging iOS-style toggle -->
+          <label class="hyl-rp-switch-row" id="discreet-toggle" onclick="toggleDiscreet()">
+            <input type="checkbox" class="discreet-check-input hyl-sr-only" id="discreet-check-input" tabindex="-1" aria-labelledby="discreet-label">
+            <span class="hyl-switch" id="discreet-check" aria-hidden="true"><span class="hyl-switch-knob"></span></span>
+            <span class="hyl-rp-switch-text">
+              <span class="hyl-rp-switch-title" id="discreet-label">Use discreet packaging</span>
+              <span class="hyl-rp-switch-sub">Low-profile handling for researchers who prefer additional privacy.</span>
+            </span>
+          </label>
+
+          <!-- Final total + Pay button + trust list -->
+          <div class="hyl-rp-final-card">
+            <div class="hyl-rp-final-row">
+              <span class="hyl-rp-final-label">Final total</span>
+              <span class="hyl-rp-final-value" id="hyl-rp-final-total">$0.00</span>
+            </div>
+            <div class="hyl-rp-secure-line">Secure hosted checkout through Bankful.</div>
+            <button class="hyl-pay-btn" id="btn-pay" onclick="submitOrder()" type="button">
+              <span class="crypto-btn-text hyl-pay-label">Pay by Card</span>
+              <span class="hyl-pay-wallet" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+                  <rect x="2.5" y="6" width="19" height="13" rx="2.5" fill="#22c55e"/>
+                  <rect x="2.5" y="6" width="19" height="13" rx="2.5" stroke="#0a0a0b" stroke-width="1.4"/>
+                  <circle cx="17.5" cy="12.5" r="2" fill="#0a0a0b"/>
+                  <circle cx="17.5" cy="12.5" r="0.7" fill="#22c55e"/>
+                </svg>
+              </span>
+              <span class="hyl-pay-shine" aria-hidden="true"></span>
+            </button>
+            <ul class="hyl-rp-trust">
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>256-bit secure encryption</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>Tracking updates after label creation</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Typical handling: 2–5 business days</li>
+            </ul>
+          </div>
+
+          <!-- Continue-to-payment button is now collapsed; submitOrder fires Bankful HPP directly. Hidden btn-continue + payment-step kept in DOM as no-ops in case a legacy flow re-enables them. -->
+          <button id="btn-continue" type="button" style="display:none" onclick="submitOrder()"></button>
           <div id="payment-step" style="display:none">
             <div class="pay-methods" id="pay-methods"></div>
-            <button class="crypto-pay-btn" id="btn-pay" onclick="submitOrder()">
-              <span class="crypto-icon-container">
-                <img src="crypto-icons/btc.svg" class="crypto-icon crypto-default-icon active" data-currency="BTC" alt="BTC">
-                <img src="crypto-icons/eth.svg" class="crypto-icon" data-currency="ETH" alt="ETH">
-                <img src="crypto-icons/sol.svg" class="crypto-icon" data-currency="SOL" alt="SOL">
-                <img src="crypto-icons/usdt.svg" class="crypto-icon" data-currency="USDT" alt="USDT">
-                <img src="crypto-icons/usdt.svg" class="crypto-icon" data-currency="TRON" alt="TRON">
-              </span>
-              <span class="crypto-btn-text">COMPLETE ORDER</span>
-            </button>
           </div>
         </div>
       </div>
@@ -2889,15 +3060,15 @@ function pcPopulateReorder(){
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Frequently Asked Questions</div>
     <div class="faq-list" id="faq-list">
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What are research peptides?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</div></div></div>
-      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I place an order?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment using cryptocurrency (BTC, ETH, SOL, or USDT). Your order will be confirmed automatically once payment is detected on the blockchain.</div></div></div>
-      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What payment methods do you accept?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">We accept Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and USDT. Payments are processed directly with zero fees through our self-hosted payment system. Browser wallets like MetaMask and Phantom are supported for one-click payment.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I place an order?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Browse our catalog, add items to your cart, proceed to checkout, fill in your shipping details, and complete payment with your credit or debit card. Your order is confirmed automatically once your card is charged.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What payment methods do you accept?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">We accept all major credit and debit cards (Visa, Mastercard).</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How long does shipping take?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Orders are typically processed within 2-5 business days. Domestic (US) shipping takes 3-7 business days after processing. You will receive a tracking number once your order ships.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Do you ship internationally?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Yes — we ship worldwide. Shipping rates and transit time vary by destination. Customs duties and import taxes are the recipient's responsibility.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What is your purity guarantee?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">All products undergo rigorous HPLC testing with purity levels of 99% or higher. Each product includes a Certificate of Analysis (COA) with lot-specific purity data.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Can I get a refund?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Due to the nature of research compounds, we cannot accept returns on opened products. If you receive a damaged or incorrect order, please contact our support team within 48 hours of delivery for a resolution.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>How do I store my peptides?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Lyophilized (freeze-dried) peptides should be stored at -20°C in a desiccated environment. Once reconstituted, store at 2-8°C and use within the recommended timeframe.</div></div></div>
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Do you offer discount codes?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Yes! Join our mailing list for exclusive deals, or check our Discord community for active promo codes. Affiliate codes are also available for content creators.</div></div></div>
-      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Is my payment secure?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Cryptocurrency payments are processed directly on the blockchain with no intermediaries. For wallet payments, transactions are signed locally in your browser wallet - we never have access to your private keys.</div></div></div>
+      <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>Is my payment secure?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Card payments are processed by our PCI-compliant payment processor over a hosted, encrypted checkout. Your card details never touch our servers.</div></div></div>
     </div>
 
     <!-- Contact Support form -->
@@ -3226,8 +3397,8 @@ function pcPopulateReorder(){
             <a href="mailto:support@haoyunlabs.com" class="tk-btn tk-btn-sm tk-btn-outline" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);width:100%">Email support</a>
           </div>
           <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-            <a onclick="navigate('lost-package')" style="font-size:12px;color:#c0c0b8;border-bottom:1px solid rgba(255,255,255,0.3);text-decoration:none;cursor:pointer">Package seems lost?</a>
-            <a onclick="navigate('returns')" style="font-size:12px;color:#c0c0b8;border-bottom:1px solid rgba(255,255,255,0.3);text-decoration:none;cursor:pointer">Request return</a>
+            <a onclick="tkForwardCtx('lost-package')" style="font-size:12px;color:#c0c0b8;border-bottom:1px solid rgba(255,255,255,0.3);text-decoration:none;cursor:pointer">Package seems lost?</a>
+            <a onclick="tkForwardCtx('returns')" style="font-size:12px;color:#c0c0b8;border-bottom:1px solid rgba(255,255,255,0.3);text-decoration:none;cursor:pointer">Request return</a>
           </div>
         </div>
       </aside>
@@ -3244,16 +3415,31 @@ function pcPopulateReorder(){
         <span class="pc-kicker">Delivered</span>
       </div>
       <h1 class="pc-h1">It's in your hands.<br><span class="pc-ital">Happy researching.</span></h1>
-      <p class="pc-lead">Your package was left at your door. Each lot's COA is linked below. Store lyophilized vials at 2 to 8 °C until you're ready to reconstitute.</p>
+      <p class="pc-lead" id="del-lead">Your package was left at your door. Each lot's COA is linked below. Store lyophilized vials at 2 to 8 °C until you're ready to reconstitute.</p>
+      <div id="del-meta" style="margin-top:14px;font-size:13px;color:var(--pc-t2);display:none">
+        <span style="font-family:'Oswald',sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:var(--pc-t3);font-size:11.5px">Order</span>
+        <span class="tk-code" id="del-order-num" style="margin-left:6px;color:var(--pc-ink)"></span>
+        <span style="margin:0 10px;color:var(--pc-t3)">·</span>
+        <span style="font-family:'Oswald',sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:var(--pc-t3);font-size:11.5px">Tracking</span>
+        <span class="tk-code" id="del-tracking" style="margin-left:6px;color:var(--pc-ink)"></span>
+      </div>
       <div class="pc-cta-row" style="margin-top:24px">
         <button class="pc-btn" onclick="showToast('Receipt confirmed. Thanks!','success')">Confirm receipt</button>
-        <button class="pc-btn pc-btn-outline" onclick="navigate('lost-package')">I didn't receive this</button>
-        <button class="pc-btn pc-btn-outline" onclick="navigate('returns')">Package looks wrong</button>
+        <button class="pc-btn pc-btn-outline" onclick="pcForwardCtx('lost-package')">I didn't receive this</button>
+        <button class="pc-btn pc-btn-outline" onclick="pcForwardCtx('returns')">Package looks wrong</button>
       </div>
     </div>
   </section>
   <section class="pc-body">
     <div class="pc-col-left">
+      <!-- Items in this delivery (Iter 109: hydrated by renderDelivered when ?order=&email= match) -->
+      <div class="pc-card" id="del-items-card" style="padding:0;display:none">
+        <div style="padding:14px 22px;border-bottom:1px solid var(--pc-line);display:flex;justify-content:space-between;align-items:center">
+          <div class="pc-kicker">In this delivery</div>
+          <span style="font-size:12px;color:var(--pc-t3)" id="del-items-count"></span>
+        </div>
+        <div id="del-items-list"></div>
+      </div>
       <!-- Leave a review -->
       <div class="pc-card pc-card-pad" style="background:var(--pc-bg-soft)">
         <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
@@ -3451,8 +3637,24 @@ function pcPopulateReorder(){
   </div>
 </div>
 
+<!-- ORDER SUPPORT CARD (Iter 134) -->
+<!-- Sits above the Discord/Insider-Access CTA. Single-row card with -->
+<!-- left-aligned title + helper copy and a right-aligned Find My Order -->
+<!-- button that routes to #tracking. Same look as the Locke Trades footer -->
+<!-- support row the operator referenced. -->
+<div style="max-width:1100px;margin:32px auto 0;padding:0 24px">
+  <div style="border:1px solid var(--stroke);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:#fff">
+    <div style="flex:1;min-width:280px">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Support</div>
+      <div style="font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:0.01em;margin-bottom:8px">Need help with an order?</div>
+      <div style="font-size:0.88rem;color:var(--muted);line-height:1.6;max-width:560px">Open Find My Order for a direct status lookup, or use Customer Support below for help.</div>
+    </div>
+    <button onclick="navigate('tracking')" style="padding:14px 28px;background:#f5f5f5;color:var(--text);border:1px solid var(--stroke);border-radius:12px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.04em;cursor:pointer;transition:all 0.2s;white-space:nowrap" onmouseover="this.style.background='#000';this.style.color='#fff';this.style.borderColor='#000'" onmouseout="this.style.background='#f5f5f5';this.style.color='var(--text)';this.style.borderColor='var(--stroke)'">Find My Order</button>
+  </div>
+</div>
+
 <!-- DISCORD CTA -->
-<div style="text-align:center;padding:60px 24px;border-top:1px solid var(--stroke)">
+<div style="text-align:center;padding:60px 24px;border-top:1px solid var(--stroke);margin-top:32px">
   <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#5865F2;margin-bottom:10px">Insider Access</div>
   <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">Join the Research Community</div>
   <div style="font-size:0.88rem;color:var(--muted);max-width:600px;margin:0 auto 24px;line-height:1.6">Join the Discord ecosystem for exclusive drops, discounted group buys, and free weekly peptide giveaways. Validate your research by viewing or leaving product reviews with our growing community.</div>
@@ -3632,6 +3834,53 @@ function track(event, props){
       keepalive: true,
     }).catch(()=>{});
   } catch(e){}
+}
+
+// Heartbeat — fires every 30s while the tab is focused. Powers the live
+// "people on site" counter on the admin dashboard. The latest heartbeat per
+// session_id within a 60s window = currently active.
+(function setupHeartbeat(){
+  let timer = null;
+  function ping(){ try { track('heartbeat', { tz: Intl.DateTimeFormat().resolvedOptions().timeZone }); } catch(_){} }
+  function start(){
+    if(timer) return;
+    ping();
+    timer = setInterval(ping, 30000);
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+  document.addEventListener('visibilitychange', () => {
+    document.visibilityState === 'visible' ? start() : stop();
+  });
+  window.addEventListener('beforeunload', () => { try { track('session_end', {}); } catch(_){} });
+  if(document.visibilityState === 'visible') start();
+})();
+
+/* ═════════════════════════════════════════════════════
+   EMAIL SUBSCRIBE (server-side via subscribe edge function — Iter 40).
+   The earlier direct-anon-upsert path returned 401 on repeat-email writes
+   because RLS on email_subscribers blocks anon UPDATE. Routing through
+   service-role keeps dedup clean and lets us junk-filter at the edge.
+   ═════════════════════════════════════════════════════ */
+async function hylSubscribe(email, source, extra){
+  if(!email) return;
+  const body = {
+    email,
+    source: source || null,
+    name: (extra && extra.name) || null,
+    code: (extra && extra.code) || null,
+  };
+  try {
+    await fetch(SUPABASE_URL + '/functions/v1/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify(body),
+      keepalive: true,
+    });
+  } catch(_){ /* analytics-style: never block UX on subscribe */ }
 }
 
 /* ═════════════════════════════════════════════════════
@@ -4202,7 +4451,8 @@ function addToCart(sku, btn){
   // If on order screen, re-render to update empty state / receipt
   if(location.hash === '#order'){ try{renderOrder();}catch(e){} }
   const p = getProduct(sku);
-  showToast(p ? `${p.name} added` : 'Added to cart', 'success', {action:{label:'View Cart',onClick:()=>navigate('order')}});
+  // Custom add-to-cart pill toast (white pill, GO TO CART CTA, X close)
+  showAddedToCartToast(p ? p.name : 'Item');
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: 1 });
   if(p) try { track('add_to_cart', { sku: p.sku, qty: 1, price: p.price }); } catch(e){}
   // Animate button: green checkmark then revert
@@ -4349,6 +4599,34 @@ function getSubtotal(){
 /* ═════════════════════════════════════════════════════
    TOAST
    ═════════════════════════════════════════════════════ */
+// Specialized toast for "added to cart" actions: white pill with the item
+// label on the left, a black GO TO CART CTA, and a close X. Stacks
+// independently of the generic showToast container so multiple adds
+// queue cleanly.
+function showAddedToCartToast(itemName){
+  const container = document.getElementById('atc-toast-container') || (() => {
+    const c = document.createElement('div');
+    c.id = 'atc-toast-container';
+    c.style.cssText = 'position:fixed;top:max(20px,env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;width:min(720px,calc(100vw - 24px))';
+    document.body.appendChild(c);
+    return c;
+  })();
+  const safeName = String(itemName || 'Item').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const el = document.createElement('div');
+  el.setAttribute('role','status');
+  el.style.cssText = 'pointer-events:auto;background:#fff;border:1px solid var(--stroke);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.08);padding:14px 14px 14px 22px;display:flex;align-items:center;gap:14px;font-family:var(--sans);transform:translateY(-12px);opacity:0;transition:opacity 0.25s ease,transform 0.35s cubic-bezier(0.22,1,0.36,1)';
+  el.innerHTML = `
+    <div style="flex:1;min-width:0;font-size:0.92rem;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${safeName} added to cart.</div>
+    <button type="button" data-act="goto" style="background:#000;color:#fff;border:none;border-radius:10px;padding:11px 22px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:transform 0.2s ease,opacity 0.2s ease">Go To Cart</button>
+    <button type="button" data-act="close" aria-label="Dismiss" style="background:transparent;border:none;width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1.2rem;line-height:1;transition:background 0.15s ease">&times;</button>`;
+  container.appendChild(el);
+  requestAnimationFrame(() => { el.style.transform='translateY(0)'; el.style.opacity='1'; });
+  const dismiss = () => { el.style.transform='translateY(-12px)'; el.style.opacity='0'; setTimeout(() => el.remove(), 280); };
+  el.querySelector('[data-act="close"]').addEventListener('click', dismiss);
+  el.querySelector('[data-act="goto"]').addEventListener('click', () => { dismiss(); navigate('order'); });
+  setTimeout(dismiss, 4500);
+}
+
 function showToast(msg, type, extra){
   try {
     const t = window._sonnerToast;
@@ -5040,7 +5318,20 @@ function mobileMenuSearch(q){
 }
 
 function handleRoute(){
-  let hash = window.location.hash.replace('#','') || 'home';
+  let raw = window.location.hash.replace('#','') || 'home';
+  // Iter 109: post-purchase pages (#delivered, #returns, #lost-package) accept
+  // ?order=...&email=... in the hash so the user can be deep-linked from
+  // emails / #tracking and skip retyping. Split here once and stash on window
+  // so handlers below (and pcPrefill*) can read without re-parsing.
+  let hash = raw, qs = '';
+  const qi = raw.indexOf('?');
+  if(qi >= 0){ hash = raw.slice(0, qi); qs = raw.slice(qi + 1); }
+  try {
+    const p = new URLSearchParams(qs);
+    const ord = (p.get('order') || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,64);
+    const eml = (p.get('email') || '').trim().toLowerCase();
+    window._hylRouteParams = { order: ord, email: eml };
+  } catch(e){ window._hylRouteParams = { order: '', email: '' }; }
   // Route aliases: old nav items FAQ / Support both resolve to the new Help Center
   if(hash === 'faq' || hash === 'support'){
     hash = 'help';
@@ -5084,20 +5375,66 @@ function handleRoute(){
     renderCardReturn();
   }
   else if(hash==='payment-confirmed'){
-    // Fire purchase_complete exactly once per order (guard against re-renders
-    // from hash changes/back nav by stashing the order id we've already reported).
-    try {
-      const pp = window._lastPaidInvoice || {};
-      const orderId = pp.order_id || pp.orderNumber || pp.tx_hash || '';
-      if(orderId && window._hylLastReportedPurchase !== orderId){
-        track('purchase_complete', {
-          order_id: orderId,
-          total: pp.total || null,
-          method: pp.network || pp.method || null,
+    // Iter 87: server-side gate. The pre-Iter-87 dispatcher rendered the
+    // confirmation UX with no payment verification --- typing
+    // /#payment-confirmed in the address bar (or back-button into it
+    // after an unpaid checkout) would land on a fake-success page.
+    // Now: pull the order number from in-memory state OR localStorage
+    // OR ?order= URL param; hit order-status; only render if status is
+    // a paid-tier value. Anything else routes to home with a toast.
+    (async function gateConfirmation(){
+      let orderNum = '';
+      try {
+        const pp = window._lastPaidInvoice || {};
+        orderNum = String(pp.order_id || pp.orderNumber || '').trim();
+        if(!orderNum){
+          const pending = JSON.parse(localStorage.getItem('hyl_card_pending') || 'null');
+          if(pending && typeof pending.orderNumber === 'string') orderNum = pending.orderNumber;
+        }
+        if(!orderNum){
+          const m = (location.hash || '').match(/[?&]order=([A-Za-z0-9_-]{1,64})/);
+          if(m) orderNum = m[1];
+        }
+        if(!orderNum){
+          try { showToast('No order to confirm.', 'error'); } catch(_){}
+          history.replaceState(null,'',location.pathname);
+          location.hash = 'home';
+          return;
+        }
+        // Server verify. Don't trust localStorage / URL alone --- the
+        // order-status function returns {status,paid_at} only, slimmed in
+        // iter 69, so this is a tight gate.
+        const resp = await fetch(SUPABASE_URL + '/functions/v1/order-status?order=' + encodeURIComponent(orderNum), {
+          headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
         });
-        window._hylLastReportedPurchase = orderId;
+        const j = await resp.json().catch(() => ({}));
+        const st = (j?.order?.status || '').toLowerCase();
+        const ok = ['paid','shipped','delivered','finalized'].includes(st);
+        if(!ok){
+          try { showToast('That order is not confirmed yet.', 'error'); } catch(_){}
+          history.replaceState(null,'',location.pathname);
+          location.hash = 'home';
+          return;
+        }
+        // Verified. Fire purchase_complete exactly once per order.
+        if(window._hylLastReportedPurchase !== orderNum){
+          try {
+            const pp = window._lastPaidInvoice || {};
+            track('purchase_complete', {
+              order_id: orderNum,
+              total: pp.total || null,
+              method: pp.network || pp.method || null,
+            });
+          } catch(_){}
+          window._hylLastReportedPurchase = orderNum;
+        }
+      } catch(e){
+        console.warn('[payment-confirmed] gate error', e);
+        try { showToast('Could not verify order. Try again.', 'error'); } catch(_){}
+        history.replaceState(null,'',location.pathname);
+        location.hash = 'home';
       }
-    } catch(e){}
+    })();
     // Populate tx hash block if we have a paid invoice in memory
     try {
       const p = window._lastPaidInvoice;
@@ -5136,6 +5473,9 @@ function handleRoute(){
       }
     } catch(e){}
   }
+  else if(hash==='delivered'){ try { renderDelivered(); } catch(e){ console.warn('[delivered] render', e); } }
+  else if(hash==='returns'){ try { pcPrefillReturn(); } catch(e){} }
+  else if(hash==='lost-package'){ try { pcPrefillLost(); } catch(e){} }
   else if(hash==='order'){
     _removeAlertSkip = false;
     // Don't kick empty carts out — the empty state now renders inline on the order screen
@@ -5761,7 +6101,7 @@ function openProduct(sku){
         <p style="white-space:pre-line">${comp.replace(/\\n/g,'\n')}</p>
       </div>
       <div class="pdp-tab-content" id="pdp-tab-shipping">
-        <p><span class="term-tip" data-tip="Freeze-dried for stability during transport">Lyophilized</span> products are packaged for transport stability. Orders over $250 ship free; standard shipping is a $15 flat rate. Processing and delivery timing depends on order volume, verification, and carrier schedules.</p>
+        <p><span class="term-tip" data-tip="Freeze-dried for stability during transport">Lyophilized</span> products are packaged for transport stability. Orders over $250 ship free; standard shipping is a $12 flat rate. Processing and delivery timing depends on order volume, verification, and carrier schedules.</p>
         <p style="margin-top:8px">Every lot is HPLC-verified and the corresponding Certificate of Analysis is available to look up anytime via our <a onclick="navigate('coa')" style="cursor:pointer;text-decoration:underline">COA archive</a>.</p>
       </div>
 
@@ -5980,6 +6320,15 @@ async function renderCardReturn(){
   if(!body) return;
   let result;
   try { result = JSON.parse(localStorage.getItem('hyl_card_result')||'null'); } catch(e){}
+  // Iter 64: defense-in-depth sanitize. Even though the URL handler now
+  // whitelists order_number on ingest, render-time code shouldn't trust
+  // localStorage values --- a future bug could write garbage and the
+  // innerHTML interpolations below would XSS. Strip everything that's not
+  // alphanumeric/dash/underscore.
+  if(result && result.order){
+    result.order = String(result.order).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 64);
+    if(!result.order){ result = null; }
+  }
   if(!result || !result.order){
     body.innerHTML = '<div style="font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:8px">No payment info</div><div style="color:var(--muted);margin-bottom:24px">Returning to home...</div>';
     setTimeout(() => navigate('home'), 2000);
@@ -6012,14 +6361,21 @@ async function renderCardReturn(){
         navigate('payment-confirmed');
         return;
       }
+      // Bail out early on terminal non-paid statuses instead of grinding the
+      // poll loop and lying to the user with a "Payment Submitted" page.
+      if(data && (data.status === 'failed' || data.status === 'cancelled')){
+        try { localStorage.removeItem('hyl_card_result'); localStorage.removeItem('hyl_card_pending'); } catch(_){}
+        body.innerHTML = '<div style="font-family:var(--display);font-size:1.6rem;font-weight:900;text-transform:uppercase;margin-bottom:8px">Payment ' + (data.status === 'failed' ? 'failed' : 'cancelled') + '</div><div style="color:var(--muted);margin-bottom:24px">Your card was not charged. Order #' + result.order + '.</div><button onclick="navigate(\'order\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Try again</button>';
+        return;
+      }
     } catch(e){ console.warn('[card-return] poll error', e); }
     if(attempts >= maxAttempts){
       body.innerHTML = `
         <div style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;background:#fef3c7;border:2px solid #f59e0b;margin-bottom:20px">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 15 14"/></svg>
         </div>
-        <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px">Payment Submitted</div>
-        <div style="color:var(--muted);font-size:0.88rem;line-height:1.6;max-width:440px;margin:0 auto 20px">Your card was charged and we're confirming with the processor. This can take a few minutes. We'll email you the moment it clears.</div>
+        <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px">Confirming your payment</div>
+        <div style="color:var(--muted);font-size:0.88rem;line-height:1.6;max-width:440px;margin:0 auto 20px">If your card was charged, you'll receive an email confirmation within a few minutes. If it was declined or you cancelled, no charge will appear. Reach out below if anything looks off.</div>
         <div style="display:inline-block;padding:10px 18px;background:#f7f7f7;border:1px solid var(--stroke);border-radius:999px;font-family:var(--mono);font-size:0.8rem;font-weight:700;margin-bottom:28px">Order <span style="color:#16a34a">#${result.order}</span></div>
         <div style="background:#f7f7f7;border-radius:14px;padding:22px 20px;max-width:420px;margin:0 auto 20px;text-align:left">
           <div style="font-family:var(--display);font-weight:800;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">What happens next</div>
@@ -6035,7 +6391,7 @@ async function renderCardReturn(){
       `;
       return;
     }
-    if(msgEl) msgEl.textContent = 'Checking with our payment processor... ('+attempts+'s)';
+    if(msgEl) msgEl.textContent = 'Checking with our payment processor... ('+(attempts*2)+'s)';
     setTimeout(poll, 2000);
   };
   poll();
@@ -6044,28 +6400,18 @@ async function renderCardReturn(){
 function renderOrder(){
   const screen = document.getElementById('screen-order');
   if(!screen) return;
-  // Toggle empty-state overlay
-  let emptyEl = document.getElementById('cart-empty-state');
-  if(cart.size === 0){
-    if(!emptyEl){
-      emptyEl = document.createElement('div');
-      emptyEl.id = 'cart-empty-state';
-      emptyEl.style.cssText = 'min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px 60px;grid-column:1/-1';
-      emptyEl.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:24px"><path d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/></svg>
-        <div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Your cart is empty</div>
-        <div style="color:var(--muted);font-size:0.9rem;max-width:360px;line-height:1.5;margin-bottom:28px">Browse our research peptides and add items to your cart to continue to checkout.</div>
-        <button onclick="navigate('catalog')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Shop Catalog</button>`;
-      const container = screen.querySelector('.container');
-      if(container) container.appendChild(emptyEl);
-    }
-    // hide all children except empty + the hero/progress header
-    screen.querySelectorAll('.checkout-layout,.checkout-progress,.hero').forEach(el=>el.style.display='none');
-    emptyEl.style.display = 'flex';
-    return;
-  }
-  if(emptyEl) emptyEl.style.display = 'none';
-  // Restore hidden children
+  // Iter 134: Zhuo-Yue-style empty state. Pre-iter-134 hid the entire
+  // checkout layout and showed a centered "YOUR CART IS EMPTY" overlay,
+  // which made it feel like a dead-end. Now: keep the shipping form +
+  // payment sidebar visible regardless of cart contents, and let the
+  // line-items area render an inline "Cart is empty." placeholder. The
+  // operator can still type their shipping info, see $0.00 totals, and
+  // get the discount-code field --- exactly like the Zhuo Yue checkout.
+  // Removes the legacy overlay if it was inserted by a prior session.
+  const legacyEmpty = document.getElementById('cart-empty-state');
+  if(legacyEmpty) legacyEmpty.remove();
+  // Always restore layout visibility (in case a prior pre-iter-134
+  // session hid them).
   screen.querySelectorAll('.checkout-layout,.checkout-progress,.hero').forEach(el=>el.style.display='');
   renderCartItems();
   renderUpsell();
@@ -6132,7 +6478,7 @@ function renderSuggested(){
       ${candidates.map(p=>{
         const qty = window._suggestedQty[p.sku] || 1;
         return `
-        <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--stroke);border-radius:8px;background:#fafafa">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--stroke);border-radius:8px;background:#fff">
           <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">
           <div style="flex:1;min-width:0">
             <div style="font-size:0.78rem;font-weight:700;line-height:1.2">${p.name}</div>
@@ -6170,12 +6516,12 @@ function renderUpsell(){
   if(peptideQty > 0 && bacInCart < bacNeeded){
     const toAdd = bacNeeded - bacInCart;
     const cost = (toAdd * 10.00).toFixed(2);
-    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
+    el.innerHTML = `<div style="margin-top:12px;padding:14px;background:#fff;border:1px solid #000;border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)">
       <div>
-        <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Recommended</div>
+        <div style="font-size:0.78rem;font-weight:700;color:#000">BAC Water Recommended</div>
         <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x suggested for ${peptideQty} vial${peptideQty>1?'s':''} - $${cost}</div>
       </div>
-      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
+      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#000;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
     </div>`;
   } else {
     el.innerHTML = '';
@@ -6185,7 +6531,17 @@ function renderUpsell(){
 function renderCartItems(){
   const el = document.getElementById('cart-items-list');
   if(cart.size === 0){
-    el.innerHTML = '<div class="cart-empty-msg">YOUR CART IS EMPTY</div>';
+    // Iter 134: inline empty-state. Mirrors the Zhuo Yue layout --- soft
+    // dashed-border panel inside the line-items area, copy reads
+    // "Cart is empty." with a small Shop Catalog CTA. The shipping form,
+    // discount field, and totals around it stay rendered.
+    el.innerHTML = `
+      <div style="border:1px dashed var(--stroke);border-radius:12px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;background:#fafafa">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.35"><path d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/></svg>
+        <div style="font-family:var(--display);font-size:0.78rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--text)">Cart is empty</div>
+        <div style="color:var(--muted);font-size:0.78rem;max-width:320px;text-align:center;line-height:1.55">Add research peptides from the catalog to continue. Your shipping info is saved.</div>
+        <button onclick="navigate('catalog')" style="margin-top:4px;padding:10px 22px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer">Shop Catalog</button>
+      </div>`;
     return;
   }
   let html = '';
@@ -6227,7 +6583,7 @@ function renderReceipt(){
   } catch(e){}
   const sub = getSubtotal();
   const isPennyTest = discountCode === 'PENNY';
-  const shipping = isPennyTest ? 0 : (sub > 0 ? (sub >= 250 ? 0 : 15) : 0);
+  const shipping = isPennyTest ? 0 : (sub > 0 ? (sub >= 250 ? 0 : 12) : 0);
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
   const feeRate = getProcessingRate();
@@ -6236,17 +6592,63 @@ function renderReceipt(){
   const discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
   const total = afterDisc + shipping + processingFee + discreetSurcharge;
   const isAffiliate = !!window._affiliateCode;
-  const tbl = document.getElementById('receipt-table');
-  tbl.innerHTML = `
-    <tr><td>Subtotal</td><td>$${sub.toFixed(2)}</td></tr>
-    ${discountPct>0?`<tr><td>Discount (${discountPct}%)${isAffiliate?'<span style="color:#22c55e;font-size:0.65rem;margin-left:6px;font-weight:700">saving $'+disc.toFixed(2)+'</span>':''}</td><td>-$${disc.toFixed(2)}</td></tr>`:''}
-    <tr><td>Processing Fee (${feePct}%)</td><td>$${processingFee.toFixed(2)}</td></tr>
-    <tr><td>Shipping${sub>=250?' (FREE over $250)':''}</td><td>${shipping===0&&sub>0?'FREE':'$'+shipping.toFixed(2)}</td></tr>
-    ${discreetSurcharge>0?`<tr><td>Discreet packaging</td><td>$${discreetSurcharge.toFixed(2)}</td></tr>`:''}
-    <tr class="total-row"><td>TOTAL</td><td>$${total.toFixed(2)}</td></tr>
-  `;
+
+  // Iter 134: renderReceipt now populates the Zhuo-Yue right-column
+  // containers (hyl-rp-items / hyl-rp-totals / hyl-rp-final-total).
+  // Pre-iter-134 it targeted a removed #receipt-table and silently threw
+  // a TypeError on every call --- which meant no totals rendered and the
+  // pay button never enabled. The Zhuo-Yue right-column rebuild forgot
+  // to migrate this function. Defensive guards on every getElementById
+  // because the template re-renders the whole screen during card return.
+  const escHtml = s => String(s == null ? '' : s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+
+  const itemsEl = document.getElementById('hyl-rp-items');
+  if(itemsEl){
+    if(cart.size === 0){
+      itemsEl.innerHTML = '<div class="hyl-rp-empty-row">Cart is empty.</div>';
+    } else {
+      const rowsHtml = [];
+      cart.forEach((qty, sku) => {
+        const p = getProduct(sku);
+        if(!p) return;
+        const lineTotal = p.price * qty;
+        rowsHtml.push(
+          '<div class="hyl-rp-row">'
+          + '<div class="rp-name"><span class="rp-sku">'+escHtml(sku)+'</span><span class="rp-title">'+escHtml(p.name || sku)+'</span></div>'
+          + '<div class="rp-unit">$'+p.price.toFixed(2)+'</div>'
+          + '<div class="rp-qty">'+qty+'</div>'
+          + '<div class="rp-line">$'+lineTotal.toFixed(2)+'</div>'
+          + '</div>'
+        );
+      });
+      itemsEl.innerHTML = rowsHtml.join('');
+    }
+  }
+
+  const totalsEl = document.getElementById('hyl-rp-totals');
+  if(totalsEl){
+    const rows = [];
+    rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Items Subtotal</span><span class="rp-tot-val">$'+sub.toFixed(2)+'</span></div>');
+    if(discountPct > 0){
+      const savingHint = isAffiliate ? ' <span style="color:#22c55e;font-size:0.65rem;margin-left:6px;font-weight:700">saving $'+disc.toFixed(2)+'</span>' : '';
+      rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Discount ('+discountPct+'%)'+savingHint+'</span><span class="rp-tot-val">-$'+disc.toFixed(2)+'</span></div>');
+    }
+    const shipLabel = 'Shipping'+(sub>=250?' (FREE over $250)':'');
+    const shipVal = (shipping===0 && sub>0) ? 'FREE' : '$'+shipping.toFixed(2);
+    rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">'+shipLabel+'</span><span class="rp-tot-val">'+shipVal+'</span></div>');
+    rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Card Processing Fee ('+feePct+'%)</span><span class="rp-tot-val">$'+processingFee.toFixed(2)+'</span></div>');
+    if(discreetSurcharge > 0){
+      rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Discreet packaging</span><span class="rp-tot-val">$'+discreetSurcharge.toFixed(2)+'</span></div>');
+    }
+    rows.push('<div class="hyl-rp-totals-row total divider"><span class="rp-tot-label">Total Due</span><span class="rp-tot-val">$'+total.toFixed(2)+'</span></div>');
+    totalsEl.innerHTML = rows.join('');
+  }
+
+  const finalEl = document.getElementById('hyl-rp-final-total');
+  if(finalEl) finalEl.textContent = '$'+total.toFixed(2);
+
   const payBtn = document.getElementById('btn-pay');
-  payBtn.disabled = cart.size === 0;
+  if(payBtn) payBtn.disabled = cart.size === 0;
 }
 
 async function applyCode(){
@@ -6282,11 +6684,29 @@ async function applyCode(){
       msg.className='discount-msg success';
       foundDiscount=true; _appliedType='affiliate'; _appliedPct=pct;
     }
-  } catch(e){ console.warn('[applyCode] validation error', e); }
-  if(!foundDiscount){
-    // Minimal offline fallback for evergreen promos only — all affiliate/real codes must resolve via DB.
-    if(code==='HAOYUN10'){discountCode='HAOYUN10';discountPct=10;msg.textContent='Code HAOYUN10 applied - 10% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=10;}
-    else if(code==='WELCOME15'){discountCode='WELCOME15';discountPct=15;msg.textContent='Code WELCOME15 applied - 15% off!';msg.className='discount-msg success';foundDiscount=true;_appliedType='discount';_appliedPct=15;}
+  } catch(e){
+    console.warn('[applyCode] validation error', e);
+    // Network or 5xx — flag the failure mode separately from "not a real code"
+    // so we don't silently fall through to the offline-only HAOYUN10/WELCOME15
+    // path and confuse the customer about what actually happened.
+    _appliedType = 'network_error';
+  }
+  // Iter 131: removed the HAOYUN10 / WELCOME15 offline fallback. Both
+  // codes are persisted in `discount_codes` (verified active = true,
+  // percent_off = 10 / 15), so validate-code resolves them on every
+  // request. The fallback created a hidden coupling --- if an operator
+  // ever deactivates one of these via the admin UI, validate-code would
+  // return "code not found" but the storefront would still locally
+  // apply the discount, then bankful-invoice would reject the checkout
+  // with "Total mismatch" (server-derived discountAmount=0 due to
+  // iter-54 / iter-55 hardening). UX-wise the customer would see the
+  // discount applied, then a confusing total-mismatch error at submit.
+  // Now: only network_error gets the soft fallback message; everything
+  // else routes through the canonical "Invalid code." path.
+  if(!foundDiscount && _appliedType === 'network_error'){
+    msg.textContent = 'Could not validate code right now — check your connection and try again.';
+    msg.className = 'discount-msg error';
+    return;
   }
   if(!foundDiscount){
     msg.textContent = previousCode ? `Invalid code. Previous code (${previousCode}) removed.` : 'Invalid code.';
@@ -6316,8 +6736,10 @@ function renderOrderSearch(){
 }
 
 /* ── PAYMENT METHODS ── */
-let selectedPayMethod = 'crypto';
-let selectedCryptoCurrency = 'BTC';
+// Crypto checkout disabled while the Railway billing server is offline.
+// All crypto branches below are dead-but-defensive.
+let selectedPayMethod = 'card';
+let selectedCryptoCurrency = null;
 let cryptoPollInterval = null;
 
 function showPaymentStep(){
@@ -6350,84 +6772,31 @@ function showPaymentStep(){
 
 function renderPayMethods(){
   const el = document.getElementById('pay-methods');
-  if(!selectedPayMethod) selectedPayMethod = 'crypto';
-  const isExpCrypto = selectedPayMethod === 'crypto';
-  const natives = [
-    {c:'BTC', name:'Bitcoin', chain:'Bitcoin Network'},
-    {c:'ETH', name:'Ethereum', chain:'Mainnet'},
-    {c:'SOL', name:'Solana', chain:'Mainnet'},
-  ];
-  const stables = [
-    {c:'USDT', name:'Tether', chain:'Ethereum · ERC-20'},
-    {c:'TRON', name:'Tether', chain:'Tron · TRC-20', badge:''},
-  ];
-  const chipHtml = (o) => `
-    <div class="crypto-chip ${selectedCryptoCurrency===o.c?'selected':''}"
-         data-c="${o.c}"
-         onclick="selectCryptoAndResetZelle('${o.c}')"
-         onmouseenter="previewPayCurrency('${o.c}')"
-         onmouseleave="previewPayCurrency(null)">
-      ${o.badge ? `<div class="cc-badge">${o.badge}</div>` : ''}
-      <img class="cc-logo" src="crypto-icons/${o.c.toLowerCase()}.svg" alt="${o.c}" onerror="this.style.display='none'">
-      <div class="cc-symbol">${o.c === 'TRON' ? 'USDT' : o.c}</div>
-      <div class="cc-name">${o.name}</div>
-      <div class="cc-chain">${o.chain}</div>
-    </div>`;
-  const methodChip = (id, label, sub, icon, sel, badge) => `
-    <div onclick="selectPayCategory('${id}')" style="cursor:pointer;padding:18px;border-radius:14px;border:1.5px solid ${sel?'var(--brand)':'var(--stroke)'};background:${sel?'#000':'#fff'};color:${sel?'#fff':'var(--text)'};display:flex;align-items:center;gap:12px;transition:all 0.3s">
-      ${icon}
-      <div style="flex:1">
-        <div style="font-weight:800;font-size:0.88rem;letter-spacing:0.04em">${label}${badge||''}</div>
-        <div style="font-size:0.62rem;opacity:0.7">${sub}</div>
-      </div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.4;flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
-    </div>`;
+  // Card-only checkout. Zelle and crypto UI removed per operator request;
+  // legacy entry points still coerce to 'card' so any deep-link or stored
+  // selection lands here cleanly.
+  selectedPayMethod = 'card';
+  selectedCryptoCurrency = null;
   el.innerHTML = `
-    <div class="pm-subhead">Choose Payment Method</div>
+    <div class="pm-subhead">Payment Method</div>
     <div style="display:flex;flex-direction:column;gap:10px">
-      ${methodChip('crypto','Cryptocurrency','BTC, ETH, SOL, USDT','<img src="crypto-icons/btc.svg" width="28" height="28" style="border-radius:50%">',isExpCrypto,'')}
-      ${methodChip('card','Credit / Debit Card','Visa, Mastercard','<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><rect x="5" y="14" width="4" height="2" rx="0.5" fill="currentColor" opacity="0.3"/></svg>',selectedPayMethod==='card','')}
-      ${methodChip('zelle','Zelle','Bank-to-bank','<img src="zelle.jpg" width="28" height="28" style="border-radius:6px;object-fit:cover;flex-shrink:0" alt="Zelle">',selectedPayMethod==='zelle','')}
+      <div style="padding:18px;border-radius:14px;border:1.5px solid var(--brand);background:#000;color:#fff;display:flex;align-items:center;gap:12px">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5"/><line x1="2" y1="10" x2="22" y2="10"/><rect x="5" y="14" width="4" height="2" rx="0.5" fill="currentColor" opacity="0.3"/></svg>
+        <div style="flex:1">
+          <div style="font-weight:800;font-size:0.88rem;letter-spacing:0.04em">Credit / Debit Card</div>
+          <div style="font-size:0.62rem;opacity:0.7">Visa, Mastercard</div>
+        </div>
+      </div>
     </div>
-    ${isExpCrypto ? `
-    <div style="margin-top:14px;padding:16px;background:#fafafa;border:1px solid var(--stroke);border-radius:14px">
-      <div class="pm-subhead" style="margin-bottom:10px">Select Currency</div>
-      <div style="border:1px solid var(--stroke);border-radius:12px;overflow:hidden;background:#fff">
-        ${[...natives,...stables].map((o,i,arr) => `
-          <div onclick="selectCryptoAndResetZelle('${o.c}')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;${i<arr.length-1?'border-bottom:1px solid var(--stroke);':''}background:${selectedCryptoCurrency===o.c?'#f5f5f5':'#fff'};transition:background 0.2s" onmouseover="this.style.background='#f8f8f8'" onmouseout="this.style.background='${selectedCryptoCurrency===o.c?'#f5f5f5':'#fff'}'">
-            <img src="crypto-icons/${o.c.toLowerCase()}.svg" alt="${o.c}" style="width:24px;height:24px;flex-shrink:0" onerror="this.style.display='none'">
-            <div style="flex:1">
-              <span style="font-weight:700;font-size:0.85rem">${o.name} </span>
-              <span style="color:var(--muted);font-size:0.75rem">${o.c === 'TRON' ? 'USDT' : o.c}</span>
-            </div>
-            <span style="font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em">${o.chain}</span>
-            ${o.badge ? `<span style="background:#22c55e;color:#fff;font-size:0.5rem;padding:2px 6px;border-radius:999px;font-weight:700;letter-spacing:0.06em">${o.badge}</span>` : ''}
-            ${selectedCryptoCurrency===o.c ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
-          </div>
-        `).join('')}
-      </div>
-      <div style="margin-top:10px;padding:8px 12px;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;font-size:0.62rem;color:#78350f;line-height:1.4;display:flex;gap:6px;align-items:flex-start">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:2px;color:#f59e0b"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span>Each coin is accepted on <strong>one specific network only</strong>. Wrong chain = permanently lost funds.</span>
-      </div>
-    </div>` : ''}
   `;
   syncPayBtnIcon();
 }
 function selectPayCategory(cat){
-  if(cat==='crypto'){
-    selectedPayMethod='crypto';
-    if(!selectedCryptoCurrency) selectedCryptoCurrency='BTC';
-    _setPayBtn('COMPLETE ORDER',false);
-  } else if(cat==='card'){
-    selectedPayMethod='card';
-    selectedCryptoCurrency=null;
-    _setPayBtn('PAY WITH CARD',true);
-  } else if(cat==='zelle'){
-    selectedPayMethod='zelle';
-    selectedCryptoCurrency=null;
-    _setPayBtn('COMPLETE ORDER',true);
-  }
+  // Card-only checkout. Zelle and crypto are disabled --- coerce any other
+  // selection so legacy deep links / cached state don't strand the user.
+  selectedPayMethod = 'card';
+  selectedCryptoCurrency = null;
+  _setPayBtn('PAY BY CARD', true);
   renderPayMethods();
   renderReceipt();
 }
@@ -6458,29 +6827,19 @@ function _setPayBtn(label, hideIcon){
 }
 
 function selectPayMethodZelle(){
-  selectedPayMethod = 'zelle';
-  selectedCryptoCurrency = null;
-  document.querySelectorAll('.crypto-chip').forEach(c => c.classList.remove('selected'));
-  _resetAltPayChips();
-  _highlightChip('[onclick*="selectPayMethodZelle"]');
-  _setPayBtn('COMPLETE ORDER', true);
+  // Card-only checkout. Coerce any legacy Zelle entry point to card.
+  selectPayMethodCard();
 }
 
 function selectPayMethodCard(){
   selectedPayMethod = 'card';
   selectedCryptoCurrency = null;
-  document.querySelectorAll('.crypto-chip').forEach(c => c.classList.remove('selected'));
-  _resetAltPayChips();
-  _highlightChip('[onclick*="selectPayMethodCard"]');
-  _setPayBtn('PAY WITH CARD', true);
+  _setPayBtn('PAY BY CARD', true);
 }
 
-function selectCryptoAndResetZelle(c){
-  selectedPayMethod = 'crypto';
-  _resetAltPayChips();
-  const iconContainer = document.querySelector('#btn-pay .crypto-icon-container');
-  if(iconContainer) iconContainer.style.display = '';
-  selectCrypto(c);
+function selectCryptoAndResetZelle(_c){
+  // Card-only checkout. Coerce any legacy crypto entry point to card.
+  selectPayMethodCard();
 }
 
 function syncPayBtnIcon(){
@@ -7215,7 +7574,7 @@ function cryptoSubmitRecovery(){
    SUBMIT ORDER
    ═════════════════════════════════════════════════════ */
 async function submitOrder(){
-  if(cart.size===0){showToast('Your cart is empty','error');navigate('home');return;}
+  if(cart.size===0){showToast('Add at least one item to continue','error');return;}
   const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-email'];
   for(const fid of fields){
     const el = document.getElementById(fid);
@@ -7264,16 +7623,17 @@ async function submitOrder(){
           return;
         }
         if(changed){
-          const suggested = [c.street1, c.street2, c.city+', '+c.state+' '+c.zip].filter(Boolean).join('\n');
-          if(confirm('We found a corrected address:\n\n'+suggested+'\n\nUse this corrected address?')){
-            if(c.street1) streetEl.value = c.street1;
-            if(c.street2) document.getElementById('f-apt').value = c.street2;
-            if(c.city) cityEl.value = c.city;
-            if(c.state) stateEl.value = c.state;
-            if(c.zip) zipEl.value = c.zip;
-          } else {
-            window._skipAddressValidation = true;
-          }
+          // Iter 134: silently apply Shippo's corrected address — no
+          // confirm() prompt. Operator feedback: customers who already
+          // confirmed their address by clicking Pay shouldn't be re-asked
+          // mid-checkout, that's a friction point right before charging
+          // the card. Shippo only flags differences when `is_valid` is
+          // true, so we already know the corrected fields are deliverable.
+          if(c.street1) streetEl.value = c.street1;
+          if(c.street2) document.getElementById('f-apt').value = c.street2;
+          if(c.city) cityEl.value = c.city;
+          if(c.state) stateEl.value = c.state;
+          if(c.zip) zipEl.value = c.zip;
         } else if(c.zip && c.zip!==zipEl.value){
           // Silent: just ZIP+4 enrichment
           zipEl.value = c.zip;
@@ -7285,12 +7645,19 @@ async function submitOrder(){
 
   const payBtn = document.getElementById('btn-pay');
   if(!payBtn) return;
-  // Double-submit guard
+  // Double-submit guard. The flag is cleared in every explicit branch below;
+  // the timeout is the last-resort escape hatch if an unexpected exception
+  // skips all cleanup. 30s was too short — a slow Bankful HPP API call plus
+  // a redirect roundtrip can easily exceed it, leaving the customer with a
+  // dead button on return. 90s is the new ceiling.
   if(window._submittingOrder) return;
   window._submittingOrder = true;
-  // Safety: force-reset flag after 30s if submit hangs (e.g., network stall)
   if(window._submitTimeout) clearTimeout(window._submitTimeout);
-  window._submitTimeout = setTimeout(() => { window._submittingOrder = false; }, 30000);
+  window._submitTimeout = setTimeout(() => {
+    window._submittingOrder = false;
+    const b = document.getElementById('btn-pay');
+    if(b){ b.disabled = false; b.classList.remove('btn-loading'); }
+  }, 90000);
   payBtn.disabled = true;
   payBtn.classList.add('btn-loading');
   const btnText = payBtn.querySelector('.crypto-btn-text');
@@ -7298,12 +7665,19 @@ async function submitOrder(){
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
-  const shipping = (discountCode === 'PENNY') ? 0 : (sub >= 250 ? 0 : 15);
+  const shipping = (discountCode === 'PENNY') ? 0 : (sub >= 250 ? 0 : 12);
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
   const feeRate = getProcessingRate();
   const processingFee = Math.round(afterDisc * feeRate * 100) / 100;
-  const total = afterDisc + shipping + processingFee;
+  // Iter 134: include discreet packaging surcharge in submitOrder's total.
+  // Pre-iter-134 renderReceipt added the +$5 to the displayed total but
+  // submitOrder built `total = afterDisc + shipping + processingFee`,
+  // so the customer was redirected to bankful-invoice with the pre-surcharge
+  // amount and the server's expectedTotal recompute (which now also adds
+  // the surcharge) returned "Total mismatch — refresh checkout and retry".
+  const discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
+  const total = afterDisc + shipping + processingFee + discreetSurcharge;
 
   const fname = document.getElementById('f-fname').value.trim();
   const lname = document.getElementById('f-lname').value.trim();
@@ -7322,7 +7696,7 @@ async function submitOrder(){
   });
 
   // Auto-subscribe email at checkout
-  try { await sb.from('email_subscribers').upsert({email, source:'checkout'},{onConflict:'email'}); } catch(e){}
+  try { await hylSubscribe(email, 'checkout'); } catch(e){}
 
   // CARD flow (Bankful Hosted Payment Page)
   if(selectedPayMethod === 'card'){
@@ -7334,13 +7708,18 @@ async function submitOrder(){
         body:JSON.stringify({
           orderNumber:orderNum, amount:total, email, fname, lname, phone,
           street, apt, city, state, zip, items,
-          subtotal:sub, shipping, discountPct, discountCode, discountAmount:disc,
+          subtotal:sub, shipping, processingFee,
+          discountPct, discountCode, discountAmount:disc,
           affiliateCode: window._affiliateCode || null,
           discreetPackaging,
+          discreetSurcharge,
         })
       });
       const data = await resp.json();
       if(data.ok && data.redirect_url){
+        // DON'T clear the cart yet — only clear once Bankful confirms the
+        // redirect URL was successfully returned. Otherwise a flaky API call
+        // would empty the cart but never hand the customer a checkout page.
         cart.clear(); saveCart(); updateBadge();
         // Persist pending order number for return-from-Bankful detection
         try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total}));}catch(e){}
@@ -7357,7 +7736,7 @@ async function submitOrder(){
     window._submittingOrder = false;
     payBtn.disabled = false;
     payBtn.classList.remove('btn-loading');
-    if(btnText) btnText.textContent = 'PAY WITH CARD';
+    if(btnText) btnText.textContent = 'PAY BY CARD';
     return;
   }
 
@@ -7454,12 +7833,19 @@ async function submitOrder(){
     return;
   }
 
-  // Crypto only - billing server → get unique address + monitor
+  // Crypto checkout disabled (Railway billing server is offline). If anything
+  // ever falls through to here, fail safe: tell the user and bail out instead
+  // of hitting the dead /api/crypto-invoice endpoint.
+  showToast('Crypto checkout is temporarily unavailable. Please use card or Zelle.');
+  payBtn.disabled = false;
+  payBtn.classList.remove('btn-loading');
+  window._submittingOrder = false;
+  return;
+
+  // ---- DEAD CODE BELOW (kept for fast re-enable when crypto comes back) ----
+  // eslint-disable-next-line no-unreachable
   try {
     try { track('initiate_payment', { method: 'crypto', currency: selectedCryptoCurrency, total }); } catch(e){}
-    // TODO: route this through a Supabase edge function that holds the
-    // billing-server shared secret server-side. X-API-Key header removed
-    // because the value was leaking to every visitor in page source.
     const resp = await fetch(BILLING_SERVER + '/api/crypto-invoice', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -7593,8 +7979,17 @@ async function verifyAge(isYes){
   }
   localStorage.setItem('hyl_age_verified','true');
   document.getElementById('age-gate').classList.add('hidden');
-  // Fire the mystery-vial popup shortly after the age gate closes on first visit.
-  setTimeout(() => { if(typeof showEmailPopup === 'function' && !sessionStorage.getItem('hyl_popup_shown_session')){ sessionStorage.setItem('hyl_popup_shown_session','1'); showEmailPopup(); } }, 1500);
+  // Iter 134: fire the mystery-vial popup after the age gate closes if the
+  // 30-min snooze isn't active. Uses a timestamp-based gate (see
+  // initEmailPopup below) so the popup is persistent across visits but
+  // doesn't re-fire mid-session if the user just dismissed it.
+  setTimeout(() => {
+    if(typeof showEmailPopup !== 'function') return;
+    const last = Number(sessionStorage.getItem('hyl_popup_last_shown_at') || 0);
+    if(Date.now() - last < 30*60*1000) return;
+    sessionStorage.setItem('hyl_popup_last_shown_at', String(Date.now()));
+    showEmailPopup();
+  }, 1500);
   try { await sb.from('age_verifications').insert({dob:'2000-01-01',verified:true,user_agent:navigator.userAgent}); } catch(e){}
 }
 
@@ -7742,7 +8137,11 @@ function closeEmailPopup(){
   const card = document.getElementById('email-popup-card');
   if(card) card.style.transform='translateY(40px) scale(0.95)';
   if(popup){ popup.style.opacity='0'; popup.style.pointerEvents='none'; }
-  localStorage.setItem('hyl_popup_dismissed', Date.now().toString());
+  // Iter 134: snooze the popup for 30 minutes within this session. Using
+  // sessionStorage (clears on tab close) + a timestamp gate so a fresh
+  // tab always re-shows immediately. Pre-iter-134 wrote a localStorage
+  // dismissed flag that nothing read --- dropped.
+  sessionStorage.setItem('hyl_popup_last_shown_at', String(Date.now()));
 }
 async function submitPopupEmail(){
   const name = (document.getElementById('popup-name')?.value||'').trim();
@@ -7751,7 +8150,7 @@ async function submitPopupEmail(){
   if(!email || !email.includes('@')){ showToast('Please enter a valid email','error'); return; }
   const code = Array.from({length:5},()=>'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.random()*36|0]).join('');
   try {
-    await sb.from('email_subscribers').upsert({email, name, source:'popup', code},{onConflict:'email'});
+    await hylSubscribe(email, 'popup', { name, code });
   } catch(e){}
   // Transform popup into success + Discord invite
   const popup = document.getElementById('email-popup').querySelector('div');
@@ -7769,13 +8168,15 @@ async function submitPopupEmail(){
     </a>
     <div onclick="closeEmailPopup()" style="text-align:center;margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Close</div>
   `;
-  localStorage.setItem('hyl_popup_dismissed', Date.now().toString());
+  // Iter 134: timestamp gate (see closeEmailPopup).
+  sessionStorage.setItem('hyl_popup_last_shown_at', String(Date.now()));
 }
 function initEmailPopup(){
   // ?popup=1 → force show regardless of gate
   try {
     const u = new URL(window.location.href);
     if(u.searchParams.get('popup') === '1'){
+      sessionStorage.removeItem('hyl_popup_last_shown_at');
       sessionStorage.removeItem('hyl_popup_shown_session');
       localStorage.removeItem('hyl_popup_dismissed');
       localStorage.removeItem('hyl_popup_seen');
@@ -7784,10 +8185,12 @@ function initEmailPopup(){
     }
   } catch(e){}
 
-  // Don't show twice in the same tab session. No long-term dismiss gate —
-  // users opening the site fresh should see the offer.
-  const shownSession = sessionStorage.getItem('hyl_popup_shown_session');
-  if(shownSession === '1') return;
+  // Iter 134: timestamp-based snooze instead of binary "shown once" flag.
+  // - sessionStorage (clears on tab close) so every fresh visit re-fires.
+  // - 30-min snooze inside the same tab once dismissed --- persistent
+  //   across visits, not annoying mid-session.
+  const last = Number(sessionStorage.getItem('hyl_popup_last_shown_at') || 0);
+  if(last && Date.now() - last < 30*60*1000) return;
   // Don't fire while the age gate is still covering the screen.
   const ageGate = document.getElementById('age-gate');
   if(ageGate && !ageGate.classList.contains('hidden')) return;
@@ -7799,7 +8202,7 @@ function initEmailPopup(){
     if(hash === 'order' || hash === 'payment-confirmed' || hash === 'card-return') return;
     if(document.getElementById('crypto-payment-screen')?.style.display !== 'none') return;
     popupTriggered = true;
-    sessionStorage.setItem('hyl_popup_shown_session', '1');
+    sessionStorage.setItem('hyl_popup_last_shown_at', String(Date.now()));
     showEmailPopup();
   }
   // Fire ~4s after load so users actually see it (was 12s / 40% scroll gate).
@@ -7816,12 +8219,26 @@ async function submitSupport(){
   const orderId = document.getElementById('support-order').value.trim();
   const category = document.getElementById('support-category').value;
   try {
-    await sb.from('support_tickets').insert({email, order_id:orderId, category, message:msg});
+    // Iter 90: routed through the submit-support-ticket Edge Function so
+    // the iter-90 lockdown can drop anon write access to support_tickets
+    // without breaking this form. Server-side input validation lives in
+    // the function (junk email filter, charset clamp, length caps).
+    const resp = await fetch(SUPABASE_URL + '/functions/v1/submit-support-ticket', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+      body: JSON.stringify({ email, order_id: orderId, category, message: msg }),
+    });
+    const j = await resp.json().catch(() => ({}));
+    if(!resp.ok || !j.ok){
+      console.warn('[support] submit failed', j);
+      showToast('Could not submit. Email support@haoyunlabs.com directly.', 'error');
+      return;
+    }
     showToast('Message sent! We will respond within 24 hours.');
     document.getElementById('support-email').value='';
     document.getElementById('support-message').value='';
     document.getElementById('support-order').value='';
-  } catch(e){ showToast('Failed to send - please email us directly.'); }
+  } catch(e){ showToast('Network error. Email support@haoyunlabs.com directly.', 'error'); }
 }
 
 async function subscribeFooterEmail(){
@@ -7830,7 +8247,7 @@ async function subscribeFooterEmail(){
   const email = input.value.trim().toLowerCase();
   if(!email || !email.includes('@')){msg.textContent='Please enter a valid email.';msg.style.color='#dc2626';return;}
   try {
-    await sb.from('email_subscribers').upsert({email, source:'footer'},{onConflict:'email'});
+    await hylSubscribe(email, 'footer');
     msg.textContent='You\'re in! Watch your inbox.';msg.style.color='#16a34a';
     klIdentify(email);input.value='';
   } catch(e){msg.textContent='Something went wrong.';msg.style.color='#dc2626';}
@@ -7847,7 +8264,7 @@ async function subscribeEmailBar(){
     return;
   }
   try {
-    await sb.from('email_subscribers').upsert({email, source:'scroll_bar'},{onConflict:'email'});
+    await hylSubscribe(email, 'scroll_bar');
     if(msg){ msg.textContent='You\'re in! Watch your inbox.'; msg.style.color='#16a34a'; }
     klIdentify(email); input.value='';
     // Auto-dismiss + remember success so we don't nag again.
@@ -8072,21 +8489,34 @@ function tkReorder(){
   navigate('order');
 }
 async function lookupOrder(){
-  const num = (document.getElementById('tracking-input')?.value || '').trim().toUpperCase();
+  // Iter 64: clamp the order-number input to the same alphanum+dash/underscore
+  // shape the storefront emits, so the innerHTML interpolation below can't
+  // reflect a script payload back at the user typing it. Self-XSS is low
+  // severity but free to close.
+  const numRaw = (document.getElementById('tracking-input')?.value || '').trim().toUpperCase();
+  const num = numRaw.replace(/[^A-Z0-9_-]/g, '').slice(0, 64);
   const email = (document.getElementById('tracking-email')?.value || '').trim().toLowerCase();
   const resultEl = document.getElementById('tracking-result');
   if(!num){ showToast('Enter an order number','error'); return; }
   if(resultEl) resultEl.innerHTML = '<div style="padding:14px;text-align:center;color:var(--muted);font-size:0.85rem">Looking up…</div>';
   try {
-    const {data,error} = await sb
-      .from('orders')
-      .select('id,order_number,status,created_at,paid_at,shipped_at,delivered_at,total,items,tracking_number,tracking_carrier,tracking_status,customers(email,first_name,last_name,street,apt,city,state,zip)')
-      .eq('order_number',num).maybeSingle();
-    if(error || !data){
+    // Iter 88: route through tracking-lookup Edge Function. Anon REST
+    // can't read public.orders post-iter-72 RLS lockdown (broke this
+    // page silently). The function returns a public shape without email
+    // (status + ETAs only) and a full shape only when email matches ---
+    // so PII never leaks to a guessed order number.
+    const qs = new URLSearchParams({ order: num });
+    if(email) qs.set('email', email);
+    const resp = await fetch(SUPABASE_URL + '/functions/v1/tracking-lookup?' + qs.toString(), {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+    });
+    const j = await resp.json().catch(() => ({}));
+    if(!resp.ok || !j.ok){
       if(resultEl) resultEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:0.85rem">No order found: ${num}</div>`;
       return;
     }
-    if(email && data.customers && data.customers.email && data.customers.email.toLowerCase() !== email){
+    const data = j.order || {};
+    if(email && j.matched === false){
       if(resultEl) resultEl.innerHTML = `<div style="padding:20px;text-align:center;color:#dc2626;font-size:0.85rem">Email doesn't match this order. Check the address used at checkout.</div>`;
       return;
     }
@@ -8213,6 +8643,94 @@ function pcRate(btn, n){
   document.querySelectorAll('#pc-stars .pc-star').forEach(s => s.classList.toggle('on', parseInt(s.dataset.n,10) <= n));
   window.__pcRating = n;
 }
+// ─── Iter 109: post-purchase order context ──────────────────────────────
+// Carry order # + email through #delivered → #returns / #lost-package so
+// the user doesn't have to retype after deep-linking from the tracking
+// page or a "package delivered" email. Source: hash query (?order=&email=)
+// parsed once by handleRoute into window._hylRouteParams.
+function pcForwardCtx(target){
+  const p = window._hylRouteParams || {};
+  const qs = new URLSearchParams();
+  if(p.order) qs.set('order', p.order);
+  if(p.email) qs.set('email', p.email);
+  const sfx = qs.toString();
+  window.location.hash = '#' + target + (sfx ? ('?' + sfx) : '');
+}
+// tkForwardCtx — same as pcForwardCtx but reads the form fields the user
+// already typed on the tracking page, so the anon link cards can carry
+// context to #returns / #lost-package without losing the email gate.
+function tkForwardCtx(target){
+  const num = (document.getElementById('tracking-input')?.value || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,64);
+  const eml = (document.getElementById('tracking-email')?.value || '').trim().toLowerCase();
+  const qs = new URLSearchParams();
+  if(num) qs.set('order', num);
+  if(eml) qs.set('email', eml);
+  const sfx = qs.toString();
+  window.location.hash = '#' + target + (sfx ? ('?' + sfx) : '');
+}
+function pcPrefillReturn(){
+  const p = window._hylRouteParams || {};
+  const o = document.getElementById('ret-order');
+  const e = document.getElementById('ret-email');
+  if(o && p.order) o.value = p.order;
+  if(e && p.email) e.value = p.email;
+}
+function pcPrefillLost(){
+  const p = window._hylRouteParams || {};
+  const o = document.getElementById('lost-order');
+  const e = document.getElementById('lost-email');
+  if(o && p.order) o.value = p.order;
+  if(e && p.email) e.value = p.email;
+}
+async function renderDelivered(){
+  const p = window._hylRouteParams || {};
+  const lead = document.getElementById('del-lead');
+  const meta = document.getElementById('del-meta');
+  const card = document.getElementById('del-items-card');
+  const list = document.getElementById('del-items-list');
+  const count = document.getElementById('del-items-count');
+  // Reset to generic state on every entry
+  if(meta) meta.style.display = 'none';
+  if(card) card.style.display = 'none';
+  if(list) list.innerHTML = '';
+  if(!p.order || !p.email) return; // keep generic copy
+  try {
+    const qs = new URLSearchParams({ order: p.order, email: p.email });
+    const r = await fetch(SUPABASE_URL + '/functions/v1/tracking-lookup?' + qs.toString(), {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+    });
+    const j = await r.json().catch(() => ({}));
+    if(!r.ok || !j.ok || !j.matched){ return; }
+    const o = j.order || {};
+    const numEl = document.getElementById('del-order-num');
+    const trkEl = document.getElementById('del-tracking');
+    if(numEl) numEl.textContent = o.order_number || p.order;
+    if(trkEl) trkEl.textContent = o.tracking_number || '—';
+    if(meta) meta.style.display = '';
+    const status = (o.status || '').toLowerCase();
+    if(lead && status !== 'delivered'){
+      // Order context found but not yet delivered — soften copy.
+      lead.textContent = 'Your order is on the way. Each lot\u2019s COA will be linked here once delivered.';
+    }
+    const items = Array.isArray(o.items) ? o.items : [];
+    if(items.length && list){
+      list.innerHTML = items.map((it, i) => {
+        const last = i === items.length - 1;
+        const sku = String(it.sku || it.SKU || '').replace(/[^A-Za-z0-9_-]/g,'').slice(0,64);
+        const name = String(it.name || it.ProductName || sku || 'Item').slice(0, 120);
+        const qty = Number(it.quantity || it.qty || 1) || 1;
+        const safeName = name.replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+        return `<div style="display:flex;gap:14px;padding:14px 22px;border-bottom:${last?'none':'1px solid var(--pc-line)'};align-items:center">
+          <div style="width:40px;height:40px;background:var(--pc-bg-soft);border-radius:8px;display:grid;place-items:center;color:var(--pc-t3);flex-shrink:0;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:0.05em">×${qty}</div>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:500">${safeName}</div><div style="font-size:11.5px;color:var(--pc-t3);margin-top:2px">SKU <span class="tk-code">${sku}</span></div></div>
+          <button class="pc-btn pc-btn-outline pc-btn-sm" onclick="navigateToProduct('${sku}')" type="button">View COA</button>
+        </div>`;
+      }).join('');
+      if(count) count.textContent = items.length + (items.length === 1 ? ' item' : ' items');
+      if(card) card.style.display = '';
+    }
+  } catch(e){ console.warn('[delivered] render error', e); }
+}
 async function pcSubmitReturn(){
   const orderNum = document.getElementById('ret-order').value.trim().toUpperCase();
   const email = document.getElementById('ret-email').value.trim().toLowerCase();
@@ -8221,11 +8739,26 @@ async function pcSubmitReturn(){
   const resolution = document.querySelector('input[name="ret-res"]:checked')?.value || 'replace';
   if(!orderNum || !email){ showToast('Order number and email required','error'); return; }
   try {
-    const payload = { kind, resolution, state:'open', payload:{ order_number:orderNum, email, notes, submitted_at:new Date().toISOString() } };
-    try { await sb.from('support_tickets').insert(Object.assign({order_id:orderNum}, payload)); } catch(e){ console.warn('[returns] supabase fallback', e); }
-    try { await fetch(SUPABASE_URL + '/functions/v1/track-event', {method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({event:'return_request',props:payload.payload,session_id:_hylSid(),path:location.pathname+location.hash,ts:new Date().toISOString()})}); } catch(e){}
-    showToast('Return request submitted. Check your email for a case number.','success');
-    ['ret-order','ret-email','ret-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    const ticketBody = { email, order_id: orderNum, category: 'returns', kind, resolution, message: notes, payload: { order_number: orderNum, email, notes, submitted_at: new Date().toISOString() } };
+    // Iter 90: route through the Edge Function (replaces iter-89 direct REST insert).
+    let inserted = false;
+    try {
+      const r = await fetch(SUPABASE_URL + '/functions/v1/submit-support-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+        body: JSON.stringify(ticketBody),
+      });
+      const rj = await r.json().catch(() => ({}));
+      if(r.ok && rj.ok && !rj.dropped) inserted = true;
+      else console.warn('[returns] submit response', rj);
+    } catch(e){ console.warn('[returns] submit exception', e); }
+    try { await fetch(SUPABASE_URL + '/functions/v1/track-event', {method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({event:'return_request',props:ticketBody.payload,session_id:_hylSid(),path:location.pathname+location.hash,ts:new Date().toISOString()})}); } catch(e){}
+    if(inserted){
+      showToast('Return request submitted. Check your email for a case number.','success');
+      ['ret-order','ret-email','ret-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    } else {
+      showToast('Could not submit. Email support@haoyunlabs.com directly.','error');
+    }
   } catch(e){ showToast('Submit failed. Email support@haoyunlabs.com directly.','error'); }
 }
 async function pcSubmitLost(){
@@ -8235,11 +8768,27 @@ async function pcSubmitLost(){
   const notes = document.getElementById('lost-notes').value.trim();
   if(!orderNum || !email){ showToast('Order number and email required','error'); return; }
   try {
-    const payload = { kind:'lost', resolution: kind==='delivered_missing' ? 'replace' : 'investigate', state:'open', payload:{ order_number:orderNum, email, situation:kind, notes, submitted_at:new Date().toISOString() } };
-    try { await sb.from('support_tickets').insert(Object.assign({order_id:orderNum}, payload)); } catch(e){ console.warn('[lost] supabase fallback', e); }
-    try { await fetch(SUPABASE_URL + '/functions/v1/track-event', {method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({event:'lost_package',props:payload.payload,session_id:_hylSid(),path:location.pathname+location.hash,ts:new Date().toISOString()})}); } catch(e){}
-    showToast('Investigation opened. We\'ll email a case number shortly.','success');
-    ['lost-order','lost-email','lost-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    const resolution = kind==='delivered_missing' ? 'replace' : 'investigate';
+    const ticketBody = { email, order_id: orderNum, category: 'lost', kind: 'lost', resolution, message: notes, payload: { order_number: orderNum, email, situation: kind, notes, submitted_at: new Date().toISOString() } };
+    // Iter 90: same Edge Function path as the returns flow.
+    let inserted = false;
+    try {
+      const r = await fetch(SUPABASE_URL + '/functions/v1/submit-support-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+        body: JSON.stringify(ticketBody),
+      });
+      const rj = await r.json().catch(() => ({}));
+      if(r.ok && rj.ok && !rj.dropped) inserted = true;
+      else console.warn('[lost] submit response', rj);
+    } catch(e){ console.warn('[lost] submit exception', e); }
+    try { await fetch(SUPABASE_URL + '/functions/v1/track-event', {method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({event:'lost_package',props:ticketBody.payload,session_id:_hylSid(),path:location.pathname+location.hash,ts:new Date().toISOString()})}); } catch(e){}
+    if(inserted){
+      showToast('Investigation opened. We\'ll email a case number shortly.','success');
+      ['lost-order','lost-email','lost-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    } else {
+      showToast('Could not submit. Email support@haoyunlabs.com directly.','error');
+    }
   } catch(e){ showToast('Submit failed. Email support@haoyunlabs.com directly.','error'); }
 }
 
@@ -8573,37 +9122,15 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     renderHome();
   }
 
-  // RESUME PENDING CRYPTO INVOICE (if user closed tab mid-payment)
+  // RESUME PENDING CRYPTO INVOICE — disabled while crypto checkout is offline.
+  // Any leftover hyl_pending_invoice entries from earlier sessions would
+  // otherwise show a "Resume" banner that points to the dead Railway server.
+  // Drop them silently on load and let the customer restart with card/Zelle.
   try {
-    const pendingRaw = localStorage.getItem('hyl_pending_invoice');
-    if(pendingRaw){
-      const pending = JSON.parse(pendingRaw);
-      const ageHours = (Date.now() - (pending.savedAt||0)) / 3600000;
-      // Auto-cleanup: drop anything older than 4 hours
-      if(ageHours > 4){
-        localStorage.removeItem('hyl_pending_invoice');
-      } else if(pending.expired){
-        // Show a one-time expired notice; leave in storage briefly
-        setTimeout(()=>showToast('Previous invoice expired — refresh your cart to try again','error'), 800);
-        setTimeout(()=>localStorage.removeItem('hyl_pending_invoice'), 5000);
-      } else {
-        // Offer resume banner
-        setTimeout(()=>{
-          const bar = document.createElement('div');
-          bar.id = 'resume-invoice-bar';
-          bar.style.cssText = 'position:fixed;top:72px;left:12px;right:12px;z-index:240;padding:14px 18px;background:#0f172a;color:#fff;border-radius:14px;box-shadow:0 10px 32px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;max-width:560px;margin:0 auto;font-family:var(--sans)';
-          bar.innerHTML = `
-            <div style="flex:1;min-width:0">
-              <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6">Unfinished order</div>
-              <div style="font-size:0.82rem;font-weight:700;margin-top:2px">${pending.orderNumber} — ${pending.invoiceData?.currency||'crypto'}</div>
-            </div>
-            <button onclick="resumePendingInvoice()" style="padding:10px 16px;background:#fff;color:#000;border:none;border-radius:999px;font-family:var(--display);font-size:0.7rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">Resume</button>
-            <button onclick="dismissPendingInvoice()" style="background:transparent;border:none;color:rgba(255,255,255,0.6);font-size:1.3rem;cursor:pointer;padding:4px 8px;line-height:1">&times;</button>`;
-          document.body.appendChild(bar);
-        }, 1200);
-      }
+    if(localStorage.getItem('hyl_pending_invoice')){
+      localStorage.removeItem('hyl_pending_invoice');
     }
-  } catch(e){ console.warn('[resume] parse failed', e); }
+  } catch(e){ /* ignore */ }
 
   // Scroll reveal observer
   const revealObserver = new IntersectionObserver((entries) => {
