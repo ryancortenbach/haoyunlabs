@@ -1329,16 +1329,16 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .btn-show-more:hover{background:var(--brand);color:var(--bg)}
 
 /* ── CHECKOUT LAYOUT ── */
-.checkout-layout{display:grid;grid-template-columns:7fr 5fr;gap:32px;padding:40px 0 60px}
-.checkout-layout>div{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:28px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
-.checkout-section-title{font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;border-bottom:2px solid var(--brand);padding-bottom:8px}
-.form-grid{display:grid;gap:12px}
-.form-row{display:grid;gap:12px}
+.checkout-layout{display:grid;grid-template-columns:7fr 5fr;gap:22px;padding:24px 0 40px}
+.checkout-layout>div{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.checkout-section-title{font-size:0.74rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;border-bottom:2px solid var(--brand);padding-bottom:6px}
+.form-grid{display:grid;gap:8px}
+.form-row{display:grid;gap:8px}
 .form-row.col-2{grid-template-columns:1fr 1fr}
-.form-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;display:block}
+.form-label{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1px;display:block}
 .form-input{
-  width:100%;padding:10px 12px;border:1px solid var(--stroke);
-  font-size:0.85rem;background:var(--bg);border-radius:var(--radius);
+  width:100%;padding:7px 10px;border:1px solid var(--stroke);
+  font-size:0.8rem;background:var(--bg);border-radius:var(--radius);
   transition:border-color 0.2s,box-shadow 0.2s;
 }
 .form-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,0,0,0.06);outline:none}
@@ -1873,11 +1873,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .crypto-btn-text{font-weight:800;font-family:var(--sans);letter-spacing:0.16em;text-transform:uppercase}
 
 /* ── Uiverse Pay Now button (by fthisilak) — used on Pay by Card ── */
-.uv-pay-btn{position:relative;width:100%;padding:10px 18px;font-size:0.88rem;background:#1a1a1a;color:#fff;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.3s ease;font-family:var(--sans);letter-spacing:0.04em}
+.uv-pay-btn{position:relative;width:100%;padding:8px 14px;font-size:0.78rem;background:#1a1a1a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s ease;font-family:var(--sans);letter-spacing:0.04em}
 .uv-pay-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.4)}
 .uv-pay-btn:disabled{background:#9d9da3;cursor:not-allowed;transform:none;box-shadow:none}
-.uv-pay-btn .uv-icon-container{position:relative;width:24px;height:24px;flex:0 0 24px}
-.uv-pay-btn .uv-icon{position:absolute;top:0;left:0;width:24px;height:24px;color:#22c55e;opacity:0;visibility:hidden}
+.uv-pay-btn .uv-icon-container{position:relative;width:18px;height:18px;flex:0 0 18px}
+.uv-pay-btn .uv-icon{position:absolute;top:0;left:0;width:18px;height:18px;color:#22c55e;opacity:0;visibility:hidden}
 .uv-pay-btn .uv-default-icon{opacity:1;visibility:visible}
 .uv-pay-btn:hover .uv-icon{animation:none}
 .uv-pay-btn:hover .uv-wallet-icon{opacity:0;visibility:hidden}
@@ -1952,10 +1952,10 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-pay-btn:hover .hyl-pay-wallet{transform:translateX(2px) rotate(2deg)}
 
 /* ── ZHUO-YUE REVIEW-AND-PAY RIGHT-COLUMN (Iter 134) ──────────────── */
-.hyl-rp{padding:22px;display:flex;flex-direction:column;gap:12px}
-.hyl-rp-eyebrow{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
-.hyl-rp-headline{font-family:var(--display);font-size:1.55rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-6px}
-.hyl-rp-helper{font-size:0.86rem;color:var(--muted);line-height:1.55;margin-top:-8px}
+.hyl-rp{padding:16px;display:flex;flex-direction:column;gap:10px}
+.hyl-rp-eyebrow{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+.hyl-rp-headline{font-family:var(--display);font-size:1.2rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-4px}
+.hyl-rp-helper{font-size:0.74rem;color:var(--muted);line-height:1.45;margin-top:-4px}
 .hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--stroke)}
 .hyl-rp-table-head>span:nth-child(2),.hyl-rp-table-head>span:nth-child(3){text-align:right}
 .hyl-rp-table-head>span:nth-child(4){text-align:right}
@@ -2009,9 +2009,9 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
 .hyl-rp-final-card{padding:12px;border:1px solid var(--stroke);border-radius:12px;background:#fff;display:flex;flex-direction:column;gap:8px;margin-top:2px}
 .hyl-rp-final-row{display:flex;justify-content:space-between;align-items:baseline}
-.hyl-rp-final-label{font-size:0.9rem;font-weight:700;color:var(--text)}
-.hyl-rp-final-value{font-family:var(--mono);font-size:1.15rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
-.hyl-rp-secure-line{padding:6px 10px;border:1px solid var(--stroke);border-radius:8px;font-size:0.74rem;color:var(--muted);background:#fafafa;text-align:left;line-height:1.4}
+.hyl-rp-final-label{font-size:0.82rem;font-weight:700;color:var(--text)}
+.hyl-rp-final-value{font-family:var(--mono);font-size:1rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
+.hyl-rp-secure-line{padding:6px 10px;border:1px solid var(--stroke);border-radius:8px;font-size:0.72rem;color:var(--muted);background:#fff;text-align:left;line-height:1.4}
 .hyl-rp-final-card .hyl-pay-btn{margin-top:0;border-radius:14px;padding:18px 22px;font-size:1.05rem;letter-spacing:0.04em}
 .hyl-rp-final-card .hyl-pay-label{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:0;font-size:1.05rem}
 .hyl-rp-trust{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -2744,14 +2744,13 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           </div>
 
           <!-- Discreet packaging iOS-style toggle -->
-          <label class="hyl-rp-switch-row" id="discreet-toggle" onclick="toggleDiscreet()">
-            <input type="checkbox" class="discreet-check-input hyl-sr-only" id="discreet-check-input" tabindex="-1" aria-labelledby="discreet-label">
+          <div class="hyl-rp-switch-row" id="discreet-toggle" role="switch" aria-checked="false" tabindex="0" onclick="toggleDiscreet()" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();toggleDiscreet();}">
             <span class="hyl-switch" id="discreet-check" aria-hidden="true"><span class="hyl-switch-knob"></span></span>
             <span class="hyl-rp-switch-text">
               <span class="hyl-rp-switch-title" id="discreet-label">Use discreet packaging</span>
               <span class="hyl-rp-switch-sub">Low-profile handling for researchers who prefer additional privacy.</span>
             </span>
-          </label>
+          </div>
 
           <!-- Final total + Pay button + trust list -->
           <div class="hyl-rp-final-card">
@@ -8851,7 +8850,9 @@ document.addEventListener('DOMContentLoaded', populateCountrySelects);
 function toggleDiscreet(){
   discreetPackaging = !discreetPackaging;
   const check = document.getElementById('discreet-check');
-  check.classList.toggle('checked', discreetPackaging);
+  if(check) check.classList.toggle('checked', discreetPackaging);
+  const row = document.getElementById('discreet-toggle');
+  if(row) row.setAttribute('aria-checked', discreetPackaging ? 'true' : 'false');
   const cb = document.getElementById('discreet-check-input');
   if(cb) cb.checked = discreetPackaging;
   try { renderReceipt(); } catch(e){}
