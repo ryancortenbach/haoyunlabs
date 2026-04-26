@@ -2655,8 +2655,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <input class="form-input" type="text" id="f-zip" name="postal-code" autocomplete="postal-code" required maxlength="10" placeholder="ZIP code">
             </div>
             <div>
-              <label class="form-label">Phone</label>
-              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel" placeholder="+1 ...">
+              <label class="form-label">Phone *</label>
+              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel" required placeholder="+1 ...">
             </div>
           </div>
         </form>
@@ -7693,16 +7693,46 @@ function cryptoSubmitRecovery(){
    ═════════════════════════════════════════════════════ */
 async function submitOrder(){
   if(cart.size===0){showToast('Add at least one item to continue','error');return;}
-  const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-email'];
-  for(const fid of fields){
+  const fieldLabels = {
+    'f-fname':  'Please enter your first name',
+    'f-lname':  'Please enter your last name',
+    'f-street': 'Please enter your street address',
+    'f-city':   'Please enter your city',
+    'f-state':  'Please enter your state',
+    'f-zip':    'Please enter your ZIP code',
+    'f-phone':  'Please enter your phone number',
+    'f-email':  'Please enter your email',
+  };
+  for(const [fid, msg] of Object.entries(fieldLabels)){
     const el = document.getElementById(fid);
-    if(!el.value.trim()){el.focus();showToast('Please fill in all required fields','error');return;}
+    if(!el.value.trim()){ el.focus(); showToast(msg,'error'); return; }
   }
-  // Email validation
+  // Email format
   const emailVal = document.getElementById('f-email').value.trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
     document.getElementById('f-email').focus();
     showToast('Please enter a valid email address','error');
+    return;
+  }
+  // State must be 2 letters (US)
+  const stateVal = document.getElementById('f-state').value.trim();
+  if(stateVal.length !== 2 || !/^[A-Za-z]{2}$/.test(stateVal)){
+    document.getElementById('f-state').focus();
+    showToast('State must be 2 letters (e.g. NY)','error');
+    return;
+  }
+  // ZIP: 5 digits or 5+4
+  const zipVal = document.getElementById('f-zip').value.trim();
+  if(!/^\d{5}(-\d{4})?$/.test(zipVal)){
+    document.getElementById('f-zip').focus();
+    showToast('Please enter a valid ZIP code','error');
+    return;
+  }
+  // Phone: at least 10 digits
+  const phoneDigits = document.getElementById('f-phone').value.replace(/\D/g,'');
+  if(phoneDigits.length < 10){
+    document.getElementById('f-phone').focus();
+    showToast('Please enter a valid phone number','error');
     return;
   }
 
