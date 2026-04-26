@@ -1997,10 +1997,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .hyl-rp-switch-row{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border:1px solid var(--stroke);border-radius:14px;background:#fafafa;cursor:pointer;transition:background 0.2s}
 .hyl-rp-switch-row:hover{background:#f4f4f4}
 .hyl-sr-only{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
-.hyl-switch{position:relative;width:44px;height:26px;border-radius:999px;background:#d1d1d6;flex-shrink:0;transition:background 0.25s ease;margin-top:2px}
-.hyl-switch-knob{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.18),0 1px 1px rgba(0,0,0,0.06);transition:transform 0.25s cubic-bezier(0.22,1,0.36,1)}
-.hyl-switch.checked{background:#22c55e}
-.hyl-switch.checked .hyl-switch-knob{transform:translateX(18px)}
+/* Uiverse switch (mrhyddenn) — used for discreet packaging toggle */
+.hyl-switch{position:relative;display:inline-block;width:62px;height:35px;flex-shrink:0;background:#fff;border:1px solid #ccc;border-radius:30px;transition:background 0.4s,border-color 0.4s;margin-top:0;cursor:pointer}
+.hyl-switch-knob{position:absolute;top:0;bottom:0;left:1.2px;margin:auto 0;width:1.9em;height:1.9em;font-size:17px;background:#fff;border-radius:16px;box-shadow:0 2px 5px #999;transition:transform 0.4s}
+.hyl-switch.checked{background:#5fdd54;border-color:transparent}
+.hyl-switch.checked .hyl-switch-knob{transform:translateX(1.5em)}
 .hyl-rp-switch-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
 .hyl-rp-switch-title{font-size:0.94rem;font-weight:700;color:var(--text)}
 .hyl-rp-switch-sub{font-size:0.78rem;color:var(--muted);line-height:1.5}
