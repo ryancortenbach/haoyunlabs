@@ -6402,13 +6402,13 @@ async function renderCardReturn(){
     // and can retry. Banner-style toast explains what happened.
     try { localStorage.removeItem('hyl_card_result'); } catch(_){}
     navigate('order');
-    setTimeout(() => showToast('Payment cancelled — your cart is still here. Try again or pick another method.', 'warning'), 250);
+    setTimeout(() => showToast('Payment cancelled. Your cart is saved.', 'warning'), 250);
     return;
   }
   if(result.status === 'failed'){
     try { localStorage.removeItem('hyl_card_result'); } catch(_){}
     navigate('order');
-    setTimeout(() => showToast('Card declined — try a different card or payment method.', 'error'), 250);
+    setTimeout(() => showToast('Card declined. Please try again.', 'error'), 250);
     return;
   }
   // Success - poll DB for status confirmation (webhook updates it)
