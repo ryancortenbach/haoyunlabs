@@ -4661,6 +4661,25 @@ function hidePayLoadingToast(){
   setTimeout(()=>el.remove(), 280);
 }
 
+// Reset checkout state when the user hits browser-back from Bankful and the
+// page is restored from bfcache. Without this, _submittingOrder stays true,
+// payBtn stays disabled, and the loading toast remains on screen — leaving
+// the customer unable to retry payment.
+window.addEventListener('pageshow', function(e){
+  if(e.persisted){
+    window._submittingOrder = false;
+    if(window._submitTimeout){ clearTimeout(window._submitTimeout); window._submitTimeout = null; }
+    hidePayLoadingToast();
+    const b = document.getElementById('btn-pay');
+    if(b){
+      b.disabled = false;
+      b.classList.remove('btn-loading');
+      const t = b.querySelector('.hyl-pay-label');
+      if(t) t.textContent = 'Pay by Card';
+    }
+  }
+});
+
 function showAddedToCartToast(itemName){
   // Suppress if user is already viewing the cart/checkout screen.
   try {
