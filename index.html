@@ -6398,11 +6398,17 @@ async function renderCardReturn(){
     return;
   }
   if(result.status === 'cancel'){
-    body.innerHTML = '<div style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;margin-bottom:8px">Payment cancelled</div><div style="color:var(--muted);margin-bottom:24px">Your order is still saved. You can try again or choose a different payment method.</div><button onclick="navigate(\'order\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Back to checkout</button>';
+    // Bring the customer straight back to the cart so they see their items
+    // and can retry. Banner-style toast explains what happened.
+    try { localStorage.removeItem('hyl_card_result'); } catch(_){}
+    navigate('order');
+    setTimeout(() => showToast('Payment cancelled — your cart is still here. Try again or pick another method.', 'warning'), 250);
     return;
   }
   if(result.status === 'failed'){
-    body.innerHTML = '<div style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div style="font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;margin-bottom:8px">Payment failed</div><div style="color:var(--muted);margin-bottom:24px">Your card was declined. Please try a different card or payment method.</div><button onclick="navigate(\'order\')" style="padding:14px 32px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer">Try again</button>';
+    try { localStorage.removeItem('hyl_card_result'); } catch(_){}
+    navigate('order');
+    setTimeout(() => showToast('Card declined — try a different card or payment method.', 'error'), 250);
     return;
   }
   // Success - poll DB for status confirmation (webhook updates it)
