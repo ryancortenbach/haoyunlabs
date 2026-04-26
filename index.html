@@ -6674,7 +6674,13 @@ function renderReceipt(){
   const itemsEl = document.getElementById('hyl-rp-items');
   if(itemsEl){
     if(cart.size === 0){
-      itemsEl.innerHTML = '<div class="hyl-rp-empty-row">Cart is empty.</div>';
+      itemsEl.innerHTML = `
+        <div style="border:1px dashed var(--stroke);border-radius:12px;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;background:#fafafa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.35"><path d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/></svg>
+          <div style="font-family:var(--display);font-size:0.72rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--text)">Cart is empty</div>
+          <div style="color:var(--muted);font-size:0.72rem;max-width:260px;text-align:center;line-height:1.5">Add research peptides from the catalog to continue. Your shipping info is saved.</div>
+          <button onclick="navigate('catalog')" style="margin-top:2px;padding:8px 18px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer">Shop Catalog</button>
+        </div>`;
     } else {
       const rowsHtml = [];
       cart.forEach((qty, sku) => {
