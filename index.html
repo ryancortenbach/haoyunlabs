@@ -3695,11 +3695,12 @@ function pcPopulateReorder(){
 
 <!-- EMAIL CAPTURE POPUP -->
 <div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;width:380px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
-  <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
+  <div id="email-popup-card" style="background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.45);line-height:1;padding:6px">&times;</button>
     <div style="display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px">Exclusive Access</div>
-    <div style="font-family:var(--display);font-weight:800;font-size:1.35rem;line-height:1.2;letter-spacing:-0.01em;margin-bottom:8px">Join the mailing list for a free mystery vial.</div>
-    <div style="font-size:0.78rem;color:rgba(255,255,255,0.55);margin-bottom:18px;line-height:1.5">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery vial</div>
+    <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
+    <div style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:18px;line-height:1.5">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Name</div>
     <input type="text" id="popup-name" placeholder="Your name" style="width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,0.14);border-radius:999px;font-size:0.88rem;margin-bottom:14px;background:rgba(255,255,255,0.04);color:#fff;font-family:var(--sans);outline:none">
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Email Address</div>
@@ -8317,6 +8318,30 @@ function showEmailPopup(){
   const card = document.getElementById('email-popup-card');
   if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
   if(card) setTimeout(()=>{ card.style.transform='translateY(0)'; },50);
+  // Word flip cycle
+  const words=['free','exclusive','bonus','surprise'];
+  let idx=0;
+  if(_flipInterval) clearInterval(_flipInterval);
+  const measure=document.getElementById('popup-flip-measure');
+  const container=document.getElementById('popup-flip-container');
+  if(measure&&container){measure.textContent=words[0];container.style.width=measure.offsetWidth+'px';}
+  _flipInterval=setInterval(()=>{
+    idx=(idx+1)%words.length;
+    const el=document.getElementById('popup-flip-word');
+    if(!el||!measure||!container){clearInterval(_flipInterval);return;}
+    el.style.transform='translateY(-110%)';el.style.opacity='0';
+    measure.textContent=words[idx];
+    container.style.width=measure.offsetWidth+'px';
+    setTimeout(()=>{
+      el.textContent=words[idx];
+      el.style.transition='none';
+      el.style.transform='translateY(110%)';
+      requestAnimationFrame(()=>{
+        el.style.transition='transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease';
+        el.style.transform='translateY(0)';el.style.opacity='1';
+      });
+    },300);
+  },3000);
 }
 function closeEmailPopup(){
   if(_flipInterval){clearInterval(_flipInterval);_flipInterval=null;}
