@@ -616,6 +616,22 @@ ul{list-style:none}
   position:fixed;top:0;left:0;right:0;z-index:101;
   background:#000;color:#fff;overflow:hidden;
 }
+.inline-marquee{
+  background:#fff;color:#000;overflow:hidden;
+  border:1px solid var(--stroke);border-radius:999px;
+  margin:0 0 24px 0;
+}
+.inline-marquee .banner-track{
+  display:flex;width:max-content;
+  -webkit-animation:banner-scroll 90s linear infinite;
+  animation:banner-scroll 90s linear infinite;
+  will-change:transform;
+}
+.inline-marquee:hover .banner-track{-webkit-animation-play-state:paused;animation-play-state:paused}
+.inline-marquee .banner-track span{
+  white-space:nowrap;padding:10px 48px;
+  font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;color:#000;
+}
 .banner-track{
   display:flex;width:max-content;
   -webkit-animation:banner-scroll 90s linear infinite;
@@ -2516,6 +2532,11 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
     </div>
 
+    <!-- INLINE MARQUEE -->
+    <div class="inline-marquee reveal">
+      <div class="banner-track" id="inline-banner-track"></div>
+    </div>
+
     <!-- FULL CATALOG (text card wraps image card inside with padding buffer) -->
     <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('catalog')">
       <div>
@@ -2548,7 +2569,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div>
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Join The Lab</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate &mdash; 20% revenue on every sale + free peptides monthly.</strong> Plus open roles across research, quality, operations, customer experience, and growth.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate. 20% revenue on every sale + free peptides monthly.</strong> Plus open roles across research, quality, operations, customer experience, and growth.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
       </div>
@@ -8162,6 +8183,8 @@ function buildMarquee(){
   if(track) track.innerHTML = spans;
   const inlineTrack = document.querySelector('.banner-track-inline');
   if(inlineTrack) inlineTrack.innerHTML = spans;
+  const inlineMarquee = document.getElementById('inline-banner-track');
+  if(inlineMarquee) inlineMarquee.innerHTML = spans;
 }
 
 /* ═════════════════════════════════════════════════════
