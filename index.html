@@ -1129,6 +1129,8 @@ ul{list-style:none}
   input[type="text"],input[type="email"],input[type="tel"],input[type="search"],select,textarea{font-size:16px!important}
   /* Email popup close button */
   #email-popup-card button[onclick*="closeEmailPopup"]{width:44px!important;height:44px!important;top:10px!important;right:10px!important;font-size:1.8rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
+  /* Email popup: top-center on phones (instead of bottom-right) */
+  #email-popup{bottom:auto!important;right:16px!important;left:16px!important;top:max(20px,env(safe-area-inset-top,20px))!important;width:auto!important;max-width:none!important}
   /* Footer email grid */
   .footer,.footer>div,.footer-inner,#footer-top{grid-template-columns:1fr!important}
   /* Sticky mobile cart CTA */
@@ -3706,8 +3708,8 @@ function pcPopulateReorder(){
 </div>
 
 <!-- EMAIL CAPTURE POPUP -->
-<div id="email-popup" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1)">
-  <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:20px;padding:36px 24px;max-width:460px;width:90%;text-align:center;position:relative;transform:translateY(40px) scale(0.95);transition:transform 0.7s cubic-bezier(0.22,1,0.36,1)">
+<div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;width:380px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
+  <div id="email-popup-card" style="background:#1a1a1a;color:#fff;border-radius:16px;padding:24px 22px;text-align:center;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.3);line-height:1">&times;</button>
     <div style="font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin-bottom:4px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery vial</div>
     <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:1.9rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
@@ -8345,7 +8347,7 @@ function showEmailPopup(){
   const popup = document.getElementById('email-popup');
   const card = document.getElementById('email-popup-card');
   if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
-  if(card) setTimeout(()=>{ card.style.transform='translateY(0) scale(1)'; },50);
+  if(card) setTimeout(()=>{ card.style.transform='translateY(0)'; },50);
   // Start word flip (Aceternity container-text-flip style)
   const words=['free','exclusive','bonus','surprise'];
   let idx=0;
@@ -8380,7 +8382,7 @@ function closeEmailPopup(){
   if(_flipInterval){clearInterval(_flipInterval);_flipInterval=null;}
   const popup = document.getElementById('email-popup');
   const card = document.getElementById('email-popup-card');
-  if(card) card.style.transform='translateY(40px) scale(0.95)';
+  if(card) card.style.transform='translateY(20px)';
   if(popup){ popup.style.opacity='0'; popup.style.pointerEvents='none'; }
   sessionStorage.setItem('hyl_popup_shown_session', '1');
 }
