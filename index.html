@@ -618,13 +618,12 @@ ul{list-style:none}
 }
 .inline-marquee{
   background:#fff;color:#000;overflow:hidden;
-  border:1px solid var(--stroke);border-radius:999px;
-  margin:0 0 24px 0;
+  border-bottom:1px solid var(--stroke);
 }
 .inline-marquee .banner-track{
   display:flex;width:max-content;
-  -webkit-animation:banner-scroll 90s linear infinite;
-  animation:banner-scroll 90s linear infinite;
+  -webkit-animation:banner-scroll 240s linear infinite;
+  animation:banner-scroll 240s linear infinite;
   will-change:transform;
 }
 .inline-marquee:hover .banner-track{-webkit-animation-play-state:paused;animation-play-state:paused}
@@ -2535,22 +2534,22 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
     </div>
 
-    <!-- INLINE MARQUEE -->
-    <div class="inline-marquee reveal">
-      <div class="banner-track" id="inline-banner-track"></div>
-    </div>
-
-    <!-- FULL CATALOG (text card wraps image card inside with padding buffer) -->
-    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('catalog')">
-      <div>
-        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Built for Serious Research</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for advanced research protocols. Metabolic peptides, secretagogues, nootropics, and reconstitution supplies. Sourced, tested, and sealed under controlled conditions.</div>
-        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
+    <!-- FULL CATALOG (with attached marquee on top, separated by a line) -->
+    <div class="reveal big-feature-card" style="border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;overflow:hidden" onclick="navigate('catalog')">
+      <div class="inline-marquee">
+        <div class="banner-track" id="inline-banner-track"></div>
       </div>
-      <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
-        <img src="https://i.pinimg.com/736x/60/a1/1e/60a11ec6b61677230fc6fdd7f5e18344.jpg" class="pin-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:1;pointer-events:none;-webkit-touch-callout:none" alt="Lab">
-        <img src="https://i.pinimg.com/736x/ca/ca/d9/cacad9f0c4bfbfcf5a0e79db7c69aad4.jpg" class="pin-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0;pointer-events:none;-webkit-touch-callout:none" alt="Lab">
+      <div style="padding:36px 32px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
+          <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Built for Serious Research</div>
+          <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for advanced research protocols. Metabolic peptides, secretagogues, nootropics, and reconstitution supplies. Sourced, tested, and sealed under controlled conditions.</div>
+          <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
+        </div>
+        <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
+          <img src="https://i.pinimg.com/736x/60/a1/1e/60a11ec6b61677230fc6fdd7f5e18344.jpg" class="pin-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:1;pointer-events:none;-webkit-touch-callout:none" alt="Lab">
+          <img src="https://i.pinimg.com/736x/ca/ca/d9/cacad9f0c4bfbfcf5a0e79db7c69aad4.jpg" class="pin-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease;opacity:0;pointer-events:none;-webkit-touch-callout:none" alt="Lab">
+        </div>
       </div>
     </div>
 
