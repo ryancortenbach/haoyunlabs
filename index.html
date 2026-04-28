@@ -2555,11 +2555,25 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
     </div>
 
-    <!-- COA / PURITY (text card wraps image card, alternated: images left) -->
-    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="navigate('coa')">
-      <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
-        <img src="media/coa-v4.gif" alt="" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" tabindex="-1">
+    <!-- CURATED KITS (image left) -->
+    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="goToCategory('kits')">
+      <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
+        <img src="media/kits/AOD10.png" class="kit-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;transition:opacity 1.2s ease;opacity:1;pointer-events:none;-webkit-touch-callout:none" alt="10-vial kit">
+        <img src="media/kits/RT10.png" class="kit-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;transition:opacity 1.2s ease;opacity:0;pointer-events:none;-webkit-touch-callout:none" alt="10-vial kit">
+        <img src="media/kits/SM10.png" class="kit-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;transition:opacity 1.2s ease;opacity:0;pointer-events:none;-webkit-touch-callout:none" alt="10-vial kit">
+        <img src="media/kits/TR10.png" class="kit-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;transition:opacity 1.2s ease;opacity:0;pointer-events:none;-webkit-touch-callout:none" alt="10-vial kit">
+        <img src="media/kits/Adamax10.png" class="kit-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;transition:opacity 1.2s ease;opacity:0;pointer-events:none;-webkit-touch-callout:none" alt="10-vial kit">
       </div>
+      <div>
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
+        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">One Click. Better Value.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price.</div>
+        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
+      </div>
+    </div>
+
+    <!-- COA / PURITY (image right) -->
+    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('coa')">
       <div>
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Purity You Can Prove</div>
@@ -2567,23 +2581,15 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
-    </div>
-
-    <!-- CURATED KITS -->
-    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="goToCategory('kits')">
-      <div>
-        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">One Click. Better Value.</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price.</div>
-        <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Lot-traceable &bull; COA-backed &bull; 10 vials per kit &bull; Lower per-vial cost</div>
-        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
-      </div>
-      <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
-        <img src="media/kits/AOD10.png" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;pointer-events:none;-webkit-touch-callout:none" alt="10-vial research kit">
+      <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
+        <img src="media/coa-v4.gif" alt="" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" tabindex="-1">
       </div>
     </div>
 
-    <a href="/jobs.html" class="reveal big-feature-card" style="text-decoration:none;color:inherit;padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
+    <a href="/jobs.html" class="reveal big-feature-card" style="text-decoration:none;color:inherit;padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center">
+      <div class="card-3d-wrap" style="background:#000;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center">
+        <div style="color:#fff;font-family:'Instrument Serif',serif;font-style:italic;font-size:3rem;text-align:center;padding:20px;line-height:1.1">we're<br>hiring</div>
+      </div>
       <div>
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Join The Lab</div>
@@ -2591,13 +2597,10 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
       </div>
-      <div class="card-3d-wrap" style="background:#000;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center">
-        <div style="color:#fff;font-family:'Instrument Serif',serif;font-style:italic;font-size:3rem;text-align:center;padding:20px;line-height:1.1">we're<br>hiring</div>
-      </div>
     </a>
 
-    <!-- SHOP YOUR WAY -->
-    <div style="margin-bottom:48px;padding:40px 0">
+    <!-- SHOP YOUR WAY (temporarily hidden) -->
+    <div style="display:none;margin-bottom:48px;padding:40px 0">
       <div style="font-family:'Instrument Serif',serif;font-size:2.4rem;margin-bottom:28px">Browse by <em style="font-style:italic">category</em></div>
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px">
         <a class="shop-pill" onclick="goToCategory('bestsellers')">
