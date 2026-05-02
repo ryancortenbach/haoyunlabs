@@ -1039,18 +1039,20 @@ ul{list-style:none}
 .cssbuttons-io{
   --x:50%;--y:50%;
   position:relative;font-family:inherit;font-weight:700;font-size:0.95rem;letter-spacing:0.04em;
-  border-radius:12px;cursor:pointer;border:none;
-  background:#5865F2;color:#fff;overflow:hidden;text-decoration:none;
-  display:inline-flex;align-items:center;line-height:1;
-  transition:transform 0.15s ease;
+  border-radius:12px;cursor:pointer;border:none;min-width:240px;
+  background:#e9eaee;color:#374151;overflow:hidden;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;line-height:1;
+  transition:color 0.45s ease,transform 0.15s ease;
 }
 .cssbuttons-io::before{
   content:"";position:absolute;inset:0;z-index:0;
   background:radial-gradient(circle 220px at var(--x) var(--y), #404EED 0%, #5865F2 35%, #7983F5 100%);
-  transition:background 0.05s linear;
+  opacity:0;transition:opacity 0.45s ease;
 }
-.cssbuttons-io svg{width:1.1em;height:1.1em;margin-right:0.55em}
-.cssbuttons-io span{position:relative;z-index:1;display:inline-flex;align-items:center;padding:0.95em 1.45em;white-space:nowrap;color:#fff}
+.cssbuttons-io:hover{color:#fff}
+.cssbuttons-io:hover::before{opacity:1}
+.cssbuttons-io svg{width:1.1em;height:1.1em;margin-right:0.55em;transition:color 0.45s ease}
+.cssbuttons-io span{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;padding:0.95em 1.45em;white-space:nowrap;color:inherit;width:100%;text-align:center}
 .cssbuttons-io:active{transform:scale(0.97)}
 
 /* ── RESEARCH LINKS + HOVER CARD ── */
@@ -2038,11 +2040,12 @@ select.form-input{
 .hyl-rp-eyebrow{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
 .hyl-rp-headline{font-family:var(--display);font-size:1.35rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-4px}
 .hyl-rp-helper{font-size:0.92rem;color:var(--muted);line-height:1.5;margin-top:-2px}
-.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--stroke)}
+.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:10px 0 8px;border-bottom:1px solid var(--stroke)}
 .hyl-rp-table-head>span:nth-child(2),.hyl-rp-table-head>span:nth-child(3){text-align:right}
 .hyl-rp-table-head>span:nth-child(4){text-align:right}
-.hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:0}
 .hyl-rp-row{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;align-items:center;padding:10px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
+.hyl-rp-row:first-child{padding-top:8px}
 .hyl-rp-row:last-child{border-bottom:none}
 .hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
@@ -2054,7 +2057,8 @@ select.form-input{
 
 .hyl-rp-section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 .hyl-rp-discount-row{display:flex;gap:8px;align-items:stretch}
-.hyl-rp-discount-input{flex:1;padding:10px 14px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.78rem;letter-spacing:0.08em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
+.hyl-rp-discount-input{flex:1;padding:10px 14px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.78rem;font-weight:700;letter-spacing:0.08em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
+.hyl-rp-discount-input::placeholder{color:#3a3f47;font-weight:700;opacity:1}
 .hyl-rp-discount-input:focus{border-color:#000}
 .hyl-rp-discount-btn{padding:0 22px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:10px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
 .hyl-rp-discount-btn:hover{background:#000;color:#fff;border-color:#000}
@@ -2179,8 +2183,10 @@ select.form-input{
 .confirmed-btns a.secondary:hover{background:var(--brand);color:var(--bg)}
 
 /* ── FOOTER ── */
-.footer{border-top:1px solid var(--stroke);padding:60px 24px 32px;background:#fafafa;position:relative;z-index:2}
+.footer{border-top:1px solid var(--stroke);padding:32px 24px;background:#fafafa;position:relative;z-index:2;margin-top:24px}
 body.no-footer .footer,body.no-footer .discord-cta{display:none !important}
+body.no-nav .nav{display:none !important}
+body.no-nav{padding-top:0 !important}
 .footer-social a:hover{background:#000!important}
 .footer-social a:hover svg{stroke:#fff!important;fill:none!important;color:#fff!important}
 .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr) 1.4fr;gap:40px}
@@ -2724,8 +2730,12 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: ORDER / CHECKOUT ═══════════════ -->
 <div class="screen" id="screen-order">
   <div class="container">
-    <div style="padding:80px 0 14px;display:flex;align-items:center;justify-content:flex-start">
-      <div style="font-family:var(--display);font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff">CHECKOUT <span style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0">— Complete your order</span></div>
+    <div style="padding:32px 0 10px;display:flex;align-items:center">
+      <div onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div>
+    </div>
+    <div style="padding:0 0 18px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;color:var(--text);letter-spacing:0.03em;text-transform:uppercase">CHECKOUT</div>
+      <div style="font-size:0.92rem;font-weight:500;color:var(--muted)">Complete your order</div>
     </div>
     <div class="checkout-layout">
       <!-- LEFT COLUMN -->
@@ -3811,7 +3821,7 @@ function pcPopulateReorder(){
       <div style="font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:0.01em;margin-bottom:8px">Need help with an order?</div>
       <div style="font-size:0.88rem;color:var(--muted);line-height:1.6;max-width:560px">Open Find My Order for a direct status lookup, or use Customer Support below for help.</div>
     </div>
-    <button onclick="navigate('tracking')" style="padding:14px 28px;background:#f5f5f5;color:var(--text);border:1px solid var(--stroke);border-radius:12px;font-family:var(--display);font-weight:800;font-size:0.82rem;letter-spacing:0.04em;cursor:pointer;transition:all 0.2s;white-space:nowrap" onmouseover="this.style.background='#000';this.style.color='#fff';this.style.borderColor='#000'" onmouseout="this.style.background='#f5f5f5';this.style.color='var(--text)';this.style.borderColor='var(--stroke)'">Find My Order</button>
+    <button onclick="navigate('tracking')" style="min-width:240px;padding:0.95em 1.45em;background:#e9eaee;color:#374151;border:none;border-radius:12px;font-family:inherit;font-weight:700;font-size:0.95rem;letter-spacing:0.04em;line-height:1;cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center" onmouseover="this.style.background='#000';this.style.color='#fff'" onmouseout="this.style.background='#e9eaee';this.style.color='#374151'">Find My Order</button>
   </div>
 </div>
 
@@ -3835,7 +3845,7 @@ function pcPopulateReorder(){
 <!-- FOOTER -->
 <footer class="footer">
   <!-- EMAIL SIGNUP ROW -->
-  <div style="max-width:1200px;margin:0 auto 40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+  <div style="max-width:1200px;margin:0 auto 24px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
     <div>
       <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Get peptide drops before anyone else.</div>
       <div style="display:flex;gap:8px">
@@ -5713,6 +5723,9 @@ function handleRoute(){
   // Hide footer on checkout/payment screens where it creates awkward whitespace
   const hideFooterOn = ['order','payment-confirmed','card-return'];
   document.body.classList.toggle('no-footer', hideFooterOn.includes(hash));
+  // Hide top nav on checkout screen so the back-pill is the only header chrome
+  const hideNavOn = ['order'];
+  document.body.classList.toggle('no-nav', hideNavOn.includes(hash));
   window.scrollTo(0,0);
 
   if(hash==='product' && !window._pdpSku){
@@ -6419,10 +6432,9 @@ function openProduct(sku){
 
   const coaSlideHTML = _coaForThisSku ? `
     <div class="pdp-slide" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:18px;box-sizing:border-box">
-      <div style="width:140%;height:140%;display:flex;align-items:center;justify-content:center;transform:scale(0.7);transform-origin:center center">
-        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0" style="width:100%;height:100%;border:none;background:#fff;display:block" loading="lazy" title="Certificate of Analysis"></iframe>
+      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff">
+        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" style="width:100%;height:100%;border:none;background:#fff;display:block" loading="lazy" title="Certificate of Analysis"></iframe>
       </div>
-      <a href="${COA_BASE}${_coaForThisSku.c}.pdf" target="_blank" style="position:absolute;bottom:14px;right:14px;padding:8px 16px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;display:inline-flex;align-items:center;gap:6px;z-index:3">Open PDF &rarr;</a>
     </div>` : '';
 
   document.getElementById('pdp-layout').innerHTML = `
@@ -6833,7 +6845,7 @@ function renderSuggested(){
             <span id="sugg-qty-${p.sku}" style="min-width:18px;text-align:center;font-size:0.78rem;font-weight:700;font-family:var(--mono)">${qty}</span>
             <button onclick="suggestedQtyChange('${p.sku}',1)" style="width:22px;height:22px;background:transparent;border:none;border-radius:4px;font-size:0.85rem;font-weight:700;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center" aria-label="Increase">+</button>
           </div>
-          <button onclick="suggestedAdd('${p.sku}')" style="padding:6px 12px;background:var(--brand);color:#fff;border:none;border-radius:6px;font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Add</button>
+          <button onclick="suggestedAdd('${p.sku}')" style="padding:8px 14px;background:var(--brand);color:#fff;border:none;border-radius:6px;font-size:0.7rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;display:inline-flex;align-items:center;gap:6px" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>Add</button>
         </div>
       `}).join('')}
     </div>
@@ -6865,7 +6877,7 @@ function renderUpsell(){
         <div style="font-size:0.78rem;font-weight:700;color:#dc2626">BAC Water Recommended</div>
         <div style="font-size:0.7rem;color:var(--muted)">${toAdd}x suggested for ${peptideQty} vial${peptideQty>1?'s':''} - $${cost}</div>
       </div>
-      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:8px 16px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap">+ ADD ${toAdd > 1 ? toAdd + 'x' : ''}</button>
+      <button type="button" id="bac-add-btn" onclick="event.preventDefault();event.stopPropagation();addBacWater(${toAdd})" style="padding:10px 18px;background:#dc2626;color:#fff;border:none;border-radius:var(--radius);font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>Add ${toAdd > 1 ? toAdd + 'x' : ''}</button>
     </div>`;
   } else {
     el.innerHTML = '';
