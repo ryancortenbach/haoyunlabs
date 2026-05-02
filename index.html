@@ -698,16 +698,21 @@ ul{list-style:none}
 .product-card:nth-child(4){animation-delay:0.2s}
 
 /* ── TOOLBAR: CATEGORIES + SEARCH ── */
-.toolbar{padding:24px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.toolbar{padding:24px 0 16px;display:flex;flex-wrap:nowrap;gap:14px;align-items:center;justify-content:flex-start}
 .toolbar-card{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px}
 .toolbar-card .toolbar{padding:0}
 .cat-tabs{
-  display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap;
-  position:relative;font-size:0.82rem;
+  display:flex;flex-direction:row;align-items:center;gap:8px;flex-wrap:nowrap;
+  position:relative;font-size:0.82rem;flex:1 1 auto;min-width:0;overflow-x:auto;overflow-y:visible;
+  scrollbar-width:none;-ms-overflow-style:none;
+  -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
+          mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
+  padding-right:8px;
 }
+.cat-tabs::-webkit-scrollbar{display:none}
 .cat-tabs-inner{
   display:inline-flex;align-items:center;gap:2px;padding:5px;
-  background:#f3f3f3;border-radius:999px;flex-shrink:1;min-width:0;
+  background:#f3f3f3;border-radius:999px;flex-shrink:0;min-width:0;
 }
 .cat-tabs-slider{display:none}
 .cat-tab{
@@ -730,7 +735,7 @@ ul{list-style:none}
 .type-tab.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 
 /* ZYL-style search + sort */
-.zyl-search-wrap{position:relative;width:240px}
+.zyl-search-wrap{position:relative;width:200px}
 .zyl-search-input{width:100%;padding:12px 42px 12px 18px;font-size:0.92rem;border:none;background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.05);transition:box-shadow 0.2s ease;color:#111}
 .zyl-search-input::placeholder{color:#9b9b9b}
 .zyl-search-input:focus{outline:none;box-shadow:0 1px 3px rgba(0,0,0,0.08),0 0 0 3px rgba(0,0,0,0.04)}
@@ -744,7 +749,7 @@ ul{list-style:none}
 .pricing-switch::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.15);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)}
 .pricing-switch.on{background:var(--brand)}
 .pricing-switch.on::after{transform:translateX(16px)}
-.search-sort{display:flex;gap:10px;align-items:center}
+.search-sort{display:flex;gap:10px;align-items:center;flex-shrink:0;margin-left:auto}
 .sort-select{
   padding:8px 12px;font-size:0.78rem;border:1px solid var(--stroke);
   background:var(--bg);cursor:pointer;text-transform:uppercase;letter-spacing:0.05em;
@@ -3813,11 +3818,11 @@ function pcPopulateReorder(){
   <div class="footer-inner">
     <div class="footer-col">
       <div class="footer-col-title">Shop</div>
-      <a onclick="goToCategory('weight-loss')">Weight Loss & Metabolic</a>
-      <a onclick="goToCategory('growth-recovery')">Growth Hormone & Recovery</a>
-      <a onclick="goToCategory('longevity')">Longevity & Mitochondrial</a>
-      <a onclick="goToCategory('cognitive-sexual')">Cognitive & Sexual Health</a>
-      <a onclick="goToCategory('supplies')">Supplies & Reconstitution</a>
+      <a onclick="goToCategory('weight-loss')">Weight Loss</a>
+      <a onclick="goToCategory('growth-recovery')">Recovery</a>
+      <a onclick="goToCategory('longevity')">Longevity</a>
+      <a onclick="goToCategory('cognitive-sexual')">Cognition</a>
+      <a onclick="goToCategory('supplies')">Supplies</a>
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Support</div>
@@ -4189,7 +4194,6 @@ const CATALOG_INDIVIDUAL = [
   { sku:'KS10SV', name:'Kisspeptin-10 10mg', price:64.8 },
   { sku:'MT1SV', name:'Melanotan-1 10mg', price:36 },
   { sku:'MT2SV', name:'Melanotan-2 10mg', price:36 },
-  { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:6 },
   { sku:'OT10SV', name:'Oxytocin 10mg', price:50.4 },
   { sku:'P411SV', name:'PT-141 10mg', price:50.4 },
   { sku:'PE10SV', name:'PE-22-28 10mg', price:64.8 },
@@ -4434,6 +4438,8 @@ const CATALOG_SUPPLIES = [
   { sku:'NEEDLE31G8MM100PK', name:'Insulin Syringes (100 pack)', price:29.99, description:'Box of 100 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
   { sku:'SWAB10PK', name:'Alcohol Swabs (10 pack)', price:3.99, description:'Sterile 2-ply alcohol prep pads saturated with 70% isopropyl alcohol for effective antiseptic cleansing of injection sites. Thick, textured material removes oils and residue while remaining durable.' },
   { sku:'SWAB100PK', name:'Alcohol Swabs (100 pack)', price:19, description:'Sterile 2-ply alcohol prep pads saturated with 70% isopropyl alcohol for effective antiseptic cleansing of injection sites. Thick, textured material removes oils and residue while remaining durable.' },
+  { sku:'ACET06-10ML', name:'Acetic Acid 0.6% 10ml', price:8, description:'10ml sterile 0.6% acetic acid solution - the standard mild-acid solvent for reconstituting peptides that require acidic buffering for solubility (e.g. BPC-157).' },
+  { sku:'ACET1-10ML', name:'Acetic Acid 1% 10ml', price:9, description:'10ml sterile 1% acetic acid solution for peptides requiring stronger acidic reconstitution. Filtered, lab-grade, sealed.' },
 ];
 
 
@@ -4617,7 +4623,9 @@ const VALID_SKUS = new Set([
   'CAG5SV','CAG10SV','CG5','CG10',
   // Nasal sprays (19)
   'OXY2NS','OXY5NS','OXY10NS','DSIP2NS','DSIP5NS','DSIP10NS','SK5NS','SK10NS','PIN5NS','PIN10NS',
-  'PE22-5NS','PE22-10NS','MT2-10NS','ADAMAX5NS','ADAMAX10NS','XA5NS','XA10NS','PT141-10NS','P21-5NS'
+  'PE22-5NS','PE22-10NS','MT2-10NS','ADAMAX5NS','ADAMAX10NS','XA5NS','XA10NS','PT141-10NS','P21-5NS',
+  // Reconstitution supplies
+  'NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'
 ]);
 
 const SUPPLIES_RX     = /bac\.?\s?water|bacteriostatic|acetic\s?acid|syringe|swab|needle|alcohol\s?prep/i;
@@ -4712,7 +4720,7 @@ function addToCartQty(sku, qty){
   showToast(p ? `${p.name} x${qty} added` : 'Added to cart', 'success', {action:{label:'View Cart',onClick:()=>navigate('order')}});
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
   if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
-  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
+  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
     const shown = sessionStorage.getItem('hyl_upsell_shown');
     if(!shown){
@@ -4737,7 +4745,7 @@ function addToCart(sku, btn){
   // Animate button: green checkmark then revert
   try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
   // Show supplies upsell if adding a peptide (not supplies themselves)
-  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
+  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
     const shown = sessionStorage.getItem('hyl_upsell_shown');
     if(!shown){
@@ -6146,11 +6154,11 @@ function buildCatTabs(containerId, activeVar, clickFn){
       + `<button class="type-tab" data-type="bundles" onclick="setProductType('bundles')">Bundles</button>`
       + `</div>`;
     const g1 = `<div class="cat-tabs-inner">`
-      + `<button class="cat-tab" data-cat="weight-loss" onclick="${clickFn}('weight-loss')">Weight Loss & Metabolic</button>`
-      + `<button class="cat-tab" data-cat="growth-recovery" onclick="${clickFn}('growth-recovery')">Growth Hormone & Recovery</button>`
-      + `<button class="cat-tab" data-cat="longevity" onclick="${clickFn}('longevity')">Longevity & Mitochondrial</button>`
-      + `<button class="cat-tab" data-cat="cognitive-sexual" onclick="${clickFn}('cognitive-sexual')">Cognitive & Sexual Health</button>`
-      + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies & Reconstitution</button>`
+      + `<button class="cat-tab" data-cat="weight-loss" onclick="${clickFn}('weight-loss')">Weight Loss</button>`
+      + `<button class="cat-tab" data-cat="growth-recovery" onclick="${clickFn}('growth-recovery')">Recovery</button>`
+      + `<button class="cat-tab" data-cat="longevity" onclick="${clickFn}('longevity')">Longevity</button>`
+      + `<button class="cat-tab" data-cat="cognitive-sexual" onclick="${clickFn}('cognitive-sexual')">Cognition</button>`
+      + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies</button>`
       + `</div>`;
     c.innerHTML = typeRow + g1;
   }
@@ -6810,7 +6818,7 @@ function renderUpsell(){
     parent.appendChild(el);
   }
   // Show BAC water suggestion if cart has peptides but no BAC water
-  const SUPPLY_SKUS = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK'];
+  const SUPPLY_SKUS = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   const hasBAC = cart.has('BAC10SV') || cart.has('BAC3SV');
   const hasPeptides = cart.size > 0;
   let peptideQty = 0;
