@@ -702,17 +702,17 @@ ul{list-style:none}
 .toolbar-card{background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px}
 .toolbar-card .toolbar{padding:0}
 .cat-tabs{
-  display:inline-flex;align-items:center;gap:12px;
+  display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap;
   position:relative;font-size:0.82rem;
 }
 .cat-tabs-inner{
-  display:inline-flex;align-items:center;gap:2px;padding:6px;
-  background:#f3f3f3;border-radius:999px;
+  display:inline-flex;align-items:center;gap:2px;padding:5px;
+  background:#f3f3f3;border-radius:999px;flex-shrink:1;min-width:0;
 }
 .cat-tabs-slider{display:none}
 .cat-tab{
   text-align:center;white-space:nowrap;position:relative;z-index:1;
-  padding:10px 22px;font-size:0.88rem;letter-spacing:0;
+  padding:8px 14px;font-size:0.78rem;letter-spacing:0;
   text-transform:none;font-weight:500;cursor:pointer;
   border:none;background:transparent;color:#6b6b6b;
   border-radius:999px;transition:all 0.2s ease;
@@ -724,6 +724,10 @@ ul{list-style:none}
   transform:none;
 }
 .cat-tab .tab-count{font-family:var(--mono);font-size:0.65rem;margin-left:4px;opacity:0.7}
+.type-tabs-inner{display:inline-flex;gap:4px;background:#f4f4f4;padding:5px;border-radius:999px;width:max-content;flex-shrink:0}
+.type-tab{padding:8px 16px;background:transparent;border:none;border-radius:999px;font-size:0.78rem;font-weight:700;letter-spacing:0.02em;cursor:pointer;color:var(--muted);transition:background 0.18s ease,color 0.18s ease}
+.type-tab:hover{color:var(--text)}
+.type-tab.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 
 /* ZYL-style search + sort */
 .zyl-search-wrap{position:relative;width:240px}
@@ -766,21 +770,22 @@ ul{list-style:none}
 .product-card.has-open-select{z-index:200}
 .product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
-.card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0}
-.card-sku{font-family:var(--mono);font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text)}
-.card-price{font-family:var(--mono);font-size:0.95rem;font-weight:700;letter-spacing:0.02em}
-.card-price-old{font-size:0.72rem;font-weight:500;color:#707070;text-decoration:line-through;margin-right:6px}
-.card-body{padding:20px 16px 12px;flex:1;display:flex;flex-direction:column}
-.card-name{font-family:var(--display);font-size:1.2rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;line-height:1.2}
-.card-desc{font-size:0.75rem;color:var(--muted);margin-top:6px;line-height:1.4}
-.card-components{font-size:0.7rem;color:var(--muted);margin-top:6px;font-family:var(--mono);line-height:1.4}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 0}
+.card-sku{font-family:var(--mono);font-size:0.7rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#9b9b9b}
+.card-price{font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.95rem;font-weight:800;letter-spacing:-0.02em;display:inline-flex;align-items:baseline;gap:4px;flex-direction:row-reverse;justify-content:flex-end}
+.card-price-old{font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.95rem;font-weight:700;letter-spacing:-0.02em;color:#9b9b9b;text-decoration:line-through;margin:0}
+.card-body{padding:10px 14px 8px;flex:1;display:flex;flex-direction:column;gap:6px}
+.card-name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1.05rem;font-weight:700;text-transform:none;letter-spacing:-0.01em;line-height:1.2}
+.card-desc{font-size:0.75rem;color:var(--muted);margin-top:2px;line-height:1.4}
+.card-components{font-size:0.7rem;color:var(--muted);margin-top:2px;font-family:var(--mono);line-height:1.4}
 .card-details-toggle{
-  font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;
-  margin-top:10px;cursor:pointer;color:#000;font-weight:700;
-  background:none;border:1.5px solid #000;border-radius:10px;padding:8px 14px;text-align:center;
-  display:block;width:100%;transition:all 0.2s;
+  font-size:0.7rem;text-transform:none;letter-spacing:0;
+  margin:0;cursor:pointer;color:#6b6b6b;font-weight:600;
+  background:none;border:none;border-radius:0;padding:2px 0;text-align:left;
+  display:inline-block;width:auto;transition:color 0.15s;
+  font-family:'Helvetica Neue',Arial,sans-serif;
 }
-.card-details-toggle:hover{background:#000;color:#fff}
+.card-details-toggle:hover{color:#000;background:none}
 .card-details{display:none;padding:8px 0 0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
 .card-details.open{display:block}
 /* ── CUSTOM SIZE SELECT (shadcn-style) ── */
@@ -825,20 +830,21 @@ ul{list-style:none}
 }
 .hyl-select-item.selected .sel-check{opacity:1}
 .hyl-select-separator{height:1px;background:var(--stroke);margin:4px 6px}
-.card-footer{padding:0 16px 16px;margin-top:auto}
+.card-footer{padding:6px 14px 14px;margin-top:auto;border-top:none}
 .btn-add{
-  width:100%;padding:12px;background:var(--brand);color:var(--bg);
-  border:none;font-size:0.75rem;font-weight:700;letter-spacing:0.14em;
+  width:100%;padding:18px 16px;background:var(--brand);color:var(--bg);
+  border:none;font-size:0.95rem;font-weight:800;letter-spacing:-0.01em;
   text-transform:uppercase;cursor:pointer;transition:opacity var(--transition);
   border-radius:var(--radius);
+  font-family:'Helvetica Neue',Arial,sans-serif;
 }
 .btn-add:hover{opacity:0.8}
 .btn-add:disabled{background:#bbb;cursor:not-allowed}
 .btn-add-short{display:none}
 @media(max-width:820px){
-  .card-add-btn{padding:10px 6px!important;font-size:0.7rem!important;letter-spacing:0.08em!important}
-  .btn-add-full{display:none}
-  .btn-add-short{display:inline}
+  .card-add-btn{padding:14px 10px!important;font-size:0.85rem!important;letter-spacing:-0.01em!important}
+  .btn-add-full{display:inline}
+  .btn-add-short{display:none}
   .card-footer .hyl-select-trigger{padding:10px 10px!important;font-size:0.78rem!important}
 }
 
@@ -881,14 +887,15 @@ ul{list-style:none}
   white-space:nowrap;
 }
 .badge-bestseller{
-  background:#facc15;
-  color:#3a2a05;text-shadow:0 1px 0 rgba(255,255,255,0.4);
-  box-shadow:0 1px 3px rgba(161,98,7,0.4),inset 0 1px 0 rgba(255,255,255,0.5);
+  background:linear-gradient(180deg,#fde68a 0%,#f4c430 22%,#caa31a 52%,#a07911 78%,#7a570a 100%);
+  color:#2a1a05;text-shadow:0 1px 0 rgba(255,235,160,0.55);
+  box-shadow:0 2px 6px rgba(120,80,8,0.45),inset 0 1px 0 rgba(255,250,210,0.85),inset 0 -1px 0 rgba(80,50,5,0.5);
+  border:1.5px solid #6a4a08;
   position:relative;overflow:hidden;
 }
 .badge-bestseller::after{
   content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,0.7) 50%,transparent 70%);
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,0.85) 50%,transparent 70%);
   animation:badge-glare 3s ease-in-out infinite;
 }
 @keyframes badge-glare{0%,100%{left:-100%}50%{left:150%}}
@@ -1310,31 +1317,33 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .discreet-check.checked::after{content:'\2713';color:#fff;font-size:0.7rem;font-weight:700}
 
 /* ── SUPPLIES UPSELL POPUP ── */
-.upsell-overlay{position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1)}
-@media(max-width:640px){.upsell-overlay{padding:16px;align-items:flex-end}.upsell-overlay .upsell-card{max-width:100%;margin-bottom:0}}
+/* Supplies upsell — corner toast styled like #email-popup */
+.upsell-overlay{position:fixed;bottom:24px;right:24px;z-index:9100;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1);background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;display:block;padding:0}
+@media(max-width:640px){.upsell-overlay{bottom:auto;right:16px;left:16px;top:max(20px,env(safe-area-inset-top,20px));width:auto;max-width:none}}
 .upsell-overlay.open{opacity:1;pointer-events:auto}
-.upsell-card{background:#1a1a1a;color:#fff;border-radius:16px;padding:28px;max-width:400px;width:100%;transform:translateY(30px) scale(0.95);transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.upsell-overlay.open .upsell-card{transform:translateY(0) scale(1)}
-.upsell-badge{display:inline-block;padding:4px 10px;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px;margin-bottom:12px}
-.upsell-title{font-family:var(--display);font-size:1.3rem;font-weight:800;margin-bottom:6px}
-.upsell-desc{font-size:0.78rem;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:20px}
-.upsell-items{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px;margin-bottom:20px}
-.upsell-items-title{font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px}
+.upsell-card{background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;width:100%;max-width:none;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.upsell-overlay.open .upsell-card{transform:translateY(0)}
+.upsell-badge{display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px}
+.upsell-title{font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px;color:#fff}
+.upsell-desc{font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:18px;line-height:1.5}
+.upsell-items{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;margin-bottom:18px}
+.upsell-items-title{font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:10px}
 .upsell-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);cursor:pointer}
 .upsell-item:first-child{border-top:none;padding-top:0}
-.upsell-check{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.upsell-check{width:22px;height:22px;border:1.5px solid rgba(255,255,255,0.28);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.18s ease,border-color 0.18s ease;background:transparent}
+.upsell-check::after{content:'';width:12px;height:12px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");background-size:contain;background-repeat:no-repeat;background-position:center;opacity:0;transform:scale(0.6);transition:opacity 0.18s ease,transform 0.22s cubic-bezier(0.34,1.56,0.64,1)}
 .upsell-check.checked{background:#fff;border-color:#fff}
-.upsell-check.checked::after{content:'\2713';color:#1a1a1a;font-size:0.7rem;font-weight:800}
-.upsell-item-name{font-size:0.82rem;font-weight:700}
-.upsell-item-detail{font-size:0.68rem;color:rgba(255,255,255,0.5)}
-.upsell-item-price{margin-left:auto;font-family:var(--mono);font-size:0.82rem;font-weight:700;flex-shrink:0}
-.upsell-actions{display:flex;flex-wrap:wrap;gap:8px}
-.upsell-btn{flex:1;padding:12px 16px;border:1px solid rgba(255,255,255,0.15);border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;text-align:center;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
-.upsell-btn:hover{background:rgba(255,255,255,0.15);transform:translateY(-1px)}
-.upsell-btn.primary{background:#fff;color:#1a1a1a;border-color:#fff}
+.upsell-check.checked::after{opacity:1;transform:scale(1)}
+.upsell-item-name{font-size:0.85rem;font-weight:700;color:#fff}
+.upsell-item-detail{font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:2px}
+.upsell-item-price{margin-left:auto;font-size:0.85rem;font-weight:700;color:#fff;flex-shrink:0}
+.upsell-actions{display:block}
+.upsell-btn{display:block;width:100%;padding:14px;background:#fff;color:#111;border:none;border-radius:999px;font-size:0.88rem;font-weight:700;cursor:pointer;text-align:center;letter-spacing:0;text-transform:none;transition:background 0.18s ease}
+.upsell-btn:hover{background:#eee;transform:none}
+.upsell-btn.primary{background:#fff;color:#111;border:none}
 .upsell-btn.primary:hover{background:#eee}
-.upsell-skip{display:block;text-align:center;margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-.upsell-skip:hover{color:rgba(255,255,255,0.7)}
+.upsell-skip{display:inline-block;margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.55);cursor:pointer;text-decoration:underline;text-underline-offset:2px;text-align:left;padding:0!important}
+.upsell-skip:hover{color:rgba(255,255,255,0.85)}
 
 /* ── ALERT DIALOG ── */
 .alert-overlay{position:fixed;inset:0;z-index:9200;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s ease}
@@ -2208,10 +2217,10 @@ body.no-footer .footer,body.no-footer .discord-cta{display:none !important}
 }
 .prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
-.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:100px 0 40px;align-items:start}
-.pdp-image{background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;padding:32px;aspect-ratio:1/1;position:sticky;top:100px;align-self:start}
-.pdp-image img{width:100%;height:100%;object-fit:contain}
-.pdp-info{display:flex;flex-direction:column;gap:12px}
+.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:100px 0 40px;align-items:stretch}
+.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;padding:32px;align-self:stretch;height:100%;min-height:520px;position:relative}
+.pdp-image img{width:100%;height:100%;object-fit:contain;max-height:520px}
+.pdp-info{display:flex;flex-direction:column;gap:14px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:28px;align-self:stretch;height:100%}
 .pdp-back{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;color:var(--muted);margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
 .pdp-back:hover{color:var(--brand)}
 .pdp-name{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;line-height:1.1}
@@ -2241,9 +2250,13 @@ body.no-footer .footer,body.no-footer .discord-cta{display:none !important}
 .pdp-details-content.open{display:block}
 .pdp-details-content strong{color:var(--text)}
 .pdp-commonly{padding:40px 0}
-.pdp-commonly h3{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
-.pdp-commonly h2{font-size:1.4rem;font-weight:800;margin-bottom:20px}
-.pdp-commonly .product-grid{grid-template-columns:repeat(3,1fr)}
+.pdp-commonly-card{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:28px}
+.pdp-commonly h3{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:var(--text);margin:0 0 8px}
+.pdp-commonly h2{font-family:var(--display);font-size:2rem;font-weight:900;margin:0 0 6px;letter-spacing:0;text-transform:none}
+.pdp-commonly .pdp-commonly-sub{font-size:0.85rem;color:var(--muted);margin-bottom:18px}
+.pdp-commonly .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.pdp-commonly .reveal,.pdp-commonly .reveal-left,.pdp-commonly .reveal-right,.pdp-commonly .reveal-scale{opacity:1!important;transform:none!important}
+@media(max-width:980px){.pdp-commonly .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:820px){
   .pdp-layout{grid-template-columns:1fr;gap:24px}
   .pdp-image{max-width:500px;margin:0 auto;position:static}
@@ -4425,6 +4438,147 @@ const CATALOG_SUPPLIES = [
 
 
 
+// Amino-acid sequence lookup, indexed by SKU. Sourced from ZYL catalog.
+const PRODUCT_SEQUENCES = {
+  '10AMSV': 'Not a peptide; small molecule (5-amino-1-methylquinolinium)',
+  '2S10SV': 'D-Arg-Dmt-Lys-Phe-NH2 (Dmt = 2\',6\'-dimethyltyrosine)',
+  '2S50SV': 'D-Arg-Dmt-Lys-Phe-NH2 (Dmt = 2\',6\'-dimethyltyrosine)',
+  '2S5SV': 'D-Arg-Dmt-Lys-Phe-NH2 (Dmt = 2\',6\'-dimethyltyrosine)',
+  '332SV': 'Not a peptide; small molecule ERR agonist (no amino acid sequence)',
+  '50AMSV': 'Not a peptide; small molecule (5-amino-1-methylquinolinium)',
+  '5AM5SV': 'Not a peptide; small molecule (5-amino-1-methylquinolinium)',
+  'ACTH1-39-5MGSV': 'SYSMEHFRWGKPVGKKRRPVKVYPNGAEDESAEAFPLEF',
+  'ADAMAX10SV': 'Ac-MEHFPGP-NH2 (acetylated and amidated Semax analog)',
+  'ADAMAX5SV': 'Ac-MEHFPGP-NH2 (acetylated and amidated Semax analog)',
+  'AOD10SV': 'YLRIVQCRSVEGSCGF (HGH fragment 177-191 with Tyr at N-terminus)',
+  'AOD2SV': 'YLRIVQCRSVEGSCGF (HGH fragment 177-191 with Tyr at N-terminus)',
+  'AOD5SV': 'YLRIVQCRSVEGSCGF (HGH fragment 177-191 with Tyr at N-terminus)',
+  'AP10SV': 'CKGGRAKDCGGD(KLAKLAK)2',
+  'AP5SV': 'CKGGRAKDCGGD(KLAKLAK)2',
+  'AHK-CU-100MGSV': 'AHK (with copper ion bound)',
+  'AHK-CU-50MGSV': 'AHK (with copper ion bound)',
+  'B7-33-2SV': 'H2N-SRSRRYLRDKRQLYRRK-OH',
+  'BC10SV': 'GEPPPGKPADDAGLV',
+  'BC2SV': 'GEPPPGKPADDAGLV',
+  'BC5SV': 'GEPPPGKPADDAGLV',
+  'BT10SV': 'LKKTETQ (active fragment of Thymosin Beta-4)',
+  'BT5SV': 'LKKTETQ (active fragment of Thymosin Beta-4)',
+  'BB10SV': 'Blend: BPC-157 (GEPPPGKPADDAGLV) + TB-500 (LKKTETQ)',
+  'BB20SV': 'Blend: BPC-157 (GEPPPGKPADDAGLV) + TB-500 (LKKTETQ)',
+  'BRONSV': 'AEDL',
+  'CARDIO20SV': 'AEDR',
+  'CARTALAX20SV': 'AEDG',
+  'CD2SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSRK (with DAC modification for extended half-life)',
+  'CD5SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSRK (with DAC modification for extended half-life)',
+  'CND10SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSR-NH2 (modified with MPA at N-terminus)',
+  'CND2SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSR-NH2 (modified with MPA at N-terminus)',
+  'CND5SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSR-NH2 (modified with MPA at N-terminus)',
+  'CORTAGEN20SV': 'AEDL',
+  'CRYSTAGEN20SV': 'EDR',
+  'CU100SV': 'GHK (with copper ion bound)',
+  'CU50SV': 'GHK (with copper ion bound)',
+  'DP10SV': 'YPFPGPI',
+  'DS10SV': 'WAGGDASGE',
+  'DS2SV': 'WAGGDASGE',
+  'DS5SV': 'WAGGDASGE',
+  'DULA10SV': 'HXEGTFTSDVSSYLEEQAAKEFIAWLVKGGG-OH (X = Aib; Fc fusion for long-acting)',
+  'DULA5SV': 'HXEGTFTSDVSSYLEEQAAKEFIAWLVKGGG-OH (X = Aib; Fc fusion for long-acting)',
+  'EPO-3000IUSV': 'APPRLICDSRVLERYLLEAKEAENITTGCAEHCSLNENITVPDTKVNFYAWKRMEVGQQAVEVWQGLALLSEAVLRGQALLVNSSQPWEPLQLHVDKAVSGLRSLTTLLRALGAQKEAISPPDAASAAPLRTITADTFRKLFRVYSNFLRGKLKLYTGEACRTGDR',
+  'ET10SV': 'AEDG',
+  'ET50SV': 'AEDG',
+  'F410SV': 'LTLRKEPASEIAQSILEAYSQNGWANRRSGGKRPPPRRRQRRKKRG (D-retro-inverso form)',
+  'FM2SV': 'YQPPSTNKNTKSQRRKGSTFEERK (C-terminal extension of IGF-1 Ec variant)',
+  'FMP2SV': 'YQPPSTNKNTKSQRRKGSTFEERK (PEGylated)',
+  'G210SV': 'DAla-D-2-Nal-Ala-Trp-D-Phe-Lys-NH2',
+  'G25SV': 'DAla-D-2-Nal-Ala-Trp-D-Phe-Lys-NH2',
+  'G610SV': 'His-D-Trp-Ala-Trp-D-Phe-Lys-NH2',
+  'G65SV': 'His-D-Trp-Ala-Trp-D-Phe-Lys-NH2',
+  'GDF8SV': 'ANYCSGECEFVFLQKYPHTHLVHQANPRGSAGPCCTPTKMSPINMLYFNGKEQIIYGKIPAMVVDRCGCS (mature form)',
+  'GONAD5SV': 'pGlu-His-Trp-Ser-Tyr-Gly-Leu-Arg-Pro-Gly-NH2',
+  'GTT1SV': 'gamma-Glu-Cys-Gly (tripeptide)',
+  'GTT500SV': 'gamma-Glu-Cys-Gly (tripeptide)',
+  'H10SV': 'FPTIPLSRLFDNAMLRAHRLHQLAFDTYQEFEEAYIPKEQKYSFLQNPQTSLCFSESIPTPSNREETQQKSNLELLRISLLLIQSWLEPVQFLRSVFANSLVYGASDSNVYDLLKDLEEGIQTLMGRLEDGSPRTGQIFKQTYSKFDTNSHNDDALLKNYGLLYCFRKDMDKVETFLRIVQCRSVEGSCGF',
+  'H12SV': 'FPTIPLSRLFDNAMLRAHRLHQLAFDTYQEFEEAYIPKEQKYSFLQNPQTSLCFSESIPTPSNREETQQKSNLELLRISLLLIQSWLEPVQFLRSVFANSLVYGASDSNVYDLLKDLEEGIQTLMGRLEDGSPRTGQIFKQTYSKFDTNSHNDDALLKNYGLLYCFRKDMDKVETFLRIVQCRSVEGSCGF',
+  'H15SV': 'FPTIPLSRLFDNAMLRAHRLHQLAFDTYQEFEEAYIPKEQKYSFLQNPQTSLCFSESIPTPSNREETQQKSNLELLRISLLLIQSWLEPVQFLRSVFANSLVYGASDSNVYDLLKDLEEGIQTLMGRLEDGSPRTGQIFKQTYSKFDTNSHNDDALLKNYGLLYCFRKDMDKVETFLRIVQCRSVEGSCGF',
+  'H24SV': 'FPTIPLSRLFDNAMLRAHRLHQLAFDTYQEFEEAYIPKEQKYSFLQNPQTSLCFSESIPTPSNREETQQKSNLELLRISLLLIQSWLEPVQFLRSVFANSLVYGASDSNVYDLLKDLEEGIQTLMGRLEDGSPRTGQIFKQTYSKFDTNSHNDDALLKNYGLLYCFRKDMDKVETFLRIVQCRSVEGSCGF',
+  'H36SV': 'FPTIPLSRLFDNAMLRAHRLHQLAFDTYQEFEEAYIPKEQKYSFLQNPQTSLCFSESIPTPSNREETQQKSNLELLRISLLLIQSWLEPVQFLRSVFANSLVYGASDSNVYDLLKDLEEGIQTLMGRLEDGSPRTGQIFKQTYSKFDTNSHNDDALLKNYGLLYCFRKDMDKVETFLRIVQCRSVEGSCGF',
+  'HUM10SV': 'MAPRGFSCLLLLTSEIDLPVKRRA',
+  'HX2SV': 'His-D-2-methyl-Trp-Ala-Trp-D-Phe-Lys-NH2',
+  'HX5SV': 'His-D-2-methyl-Trp-Ala-Trp-D-Phe-Lys-NH2',
+  'IP10SV': 'Aib-His-D-2-Nal-D-Phe-Lys-NH2',
+  'IPS5SV': 'Aib-His-D-2-Nal-D-Phe-Lys-NH2',
+  'KPV10SV': 'KPV',
+  'KS10SV': 'YNWNSFGLRF-NH2',
+  'KS5SV': 'YNWNSFGLRF-NH2',
+  'LIRA10SV': 'HAEGTFTSDVSSYLEGQAAKEFIAWLVKGRG-OH (with fatty acid modification at Lys26)',
+  'LIRA30SV': 'HAEGTFTSDVSSYLEGQAAKEFIAWLVKGRG-OH (with fatty acid modification at Lys26)',
+  'LIRA5SV': 'HAEGTFTSDVSSYLEGQAAKEFIAWLVKGRG-OH (with fatty acid modification at Lys26)',
+  'LL375SV': 'LLGDFFRKSKEKIGKEFKRIVQRIKDFLRNLVPRTES',
+  'MAZ20SV': 'YXEGTFTSDYSIXLEKQAAREFVNWLXAGGPSSGAPPPSC-NH2 (X = Aib, with modification)',
+  'MAZ5SV': 'YXEGTFTSDYSIXLEKQAAREFVNWLXAGGPSSGAPPPSC-NH2 (X = Aib, with modification)',
+  'MDT10SV': 'YXEGTFTSDYSIXLEKQAAREFVNWLXAGGPSSGAPPPSC-NH2 (X = Aib, with modification)',
+  'MS10SV': 'MRWQEMGYIFYPRKLR',
+  'MS40SV': 'MRWQEMGYIFYPRKLR',
+  'MS5SV': 'MRWQEMGYIFYPRKLR',
+  'MT1SV': 'Ac-Ser-Tyr-Ser-Nle-Glu-His-D-Phe-Arg-Trp-Gly-Lys-Pro-Val-NH2',
+  'MT2SV': 'Ac-Nle-cyclo[Asp-His-D-Phe-Arg-Trp-Lys]-NH2',
+  'NP810SV': 'Ac-EEMQRRAD-NH2',
+  'OT10SV': 'CYIQNCPLG-NH2 (disulfide bond between Cys1 and Cys6)',
+  'OT5SV': 'CYIQNCPLG-NH2 (disulfide bond between Cys1 and Cys6)',
+  'P21SV': 'DGGLAG (derived from CNTF)',
+  'P411SV': 'Ac-Nle-cyclo[Asp-His-D-Phe-Arg-Trp-Lys]-OH',
+  'PE10SV': 'VEFYGGC',
+  'PE5SV': 'VEFYGGC',
+  'PIN10SV': 'EDR',
+  'PIN5SV': 'EDR',
+  'PNC2710SV': 'PPLSQETFSDLWKLLKKWKMRRNQFWVKVQRG',
+  'PNC275SV': 'PPLSQETFSDLWKLLKKWKMRRNQFWVKVQRG',
+  'PTD-1SV': 'RRRRRRRRRHEKLKKIF (protein transduction domain fused to DBM sequence)',
+  'RA10SV': 'ZEQLERALNSS (Z = pyroglutamic acid)',
+  'RT10SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT15SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT20SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT30SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT40SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT50SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT5SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'RT60SV': 'YXQGTFTSDYSIXLDEQAAKEFVQWLLDHHPSIEEAGAPPSS-NH2 (X = Aib, with fatty acid modification)',
+  'SK10SV': 'TKPRPGP',
+  'SK5SV': 'TKPRPGP',
+  'SM10SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SM15SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SM20SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SM2SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SM30SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SM50SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SM5SV': 'HXEGTFTSDVSSYLEGQAAKEFIAWLVRGRG-OH (X = Aib, with fatty acid modification at K20)',
+  'SMO10SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSR-NH2',
+  'SMO2SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSR-NH2',
+  'SMO5SV': 'YADAIFTQSYRKVLAQLSARKLLQDILSR-NH2',
+  'SUR10SV': 'Iub-X-DTGFTSDS-S-K-L-D-E-Q-R-A-K-D-F-I-E-W-L-K-A-G-G-P-S-S-G-A-P-P-P-S-NH2 (X = Aib, with modification at K12)',
+  'TA10SV': 'Ac-SDAAVDTSSEITTKDLKEKKEVVEEAEN',
+  'TA2SV': 'Ac-SDAAVDTSSEITTKDLKEKKEVVEEAEN',
+  'TA5SV': 'Ac-SDAAVDTSSEITTKDLKEKKEVVEEAEN',
+  'TR100SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR10SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR15SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR20SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR30SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR40SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR50SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR5SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TR60SV': 'YXEGTFTSDYSIXLDKIAQRAFVQWLIAGGPSSGAPPPS-NH2 (X = Aib, with fatty acid modification at K20)',
+  'TSM10SV': 'YADAIFTNSYRKVLGQLSARKLLQDIMSRQQGESNQERGARARL-NH2 (Y = trans-3-hexenoyl)',
+  'TSM2SV': 'YADAIFTNSYRKVLGQLSARKLLQDIMSRQQGESNQERGARARL-NH2 (Y = trans-3-hexenoyl)',
+  'TSM5SV': 'YADAIFTNSYRKVLGQLSARKLLQDIMSRQQGESNQERGARARL-NH2 (Y = trans-3-hexenoyl)',
+  'VESUGEN10SV': 'KED',
+  'VIP10SV': 'HSDAVFTDNYTRLRKQMAVKKYLNSILN-NH2',
+  'VIP5SV': 'HSDAVFTDNYTRLRKQMAVKKYLNSILN-NH2',
+  'XA10SV': 'MEHFPGP',
+  'XA5SV': 'MEHFPGP',
+};
+function getSequenceForSku(sku){ return PRODUCT_SEQUENCES[sku] || ''; }
+
 // Only show products that have a real mockup image in site/media/products/
 const VALID_SKUS = new Set([
   '10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
@@ -5856,8 +6010,15 @@ function _deterministicPurity(sku){
 function cardHTML(p){
   const detailId = 'det-'+p.sku;
   const descText = p.description || autoDesc(p);
-  const specs = [`Purity: >99% <span class="term-tip" data-tip="High Performance Liquid Chromatography - gold standard purity test">(HPLC)</span>`,`Form: <span class="term-tip" data-tip="Freeze-dried powder for maximum stability and shelf life">Lyophilized</span> Powder`,`Storage: 2-8\u00B0C`,`LOT: Verified`];
-  const detailHTML = (descText ? `<div style="margin-bottom:6px;font-size:0.75rem;color:var(--muted);line-height:1.5">${descText}</div>` : '') + specs.map(s=>`<div>${s}</div>`).join('');
+  const seq = getSequenceForSku(p.sku);
+  const detailHTML = `
+    ${descText ? `<div style="margin-bottom:10px"><strong>Description:</strong> ${descText}</div>` : ''}
+    ${seq ? `<div style="margin-bottom:10px;word-break:break-word"><strong>Sequence:</strong> <span style="font-family:var(--mono,'SF Mono',monospace);font-size:0.7rem">${seq}</span></div>` : ''}
+    <div style="margin-bottom:6px"><strong>Purity:</strong> &ge;99% (HPLC)</div>
+    <div style="margin-bottom:6px"><strong>Storage:</strong> -20&deg;C (lyophilized, desiccated)</div>
+    <div style="margin-bottom:6px"><strong>Appearance:</strong> White Powder</div>
+    <div>Research Use Only.</div>
+  `;
 
   const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r._skus && r._skus.includes(p.sku.toLowerCase()));
   const purity = coaMatch ? coaMatch.pu.replace('%','') : _deterministicPurity(p.sku);
@@ -5882,37 +6043,18 @@ function cardHTML(p){
     </div>
     <div class="card-header">
       <span class="card-sku">${p.sku}</span>
-      <span class="card-price"><span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span><br>$${p.price.toFixed(2)}</span>
+      <span class="card-price">$${p.price.toFixed(2)}<span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span></span>
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
       <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)">+ More Details</button>
       <div class="card-details" id="${detailId}">${detailHTML}</div>
     </div>
-    ${PRODUCT_SIZES[p.sku] ? `<div style="padding:0 16px 8px" onclick="event.stopPropagation()">
-      <div class="hyl-select" id="size-${p.sku}" data-sku="${p.sku}" data-value="${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);return idx>=0?idx:0;})()}">
-        <button class="hyl-select-trigger" onclick="event.stopPropagation();toggleSizeSelect('size-${p.sku}')" type="button">
-          <span class="hyl-select-value">${(()=>{const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();const idx=PRODUCT_SIZES[p.sku].findIndex(s=>s.label.toLowerCase()===dose);const s=PRODUCT_SIZES[p.sku][idx>=0?idx:0];return s.label;})()}</span>
-          <svg class="hyl-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="hyl-select-content">
-          ${PRODUCT_SIZES[p.sku].map((s,i)=>{
-            const dose=(p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0].toLowerCase();
-            const isSelected=s.label.toLowerCase()===dose;
-            return `<div class="hyl-select-item${isSelected?' selected':''}" data-index="${i}" onclick="event.stopPropagation();pickSize('size-${p.sku}',${i})"><span>${s.label}</span><svg class="sel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>`;
-          }).join('')}
-        </div>
-      </div>
-    </div>` : ''}
     <div class="card-footer">
-      <div style="display:flex;gap:8px;align-items:stretch">
-        <div onclick="event.stopPropagation()" style="display:flex;align-items:center;gap:0;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);flex-shrink:0">
-          <button onclick="event.stopPropagation();cardQtyChange('${p.sku}',-1)" aria-label="Decrease" style="width:30px;height:42px;background:transparent;border:none;font-size:1rem;font-weight:700;cursor:pointer;color:var(--muted)">&minus;</button>
-          <span id="card-qty-${p.sku}" style="min-width:18px;text-align:center;font-size:0.82rem;font-weight:700;font-family:var(--mono)">1</span>
-          <button onclick="event.stopPropagation();cardQtyChange('${p.sku}',1)" aria-label="Increase" style="width:30px;height:42px;background:transparent;border:none;font-size:1rem;font-weight:700;cursor:pointer;color:var(--muted)">+</button>
-        </div>
-        <button class="btn-add card-add-btn" style="flex:1;white-space:nowrap" onclick="event.stopPropagation();cardAdd('${p.sku}',this)"><span class="btn-add-full">ADD TO CART</span><span class="btn-add-short">ADD</span></button>
-      </div>
+      <button class="btn-add card-add-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap" onclick="event.stopPropagation();cardAdd('${p.sku}',this)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>
+        <span class="btn-add-full">ADD TO CART</span><span class="btn-add-short">ADD</span>
+      </button>
     </div>
   </div>`;
 }
@@ -5986,25 +6128,41 @@ function showSectionSkeletons(){
 let homeCategory = 'weight-loss';
 let homePageSize = 12;
 let homeShown = 12;
+// Product type toggle: 'singles' | 'kits' | 'bundles'
+let productType = 'singles';
+function setProductType(t){
+  productType = t;
+  homeShown = 12;
+  if(typeof renderHome === 'function') renderHome();
+  if(typeof renderCatalog === 'function' && document.getElementById('cat-cat-tabs')) renderCatalog();
+}
 
 function buildCatTabs(containerId, activeVar, clickFn){
   const c = document.getElementById(containerId);
   if(!c.querySelector('.cat-tabs-inner')){
+    const typeRow = `<div class="type-tabs-inner">`
+      + `<button class="type-tab" data-type="singles" onclick="setProductType('singles')">Singles</button>`
+      + `<button class="type-tab" data-type="kits" onclick="setProductType('kits')">Kits</button>`
+      + `<button class="type-tab" data-type="bundles" onclick="setProductType('bundles')">Bundles</button>`
+      + `</div>`;
     const g1 = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="weight-loss" onclick="${clickFn}('weight-loss')">Weight Loss & Metabolic</button>`
       + `<button class="cat-tab" data-cat="growth-recovery" onclick="${clickFn}('growth-recovery')">Growth Hormone & Recovery</button>`
       + `<button class="cat-tab" data-cat="longevity" onclick="${clickFn}('longevity')">Longevity & Mitochondrial</button>`
-      + `</div>`;
-    const g2 = `<div class="cat-tabs-inner">`
       + `<button class="cat-tab" data-cat="cognitive-sexual" onclick="${clickFn}('cognitive-sexual')">Cognitive & Sexual Health</button>`
-      + `<button class="cat-tab" data-cat="bundles" onclick="${clickFn}('bundles')">Bundles</button>`
       + `<button class="cat-tab" data-cat="supplies" onclick="${clickFn}('supplies')">Supplies & Reconstitution</button>`
       + `</div>`;
-    c.innerHTML = g1 + g2;
+    c.innerHTML = typeRow + g1;
   }
   c.querySelectorAll('.cat-tab').forEach(t=>{
     t.classList.toggle('active', t.dataset.cat === activeVar);
   });
+  c.querySelectorAll('.type-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.type === productType);
+  });
+  // Hide category row when viewing Bundles (bundles aren't categorized)
+  const catRow = c.querySelector('.cat-tabs-inner');
+  if(catRow) catRow.style.display = (productType === 'bundles') ? 'none' : '';
   requestAnimationFrame(()=>slideCatTab(containerId));
 }
 
@@ -6175,151 +6333,126 @@ function openProduct(sku){
   const desc = p.description || autoDesc(p);
   const comp = p.components || 'Purity: >99% (HPLC)\nStorage: -20°C (lyophilized, desiccated)\nAppearance: White Powder\nResearch Use Only.';
 
-  const others = ALL_PRODUCTS.filter(x=>x.sku!==sku).slice(0,3);
+  // --- compound + dose for current SKU ---
+  const compoundName = (() => {
+    const n = p.name;
+    const kitMatch = n.match(/^(.+?)\s*\(/);
+    if(kitMatch && /x\s*10\s*vials/i.test(n)) return kitMatch[1].trim();
+    return n.replace(/\s*\d+\s*(?:mg|iu|ml|mcg)\s*/i,'').trim();
+  })();
+  const doseText = (() => {
+    const n = p.name;
+    const kitPart = n.match(/\(([^)]+)\)/);
+    if(kitPart && /x\s*10\s*vials/i.test(n)) return kitPart[1];
+    return (n.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0];
+  })();
 
-  // --- COA carousel: find all COAs for the compound (all doses/lots) ---
-  const _compoundForCoa = (p.name || '')
-    .replace(/\s*\d+\s*(?:mg|iu|ml|mcg|tabs?|caps?|pk).*$/i, '')
-    .trim()
-    .toLowerCase();
-  const _coaMatches = (typeof COA_DATA !== 'undefined' && _compoundForCoa)
-    ? COA_DATA
-        .filter(r => r.p && r.p.toLowerCase().startsWith(_compoundForCoa))
-        .slice(0, 10)
-    : [];
-  const _totalSlides = 1 + _coaMatches.length;
-  const _slideW = (100 / _totalSlides).toFixed(4) + '%';
-  const _trackW = (_totalSlides * 100) + '%';
+  // Recommendations: 1) different products, same dose; 2) same product, different doses; 3) bestsellers as filler
+  const _isVariant = (x)=> x && x.sku !== sku && !x.isKit && !x.isBundle;
+  const _doseLc = (doseText||'').toLowerCase();
+  const _compoundLc = compoundName.toLowerCase();
+  const sameDoseDiffProduct = ALL_PRODUCTS.filter(x => {
+    if(!_isVariant(x)) return false;
+    const dm = (x.name.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0].toLowerCase();
+    return dm === _doseLc && !x.name.toLowerCase().includes(_compoundLc);
+  });
+  const sameProductDiffDose = ALL_PRODUCTS.filter(x => {
+    if(!_isVariant(x)) return false;
+    return x.name.toLowerCase().includes(_compoundLc);
+  });
+  const filler = ALL_PRODUCTS.filter(x => _isVariant(x) && (typeof BESTSELLER_SKUS !== 'undefined' && BESTSELLER_SKUS.includes(x.sku)));
+  const seen = new Set();
+  const others = [...sameDoseDiffProduct, ...sameProductDiffDose, ...filler]
+    .filter(x => { if(seen.has(x.sku)) return false; seen.add(x.sku); return true; })
+    .slice(0, 8);
+
+  // --- PDP slider: image + (optional) COA card for THIS exact SKU ---
+  const _coaForThisSku = (typeof COA_DATA !== 'undefined')
+    ? COA_DATA.find(r => (r.p||'').toLowerCase() === (p.name||'').toLowerCase()) || null
+    : null;
+  const purityText = _coaForThisSku ? _coaForThisSku.pu + ' Purity' : '99%+ Purity';
+  const _totalSlides = 1 + (_coaForThisSku ? 1 : 0);
   window._pdpSliderIdx = 0;
   window._pdpSliderCount = _totalSlides;
 
+  const coaSlideHTML = _coaForThisSku ? `
+    <div style="flex:0 0 100%;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#f9f9f9;border-radius:10px">
+      <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Certificate of Analysis</div>
+      <div style="font-family:var(--mono,monospace);font-size:0.78rem;font-weight:700;margin-bottom:6px">${_coaForThisSku.c}</div>
+      <div style="font-size:0.85rem;font-weight:700;margin-bottom:10px">${_coaForThisSku.p}</div>
+      <div style="font-size:1.2rem;font-weight:900;margin-bottom:6px">${_coaForThisSku.pu} Purity</div>
+      <div style="font-size:0.72rem;color:var(--muted)">Lot: ${_coaForThisSku.l}</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:14px">Reported: ${_coaForThisSku.r}</div>
+      <a href="${COA_BASE}${_coaForThisSku.c}.pdf" target="_blank" style="padding:10px 22px;background:#000;color:#fff;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a>
+    </div>` : '';
+
   document.getElementById('pdp-layout').innerHTML = `
-    <div class="pdp-image" style="position:relative;overflow:hidden">
-      <div class="pdp-slider" id="pdp-slider" style="display:flex;transition:transform 0.4s ease;width:${_trackW}">
-        <div style="width:${_slideW};flex-shrink:0;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
-        ${_coaMatches.map(c => `<div style="width:${_slideW};flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#f9f9f9"><div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Certificate of Analysis</div><div style="font-family:var(--mono);font-size:0.82rem;font-weight:700;margin-bottom:4px">${c.c}</div><div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:6px">${c.p}</div><div style="font-size:0.9rem;font-weight:800;margin-bottom:4px">${c.pu} Purity</div><div style="font-size:0.72rem;color:var(--muted)">Lot: ${c.l}</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Reported: ${c.r}</div><a href="${COA_BASE}${c.c}.pdf" target="_blank" style="padding:8px 20px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a></div>`).join('')}
+    <div class="pdp-image">
+      <div id="pdp-slider" style="display:flex;width:100%;height:100%;transition:transform 0.4s ease">
+        <div style="flex:0 0 100%;width:100%;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
+        ${coaSlideHTML}
       </div>
       ${_totalSlides > 1 ? `
-      <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;padding:0 0 3px 0">&#8249;</button>
-      <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;padding:0 0 3px 0">&#8250;</button>
+        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1">&#8249;</button>
+        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1">&#8250;</button>
+        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px">
+          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:8px;height:8px;border-radius:50%;border:none;background:${i===0?'#000':'#ccc'};cursor:pointer;padding:0"></button>`).join('')}
+        </div>
       ` : ''}
-      <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px">
-        ${Array.from({length: _totalSlides}, (_, i) => `<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" style="width:8px;height:8px;border-radius:50%;border:none;background:${i===0?'#000':'#ccc'};cursor:pointer;padding:0"></button>`).join('')}
-      </div>
     </div>
     <div class="pdp-info">
-      <div class="pdp-back" onclick="history.back()">&#8592; Back</div>
-      <div class="pdp-name">${(() => {
-        const n = p.name;
-        // Kit format: "Compound (Xmg x 10 vials)" → show compound only
-        const kitMatch = n.match(/^(.+?)\s*\(/);
-        if(kitMatch && /x\s*10\s*vials/i.test(n)) return kitMatch[1].trim();
-        // Single format: "Compound Xmg" → strip dose
-        return n.replace(/\s*\d+\s*(?:mg|iu|ml|mcg)\s*/i,'').trim();
-      })()}</div>
-      <div class="pdp-dose">${(() => {
-        const n = p.name;
-        // Kit format: show full parenthetical
-        const kitPart = n.match(/\(([^)]+)\)/);
-        if(kitPart && /x\s*10\s*vials/i.test(n)) return kitPart[1];
-        // Single: just the dose
-        return (n.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0];
-      })()}</div>
-      <div class="pdp-badges">
-        <span class="pdp-badge pdp-badge-purity">99%+ PURITY</span>
-      </div>
-      ${PRODUCT_SIZES[p.sku] ? `
-      <div style="margin:8px 0 4px">
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px">Size</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          ${PRODUCT_SIZES[p.sku].map((s,i)=>{
-            const dose = (p.name.match(/\d+\s*(?:mg|iu)/i)||[''])[0];
-            const isActive = s.label.toLowerCase() === dose.toLowerCase();
-            return `<button onclick="selectPdpSize('${p.sku}',${i})" class="pdp-size-btn ${isActive?'active':''}" style="padding:10px 24px;border-radius:999px;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);border:1.5px solid ${isActive?'var(--brand)':'var(--stroke)'};background:${isActive?'var(--brand)':'var(--bg)'};color:${isActive?'#fff':'var(--text)'}">${s.label}</button>`;
-          }).join('')}
+      <div class="pdp-back" onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--stroke);border-radius:999px;margin-bottom:14px;align-self:flex-start">&#8592; Back</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+        <div style="min-width:0;flex:1">
+          <h1 class="pdp-name" style="font-family:var(--display);font-size:2.4rem;font-weight:900;line-height:1.05;color:var(--text);margin:0 0 6px;text-transform:none;letter-spacing:0">${compoundName}</h1>
+          <div class="pdp-dose" style="font-size:0.92rem;color:var(--muted);font-weight:700">${doseText}</div>
         </div>
-      </div>` : ''}
-      <div class="pdp-price-wrap">
-        <div class="pdp-price-old">$${oldPrice}</div>
-        <div class="pdp-price" id="pdp-price-display">$${p.price.toFixed(2)}</div>
-      </div>
-      <div class="pdp-meta">
-        <div class="pdp-meta-row"><span class="pdp-meta-label">SKU</span><span class="pdp-meta-value pdp-sku-value">${p.sku}</span></div>
-        <div class="pdp-meta-row"><span class="pdp-meta-label">Status</span><span class="pdp-status">Available for order</span></div>
-      </div>
-      <div class="pdp-qty-row">
-        <div class="pdp-qty">
-          <button onclick="pdpQty=Math.max(1,pdpQty-1);document.getElementById('pdp-qty-val').textContent=pdpQty;event.stopPropagation()">-</button>
-          <span id="pdp-qty-val">1</span>
-          <button onclick="pdpQty++;document.getElementById('pdp-qty-val').textContent=pdpQty;event.stopPropagation()">+</button>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+          <span class="pdp-badge-purity" style="background:#fff;color:var(--text);border:1px solid var(--text);padding:5px 12px;border-radius:999px;font-size:0.68rem;font-weight:800;letter-spacing:0.04em;white-space:nowrap">${purityText}</span>
+          <div class="pdp-price" id="pdp-price-display" style="font-size:1.7rem;font-weight:900;color:var(--text);font-family:var(--display);line-height:1">$${p.price.toFixed(2)}</div>
         </div>
-        <button class="pdp-add-btn" onclick="addToCartQty('${p.sku}',pdpQty)">ADD TO CART</button>
       </div>
-      <div class="pdp-tabs">
-        <button class="pdp-tab active" type="button" role="tab" onclick="switchPdpTab(\'desc\',this)" aria-selected="true">Description</button>
-        <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'specs\',this)" aria-selected="false">Specifications</button>
-        <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'shipping\',this)" aria-selected="false">Shipping</button>
-        <button class="pdp-tab" type="button" role="tab" onclick="switchPdpTab(\'testing\',this)" aria-selected="false">Testing</button>
-      </div>
-      <div class="pdp-tab-content active" id="pdp-tab-desc">
-        <p>${desc}</p>
-      </div>
-      <div class="pdp-tab-content" id="pdp-tab-specs">
-        <p style="white-space:pre-line">${comp.replace(/\\n/g,'\n')}</p>
-      </div>
-      <div class="pdp-tab-content" id="pdp-tab-shipping">
-        <p><span class="term-tip" data-tip="Freeze-dried for stability during transport">Lyophilized</span> products are packaged for transport stability. Orders over $250 ship free; standard shipping is a $12 flat rate. Processing and delivery timing depends on order volume, verification, and carrier schedules.</p>
-        <p style="margin-top:8px">Every lot is HPLC-verified and the corresponding Certificate of Analysis is available to look up anytime via our <a onclick="navigate('coa')" style="cursor:pointer;text-decoration:underline">COA archive</a>.</p>
-      </div>
-
-      <div class="pdp-tab-content" id="pdp-tab-testing">
-        ${(()=>{
-          const coaMatch = typeof COA_DATA !== 'undefined' && COA_DATA.find(r => r.p && r.p.toLowerCase().includes((p.name || '').toLowerCase()));
-          if(coaMatch){
-            return '<div style="background:#fff;border:1px solid var(--stroke);border-radius:10px;padding:16px;margin-bottom:12px">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-                '<span style="font-weight:700;font-size:0.82rem">Certificate of Analysis</span>' +
-                '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--muted)">' + coaMatch.c + '</span>' +
-              '</div>' +
-              '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.75rem;margin-bottom:12px">' +
-                '<div><span style="color:var(--muted)">Purity:</span> <strong>' + coaMatch.pu + '</strong></div>' +
-                '<div><span style="color:var(--muted)">Lot:</span> <strong>' + coaMatch.l + '</strong></div>' +
-                '<div><span style="color:var(--muted)">Reported:</span> ' + coaMatch.r + '</div>' +
-                '<div><span style="color:var(--muted)">Compound:</span> ' + coaMatch.p + '</div>' +
-              '</div>' +
-              '<div style="display:flex;gap:8px">' +
-                '<a href="' + COA_BASE + coaMatch.c + '.pdf" target="_blank" style="flex:1;padding:10px;text-align:center;background:#000;color:#fff;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em">View PDF</a>' +
-                '<a href="' + COA_BASE + coaMatch.c + '.pdf" download style="flex:1;padding:10px;text-align:center;border:1.5px solid #000;border-radius:999px;font-size:0.72rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;color:#000">Download</a>' +
-              '</div>' +
-            '</div>' +
-            '<a onclick="navigate(\\\'coa\\\')" style="display:block;text-align:center;font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;margin-top:8px">Browse full COA archive</a>';
-          }
-          return '<p style="color:var(--muted)">No COA available for this product yet. Check our <a onclick="navigate(\\\'coa\\\')" style="cursor:pointer;text-decoration:underline">COA archive</a> for the latest certificates.</p>';
-        })()}
-      </div>
-
-      <!-- TRUST BADGES -->
-      <div style="display:flex;gap:16px;margin-top:20px;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)"><svg class="ico-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 99%+ HPLC verified</div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)"><svg class="ico-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Third-party tested</div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)"><svg class="ico-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Free shipping $250+</div>
-      </div>
-
-      <!-- TESTING BADGE -->
-      <div style="display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px 16px;background:#f7f7f7;border-radius:10px;font-size:0.75rem">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg>
-        <div>
-          <div style="font-weight:700">Independently tested</div>
-          <div style="color:var(--muted);font-size:0.7rem">HPLC purity analysis on every lot</div>
+      <div class="pdp-meta" style="display:flex;flex-direction:column;gap:1px;background:var(--stroke);border-radius:10px;overflow:hidden;border:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fafafa;border:none;border-radius:0;margin:0">
+          <span style="font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">SKU</span>
+          <span style="font-size:0.85rem;font-weight:700;color:var(--text);font-family:var(--mono,'SF Mono',monospace)">${p.sku}</span>
         </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fafafa;border:none;border-radius:0;margin:0">
+          <span style="font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">Status</span>
+          <span style="font-size:0.85rem;font-weight:700;color:#16a34a">Available for order</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:stretch">
+        <div class="pdp-qty" style="display:flex;align-items:center;border:1px solid var(--stroke);border-radius:10px;background:#fff;height:52px;overflow:hidden">
+          <button onclick="pdpQty=Math.max(1,pdpQty-1);document.getElementById('pdp-qty-val').value=pdpQty;event.stopPropagation()" style="width:42px;height:100%;border:none;background:transparent;color:var(--text);font-size:1.2rem;font-weight:700;cursor:pointer">&minus;</button>
+          <input id="pdp-qty-val" type="number" min="1" step="1" value="1" style="width:46px;height:100%;border:none;text-align:center;font-size:0.95rem;font-weight:700;background:transparent" inputmode="numeric" oninput="pdpQty=Math.max(1,parseInt(this.value)||1)">
+          <button onclick="pdpQty++;document.getElementById('pdp-qty-val').value=pdpQty;event.stopPropagation()" style="width:42px;height:100%;border:none;background:transparent;color:var(--text);font-size:1.2rem;font-weight:700;cursor:pointer">+</button>
+        </div>
+        <button class="pdp-add-btn" onclick="addToCartQty('${p.sku}',pdpQty)" style="flex:1;height:52px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.85rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>
+          Add to cart
+        </button>
+      </div>
+      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const open=pn.style.display!=='none';pn.style.display=open?'none':'block';b.querySelector('.arrow').textContent=open?'→':'↓';})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
+        More Details <span class="arrow" style="display:inline-block;transition:transform 0.2s">&#8594;</span>
+      </button>
+      <div id="moreDetailsPanel" style="display:none;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text)">
+        <div><strong>Description:</strong> ${desc}</div>
+        ${getSequenceForSku(p.sku) ? `<div style="word-break:break-word"><strong>Sequence:</strong> <span style="font-family:var(--mono,'SF Mono',monospace);font-size:0.78rem">${getSequenceForSku(p.sku)}</span></div>` : ''}
+        <div><strong>Purity:</strong> &ge;99% (HPLC)</div>
+        <div><strong>Storage:</strong> -20&deg;C (lyophilized, desiccated)</div>
+        <div><strong>Appearance:</strong> White Powder</div>
+        <div>Research Use Only.</div>
       </div>
     </div>
   `;
 
   document.getElementById('pdp-commonly').innerHTML = others.length ? `
-    <h3>COMMONLY BOUGHT WITH</h3>
-    <h2>Commonly Bought With</h2>
-    <div class="product-grid">${others.map(cardHTML).join('')}</div>
+    <div class="pdp-commonly-card">
+      <h2>Commonly Bought With</h2>
+      <div class="pdp-commonly-sub">Different products at ${doseText} first, then other sizes of ${compoundName}.</div>
+      <div class="product-grid">${others.slice(0,4).map(cardHTML).join('')}</div>
+    </div>
   ` : '';
 
   navigate('product');
@@ -6410,8 +6543,9 @@ function getFilteredProducts(cat, searchId, sortId){
   let items;
   if(cat==='bestsellers') items = ALL_PRODUCTS.filter(p=>BESTSELLER_SKUS.includes(p.sku));
   else if(cat==='all') items = ALL_PRODUCTS.slice();
-  else if(cat==='bundles') items = ALL_PRODUCTS.filter(p=>p.isBundle);
-  else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && (showKits ? p.isKit : !p.isKit));
+  else if(productType === 'bundles') items = ALL_PRODUCTS.filter(p=>p.isBundle);
+  else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && p.isKit);
+  else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && !p.isKit);
   const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
   if(q) items = items.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q));
   const sort = document.getElementById(sortId)?.value||'featured';
