@@ -5723,8 +5723,8 @@ function handleRoute(){
   // Hide footer on checkout/payment screens where it creates awkward whitespace
   const hideFooterOn = ['order','payment-confirmed','card-return'];
   document.body.classList.toggle('no-footer', hideFooterOn.includes(hash));
-  // Hide top nav on checkout screen so the back-pill is the only header chrome
-  const hideNavOn = ['order'];
+  // Hide top nav on checkout + product screens so the back-pill is the only header chrome
+  const hideNavOn = ['order','product'];
   document.body.classList.toggle('no-nav', hideNavOn.includes(hash));
   window.scrollTo(0,0);
 
@@ -6432,8 +6432,8 @@ function openProduct(sku){
 
   const coaSlideHTML = _coaForThisSku ? `
     <div class="pdp-slide" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:18px;box-sizing:border-box">
-      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff">
-        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" style="width:100%;height:100%;border:none;background:#fff;display:block" loading="lazy" title="Certificate of Analysis"></iframe>
+      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden;border-radius:6px">
+        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" style="width:130%;height:100%;border:none;background:#fff;display:block;margin:0 -15%" loading="lazy" title="Certificate of Analysis"></iframe>
       </div>
     </div>` : '';
 
