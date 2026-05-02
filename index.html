@@ -2225,8 +2225,8 @@ body.no-footer .footer,body.no-footer .discord-cta{display:none !important}
 .prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
 .pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:0 0 40px;align-items:stretch}
-.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;padding:32px;align-self:stretch;height:100%;min-height:520px;position:relative}
-.pdp-image img{width:100%;height:100%;object-fit:contain;max-height:520px}
+.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);align-self:stretch;height:100%;min-height:520px;position:relative}
+.pdp-image .pdp-slide img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .pdp-info{display:flex;flex-direction:column;gap:14px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:28px;align-self:stretch;height:100%}
 .pdp-back{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;color:var(--muted);margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
 .pdp-back:hover{color:var(--brand)}
@@ -6332,9 +6332,9 @@ window.pdpSliderGo = function(idx){
   const count = window._pdpSliderCount || 1;
   const next = Math.max(0, Math.min(count - 1, idx));
   window._pdpSliderIdx = next;
-  slider.style.transform = 'translateX(-' + (100 / count * next) + '%)';
+  slider.style.transform = 'translateX(-' + (100 * next) + '%)';
   document.querySelectorAll('.pdp-dot').forEach((d, i) => {
-    d.style.background = i === next ? '#000' : '#ccc';
+    d.style.background = i === next ? '#111' : 'transparent';
   });
 };
 window.pdpSliderPrev = function(){ window.pdpSliderGo((window._pdpSliderIdx || 0) - 1); };
@@ -6394,22 +6394,24 @@ function openProduct(sku){
   window._pdpSliderCount = _totalSlides;
 
   const coaSlideHTML = _coaForThisSku ? `
-    <div style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:stretch;justify-content:center;background:#fff;position:relative;overflow:hidden;border-radius:10px">
+    <div class="pdp-slide" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:stretch;justify-content:center;background:#fff;position:relative;overflow:hidden">
       <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" style="width:100%;height:100%;border:none;background:#fff;display:block" loading="lazy" title="Certificate of Analysis"></iframe>
       <a href="${COA_BASE}${_coaForThisSku.c}.pdf" target="_blank" style="position:absolute;bottom:14px;right:14px;padding:8px 16px;background:#000;color:#fff;border-radius:999px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.08em;display:inline-flex;align-items:center;gap:6px">Open PDF &rarr;</a>
     </div>` : '';
 
   document.getElementById('pdp-layout').innerHTML = `
     <div class="pdp-image">
-      <div id="pdp-slider" style="display:flex;width:100%;height:100%;transition:transform 0.4s ease">
-        <div style="flex:0 0 100%;width:100%;display:flex;align-items:center;justify-content:center">${imgHTML}</div>
-        ${coaSlideHTML}
+      <div class="pdp-viewport" style="position:absolute;inset:0;overflow:hidden;border-radius:14px">
+        <div id="pdp-slider" style="display:flex;width:100%;height:100%;transition:transform 0.45s cubic-bezier(0.22,1,0.36,1);will-change:transform">
+          <div class="pdp-slide" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:32px;box-sizing:border-box">${imgHTML}</div>
+          ${coaSlideHTML}
+        </div>
       </div>
       ${_totalSlides > 1 ? `
-        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1">&#8249;</button>
-        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1">&#8250;</button>
-        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px">
-          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:8px;height:8px;border-radius:50%;border:none;background:${i===0?'#000':'#ccc'};cursor:pointer;padding:0"></button>`).join('')}
+        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--stroke);background:#fff;color:#111;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.08);z-index:2">&#8249;</button>
+        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--stroke);background:#fff;color:#111;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.08);z-index:2">&#8250;</button>
+        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.95);border:1px solid var(--stroke);padding:6px 10px;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,0.06);z-index:2">
+          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:8px;height:8px;border-radius:50%;border:1px solid #111;background:${i===0?'#111':'transparent'};cursor:pointer;padding:0;transition:background 0.2s"></button>`).join('')}
         </div>
       ` : ''}
     </div>
