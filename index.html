@@ -6436,9 +6436,9 @@ function openProduct(sku){
   window._pdpSliderCount = _totalSlides;
 
   const coaSlideHTML = _coaForThisSku ? `
-    <div class="pdp-slide" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:18px;box-sizing:border-box">
-      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden;border-radius:6px">
-        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" style="width:130%;height:100%;border:none;background:#fff;display:block;margin:0 -15%" loading="lazy" title="Certificate of Analysis"></iframe>
+    <div class="pdp-slide pdp-slide--coa" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:24px 32px 56px;box-sizing:border-box">
+      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,0.04)">
+        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" style="width:200%;height:100%;border:none;background:#fff;display:block;margin:0 -50%" loading="lazy" title="Certificate of Analysis"></iframe>
       </div>
     </div>` : '';
 
@@ -6451,10 +6451,10 @@ function openProduct(sku){
         </div>
       </div>
       ${_totalSlides > 1 ? `
-        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--stroke);background:#fff;color:#111;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.08);z-index:2">&#8249;</button>
-        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--stroke);background:#fff;color:#111;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.08);z-index:2">&#8250;</button>
-        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.95);border:1px solid var(--stroke);padding:6px 10px;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,0.06);z-index:2">
-          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:8px;height:8px;border-radius:50%;border:1px solid #111;background:${i===0?'#111':'transparent'};cursor:pointer;padding:0;transition:background 0.2s"></button>`).join('')}
+        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;font-weight:400;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(80,84,95,0.75)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'">&#8249;</button>
+        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;font-weight:400;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(80,84,95,0.75)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'">&#8250;</button>
+        <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:0;background:#e9eaee;padding:5px;border-radius:999px;z-index:2">
+          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:18px;height:14px;border-radius:999px;border:none;background:${i===0?'#111':'transparent'};cursor:pointer;padding:0;margin:0 1px;transition:background 0.25s ease"></button>`).join('')}
         </div>
       ` : ''}
     </div>
