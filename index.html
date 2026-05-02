@@ -2256,10 +2256,15 @@ body.no-nav{padding-top:0 !important}
 }
 .prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
-.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:0 0 40px;align-items:stretch}
-.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);align-self:stretch;height:100%;min-height:520px;position:relative}
+.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:0 0 40px;align-items:start}
+.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);min-height:520px;position:relative}
 .pdp-image .pdp-slide img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
-.pdp-info{display:flex;flex-direction:column;gap:14px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:28px;align-self:stretch;height:100%}
+.pdp-info{display:flex;flex-direction:column;gap:14px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:28px}
+.pdp-more-panel{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s ease}
+.pdp-more-panel>.pdp-more-inner{min-height:0;overflow:hidden}
+.pdp-more-panel.is-open{grid-template-rows:1fr}
+.pdp-more-arrow{display:inline-block;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1)}
+.pdp-more-arrow.is-open{transform:rotate(180deg)}
 .pdp-back{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;color:var(--muted);margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
 .pdp-back:hover{color:var(--brand)}
 .pdp-name{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;line-height:1.1}
@@ -6486,16 +6491,20 @@ function openProduct(sku){
           Add to cart
         </button>
       </div>
-      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const open=pn.style.display!=='none';pn.style.display=open?'none':'flex';b.querySelector('.arrow').textContent=open?'→':'↓';})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
-        More Details <span class="arrow" style="display:inline-block;transition:transform 0.2s">&#8595;</span>
+      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
+        More Details <span class="pdp-more-arrow">&#8595;</span>
       </button>
-      <div id="moreDetailsPanel" style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text)">
-        <div><strong>Description:</strong> ${desc}</div>
-        ${getSequenceForSku(p.sku) ? `<div style="word-break:break-word"><strong>Sequence:</strong> <span style="font-family:var(--mono,'SF Mono',monospace);font-size:0.78rem">${getSequenceForSku(p.sku)}</span></div>` : ''}
-        <div><strong>Purity:</strong> &ge;99% (HPLC)</div>
-        <div><strong>Storage:</strong> -20&deg;C (lyophilized, desiccated)</div>
-        <div><strong>Appearance:</strong> White Powder</div>
-        <div>Research Use Only.</div>
+      <div id="moreDetailsPanel" class="pdp-more-panel">
+        <div class="pdp-more-inner">
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text);padding-top:4px">
+            <div><strong>Description:</strong> ${desc}</div>
+            ${getSequenceForSku(p.sku) ? `<div style="word-break:break-word"><strong>Sequence:</strong> <span style="font-family:var(--mono,'SF Mono',monospace);font-size:0.78rem">${getSequenceForSku(p.sku)}</span></div>` : ''}
+            <div><strong>Purity:</strong> &ge;99% (HPLC)</div>
+            <div><strong>Storage:</strong> -20&deg;C (lyophilized, desiccated)</div>
+            <div><strong>Appearance:</strong> White Powder</div>
+            <div>Research Use Only.</div>
+          </div>
+        </div>
       </div>
     </div>
   `;
