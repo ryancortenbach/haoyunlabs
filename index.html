@@ -6460,6 +6460,7 @@ function openProduct(sku){
           <div class="pdp-dose" style="font-size:0.92rem;color:var(--muted);font-weight:700">${doseText}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+          ${BESTSELLER_SKUS.includes(p.sku) ? '<span class="badge-bestseller" style="font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:999px;font-weight:800;text-transform:uppercase;white-space:nowrap">Best Seller</span>' : ''}
           <span class="pdp-badge-purity" style="background:#fff;color:var(--text);border:1px solid var(--text);padding:5px 12px;border-radius:999px;font-size:0.68rem;font-weight:800;letter-spacing:0.04em;white-space:nowrap">${purityText}</span>
           <div class="pdp-price" id="pdp-price-display" style="font-size:1.7rem;font-weight:900;color:var(--text);font-family:var(--display);line-height:1">$${p.price.toFixed(2)}</div>
         </div>
