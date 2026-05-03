@@ -2737,7 +2737,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: PRODUCT DETAIL ═══════════════ -->
 <div class="screen" id="screen-product">
   <div class="container">
-    <div class="pdp-back-row" style="padding:80px 0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--stroke);margin-bottom:18px"><div class="pdp-back" onclick="pdpBack()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div><div class="pdp-brand" onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:2.2rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div></div>
+    <div class="pdp-back-row" style="padding:80px 0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--stroke);margin-bottom:18px"><div class="pdp-back" onclick="pdpBack()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div><div class="pdp-brand" onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:3.2rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div></div>
     <div class="pdp-layout" id="pdp-layout"></div>
     <div class="pdp-commonly" id="pdp-commonly"></div>
   </div>
@@ -2749,7 +2749,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div style="margin:32px 0 18px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:20px 22px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
       <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--stroke)">
         <div onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div>
-        <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:2.2rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div>
+        <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:3.2rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div>
       </div>
       <div style="padding-top:16px">
         <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;color:var(--text);letter-spacing:0.03em;text-transform:uppercase">CHECKOUT</div>
@@ -3860,17 +3860,17 @@ function pcPopulateReorder(){
 <!-- FOOTER -->
 <footer class="footer">
   <!-- EMAIL SIGNUP ROW -->
-  <div style="max-width:1200px;margin:0 auto 24px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
-    <div>
-      <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Get mystery vials and discounts sent to your inbox.</div>
-      <div style="display:flex;gap:8px">
-        <input type="email" id="footer-email-main" placeholder="Enter your email..." style="flex:1;padding:12px 16px;border:1px solid var(--stroke);border-radius:10px;font-size:0.85rem;background:#fff;font-family:var(--sans)">
-        <button onclick="subscribeFooterEmail()" style="padding:12px 24px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer">Join now</button>
-      </div>
-      <div id="footer-email-main-msg" style="font-size:0.72rem;margin-top:6px;min-height:1em"></div>
+  <div style="max-width:1200px;margin:0 auto 16px">
+    <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Get mystery vials and discounts sent to your inbox.</div>
+    <div style="display:flex;gap:8px;max-width:560px">
+      <input type="email" id="footer-email-main" placeholder="Your email here" style="flex:1;padding:12px 16px;border:1px solid var(--stroke);border-radius:10px;font-size:0.85rem;background:#fff;font-family:var(--sans)">
+      <button onclick="subscribeFooterEmail()" class="footer-join-btn" style="padding:12px 24px;background:#000;color:#fff;border:1px solid #000;border-radius:10px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background .18s,color .18s" onmouseover="this.style.background='#fff';this.style.color='#000'" onmouseout="this.style.background='#000';this.style.color='#fff'">Join now</button>
     </div>
-    <div style="font-size:0.72rem;color:var(--muted);line-height:1.6;padding-top:8px">
-      New drops, restocks, and research updates. No spam &mdash; unsubscribe anytime. See our <a onclick="navigate('terms')" style="text-decoration:underline;cursor:pointer">Privacy Policy</a>.
+    <div id="footer-email-main-msg" style="font-size:0.72rem;margin-top:6px;min-height:1em"></div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto 24px;border-top:1px solid var(--stroke);padding-top:14px">
+    <div style="font-size:0.72rem;color:var(--muted);line-height:1.6">
+      New drops, restocks, and research updates. No spam, unsubscribe anytime. See our <a onclick="navigate('terms')" style="text-decoration:underline;cursor:pointer">Privacy Policy</a>.
     </div>
   </div>
   <div class="footer-inner">
