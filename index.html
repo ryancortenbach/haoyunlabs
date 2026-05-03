@@ -577,7 +577,7 @@ ul{list-style:none}
   .big-feature-card .card-3d-wrap{width:100%!important;aspect-ratio:1/1!important;max-height:none!important}
   .hero-feature-grid{grid-template-columns:1fr!important}
   /* Mobile menu safe areas */
-  .mobile-menu{padding-top:max(72px,env(safe-area-inset-top,72px))!important;padding-bottom:max(32px,env(safe-area-inset-bottom,32px))!important}
+  .mobile-menu{padding-top:28px!important;padding-bottom:max(32px,env(safe-area-inset-bottom,32px))!important}
   /* Mobile cart CTA safe area */
   #mobile-cart-cta{bottom:max(12px,env(safe-area-inset-bottom,12px))!important}
   /* PDP size grid: 3 cols on small screens */
@@ -604,15 +604,24 @@ ul{list-style:none}
 .nav-hamburger:active{background:rgba(0,0,0,0.08)}
 .nav-hamburger svg{width:22px;height:22px;stroke:var(--text)}
 /* MOBILE MENU OVERLAY */
-.mobile-menu{
-  position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;
-  background:#fff;
-  display:flex;flex-direction:column;padding:72px 24px 32px;
-  transform:translateX(-100%);opacity:0;pointer-events:none;
-  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.25s ease;
-  will-change:transform,opacity;
+.mobile-menu-backdrop{
+  position:fixed;inset:0;z-index:299;background:rgba(0,0,0,0.45);
+  opacity:0;pointer-events:none;transition:opacity 0.3s ease;
 }
-.mobile-menu.open{transform:translateX(0);opacity:1;pointer-events:auto}
+.mobile-menu-backdrop.open{opacity:1;pointer-events:auto}
+.mobile-menu{
+  position:fixed;left:0;right:0;bottom:0;top:auto;height:80vh;max-height:80vh;z-index:300;
+  background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,0.18);
+  display:flex;flex-direction:column;padding:28px 24px 32px;
+  transform:translateY(100%);opacity:1;pointer-events:none;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  will-change:transform;
+}
+.mobile-menu::before{
+  content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  width:42px;height:5px;border-radius:999px;background:#d4d4d4;
+}
+.mobile-menu.open{transform:translateY(0);pointer-events:auto}
 .mobile-menu-close{
   position:absolute;top:20px;right:18px;width:44px;height:44px;
   border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
@@ -2351,9 +2360,6 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
-    </button>
     <div class="nav-brand" onclick="navigate('home')">Hao Yun Labs</div>
     <div class="nav-center">
       <a onclick="navigate('catalog')">Shop</a>
@@ -2377,6 +2383,9 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
         <span class="nav-cart-badge" id="cart-badge"></span>
+      </button>
+      <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
       </button>
       <!-- Connect wallet removed -->
     </div>
@@ -2518,7 +2527,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   <span class="mcta-count" id="mcta-count"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span id="mcta-num">0</span></span>
 </button>
 
-<!-- MOBILE MENU OVERLAY -->
+<!-- MOBILE MENU OVERLAY (bottom sheet) -->
+<div class="mobile-menu-backdrop" id="mobile-menu-backdrop" onclick="toggleMobileMenu()"></div>
 <div class="mobile-menu" id="mobile-menu">
   <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Close menu">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -5675,6 +5685,8 @@ function toggleMobileMenu(){
   if(!menu) return;
   const opening = !menu.classList.contains('open');
   menu.classList.toggle('open');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+  if(backdrop) backdrop.classList.toggle('open', opening);
   if(opening){
     document.body.style.overflow='hidden';document.body.style.position='fixed';document.body.style.width='100%';document.body.style.top='-'+window.scrollY+'px';
   } else {
