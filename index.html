@@ -1339,9 +1339,20 @@ body.admin-open{overflow:hidden}
   #screen-product.active .pdp-add-btn{min-height:48px;padding:14px 18px}
   /* Bigger back button touch target on mobile PDP */
   #screen-product.active .pdp-back{min-height:44px;padding:10px 4px;margin-bottom:4px;font-size:0.82rem}
-  /* Related products horizontal scroll on mobile */
-  #screen-product.active .pdp-commonly .product-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px;margin:0 -16px;padding-left:16px;padding-right:16px}
-  #screen-product.active .pdp-commonly .product-grid > .product-card{flex:0 0 72%;scroll-snap-align:start;min-width:0}
+  /* Related products: compact 2-up grid on mobile, uniform card sizes (no janky horizontal scroll) */
+  #screen-product.active .pdp-commonly .product-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;overflow:visible!important;margin:0!important;padding:0!important}
+  #screen-product.active .pdp-commonly .product-card{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"img" "head" "body" "size"!important;
+    flex:none!important;
+  }
+  #screen-product.active .pdp-commonly .product-card .prod-img{aspect-ratio:1/1!important;min-height:0!important;width:100%!important}
+  #screen-product.active .pdp-commonly .product-card .card-header{padding:8px 10px 0!important}
+  #screen-product.active .pdp-commonly .product-card .card-body{padding:2px 10px 8px!important}
+  #screen-product.active .pdp-commonly .product-card .card-name{font-size:0.82rem!important}
+  #screen-product.active .pdp-commonly .product-card .card-header .card-price{font-size:0.88rem!important}
+  /* Hide bottom View Cart bar while on PDP */
+  body:has(#screen-product.active) #mobile-cart-cta{display:none!important}
   /* FAQ plus/minus sizing for mobile tap + clarity */
   .faq-q{min-height:52px}
   .faq-icon{width:22px;height:22px}
