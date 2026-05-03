@@ -4778,10 +4778,9 @@ function addToCartQty(sku, qty){
   if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
-    const shown = sessionStorage.getItem('hyl_upsell_shown');
-    if(!shown){
+    const cartHasSupplies = supplySkus.some(s=>cart.has(s));
+    if(!cartHasSupplies){
       setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
-      sessionStorage.setItem('hyl_upsell_shown','1');
     }
   }
 }
@@ -4800,13 +4799,12 @@ function addToCart(sku, btn){
   if(p) try { track('add_to_cart', { sku: p.sku, qty: 1, price: p.price }); } catch(e){}
   // Animate button: green checkmark then revert
   try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
-  // Show supplies upsell if adding a peptide (not supplies themselves)
+  // Show supplies upsell if adding a peptide and cart has no supplies yet
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
-    const shown = sessionStorage.getItem('hyl_upsell_shown');
-    if(!shown){
+    const cartHasSupplies = supplySkus.some(s=>cart.has(s));
+    if(!cartHasSupplies){
       setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
-      sessionStorage.setItem('hyl_upsell_shown','1');
     }
   }
 }
