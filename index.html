@@ -237,20 +237,13 @@ ul{list-style:none}
 /* ── NAV (resizable) ── */
 /* ── NAV ── */
 .nav{
-  position:fixed;top:32px;left:0;right:0;z-index:100;
-  background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:none;
-  margin:0 auto;
-  border-radius:0;
-  box-shadow:none;
-  transition:top 1s cubic-bezier(0.22,1,0.36,1),left 1s cubic-bezier(0.22,1,0.36,1),right 1s cubic-bezier(0.22,1,0.36,1),border-radius 1s cubic-bezier(0.22,1,0.36,1),box-shadow 1s cubic-bezier(0.22,1,0.36,1),background 1s cubic-bezier(0.22,1,0.36,1),border-color 1s cubic-bezier(0.22,1,0.36,1);
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:#fff;
+  border:none;border-bottom:1px solid var(--stroke);
+  margin:0;border-radius:0;box-shadow:none;
 }
 .nav.shrunk{
-  top:40px;left:calc(50% - 450px);right:calc(50% - 450px);
-  border-radius:999px;
-  box-shadow:0 4px 24px rgba(0,0,0,0.06);
-  border:none;
-  background:rgba(255,255,255,0.97);
+  top:0;left:0;right:0;border-radius:0;box-shadow:none;background:#fff;
 }
 .nav-inner{
   max-width:1200px;margin:0 auto;padding:0 32px;
@@ -353,8 +346,8 @@ ul{list-style:none}
   .nav-hamburger{display:flex!important;width:46px!important;height:46px!important}
   .nav-hamburger svg{width:26px!important;height:26px!important;stroke-width:2.1}
   .nav-cart-badge{min-width:18px!important;height:18px!important;font-size:0.6rem!important;top:-2px!important;right:-2px!important}
-  .nav.shrunk{top:30px;left:8px;right:8px;border-radius:16px}
-  .nav.shrunk .nav-inner{height:58px;padding:0 12px}
+  .nav.shrunk{top:0;left:0;right:0;border-radius:0}
+  .nav.shrunk .nav-inner{height:64px;padding:0 14px}
 
   /* HOME hero */
   .hero{padding:96px 0 24px!important}
@@ -644,10 +637,7 @@ ul{list-style:none}
 }
 
 /* ── STICKY BANNER ── */
-.sticky-banner{
-  position:fixed;top:0;left:0;right:0;z-index:101;
-  background:#000;color:#fff;overflow:hidden;
-}
+.sticky-banner{display:none!important}
 .inline-marquee{
   background:#fff;color:#000;overflow:hidden;
   border-bottom:1px solid var(--stroke);
