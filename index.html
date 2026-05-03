@@ -90,6 +90,14 @@
 <meta name="twitter:image" content="https://haoyunlabs.com/og.jpg?v=2">
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://cdn.jsdelivr.net/npm/vanilla-sonner@0.2.3/dist/vanilla-sonner.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs" type="module"></script>
+<script type="module">
+  // Eager-import pdf.js + worker so window.pdfjsLib is available for COA rendering
+  import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
+  window.pdfjsLib = pdfjsLib;
+  window.dispatchEvent(new Event('pdfjs-ready'));
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -2264,7 +2272,7 @@ body.no-nav{padding-top:0 !important}
 .pdp-more-panel>.pdp-more-inner{min-height:0;overflow:hidden}
 .pdp-more-panel.is-open{grid-template-rows:1fr}
 .pdp-more-arrow{display:inline-block;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1)}
-.pdp-more-arrow.is-open{transform:rotate(180deg)}
+.pdp-more-arrow.is-open{transform:translateX(6px)}
 .pdp-back{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;color:var(--muted);margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
 .pdp-back:hover{color:var(--brand)}
 .pdp-name{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;line-height:1.1}
@@ -6444,10 +6452,11 @@ function openProduct(sku){
   window._pdpSliderIdx = 0;
   window._pdpSliderCount = _totalSlides;
 
+  const _coaUrl = _coaForThisSku ? (COA_BASE + _coaForThisSku.c + '.pdf') : '';
   const coaSlideHTML = _coaForThisSku ? `
-    <div class="pdp-slide pdp-slide--coa" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:24px 32px 56px;box-sizing:border-box;color-scheme:light">
-      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,0.04);color-scheme:light">
-        <iframe src="${COA_BASE}${_coaForThisSku.c}.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit" style="width:100%;height:100%;border:none;background:#fff;display:block;color-scheme:light" loading="lazy" title="Certificate of Analysis"></iframe>
+    <div class="pdp-slide pdp-slide--coa" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:24px 32px 56px;box-sizing:border-box">
+      <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,0.04);overflow:hidden">
+        <canvas id="pdp-coa-canvas" data-pdf="${_coaUrl}" style="width:100%;height:100%;display:block;background:#fff"></canvas>
       </div>
     </div>` : '';
 
@@ -6501,7 +6510,7 @@ function openProduct(sku){
         </button>
       </div>
       <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
-        More Details <span class="pdp-more-arrow">&#8595;</span>
+        More Details <span class="pdp-more-arrow">&rarr;</span>
       </button>
       <div id="moreDetailsPanel" class="pdp-more-panel">
         <div class="pdp-more-inner">
@@ -6527,6 +6536,37 @@ function openProduct(sku){
   ` : '';
 
   navigate('product');
+  // Render COA via PDF.js into canvas (eliminates Chrome PDF viewer dark mode)
+  setTimeout(()=>{ try { renderCoaCanvas(); } catch(e){ console.warn('[coa]', e); } }, 50);
+}
+
+function renderCoaCanvas(){
+  const cvs = document.getElementById('pdp-coa-canvas');
+  if(!cvs) return;
+  const url = cvs.dataset.pdf;
+  if(!url) return;
+  const start = ()=>{
+    const lib = window.pdfjsLib;
+    if(!lib){ window.addEventListener('pdfjs-ready', start, {once:true}); return; }
+    lib.getDocument(url).promise.then(pdf => pdf.getPage(1)).then(page => {
+      const container = cvs.parentElement;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      const vp1 = page.getViewport({scale:1});
+      const scale = Math.min(cw / vp1.width, ch / vp1.height);
+      const vp = page.getViewport({scale: scale * dpr});
+      cvs.width = Math.floor(vp.width);
+      cvs.height = Math.floor(vp.height);
+      cvs.style.width = Math.floor(vp.width / dpr) + 'px';
+      cvs.style.height = Math.floor(vp.height / dpr) + 'px';
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+      page.render({canvasContext: ctx, viewport: vp});
+    }).catch(err => console.warn('[coa] render failed', err));
+  };
+  start();
 }
 
 function selectPdpSize(sku, idx){
