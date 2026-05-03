@@ -808,8 +808,9 @@ ul{list-style:none}
   align-self:stretch;box-sizing:border-box;
 }
 .card-details-toggle:hover{color:#fff;background:#000}
-.card-details{display:none;padding:8px 0 0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
-.card-details.open{display:block}
+.card-details{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1),padding 0.4s ease;padding:0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
+.card-details>*{min-height:0;overflow:hidden}
+.card-details.open{grid-template-rows:1fr;padding:8px 0 0}
 /* ── CUSTOM SIZE SELECT (shadcn-style) ── */
 .hyl-select{position:relative;user-select:none}
 .hyl-select-trigger{
@@ -1054,11 +1055,13 @@ ul{list-style:none}
 }
 .cssbuttons-io::before{
   content:"";position:absolute;inset:0;z-index:0;
-  background:radial-gradient(circle 220px at var(--x) var(--y), #404EED 0%, #5865F2 35%, #7983F5 100%);
-  opacity:0;transition:opacity 0.45s ease;
+  --r:0px;
+  background:radial-gradient(circle var(--r) at var(--x) var(--y), #5865F2 0%, #5865F2 70%, transparent 100%);
+  opacity:1;transition:--r 0.55s ease;
 }
+@property --r{syntax:'<length>';inherits:false;initial-value:0px}
 .cssbuttons-io:hover{color:#fff}
-.cssbuttons-io:hover::before{opacity:1}
+.cssbuttons-io:hover::before{--r:520px}
 .cssbuttons-io svg{width:1.1em;height:1.1em;margin-right:0.55em;transition:color 0.45s ease}
 .cssbuttons-io span{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;padding:0.95em 1.45em;white-space:nowrap;color:inherit;width:100%;text-align:center}
 .cssbuttons-io:active{transform:scale(0.97)}
@@ -2264,8 +2267,8 @@ body.no-nav{padding-top:0 !important}
 }
 .prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
-.pdp-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:0 0 32px;align-items:start}
-.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);min-height:468px;position:relative}
+.pdp-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;padding:0 0 32px;align-items:start}
+.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);min-height:620px;position:relative}
 .pdp-image .pdp-slide img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .pdp-info{display:flex;flex-direction:column;gap:12px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:24px}
 .pdp-more-panel{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s ease}
@@ -2609,7 +2612,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     </div>
 
     <!-- CURATED KITS (image left) -->
-    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="goToCategory('growth-recovery')">
+    <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center" onclick="setProductType('kits');goToCategory('growth-recovery')">
       <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
         <video src="media/hyl-kits.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none"></video>
       </div>
@@ -2734,7 +2737,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: PRODUCT DETAIL ═══════════════ -->
 <div class="screen" id="screen-product">
   <div class="container">
-    <div class="pdp-back-row" style="padding:80px 0 14px;display:flex;align-items:center"><div class="pdp-back" onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div></div>
+    <div class="pdp-back-row" style="padding:80px 0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--stroke);margin-bottom:18px"><div class="pdp-back" onclick="pdpBack()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div><div class="pdp-brand" onclick="navigate('home')" style="cursor:pointer;line-height:0"><img src="hylcompany.png" alt="Hao Yun Labs" style="height:32px;width:auto;display:block"></div></div>
     <div class="pdp-layout" id="pdp-layout"></div>
     <div class="pdp-commonly" id="pdp-commonly"></div>
   </div>
@@ -3822,12 +3825,25 @@ function pcPopulateReorder(){
   </div>
 </div>
 
-<!-- ORDER SUPPORT CARD (Iter 134) -->
-<!-- Sits above the Discord/Insider-Access CTA. Single-row card with -->
-<!-- left-aligned title + helper copy and a right-aligned Find My Order -->
-<!-- button that routes to #tracking. Same look as the Locke Trades footer -->
-<!-- support row the operator referenced. -->
+<!-- DISCORD CTA - now shown above Support -->
 <div style="max-width:1100px;margin:32px auto 0;padding:0 24px">
+  <div style="background:#fff;border:1px solid var(--stroke);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+    <div style="flex:1;min-width:280px">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Insider Access</div>
+      <div style="font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:0.01em;margin-bottom:8px">Join the Research Community</div>
+      <div style="font-size:0.88rem;color:var(--muted);line-height:1.6;max-width:560px">Discord ecosystem for exclusive drops, discounted <a href="https://discord.gg/WDYVkgt5dB" target="_blank" style="color:var(--text);text-decoration:underline;text-underline-offset:2px;font-weight:700">group buys</a>, and free weekly peptide giveaways.</div>
+    </div>
+    <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="cssbuttons-io" aria-label="Join Discord" onmousemove="const r=this.getBoundingClientRect();this.style.setProperty('--x',(event.clientX-r.left)+'px');this.style.setProperty('--y',(event.clientY-r.top)+'px')" ontouchmove="const t=event.touches[0];const r=this.getBoundingClientRect();this.style.setProperty('--x',(t.clientX-r.left)+'px');this.style.setProperty('--y',(t.clientY-r.top)+'px')">
+      <span>
+        <svg viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
+        Join Discord
+      </span>
+    </a>
+  </div>
+</div>
+
+<!-- ORDER SUPPORT CARD - now below Discord -->
+<div style="max-width:1100px;margin:16px auto 0;padding:0 24px">
   <div style="border:1px solid var(--stroke);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:#fff">
     <div style="flex:1;min-width:280px">
       <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Support</div>
@@ -3838,37 +3854,20 @@ function pcPopulateReorder(){
   </div>
 </div>
 
-<!-- DISCORD CTA - matched to Support card size, no bg dots -->
-<div style="max-width:1100px;margin:16px auto 0;padding:0 24px">
-  <div style="background:#fff;border:1px solid var(--stroke);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-    <div style="flex:1;min-width:280px">
-      <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Insider Access</div>
-      <div style="font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:0.01em;margin-bottom:8px">Join the Research Community</div>
-      <div style="font-size:0.88rem;color:var(--muted);line-height:1.6;max-width:560px">Discord ecosystem for exclusive drops, discounted <a href="https://discord.gg/WDYVkgt5dB" target="_blank" style="color:var(--text);text-decoration:underline;text-underline-offset:2px;font-weight:700">group buys</a>, and free weekly peptide giveaways.</div>
-    </div>
-    <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="cssbuttons-io" aria-label="Join the Research Community" onmousemove="const r=this.getBoundingClientRect();this.style.setProperty('--x',(event.clientX-r.left)+'px');this.style.setProperty('--y',(event.clientY-r.top)+'px')" ontouchmove="const t=event.touches[0];const r=this.getBoundingClientRect();this.style.setProperty('--x',(t.clientX-r.left)+'px');this.style.setProperty('--y',(t.clientY-r.top)+'px')">
-      <span>
-        <svg viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
-        Join the Research Community!
-      </span>
-    </a>
-  </div>
-</div>
-
 <!-- FOOTER -->
 <footer class="footer">
   <!-- EMAIL SIGNUP ROW -->
   <div style="max-width:1200px;margin:0 auto 24px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
     <div>
-      <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Get peptide drops before anyone else.</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Get mystery vials and discounts sent to your inbox.</div>
       <div style="display:flex;gap:8px">
         <input type="email" id="footer-email-main" placeholder="Enter your email..." style="flex:1;padding:12px 16px;border:1px solid var(--stroke);border-radius:10px;font-size:0.85rem;background:#fff;font-family:var(--sans)">
-        <button onclick="subscribeFooterEmail()" style="padding:12px 24px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer">&rarr;</button>
+        <button onclick="subscribeFooterEmail()" style="padding:12px 24px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer">Join now</button>
       </div>
       <div id="footer-email-main-msg" style="font-size:0.72rem;margin-top:6px;min-height:1em"></div>
     </div>
     <div style="font-size:0.72rem;color:var(--muted);line-height:1.6;padding-top:8px">
-      By signing up, you agree to receive marketing emails about new products, exclusive deals, and research updates. Unsubscribe anytime. View our <a onclick="navigate('terms')" style="text-decoration:underline;cursor:pointer">Privacy Policy</a>.
+      New drops, restocks, and research updates. No spam &mdash; unsubscribe anytime. See our <a onclick="navigate('terms')" style="text-decoration:underline;cursor:pointer">Privacy Policy</a>.
     </div>
   </div>
   <div class="footer-inner">
@@ -3946,7 +3945,7 @@ body:has(#mobile-cart-cta.visible) #hyl-email-bar{bottom:calc(92px + max(12px, e
 </style>
 <div id="hyl-email-bar" role="region" aria-label="Email signup" aria-hidden="true">
   <div class="hyl-eb-copy">
-    <div class="hyl-eb-title">Get peptide drops before anyone else.</div>
+    <div class="hyl-eb-title">Get mystery vials and discounts sent to your inbox.</div>
     <div class="hyl-eb-sub">New lots, restocks, and research updates.</div>
   </div>
   <div class="hyl-eb-form">
@@ -5059,8 +5058,24 @@ function showToast(msg, type, extra){
    ROUTING
    ═════════════════════════════════════════════════════ */
 function navigate(screen){
+  // Track previous screen so PDP back can return to catalog cleanly
+  try {
+    const cur = (location.hash || '#home').replace('#','').split('?')[0];
+    if(screen !== cur) sessionStorage.setItem('hyl_prev_screen', cur);
+  } catch(e){}
   window.location.hash = '#' + screen;
 }
+window.pdpBack = function(){
+  try {
+    const prev = sessionStorage.getItem('hyl_prev_screen') || '';
+    if(prev && prev !== 'product'){
+      navigate(prev);
+      return;
+    }
+  } catch(e){}
+  if(history.length > 1) history.back();
+  else navigate('catalog');
+};
 
 /* ═══════════════ WALLETCONNECT v2 ═══════════════ */
 const WC_PROJECT_ID = '61ac05d3a4d22887b96a8c44dfc43f32';
@@ -6126,8 +6141,8 @@ function cardHTML(p){
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
-      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)">+ More Details</button>
-      <div class="card-details" id="${detailId}">${detailHTML}</div>
+      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span> <span class="pdp-more-arrow">&rarr;</span></button>
+      <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
     <div class="card-footer">
       <button class="btn-add card-add-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap" onclick="event.stopPropagation();cardAdd('${p.sku}',this)">
@@ -6181,7 +6196,10 @@ function toggleDetails(id, btn){
   }
   const el = document.getElementById(id);
   const open = el.classList.toggle('open');
-  btn.textContent = open ? '- Hide Details' : '+ More Details';
+  const lbl = btn.querySelector('.card-details-label');
+  const arr = btn.querySelector('.pdp-more-arrow');
+  if(lbl) lbl.textContent = open ? 'Hide Details' : 'More Details';
+  if(arr) arr.classList.toggle('is-open', open);
 }
 
 /* ═════════════════════════════════════════════════════
@@ -6427,28 +6445,64 @@ function openProduct(sku){
     return (n.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0];
   })();
 
-  // Recommendations: 1) different products, same dose; 2) same product, different doses; 3) bestsellers as filler
+  // Recommendations: domain-aware co-buy map → category peers → bestsellers filler.
   const _isVariant = (x)=> x && x.sku !== sku && !x.isKit && !x.isBundle;
-  const _doseLc = (doseText||'').toLowerCase();
   const _compoundLc = compoundName.toLowerCase();
-  const sameDoseDiffProduct = ALL_PRODUCTS.filter(x => {
+  const _coBuyMap = {
+    'semaglutide':['Tirzepatide','Retatrutide','Cagrilintide','Bacteriostatic Water','Insulin Syringes'],
+    'tirzepatide':['Retatrutide','Semaglutide','Cagrilintide','Bacteriostatic Water','Insulin Syringes'],
+    'retatrutide':['Tirzepatide','Cagrilintide','Mazdutide','Bacteriostatic Water','Insulin Syringes'],
+    'cagrilintide':['Semaglutide','Tirzepatide','Retatrutide'],
+    'bpc-157':['TB-500','KPV','Bacteriostatic Water','Insulin Syringes'],
+    'tb-500':['BPC-157','KPV','Bacteriostatic Water'],
+    'hgh':['IGF-1 LR3','CJC-1295 DAC','Ipamorelin','Tesamorelin'],
+    'tesamorelin':['CJC-1295 DAC','Ipamorelin','HGH'],
+    'sermorelin':['Ipamorelin','CJC-1295 DAC'],
+    'cjc-1295 dac':['Ipamorelin','Tesamorelin','GHRP-2'],
+    'cjc no dac':['Ipamorelin','Sermorelin'],
+    'ipamorelin':['CJC-1295 DAC','CJC no DAC','Tesamorelin'],
+    'ghk-cu':['AHK-Cu','Snap-8','Matrixyl','GHK-Cu'],
+    'ahk-cu':['GHK-Cu','Matrixyl'],
+    'matrixyl':['GHK-Cu','AHK-Cu','Snap-8'],
+    'epithalon':['DSIP','Pinealon','Cartalax','Melatonin'],
+    'dsip':['Epithalon','Melatonin','Selank'],
+    'selank':['Semax','DSIP','P21'],
+    'semax':['Selank','P21','Cerebrolysin'],
+    'pt-141':['Oxytocin','Kisspeptin-10','Melanotan II'],
+    'melanotan ii':['PT-141','Melanotan I'],
+    'kisspeptin-10':['Gonadorelin','Triptorelin','HCG'],
+    'hcg':['HMG','Kisspeptin-10','Gonadorelin'],
+    'nad+':['Glutathione','MOTS-C','SS-31'],
+    'mots-c':['SS-31','Humanin','NAD+'],
+    'thymosin a-1':['LL-37','KPV','Thymalin'],
+    'kpv':['BPC-157','LL-37','Thymosin A-1'],
+    'll-37':['Thymosin A-1','KPV'],
+  };
+  const _peers = (_coBuyMap[_compoundLc]||[]).map(s=>s.toLowerCase());
+  const peerProducts = ALL_PRODUCTS.filter(x => {
     if(!_isVariant(x)) return false;
-    const dm = (x.name.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0].toLowerCase();
-    return dm === _doseLc && !x.name.toLowerCase().includes(_compoundLc);
+    const n = x.name.toLowerCase();
+    return _peers.some(peer => n.includes(peer));
   });
-  const sameProductDiffDose = ALL_PRODUCTS.filter(x => {
+  const sameCategoryFiller = ALL_PRODUCTS.filter(x => {
     if(!_isVariant(x)) return false;
-    return x.name.toLowerCase().includes(_compoundLc);
+    return x.cat === p.cat && !x.name.toLowerCase().includes(_compoundLc);
   });
   const filler = ALL_PRODUCTS.filter(x => _isVariant(x) && (typeof BESTSELLER_SKUS !== 'undefined' && BESTSELLER_SKUS.includes(x.sku)));
-  const seen = new Set();
-  const others = [...sameDoseDiffProduct, ...sameProductDiffDose, ...filler]
+  const seen = new Set([sku]);
+  const others = [...peerProducts, ...sameCategoryFiller, ...filler]
     .filter(x => { if(seen.has(x.sku)) return false; seen.add(x.sku); return true; })
     .slice(0, 8);
 
   // --- PDP slider: image + (optional) COA card for THIS exact SKU ---
+  // For kits, the COA is the single-vial COA (kit name is "Compound (Dose x 10 vials)").
+  // Match by compound + dose so kit PDPs surface the matching single-vial COA.
+  const _doseOnly = (doseText.match(/\d+\s*(?:mg|iu|ml|mcg)/i)||[''])[0];
+  const _singleVialName = (compoundName + ' ' + _doseOnly).trim().toLowerCase();
   const _coaForThisSku = (typeof COA_DATA !== 'undefined')
-    ? COA_DATA.find(r => (r.p||'').toLowerCase() === (p.name||'').toLowerCase()) || null
+    ? (COA_DATA.find(r => (r.p||'').toLowerCase() === (p.name||'').toLowerCase())
+       || (p.isKit ? COA_DATA.find(r => (r.p||'').toLowerCase() === _singleVialName) : null)
+       || null)
     : null;
   const purityText = _coaForThisSku ? _coaForThisSku.pu + ' Purity' : '99%+ Purity';
   const _totalSlides = 1 + (_coaForThisSku ? 1 : 0);
@@ -6457,7 +6511,7 @@ function openProduct(sku){
 
   const _coaUrl = _coaForThisSku ? (COA_BASE + _coaForThisSku.c + '.pdf') : '';
   const coaSlideHTML = _coaForThisSku ? `
-    <div class="pdp-slide pdp-slide--coa" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:24px 32px 56px;box-sizing:border-box">
+    <div class="pdp-slide pdp-slide--coa" style="flex:0 0 100%;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;padding:6px 10px 36px;box-sizing:border-box">
       <div style="height:100%;aspect-ratio:8.5/11;max-width:100%;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,0.04);overflow:hidden">
         <canvas id="pdp-coa-canvas" data-pdf="${_coaUrl}" style="width:100%;height:100%;display:block;background:#fff"></canvas>
       </div>
@@ -6472,10 +6526,10 @@ function openProduct(sku){
         </div>
       </div>
       ${_totalSlides > 1 ? `
-        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.8)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.8)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:0;background:#dadde2;padding:3px;border-radius:999px;z-index:2">
-          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:14px;height:9px;border-radius:999px;border:none;background:${i===0?'#3a3f47':'transparent'};cursor:pointer;padding:0;margin:0 1px;transition:background 0.2s"></button>`).join('')}
+        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.8)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.8)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:0;background:#dadde2;padding:2px;border-radius:999px;z-index:2">
+          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:10px;height:6px;border-radius:999px;border:none;background:${i===0?'#3a3f47':'transparent'};cursor:pointer;padding:0;margin:0 1px;transition:background 0.2s"></button>`).join('')}
         </div>
       ` : ''}
     </div>
@@ -6507,9 +6561,9 @@ function openProduct(sku){
           <input id="pdp-qty-val" type="number" min="1" step="1" value="1" style="width:46px;height:100%;border:none;text-align:center;font-size:0.95rem;font-weight:700;background:transparent" inputmode="numeric" oninput="pdpQty=Math.max(1,parseInt(this.value)||1)">
           <button onclick="pdpQty++;document.getElementById('pdp-qty-val').value=pdpQty;event.stopPropagation()" style="width:42px;height:100%;border:none;background:transparent;color:var(--text);font-size:1.2rem;font-weight:700;cursor:pointer">+</button>
         </div>
-        <button class="pdp-add-btn" onclick="addToCartQty('${p.sku}',pdpQty)" style="flex:1;height:52px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.85rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <button class="pdp-add-btn" onclick="addToCartQty('${p.sku}',pdpQty);pdpAddBtnFlash(this)" style="flex:1;height:52px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:0.85rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.25s ease">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>
-          Add to cart
+          <span class="pdp-add-label">Add to cart</span>
         </button>
       </div>
       <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
@@ -6532,8 +6586,8 @@ function openProduct(sku){
 
   document.getElementById('pdp-commonly').innerHTML = others.length ? `
     <div class="pdp-commonly-card">
-      <h2>Commonly Bought With</h2>
-      <div class="pdp-commonly-sub">Different products at ${doseText} first, then other sizes of ${compoundName}.</div>
+      <h2>Frequently Stacked With</h2>
+      <div class="pdp-commonly-sub">Compounds researchers commonly run alongside ${compoundName} in published protocols.</div>
       <div class="product-grid">${others.slice(0,4).map(cardHTML).join('')}</div>
     </div>
   ` : '';
@@ -6570,6 +6624,20 @@ function renderCoaCanvas(){
     }).catch(err => console.warn('[coa] render failed', err));
   };
   start();
+}
+
+function pdpAddBtnFlash(btn){
+  if(!btn) return;
+  const label = btn.querySelector('.pdp-add-label');
+  const origBg = btn.style.background;
+  const origText = label ? label.textContent : null;
+  btn.style.background = '#16a34a';
+  if(label) label.textContent = 'Added';
+  clearTimeout(btn._flashT);
+  btn._flashT = setTimeout(()=>{
+    btn.style.background = origBg || 'var(--brand)';
+    if(label && origText !== null) label.textContent = origText;
+  }, 1100);
 }
 
 function selectPdpSize(sku, idx){
