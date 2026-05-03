@@ -4709,6 +4709,9 @@ const ALL_PRODUCTS = [
 
 
 const KIT_SKUS_WITH_IMAGES = new Set(['SM2','SM5','SM10','SM15','SM20','SM30','SM50','TR5','TR10','TR15','TR20','TR30','TR40','TR50','TR60','TR80','TR100','RT5','RT10','RT15','RT20','RT30','RT40','RT50','RT60','SUR10','MAZ5','MDT','MAZ20','AP5','AP10','AOD2','AOD5','AOD10','Dula5','Dula10','Lira5','Lira10','Lira30','332','IPS','IP10','TSM2','TSM5','TSM10','TSM20','SMO2','SMO5','SMO10','CND2','CND5','CND10','CD2','CD5','G25','G210','G65','G610','HX2','HX5','G2K','G5K','G75','Gonad','IGF01','IGF1','IGD','BC2','BC5','BC10','BT5','BT10','BB10','BB20','BBG70','KLOW80','LL375','RA10','FM2','FMP2','TA2','TA5','TA10','TY','B7-33-2','CU50','CU100','NP810','XT100','GTT','GTT500','LC200','LC600','LC1200','MIC','KPV10','ET10','ET50','XA5','XA10','SK5','SK10','Adamax5','Adamax10','DS2','DS10','KS5','KS10','MT2','OT10','P41','PE10','PIN10','Hum','NJ100','NJ500','2S10','2S50','MS10','MS40','5AM','F410','PNC27','FN1','AE1','AR50','GDF8','P21','PTD-1','VIP10','Bron','Cardio','Cartalax','Cortagen','Crystagen','Ves','CG5','CG10','FRAG2','FRAG5','H10','H12','H15','H24']);
+// SKUs whose mockups are still the OLD black-label vial design — gate them
+// to the text fallback until new renders are produced.
+const OLD_IMAGE_SKUS = new Set(['2S10','2S50','2S5SV','332','332SV','50AMSV','5AM','Adamax10','Adamax5','AE1','AHK-CU-50MGSV','AOD2','AOD2SV','AOD5','AP10','AP5','AQUA8','AR50','B12-1MGMLSV','B7-33-2','BAC10SV','BAC3SV','ACET06-10ML','ACET1-10ML','BB10','BB20','BB30SV','BBG70','BC10','BC2','BC20SV','BC5','Bron','BT10','BT5','Cardio','Cartalax','CD2','CD5','CND10','CND2','CND5','Cortagen','Crystagen','CRYSTAGEN20SV','CS10','CS10SV','CU100','CU50','DP10SV','DS10','DS2','DS2SV','Dula5','ET10','ET50','F410','FM2','FMP2','FN1','FN1SV','FR2','FR2SV','FR5','FR5SV','G210','G25','G2K','G5K','G610','G65','G75','GDF8','GDF8SV','Gonad','GTT','GTT500','H06','H10','H12','H15','H24','H40SV','H6SV','Hum','HX2','HX5','IGD','IGD1SV','IGD2SV','IGF01','IGF1','IP10','IPS','KLOW80','KPV10','KS10','KS5','LC1200','LC200','LC600','Lemon','LemonSV','Lira10','Lira5','LL375','MAZ20','MAZ20SV','MAZ5','MAZ5SV','MDT','MIC','MICSV','MS10','MS20SV','MS40','MS5SV','MT2','NJ100','NJ500','NP810','NP8100SV','OT10','OT2SV','P21','P41','PE10','PIN10','PNC27','PNC2710SV','PTD-1','PTD-1SV','RA10','RT10','RT15','RT20','RT20PLUSTR40SV','RT30','RT40','RT40SV','RT5','RT50','RT60','SK10','SK5','SM10','SM15','SM2','SM20','SM30','SM5','SM50','SMO10','SMO2','SMO5','SUR10','TA10','TA2','TA2SV','TA5','TESA10PLUSIP5SV','TESTE10SV','TR10','TR100','TR100SV','TR15','TR20','TR30','TR40','TR5','TR50','TR60','TR80','TR80SV','TSM10','TSM2','TSM20','TSM20SV','TY','Ves','VESUGEN10SV','VIP10','XA10','XA5','XT100','XT100SV']);
 function getProductImageHTML(p) {
   // Bundle/stack images
   if(p.isBundle){
@@ -4717,15 +4720,15 @@ function getProductImageHTML(p) {
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
-  // Kit images from Canva bulk renders
-  if(p.isKit && KIT_SKUS_WITH_IMAGES.has(p.sku)){
+  // Kit images from Canva bulk renders (skip if SKU has the old vial design)
+  if(p.isKit && KIT_SKUS_WITH_IMAGES.has(p.sku) && !OLD_IMAGE_SKUS.has(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
       <img src="media/kits/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
-  // Use real mockup if SKU has an image in media/products/
-  if(VALID_SKUS.has(p.sku)){
+  // Use real mockup if SKU has a NEW-design image in media/products/
+  if(VALID_SKUS.has(p.sku) && !OLD_IMAGE_SKUS.has(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
       <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
@@ -6469,10 +6472,10 @@ function openProduct(sku){
         </div>
       </div>
       ${_totalSlides > 1 ? `
-        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:none;background:rgba(120,124,135,0.6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.85)'" onmouseout="this.style.background='rgba(120,124,135,0.6)'"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:none;background:rgba(120,124,135,0.6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.85)'" onmouseout="this.style.background='rgba(120,124,135,0.6)'"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.95);border:1px solid var(--stroke);padding:6px 10px;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,0.06);z-index:2">
-          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:8px;height:8px;border-radius:50%;border:1px solid #111;background:${i===0?'#111':'transparent'};cursor:pointer;padding:0;transition:background 0.2s"></button>`).join('')}
+        <button aria-label="Previous" onclick="pdpSliderPrev()" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.8)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button aria-label="Next" onclick="pdpSliderNext()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(120,124,135,0.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);transition:background 0.2s;z-index:2" onmouseover="this.style.background='rgba(60,64,75,0.8)'" onmouseout="this.style.background='rgba(120,124,135,0.55)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:0;background:#dadde2;padding:3px;border-radius:999px;z-index:2">
+          ${Array.from({length: _totalSlides}, (_,i)=>`<button class="pdp-dot" data-idx="${i}" onclick="pdpSliderGo(${i})" aria-label="Go to slide ${i+1}" style="width:14px;height:9px;border-radius:999px;border:none;background:${i===0?'#3a3f47':'transparent'};cursor:pointer;padding:0;margin:0 1px;transition:background 0.2s"></button>`).join('')}
         </div>
       ` : ''}
     </div>
@@ -6514,7 +6517,7 @@ function openProduct(sku){
       </button>
       <div id="moreDetailsPanel" class="pdp-more-panel">
         <div class="pdp-more-inner">
-          <div style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text);padding-top:4px">
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text);padding-top:14px;margin-top:6px;border-top:1px solid var(--stroke)">
             <div><strong>Description:</strong> ${desc}</div>
             ${getSequenceForSku(p.sku) ? `<div style="word-break:break-word"><strong>Sequence:</strong> <span style="font-family:var(--mono,'SF Mono',monospace);font-size:0.78rem">${getSequenceForSku(p.sku)}</span></div>` : ''}
             <div><strong>Purity:</strong> &ge;99% (HPLC)</div>
