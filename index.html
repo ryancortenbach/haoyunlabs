@@ -2746,13 +2746,15 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: ORDER / CHECKOUT ═══════════════ -->
 <div class="screen" id="screen-order">
   <div class="container">
-    <div style="padding:32px 0 10px;display:flex;align-items:center;justify-content:space-between">
-      <div onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div>
-      <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:2.2rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div>
-    </div>
-    <div style="padding:0 0 18px">
-      <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;color:var(--text);letter-spacing:0.03em;text-transform:uppercase">CHECKOUT</div>
-      <div style="font-size:0.92rem;font-weight:500;color:var(--muted);margin-top:6px">Complete your order</div>
+    <div style="margin:32px 0 18px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:20px 22px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--stroke)">
+        <div onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div>
+        <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:2.2rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div>
+      </div>
+      <div style="padding-top:16px">
+        <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;color:var(--text);letter-spacing:0.03em;text-transform:uppercase">CHECKOUT</div>
+        <div style="font-size:0.92rem;font-weight:500;color:var(--muted);margin-top:6px">Complete your order</div>
+      </div>
     </div>
     <div class="checkout-layout">
       <!-- LEFT COLUMN -->
