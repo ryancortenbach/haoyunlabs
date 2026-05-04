@@ -6996,7 +6996,7 @@ function renderSuggested(){
           <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">
           <div style="flex:1;min-width:0">
             <div style="font-size:0.78rem;font-weight:700;line-height:1.2">${p.name}</div>
-            <div style="font-size:0.7rem;color:var(--muted);font-family:var(--mono);margin-top:2px">$${p.price.toFixed(2)}</div>
+            <div style="font-family:var(--mono);margin-top:4px;display:flex;align-items:baseline;gap:8px"><span style="font-size:0.82rem;font-weight:800;color:var(--text)">$${p.price.toFixed(2)}</span><span style="font-size:0.68rem;text-decoration:line-through;color:#9b9b9b">$${(Math.floor(p.price*1.8)-0.01).toFixed(2)}</span></div>
           </div>
           <div style="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--stroke);border-radius:6px;padding:2px">
             <button onclick="suggestedQtyChange('${p.sku}',-1)" style="width:22px;height:22px;background:transparent;border:none;border-radius:4px;font-size:0.85rem;font-weight:700;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center" aria-label="Decrease">&minus;</button>
