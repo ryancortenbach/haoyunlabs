@@ -3382,13 +3382,12 @@ function pcPopulateReorder(){
     <div class="coa-search-head" style="display:grid;grid-template-columns:1fr minmax(0,520px);gap:24px;align-items:end;margin-bottom:32px;border-bottom:1px solid var(--stroke);padding-bottom:32px">
       <div>
         <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Archive Search</div>
-        <div style="font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Code, compound, or lot.</div>
       </div>
       <div class="coa-search-row" style="display:flex;align-items:end;gap:12px;min-width:0">
         <div style="flex:1;min-width:0;border-bottom:1px solid var(--text)">
           <input type="text" id="coa-search" placeholder="Find the matching certificate" oninput="renderCOAArchive()" style="width:100%;padding:10px 0;border:none;outline:none;background:transparent;font-size:16px;font-family:var(--sans);text-transform:uppercase;letter-spacing:0.04em">
         </div>
-        <button onclick="renderCOAArchive()" style="padding:10px 22px;border:1px solid var(--text);background:var(--bg);font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex-shrink:0" onmouseover="this.style.background='var(--text)';this.style.color='var(--bg)'" onmouseout="this.style.background='var(--bg)';this.style.color='var(--text)'">Search</button>
+        <button onclick="renderCOAArchive()" style="padding:10px 22px;border:1px solid #000;background:#fff;color:#000;font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background 0.2s,color 0.2s" onmouseover="this.style.background='#000';this.style.color='#fff'" onmouseout="this.style.background='#fff';this.style.color='#000'">Search</button>
       </div>
     </div>
 
@@ -8764,14 +8763,23 @@ function renderCOAArchive(){
         .map(p => p.sku.toLowerCase());
     });
   }
-  if(total) total.textContent = COA_DATA.length;
+  // Hide COAs whose matched product has no new-style image (we no longer sell those).
+  const hasNewImage = sku => {
+    const u = (sku||'').toUpperCase();
+    if(typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(u)) return false;
+    if(typeof VALID_SKUS !== 'undefined' && VALID_SKUS.has(u)) return true;
+    if(typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(u)) return true;
+    return false;
+  };
+  const sellable = COA_DATA.filter(r => r._skus && r._skus.some(s => hasNewImage(s)));
+  if(total) total.textContent = sellable.length;
   const q = (document.getElementById('coa-search')?.value || '').toLowerCase().trim();
-  const filtered = q ? COA_DATA.filter(r =>
+  const filtered = q ? sellable.filter(r =>
     r.c.toLowerCase().includes(q) ||
     r.p.toLowerCase().includes(q) ||
     r.l.toLowerCase().includes(q) ||
     (r._skus && r._skus.some(sku => sku.includes(q)))
-  ) : COA_DATA;
+  ) : sellable;
   if(resCount) resCount.textContent = filtered.length;
   if(!filtered.length){
     list.innerHTML = '<div class="coa-empty">No certificates match your search.</div>';
