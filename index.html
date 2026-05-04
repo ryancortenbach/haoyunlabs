@@ -6275,6 +6275,8 @@ let productType = 'singles';
 function setProductType(t){
   productType = t;
   homeShown = 12;
+  ['home-search','cat-search'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['home-sort','cat-sort'].forEach(id=>{const el=document.getElementById(id);if(el)el.selectedIndex=0;});
   if(typeof renderHome === 'function') renderHome();
   if(typeof renderCatalog === 'function' && document.getElementById('cat-cat-tabs')) renderCatalog();
 }
@@ -6822,6 +6824,8 @@ function switchPdpTab(tab, el){
 function setHomeCat(cat){
   homeCategory = cat;
   homeShown = 12;
+  const s = document.getElementById('home-search');if(s)s.value='';
+  const so = document.getElementById('home-sort');if(so)so.selectedIndex=0;
   renderHome();
 }
 
@@ -6839,6 +6843,8 @@ function goToCategory(cat){
 }
 function setCatCat(cat){
   catCategory = cat;
+  const s = document.getElementById('cat-search');if(s)s.value='';
+  const so = document.getElementById('cat-sort');if(so)so.selectedIndex=0;
   renderCatalog();
 }
 
