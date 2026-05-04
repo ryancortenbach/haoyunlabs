@@ -7030,9 +7030,9 @@ function renderCartItems(){
     const typeLabel = _orderCatLabelOf(p);
     html += `<div class="cart-item">
       <div class="cart-item-info">
-        <div style="margin-bottom:6px"><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
         <div class="cart-item-name">${p.name}</div>
         <div class="cart-item-sku">${p.sku}</div>
+        <div style="margin-top:6px"><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
       </div>
       <div class="cart-item-controls">
         <button class="qty-btn" onclick="setQty('${sku}',-1)">&minus;</button>
