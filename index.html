@@ -1187,18 +1187,23 @@ body:has(#screen-order.active) #ripple-grid{display:none}
 .coa-thumb{display:none}
 .coa-empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:0.85rem}
 @media(max-width:820px){
-  .coa-row{display:grid!important;grid-template-columns:1fr;gap:6px;padding:14px 4px;margin-bottom:0;border:none!important;border-bottom:1px solid var(--stroke)!important;border-radius:0;background:#fff!important;font-size:0.78rem!important}
+  #coa-archive-list{display:flex!important;flex-direction:column;gap:12px}
+  .coa-row{display:grid!important;grid-template-columns:88px 1fr!important;gap:14px!important;padding:14px!important;margin-bottom:0;border:1px solid var(--stroke)!important;border-radius:14px;background:#fff!important;font-size:0.78rem!important;box-shadow:0 1px 3px rgba(0,0,0,0.04);align-items:start}
   .coa-row-header{display:none!important}
-  .coa-info{display:grid!important;grid-template-columns:1fr;gap:0;min-width:0}
-  .coa-thumb{display:none!important}
-  .coa-label{display:inline!important;font-weight:600;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-right:6px}
-  .coa-info > div:first-child{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .coa-thumb{display:flex!important;width:88px!important;height:88px!important;border-radius:10px;background:#f5f5f5;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;border:1px solid var(--stroke)}
+  .coa-thumb img{width:100%!important;height:100%!important;object-fit:contain;padding:6px;display:block}
+  .coa-info{display:flex!important;flex-direction:column;gap:0;min-width:0}
+  .coa-info > div:first-child{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
   .coa-code{font-size:0.78rem!important;letter-spacing:0.06em}
-  .coa-code-sub{font-size:0.55rem!important;margin-top:0!important;letter-spacing:0.1em}
-  .coa-compound{font-size:0.92rem!important;font-weight:700!important;line-height:1.2;margin-top:0;margin-bottom:6px}
-  .coa-lot,.coa-purity,.coa-reported{font-size:0.7rem!important;color:var(--text)!important;line-height:1.5;font-family:var(--mono)}
-  .coa-actions{justify-content:flex-start;margin-top:10px;gap:8px;display:flex!important}
-  .coa-action{font-size:0.62rem!important;padding:7px 14px!important;border:1px solid #000!important;border-bottom:1px solid #000!important;border-radius:8px;background:#000;color:#fff!important;text-decoration:none!important;letter-spacing:0.08em;font-weight:700}
+  .coa-code-sub{font-size:0.55rem!important;margin-top:0!important;letter-spacing:0.1em;color:var(--muted)}
+  .coa-compound{font-size:0.95rem!important;font-weight:800!important;line-height:1.2;margin:0 0 8px 0!important;color:var(--text)}
+  .coa-lot,.coa-purity,.coa-reported{font-size:0.68rem!important;line-height:1.6;font-family:var(--mono);display:flex;align-items:baseline;gap:6px}
+  .coa-label{display:inline!important;font-weight:700;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);min-width:54px;font-family:inherit}
+  .coa-purity{color:#16a34a;font-weight:700}
+  .coa-purity .coa-label{color:var(--muted);font-weight:700}
+  .coa-actions{justify-content:space-between!important;margin-top:12px!important;gap:8px;display:grid!important;grid-template-columns:1fr 1fr}
+  .coa-action{font-size:0.62rem!important;padding:9px 0!important;border:none!important;border-radius:8px;background:#000;color:#fff!important;text-decoration:none!important;letter-spacing:0.1em;font-weight:700;text-align:center}
+  .coa-action:nth-child(2){background:#fff;color:#000!important;border:1px solid #000!important}
   .coa-action:hover{opacity:0.8}
   #screen-coa .container{padding-top:96px!important;padding-left:14px!important;padding-right:14px!important}
   .coa-search-head{grid-template-columns:1fr!important;gap:16px!important;padding-bottom:20px!important;margin-bottom:20px!important}
@@ -8766,24 +8771,27 @@ function renderCOAArchive(){
   }
   list.innerHTML = filtered.map(r => {
     const skuStr = r._skus && r._skus.length ? r._skus.map(s=>s.toUpperCase()).join(', ') : '';
+    const firstSku = r._skus && r._skus.length ? r._skus[0].toUpperCase() : '';
+    const imgSrc = firstSku ? `media/products/${firstSku}.png` : '';
+    const fallbackSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='1.5'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='9' y1='13' x2='15' y2='13'/><line x1='9' y1='17' x2='15' y2='17'/></svg>`;
     return `
     <div class="coa-row">
+      <div class="coa-thumb" onclick="window.open(COA_BASE+'${r.c}.pdf','_blank')">
+        <img src="${imgSrc}" alt="${r.p}" loading="lazy" onerror="this.src='${fallbackSvg}';this.style.padding='22px'">
+      </div>
       <div class="coa-info">
         <div>
           <div class="coa-code">${r.c}</div>
           ${skuStr ? `<div class="coa-code-sub">${skuStr}</div>` : '<div class="coa-code-sub">COA</div>'}
         </div>
         <div class="coa-compound">${r.p}</div>
-        <div class="coa-lot"><span class="coa-label">Lot:</span> ${r.l}</div>
-        <div class="coa-purity"><span class="coa-label">Purity:</span> ${r.pu}</div>
-        <div class="coa-reported"><span class="coa-label">Reported:</span> ${formatCOADate(r.r)}</div>
+        <div class="coa-lot"><span class="coa-label">Lot</span> ${r.l}</div>
+        <div class="coa-purity"><span class="coa-label">Purity</span> ${r.pu}</div>
+        <div class="coa-reported"><span class="coa-label">Reported</span> ${formatCOADate(r.r)}</div>
         <div class="coa-actions">
           <a class="coa-action" href="${COA_BASE}${r.c}.pdf" target="_blank" rel="noopener">Open</a>
           <a class="coa-action" href="${COA_BASE}${r.c}.pdf" download="${r.c}.pdf">Download</a>
         </div>
-      </div>
-      <div class="coa-thumb" onclick="window.open(COA_BASE+'${r.c}.pdf','_blank')">
-        <img src="coa/thumbs/${r.c}.png" alt="${r.p} COA" loading="lazy">
       </div>
     </div>`;
   }).join('');
