@@ -1202,9 +1202,11 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   .coa-purity{color:var(--text);font-weight:600}
   .coa-purity .coa-label{color:var(--muted);font-weight:700}
   .coa-actions{margin-top:12px!important;display:block!important}
-  .coa-action{font-size:0.62rem!important;padding:10px 0!important;border:none!important;border-radius:8px;background:#000;color:#fff!important;text-decoration:none!important;letter-spacing:0.1em;font-weight:700;text-align:center;display:block;width:100%}
+  .coa-action{font-size:0.7rem!important;padding:12px 0!important;border:none!important;border-radius:8px;background:#f1f1f1!important;color:#374151!important;text-decoration:none!important;letter-spacing:0.1em;font-weight:700;text-align:center;display:block;width:100%;position:relative;overflow:hidden;isolation:isolate;transition:color 0.45s ease}
+  .coa-action::before{content:"";position:absolute;inset:0;z-index:-1;--r:0px;background:radial-gradient(circle var(--r) at 50% 50%, #000 0%, #000 70%, transparent 100%);transition:--r 0.55s ease}
+  .coa-action:hover{color:#fff!important}
+  .coa-action:hover::before{--r:600px}
   .coa-action:nth-child(2){display:none!important}
-  .coa-action:hover{opacity:0.8}
   #screen-coa .container{padding-top:96px!important;padding-left:14px!important;padding-right:14px!important}
   .coa-search-head{grid-template-columns:1fr!important;gap:16px!important;padding-bottom:20px!important;margin-bottom:20px!important}
   .coa-search-head button{color:#000!important;border-color:#000!important}
