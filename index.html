@@ -301,12 +301,27 @@ body:has(#screen-order.active) #ripple-grid{display:none}
 .nav-btn svg{width:18px;height:18px;stroke:var(--text);opacity:0.7}
 .nav-cart-wrap{position:relative}
 .nav-cart-badge{
-  position:absolute;top:-4px;right:-4px;background:var(--brand);color:var(--bg);
-  font-size:0.55rem;font-weight:700;min-width:16px;height:16px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:50%;font-family:var(--mono);
+  position:absolute;top:2px;right:2px;background:#e11d48;
+  width:9px;height:9px;border-radius:50%;
+  box-shadow:0 0 0 2px var(--bg);
+  font-size:0;color:transparent;
+  pointer-events:none;
 }
 .nav-cart-badge:empty{display:none}
+.nav-cart-wrap.has-items svg{
+  transform-origin:50% 4px;
+  animation:bell-ring 1.6s ease-in-out infinite;
+}
+@keyframes bell-ring{
+  0%,55%,100%{transform:rotate(0)}
+  60%{transform:rotate(14deg)}
+  65%{transform:rotate(-12deg)}
+  70%{transform:rotate(10deg)}
+  75%{transform:rotate(-8deg)}
+  80%{transform:rotate(5deg)}
+  85%{transform:rotate(-3deg)}
+  90%{transform:rotate(0)}
+}
 /* ── WALLETCONNECT BUTTON ── */
 .nav-connect-btn{
   display:flex;align-items:center;gap:6px;
@@ -393,7 +408,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   /* COA + Pinterest image panels: square */
   .big-feature-card .card-3d-wrap{aspect-ratio:1/1!important}
   /* Purity heading: fit one line */
-  .big-feature-card .shimmer-title{font-size:1.3rem!important;white-space:nowrap}
+  .big-feature-card .shimmer-title{font-size:1.85rem!important;white-space:normal;line-height:1.05;letter-spacing:-0.01em}
   /* Category pill vials */
   .shop-pill-img img{transform:none!important}
   /* FEATURED dropdown: black text */
@@ -497,7 +512,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
     display:flex!important;
     align-items:center;justify-content:center;
     padding:0!important;
-    border-right:1px solid #f0f0f0!important;
+    border-right:none!important;
     border-bottom:none!important;
     overflow:hidden;
     position:relative;
@@ -539,7 +554,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
     letter-spacing:0.02em!important;
   }
   .product-card .card-details-toggle{font-size:0.78rem!important;margin-top:8px!important;font-weight:800!important}
-  .product-card .card-details{display:none!important}
+  .product-card .card-details{display:grid!important}
   /* On mobile, "More Details" navigates to PDP instead of expanding inline */
   .product-card .card-details-toggle.mobile-pdp-link{}
   .product-card>div[onclick][style*="padding:0 16px 8px"]{
@@ -567,7 +582,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   .product-card .btn-add-full{display:inline}
   .product-card .btn-add-short{display:none}
   .product-card .card-footer>div>div{border-radius:12px!important}
-  .badge-bestseller,.badge-purity{font-size:0.55rem!important;padding:3px 8px!important}
+  .badge-bestseller,.badge-purity{font-size:0.46rem!important;padding:2px 6px!important;letter-spacing:0.04em!important}
   /* Best seller overlay reposition — top-right of image */
   .product-card div[style*="position:absolute"][style*="top:10px"]{top:6px!important;right:6px!important}
 }
@@ -577,9 +592,10 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   .btn-add,.hero-btn,.btn-show-more{border-radius:999px!important}
   .hero-btn{padding:14px 26px!important;font-weight:800}
   .tilt-card,.feature-card{border-radius:18px!important}
-  .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important}
+  .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card:has(.inline-marquee){padding:0!important}
   .big-feature-card>div[style*="grid-template-columns"]{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important}
+  .big-feature-card>div:not(.card-3d-wrap){display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;width:100%}
   .big-feature-card .card-3d-wrap{width:100%!important;aspect-ratio:1/1!important;max-height:none!important}
   .hero-feature-grid{grid-template-columns:1fr!important}
   /* Mobile menu safe areas */
@@ -736,14 +752,17 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   display:flex;flex-direction:row;align-items:center;gap:8px;flex-wrap:nowrap;
   position:relative;font-size:0.82rem;flex:1 1 auto;min-width:0;overflow-x:auto;overflow-y:visible;
   scrollbar-width:none;-ms-overflow-style:none;
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
-          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
   padding:0 8px;
+  -webkit-mask-image:none;mask-image:none;
+}
+.cat-tabs.has-right-overflow{
+  -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
+          mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
 }
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tabs-inner{
-  display:inline-flex;align-items:center;gap:2px;padding:5px;
-  background:#f3f3f3;border-radius:999px;flex-shrink:0;min-width:0;
+  display:inline-flex;align-items:center;gap:4px;padding:5px;
+  background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;
 }
 .cat-tabs-slider{display:none}
 .cat-tab{
@@ -2083,12 +2102,12 @@ select.form-input{
 .hyl-rp-helper{font-size:0.92rem;color:var(--muted);line-height:1.5;margin-top:-2px}
 .hyl-rp-table-head{display:none}
 .hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:0}
-.hyl-rp-row{display:grid;grid-template-columns:104px 1fr;column-gap:18px;row-gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
-.hyl-rp-row:first-child{padding-top:6px}
+.hyl-rp-row{display:grid;grid-template-columns:84px 1fr;column-gap:14px;row-gap:3px;padding:8px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
+.hyl-rp-row:first-child{padding-top:4px}
 .hyl-rp-row:last-child{border-bottom:none}
-.hyl-rp-row .rp-img{grid-row:1/span 4;width:104px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:140px}
+.hyl-rp-row .rp-img{grid-row:1/span 4;width:84px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:96px}
 .hyl-rp-row .rp-img img{width:100%;height:100%;object-fit:contain}
-.hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0;margin-bottom:4px}
+.hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:1px;min-width:0;margin-bottom:2px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
 .hyl-rp-row .rp-title{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;white-space:normal;word-break:break-word}
 .hyl-rp-row .rp-unit,.hyl-rp-row .rp-qty,.hyl-rp-row .rp-line{display:grid;grid-template-columns:auto 1fr;align-items:baseline;column-gap:18px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:0.92rem;font-weight:600;color:var(--text);text-align:right;width:100%}
@@ -2368,7 +2387,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
       </button>
       <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M3 4h2.2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.55L21 8H6.2"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
         <span class="nav-cart-badge" id="cart-badge"></span>
       </button>
       <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -2904,6 +2923,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           </div>
           <div class="hyl-rp-discount-help">Enter a discount / affiliate code and press apply.</div>
           <div class="discount-msg" id="discount-msg"></div>
+          <div style="border-top:1px solid var(--stroke);margin:14px 0 10px"></div>
 
           <!-- Totals -->
           <div class="hyl-rp-totals" id="hyl-rp-totals-pre"></div>
@@ -3856,7 +3876,12 @@ function pcPopulateReorder(){
       <div style="font-family:var(--display);font-size:1.6rem;font-weight:900;letter-spacing:0.01em;margin-bottom:8px">Need help with an order?</div>
       <div style="font-size:0.88rem;color:var(--muted);line-height:1.6;max-width:560px">Open Find My Order for a direct status lookup, or use Customer Support below for help.</div>
     </div>
-    <button onclick="navigate('tracking')" style="min-width:240px;padding:0.95em 1.45em;background:#e9eaee;color:#374151;border:none;border-radius:12px;font-family:inherit;font-weight:700;font-size:0.95rem;letter-spacing:0.04em;line-height:1;cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center" onmouseover="this.style.background='#000';this.style.color='#fff'" onmouseout="this.style.background='#e9eaee';this.style.color='#374151'">Find My Order</button>
+    <button onclick="navigate('tracking')" class="cssbuttons-io cssbuttons-io--neutral" aria-label="Find My Order" onmousemove="const r=this.getBoundingClientRect();this.style.setProperty('--x',(event.clientX-r.left)+'px');this.style.setProperty('--y',(event.clientY-r.top)+'px')" ontouchmove="const t=event.touches[0];const r=this.getBoundingClientRect();this.style.setProperty('--x',(t.clientX-r.left)+'px');this.style.setProperty('--y',(t.clientY-r.top)+'px')">
+      <span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Find My Order
+      </span>
+    </button>
   </div>
 </div>
 
@@ -3905,7 +3930,6 @@ function pcPopulateReorder(){
       <div class="footer-social">
         <a href="https://discord.gg/WDYVkgt5dB" target="_blank" aria-label="Discord"><svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor" style="stroke:none"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg></a>
         <a href="mailto:support@haoyunlabs.com" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></a>
-        <a href="#" target="_blank" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
       </div>
     </div>
   </div>
@@ -4899,7 +4923,11 @@ function updateBadge(){
   const badge = document.getElementById('cart-badge');
   let total = 0;
   cart.forEach(v => total += v);
-  if(badge) badge.textContent = total > 0 ? total : '';
+  if(badge){
+    badge.textContent = total > 0 ? ' ' : '';
+    const wrap = badge.closest('.nav-cart-wrap');
+    if(wrap) wrap.classList.toggle('has-items', total > 0);
+  }
   const mcta = document.getElementById('mobile-cart-cta');
   const mctaNum = document.getElementById('mcta-num');
   if(mcta){
@@ -5672,11 +5700,8 @@ function toggleMobileMenu(){
   menu.classList.toggle('open');
   const backdrop = document.getElementById('mobile-menu-backdrop');
   if(backdrop) backdrop.classList.toggle('open', opening);
-  if(opening){
-    document.body.style.overflow='hidden';document.body.style.position='fixed';document.body.style.width='100%';document.body.style.top='-'+window.scrollY+'px';
-  } else {
-    const top=parseInt(document.body.style.top||'0')*-1;document.body.style.overflow='';document.body.style.position='';document.body.style.width='';document.body.style.top='';window.scrollTo(0,top);
-  }
+  // Just lock body scroll — don't use position:fixed (that causes the page to snap to top under the menu).
+  document.body.style.overflow = opening ? 'hidden' : '';
   if(opening){
     // Track last-focused element so we can return focus on close
     try { window._mobileMenuReturnFocus = document.querySelector('.nav-hamburger'); } catch(e){}
@@ -6188,14 +6213,6 @@ function cardAdd(sku, btn){
 }
 
 function toggleDetails(id, btn){
-  // On mobile (<540px), card-details is display:none!important, so navigate to PDP instead
-  if(window.innerWidth <= 540){
-    const card = btn.closest('.product-card');
-    if(card && card.getAttribute('onclick')){
-      const m = card.getAttribute('onclick').match(/openProduct\(['"]([^'"]+)['"]\)/);
-      if(m){ openProduct(m[1]); return; }
-    }
-  }
   const el = document.getElementById(id);
   const open = el.classList.toggle('open');
   const lbl = btn.querySelector('.card-details-label');
@@ -7227,7 +7244,7 @@ async function applyCode(){
       discountPct=pct;
       const txt = previousCode && previousCode!==d.code
         ? `Replaced ${previousCode} → ${d.name||d.code} (${pct}% off)`
-        : `Affiliate ${d.name||d.code} linked — ${pct}% off!`;
+        : `Affiliate ${d.name||d.code} linked: ${pct}% off!`;
       msg.textContent=txt;
       msg.className='discount-msg success';
       try { showToast(txt, 'success'); } catch(e){}
@@ -9420,9 +9437,20 @@ function setupFlipWord(elId, words, fontSize){
   let idx=0;
   const colors=['#dc2626','#ea580c','#f59e0b','#eab308','#ca8a04','#84cc16','#16a34a','#15803d','#0d9488','#0891b2','#0284c7','#2563eb','#4f46e5','#7c3aed','#9333ea','#c026d3','#db2777','#e11d48','#f97316','#facc15','#22c55e','#06b6d4','#3b82f6','#8b5cf6','#a855f7','#ec4899'];
   var measurer=document.createElement('span');
-  measurer.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-family:Instrument Serif,serif;font-size:'+fontSize+';font-weight:400;left:-9999px';
+  // Measure with the parent's actual rendered font size so mobile breakpoints don't oversize the measurement.
+  const _parentCS=getComputedStyle(el);
+  measurer.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;font-family:'+_parentCS.fontFamily+';font-size:'+_parentCS.fontSize+';font-weight:'+_parentCS.fontWeight+';letter-spacing:'+_parentCS.letterSpacing+';left:-9999px';
   document.body.appendChild(measurer);
-  function measureWord(w){measurer.textContent=w;return measurer.offsetWidth;}
+  function measureWord(w){
+    // Refresh on each measure to track viewport changes (e.g. resize/orientation).
+    const cs=getComputedStyle(el);
+    measurer.style.fontSize=cs.fontSize;
+    measurer.style.fontFamily=cs.fontFamily;
+    measurer.style.fontWeight=cs.fontWeight;
+    measurer.style.letterSpacing=cs.letterSpacing;
+    measurer.textContent=w;
+    return measurer.offsetWidth;
+  }
   function renderWord(word){
     el.style.width=measureWord(word)+'px';
     el.innerHTML=word.split('').map(function(c,i){
@@ -9624,18 +9652,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   buildMarquee();
   checkInternational();
 
-  // Nav: shrink on scroll
+  // Nav: stays full size; scroll-shrink disabled
   const nav = document.querySelector('.nav');
   const banner = document.getElementById('sticky-banner');
-  let navShrunk = false;
-  function updateNav(){
-    const y = window.scrollY;
-    if(!navShrunk && y > 80) navShrunk = true;
-    else if(navShrunk && y < 20) navShrunk = false;
-    nav.classList.toggle('shrunk', navShrunk);
-  }
-  window.addEventListener('scroll', updateNav, {passive:true});
-  updateNav();
+  if(nav) nav.classList.remove('shrunk');
 
   // Ripple grid background
   (function initRippleGrid(){
