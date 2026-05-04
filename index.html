@@ -301,14 +301,16 @@ body:has(#screen-order.active) #ripple-grid{display:none}
 .nav-btn svg{width:18px;height:18px;stroke:var(--text);opacity:0.7}
 .nav-cart-wrap{position:relative}
 .nav-cart-badge{
-  position:absolute;top:2px;right:2px;background:#e11d48;
-  width:9px;height:9px;border-radius:50%;
+  position:absolute;top:-3px;right:-3px;
+  width:18px;height:18px;border-radius:50%;
+  background:#e11d48;
+  display:none;align-items:center;justify-content:center;
   box-shadow:0 0 0 2px var(--bg);
-  font-size:0;color:transparent;
   pointer-events:none;
 }
-.nav-cart-badge:empty{display:none}
-.nav-cart-wrap.has-items svg{
+.nav-cart-badge svg{width:10px;height:10px;display:block}
+.nav-cart-wrap.has-items .nav-cart-badge{display:inline-flex}
+.nav-cart-wrap.has-items .nav-cart-badge svg{
   transform-origin:50% 4px;
   animation:bell-ring 1.6s ease-in-out infinite;
 }
@@ -362,7 +364,8 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   .nav-btn svg{width:24px!important;height:24px!important;opacity:0.9;stroke-width:2.1}
   .nav-hamburger{display:flex!important;width:46px!important;height:46px!important}
   .nav-hamburger svg{width:26px!important;height:26px!important;stroke-width:2.1}
-  .nav-cart-badge{min-width:0!important;width:9px!important;height:9px!important;font-size:0!important;top:6px!important;right:6px!important;background:#e11d48!important;color:transparent!important;box-shadow:0 0 0 2px var(--bg)!important}
+  .nav-cart-badge{width:18px!important;height:18px!important;top:-2px!important;right:-2px!important;background:#e11d48!important;box-shadow:0 0 0 2px var(--bg)!important}
+  .nav-cart-badge svg{width:11px!important;height:11px!important}
   .nav.shrunk{top:0;left:0;right:0;border-radius:0}
   .nav.shrunk .nav-inner{height:64px;padding:0 14px}
 
@@ -1103,6 +1106,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
 @property --r{syntax:'<length>';inherits:false;initial-value:0px}
 .cssbuttons-io:hover{color:#fff}
 .cssbuttons-io:hover::before{--r:520px}
+.cssbuttons-io--neutral::before{background:radial-gradient(circle var(--r) at var(--x) var(--y), #000 0%, #000 70%, transparent 100%)}
 .cssbuttons-io svg{width:1.1em;height:1.1em;margin-right:0.55em;transition:color 0.45s ease}
 .cssbuttons-io span{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;padding:0.95em 1.45em;white-space:nowrap;color:inherit;width:100%;text-align:center}
 .cssbuttons-io:active{transform:scale(0.97)}
@@ -2338,6 +2342,8 @@ body.no-nav{padding-top:0 !important}
 .pdp-commonly h2{font-family:var(--display);font-size:2rem;font-weight:900;margin:0 0 6px;letter-spacing:0;text-transform:none}
 .pdp-commonly .pdp-commonly-sub{font-size:0.85rem;color:var(--muted);margin-bottom:18px}
 .pdp-commonly .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.pdp-commonly .product-card .prod-img{padding-top:46px!important;padding-left:8px!important;padding-right:8px!important;box-sizing:border-box}
+.pdp-commonly .product-card .prod-img img{max-height:80%;width:auto!important;height:auto;margin:0 auto}
 .pdp-commonly .reveal,.pdp-commonly .reveal-left,.pdp-commonly .reveal-right,.pdp-commonly .reveal-scale{opacity:1!important;transform:none!important}
 @media(max-width:980px){.pdp-commonly .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.pdp-commonly .product-grid{grid-template-columns:1fr!important}}
@@ -2397,8 +2403,10 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
       </button>
       <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
-        <span class="nav-cart-badge" id="cart-badge"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M3 4h2.2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.55L21 8H6.2"/></svg>
+        <span class="nav-cart-badge" id="cart-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+        </span>
       </button>
       <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
@@ -4751,7 +4759,7 @@ const ALL_PRODUCTS = [
 const KIT_SKUS_WITH_IMAGES = new Set(['SM2','SM5','SM10','SM15','SM20','SM30','SM50','TR5','TR10','TR15','TR20','TR30','TR40','TR50','TR60','TR80','TR100','RT5','RT10','RT15','RT20','RT30','RT40','RT50','RT60','SUR10','MAZ5','MDT','MAZ20','AP5','AP10','AOD2','AOD5','AOD10','Dula5','Dula10','Lira5','Lira10','Lira30','332','IPS','IP10','TSM2','TSM5','TSM10','TSM20','SMO2','SMO5','SMO10','CND2','CND5','CND10','CD2','CD5','G25','G210','G65','G610','HX2','HX5','G2K','G5K','G75','Gonad','IGF01','IGF1','IGD','BC2','BC5','BC10','BT5','BT10','BB10','BB20','BBG70','KLOW80','LL375','RA10','FM2','FMP2','TA2','TA5','TA10','TY','B7-33-2','CU50','CU100','NP810','XT100','GTT','GTT500','LC200','LC600','LC1200','MIC','KPV10','ET10','ET50','XA5','XA10','SK5','SK10','Adamax5','Adamax10','DS2','DS10','KS5','KS10','MT2','OT10','P41','PE10','PIN10','Hum','NJ100','NJ500','2S10','2S50','MS10','MS40','5AM','F410','PNC27','FN1','AE1','AR50','GDF8','P21','PTD-1','VIP10','Bron','Cardio','Cartalax','Cortagen','Crystagen','Ves','CG5','CG10','FRAG2','FRAG5','H10','H12','H15','H24']);
 // SKUs whose mockups are still the OLD black-label vial design — gate them
 // to the text fallback until new renders are produced.
-const OLD_IMAGE_SKUS = new Set(['2S10','2S50','2S5SV','332','332SV','50AMSV','5AM','Adamax10','Adamax5','AE1','AHK-CU-50MGSV','AOD2','AOD2SV','AOD5','AP10','AP5','AQUA8','AR50','B12-1MGMLSV','B7-33-2','BB10','BB20','BB30SV','BBG70','BC10','BC2','BC20SV','BC5','Bron','BT10','BT5','Cardio','Cartalax','CD2','CD5','CND10','CND2','CND5','Cortagen','Crystagen','CRYSTAGEN20SV','CS10','CS10SV','CU100','CU50','DP10SV','DS10','DS2','DS2SV','Dula5','ET10','ET50','F410','FM2','FMP2','FN1','FN1SV','FR2','FR2SV','FR5','FR5SV','G210','G25','G2K','G5K','G610','G65','G75','GDF8','GDF8SV','Gonad','GTT','GTT500','H06','H10','H12','H15','H24','H40SV','H6SV','Hum','HX2','HX5','IGD','IGD1SV','IGD2SV','IGF01','IGF1','IP10','IPS','KLOW80','KPV10','KS10','KS5','LC1200','LC200','LC600','Lemon','LemonSV','Lira10','Lira5','LL375','MAZ20','MAZ20SV','MAZ5','MAZ5SV','MDT','MIC','MICSV','MS10','MS20SV','MS40','MS5SV','MT2','NJ100','NJ500','NP810','NP8100SV','OT10','OT2SV','P21','P41','PE10','PIN10','PNC27','PNC2710SV','PTD-1','PTD-1SV','RA10','RT10','RT15','RT20','RT20PLUSTR40SV','RT30','RT40','RT40SV','RT5','RT50','RT60','SK10','SK5','SM10','SM15','SM2','SM20','SM30','SM5','SM50','SMO10','SMO2','SMO5','SUR10','TA10','TA2','TA2SV','TA5','TESA10PLUSIP5SV','TESTE10SV','TR10','TR100','TR100SV','TR15','TR20','TR30','TR40','TR5','TR50','TR60','TR80','TR80SV','TSM10','TSM2','TSM20','TSM20SV','TY','Ves','VESUGEN10SV','VIP10','XA10','XA5','XT100','XT100SV']);
+const OLD_IMAGE_SKUS = new Set([]);
 function getProductImageHTML(p) {
   // Bundle/stack images
   if(p.isBundle){
@@ -4819,10 +4827,7 @@ function addToCartQty(sku, qty){
   if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
-    const cartHasSupplies = supplySkus.some(s=>cart.has(s));
-    if(!cartHasSupplies){
-      setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
-    }
+    setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
   }
 }
 function addToCart(sku, btn){
@@ -4843,10 +4848,7 @@ function addToCart(sku, btn){
   // Show supplies upsell if adding a peptide and cart has no supplies yet
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
-    const cartHasSupplies = supplySkus.some(s=>cart.has(s));
-    if(!cartHasSupplies){
-      setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
-    }
+    setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
   }
 }
 /* ── SUPPLIES UPSELL ── */
@@ -6695,11 +6697,19 @@ function renderCoaCanvas(){
 
 function toggleStackedMore(btn){
   const rest = document.getElementById('pdp-commonly-rest');
-  if(!rest) return;
-  const open = rest.style.display !== 'none';
-  rest.style.display = open ? 'none' : '';
-  btn.textContent = open ? 'Load More' : 'Show Less';
+  if(!rest || !btn) return;
+  const isHidden = rest.style.display === 'none' || rest.classList.contains('is-hidden');
+  if(isHidden){
+    rest.style.display = 'grid';
+    rest.classList.remove('is-hidden');
+    btn.textContent = 'Show Less';
+  } else {
+    rest.style.display = 'none';
+    rest.classList.add('is-hidden');
+    btn.textContent = 'Load More';
+  }
 }
+window.toggleStackedMore = toggleStackedMore;
 function _pdpShareUrl(sku){ return location.origin + '/?sku=' + encodeURIComponent(sku); }
 async function togglePdpShare(e){
   if(e) e.stopPropagation();
@@ -7196,7 +7206,7 @@ function renderReceipt(){
         const imgPath = p.isBundle ? `media/bundles/${sku}.png` : (_imgKit ? `media/kits/${sku}.png` : (_imgGated ? '' : `media/products/${sku}.png`));
         const fallbackSvg = '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg>';
         const imgHtml = imgPath
-          ? '<img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.outerHTML=\''+fallbackSvg.replace(/'/g,"\\'")+'\'">'
+          ? '<img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.style.display=\'none\'">'
           : fallbackSvg;
         rowsHtml.push(
           '<div class="hyl-rp-row">'
@@ -7375,18 +7385,20 @@ function renderOrderSearch(showAll){
     return `media/products/${p.sku}.png`;
   };
   const cartSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>';
+  const _typeLabel = p => p.isBundle ? 'Stack' : (p.isKit ? 'Kit' : 'Single Vial');
   el.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px">${matches.map(p=>{
     const qty = window._orderSearchQty[p.sku] || 1;
     const img = _imgFor(p);
     const oldPrice = (Math.floor(p.price*1.8)-0.01).toFixed(2);
     const imgHTML = img
-      ? `<img src="${img}" alt="${p.name}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">`
-      : `<div style="width:40px;height:40px;flex-shrink:0;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg></div>`;
+      ? `<div style="width:48px;height:48px;flex-shrink:0;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${img}" alt="${p.name}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" loading="lazy" onerror="this.style.display='none'"></div>`
+      : `<div style="width:48px;height:48px;flex-shrink:0;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg></div>`;
     return `
       <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--stroke);border-radius:8px;background:#fff">
         ${imgHTML}
         <div style="flex:1;min-width:0;cursor:pointer" onclick="openProduct('${p.sku}')">
           <div style="font-size:0.78rem;font-weight:700;line-height:1.2">${p.name}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px"><span style="font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.55rem;font-weight:700;letter-spacing:0.12em;color:var(--muted);padding:2px 8px;border:1px solid var(--stroke);border-radius:999px;background:#fff;text-transform:uppercase">${_typeLabel(p)}</span></div>
           <div style="font-family:var(--mono);margin-top:4px;display:flex;align-items:baseline;gap:8px"><span style="font-size:0.82rem;font-weight:800;color:var(--text)">$${p.price.toFixed(2)}</span><span style="font-size:0.68rem;text-decoration:line-through;color:#9b9b9b">$${oldPrice}</span></div>
         </div>
         <div style="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--stroke);border-radius:6px;padding:2px">
