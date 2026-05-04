@@ -2239,10 +2239,10 @@ body.no-nav{padding-top:0 !important}
 .footer-social a svg{position:relative;z-index:1;width:16px;height:16px;color:inherit;transition:color 0.45s ease}
 .footer-social a svg[stroke]{stroke:currentColor}
 .footer-social a:hover{color:#fff}
-.footer-social a[href*="discord"]{--x:50%;--y:50%}
-.footer-social a[href*="discord"]::before{content:"";position:absolute;inset:0;z-index:0;--r:0px;background:radial-gradient(circle var(--r) at var(--x) var(--y), #5865F2 0%, #5865F2 70%, transparent 100%);transition:--r 0.55s ease}
-.footer-social a[href*="discord"]:hover::before{--r:120px}
-.footer-social a:not([href*="discord"]):hover{background:#000}
+.footer-social a{--x:50%;--y:50%}
+.footer-social a::before{content:"";position:absolute;inset:0;z-index:0;--r:0px;background:radial-gradient(circle var(--r) at var(--x) var(--y), #000 0%, #000 70%, transparent 100%);transition:--r 0.55s ease}
+.footer-social a[href*="discord"]::before{background:radial-gradient(circle var(--r) at var(--x) var(--y), #5865F2 0%, #5865F2 70%, transparent 100%)}
+.footer-social a:hover::before{--r:120px}
 .footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--stroke);display:flex;justify-content:space-between;align-items:center;font-size:0.7rem;color:var(--muted)}
 .footer-subscribe-row{display:flex;gap:8px}
 .footer-subscribe-row input{flex:1;padding:10px 14px;border:1px solid var(--stroke);font-size:0.82rem;background:#fff;border-radius:8px}
