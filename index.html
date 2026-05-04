@@ -2890,8 +2890,15 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="hyl-rp-headline" style="margin-top:0">Add items</div>
           <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:12px">Search by name, SKU, or category, then review the cart below.</div>
           <!-- Mini search to add more products -->
-          <div style="display:flex;gap:8px;margin-bottom:16px">
-            <input class="form-input" type="text" placeholder="Search products to add..." id="order-product-search" oninput="renderOrderSearch()" onfocus="renderOrderSearch(true)" onclick="renderOrderSearch(true)" style="flex:1">
+          <div style="margin-bottom:16px">
+            <label class="form-label" for="order-cat-filter">Category</label>
+            <select class="form-input" id="order-cat-filter" onchange="onOrderCatChange()" style="margin-bottom:10px">
+              <option value="singles">Singles</option>
+              <option value="kits">Kits</option>
+              <option value="stacks">Stacks</option>
+            </select>
+            <div class="hyl-rp-helper" style="margin:0 0 8px">Select a category, then search and add items.</div>
+            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onfocus="renderOrderSearch(true)" onclick="renderOrderSearch(true)">
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
           <div id="cart-items-list"></div>
@@ -7055,10 +7062,11 @@ function renderCartItems(){
   cart.forEach((qty, sku)=>{
     const p = getProduct(sku);
     if(!p) return;
+    const typeLabel = _orderCatLabelOf(p);
     html += `<div class="cart-item">
       <div class="cart-item-info">
         <div class="cart-item-name">${p.name}</div>
-        <div class="cart-item-sku">${p.sku}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:2px"><div class="cart-item-sku">${p.sku}</div><div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:2px 8px;border:1px solid var(--stroke);border-radius:999px">${typeLabel}</div></div>
       </div>
       <div class="cart-item-controls">
         <button class="qty-btn" onclick="setQty('${sku}',-1)">&minus;</button>
@@ -7249,15 +7257,28 @@ async function applyCode(){
 }
 
 /* ── ORDER PRODUCT SEARCH (inline add) ── */
+function _orderCatTypeOf(p){ return p.isBundle ? 'stacks' : (p.isKit ? 'kits' : 'singles'); }
+function _orderCatLabelOf(p){ return p.isBundle ? 'STACK' : (p.isKit ? 'KIT' : 'SINGLE'); }
+function onOrderCatChange(){
+  const cat = document.getElementById('order-cat-filter').value;
+  const ph = {singles:'Ex: Retatrutide 10mg', kits:'Ex: Retatrutide kit', stacks:'Ex: Recomp stack'}[cat] || 'Ex: Retatrutide 10mg';
+  const inp = document.getElementById('order-product-search');
+  if(inp){ inp.placeholder = ph; }
+  renderOrderSearch(true);
+}
 function renderOrderSearch(showAll){
   const q = document.getElementById('order-product-search').value.toLowerCase().trim();
   const el = document.getElementById('order-search-results');
+  const catSel = document.getElementById('order-cat-filter');
+  const cat = catSel ? catSel.value : 'singles';
+  const inCat = p => _orderCatTypeOf(p) === cat;
   let matches;
   if(!q){
     if(!showAll){el.innerHTML='';return;}
-    matches = ALL_PRODUCTS.filter(p => /\b10\s*(mg|ml)\b/i.test(p.name)).slice(0,8);
+    matches = ALL_PRODUCTS.filter(p => inCat(p) && /\b10\s*(mg|ml)\b/i.test(p.name)).slice(0,8);
+    if(!matches.length) matches = ALL_PRODUCTS.filter(inCat).slice(0,8);
   } else {
-    matches = ALL_PRODUCTS.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q)).slice(0,8);
+    matches = ALL_PRODUCTS.filter(p=>inCat(p) && (p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q))).slice(0,8);
   }
   if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
   el.innerHTML = matches.map(p=>`
