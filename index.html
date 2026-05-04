@@ -428,13 +428,13 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   .pdp-layout{grid-template-columns:minmax(0,1fr)!important;gap:18px!important;padding:0 0 32px!important}
   .pdp-back-row{margin:18px 0 14px!important;padding:12px 14px!important}
   .pdp-brand{font-size:1.2rem!important}
-  .pdp-image{min-height:0!important;aspect-ratio:1/1!important;overflow:hidden!important}
+  .pdp-image{min-height:0!important;aspect-ratio:1/1!important;overflow:hidden!important;position:relative!important;isolation:isolate}
   .pdp-image .pdp-slide{aspect-ratio:1/1}
   .pdp-name{font-size:1.5rem!important}
   .pdp-price{font-size:1.6rem!important}
-  .pdp-image{max-width:100%!important;padding:20px!important;position:static!important;margin:0!important}
+  .pdp-image{max-width:100%!important;padding:0!important;margin:0!important}
   .pdp-image img{max-width:100%!important;height:auto!important;width:auto!important}
-  .pdp-info{min-width:0}
+  .pdp-info{min-width:0;position:relative;z-index:2}
   .pdp-size-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   .pdp-size-btn{font-size:0.78rem!important;padding:10px 4px!important}
   .pdp-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -2260,7 +2260,7 @@ body.no-nav{padding-top:0 !important}
 .prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
 .pdp-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;padding:0 0 32px;align-items:start}
-.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);min-height:620px;position:relative}
+.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);min-height:620px;position:relative;isolation:isolate;z-index:1}
 .pdp-image .pdp-slide img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .pdp-info{display:flex;flex-direction:column;gap:12px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:24px}
 .pdp-more-panel{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s ease}
@@ -2268,6 +2268,8 @@ body.no-nav{padding-top:0 !important}
 .pdp-more-panel.is-open{grid-template-rows:1fr}
 .pdp-more-arrow{display:inline-block;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1)}
 .pdp-more-arrow.is-open{transform:translateX(6px)}
+#pdp-share-panel{display:none}
+#pdp-share-panel.is-open{display:block}
 .pdp-back{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;color:var(--muted);margin-bottom:8px;display:inline-flex;align-items:center;gap:6px}
 .pdp-back:hover{color:var(--brand)}
 .pdp-name{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:0.06em;line-height:1.1}
@@ -6567,7 +6569,7 @@ function openProduct(sku){
         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         Share
       </button>
-      <div id="pdp-share-panel" style="display:none;margin-top:10px;padding:14px;border:1px solid var(--stroke);border-radius:12px;background:#fafafa">
+      <div id="pdp-share-panel" style="margin-top:10px;padding:14px;border:1px solid var(--stroke);border-radius:12px;background:#fafafa">
         <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px">Share ${p.name}</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button onclick="copyPdpLink('${p.sku}')" style="padding:8px 14px;background:#fff;border:1px solid var(--stroke);border-radius:999px;font-size:0.74rem;font-weight:700;cursor:pointer">Copy Link</button>
@@ -6637,7 +6639,7 @@ function renderCoaCanvas(){
 }
 
 function _pdpShareUrl(sku){ return location.origin + '/?sku=' + encodeURIComponent(sku); }
-function togglePdpShare(e){ if(e) e.stopPropagation(); const el = document.getElementById('pdp-share-panel'); if(!el) return; el.style.display = (el.style.display === 'none' || !el.style.display) ? 'block' : 'none'; }
+function togglePdpShare(e){ if(e) e.stopPropagation(); const el = document.getElementById('pdp-share-panel'); if(!el) return; el.classList.toggle('is-open'); }
 function copyPdpLink(sku){ const url = _pdpShareUrl(sku); const done = ()=>{ try{ showToast('Link copied','success'); }catch(e){} }; if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(url).then(done).catch(()=>{}); } else { try{ const t=document.createElement('textarea'); t.value=url; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); done(); }catch(e){} } }
 function textPdpLink(sku, name){ const url = _pdpShareUrl(sku); window.location.href = 'sms:?body=' + encodeURIComponent((name||'Hao Yun Labs')+' — '+url); }
 function emailPdpLink(sku, name){ const url = _pdpShareUrl(sku); window.location.href = 'mailto:?subject=' + encodeURIComponent('Hao Yun Labs: '+(name||'')) + '&body=' + encodeURIComponent('Take a look:\n\n'+url); }
