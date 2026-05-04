@@ -4784,15 +4784,15 @@ function getProductImageHTML(p) {
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
-  // Kit images from Canva bulk renders (skip if SKU has the old vial design)
-  if(p.isKit && KIT_SKUS_WITH_IMAGES.has(p.sku) && !OLD_IMAGE_SKUS.has(p.sku)){
+  // Kit images from Canva bulk renders — render only if file actually exists on disk
+  if(p.isKit && hasImageOnDisk(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
       <img src="media/kits/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
-  // Use real mockup if SKU has a NEW-design image in media/products/
-  if(VALID_SKUS.has(p.sku) && !OLD_IMAGE_SKUS.has(p.sku)){
+  // Real product mockup — render only if file actually exists on disk
+  if(VALID_SKUS.has(p.sku) && hasImageOnDisk(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
       <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
@@ -6280,8 +6280,22 @@ let homePageSize = 12;
 let homeShown = 12;
 // Product type toggle: 'singles' | 'kits' | 'bundles'
 let productType = 'singles';
+function _typeHasProducts(cat, t){
+  if(cat==='bestsellers' || cat==='all') return true;
+  if(t === 'bundles') return ALL_PRODUCTS.some(p=>p.isBundle);
+  if(t === 'kits') return ALL_PRODUCTS.some(p=>p.cat===cat && !p.isBundle && p.isKit);
+  return ALL_PRODUCTS.some(p=>p.cat===cat && !p.isBundle && !p.isKit);
+}
+function _pickValidProductType(cat, current){
+  if(_typeHasProducts(cat, current)) return current;
+  for(const fallback of ['singles','kits','bundles']){
+    if(fallback !== current && _typeHasProducts(cat, fallback)) return fallback;
+  }
+  return current;
+}
 function setProductType(t){
-  productType = t;
+  const activeCat = (typeof homeCategory !== 'undefined' && homeCategory) || (typeof catCategory !== 'undefined' && catCategory) || 'weight-loss';
+  productType = _pickValidProductType(activeCat, t);
   homeShown = 12;
   ['home-search','cat-search'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   ['home-sort','cat-sort'].forEach(id=>{const el=document.getElementById(id);if(el)el.selectedIndex=0;});
@@ -6832,6 +6846,7 @@ function switchPdpTab(tab, el){
 function setHomeCat(cat){
   homeCategory = cat;
   homeShown = 12;
+  productType = _pickValidProductType(cat, productType);
   const s = document.getElementById('home-search');if(s)s.value='';
   const so = document.getElementById('home-sort');if(so)so.selectedIndex=0;
   renderHome();
@@ -6851,6 +6866,7 @@ function goToCategory(cat){
 }
 function setCatCat(cat){
   catCategory = cat;
+  productType = _pickValidProductType(cat, productType);
   const s = document.getElementById('cat-search');if(s)s.value='';
   const so = document.getElementById('cat-sort');if(so)so.selectedIndex=0;
   renderCatalog();
