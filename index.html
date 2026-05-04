@@ -2074,9 +2074,11 @@ select.form-input{
 .hyl-rp-helper{font-size:0.92rem;color:var(--muted);line-height:1.5;margin-top:-2px}
 .hyl-rp-table-head{display:none}
 .hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:0}
-.hyl-rp-row{display:flex;flex-direction:column;gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
+.hyl-rp-row{display:grid;grid-template-columns:64px 1fr;column-gap:14px;row-gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
 .hyl-rp-row:first-child{padding-top:6px}
 .hyl-rp-row:last-child{border-bottom:none}
+.hyl-rp-row .rp-img{grid-row:1/span 4;width:64px;height:64px;border:1px solid var(--stroke);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:start}
+.hyl-rp-row .rp-img img{width:100%;height:100%;object-fit:contain;padding:4px}
 .hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0;margin-bottom:4px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
 .hyl-rp-row .rp-title{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;white-space:normal;word-break:break-word}
@@ -7093,8 +7095,10 @@ function renderReceipt(){
         const p = getProduct(sku);
         if(!p) return;
         const lineTotal = p.price * qty;
+        const imgPath = p.isBundle ? `media/bundles/${sku}.png` : (p.isKit ? `media/kits/${sku}.png` : `media/products/${sku}.png`);
         rowsHtml.push(
           '<div class="hyl-rp-row">'
+          + '<div class="rp-img"><img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.style.display=\'none\'"></div>'
           + '<div class="rp-name"><span class="rp-sku">'+escHtml(sku)+'</span><span class="rp-title">'+escHtml(p.name || sku)+'</span></div>'
           + '<div class="rp-unit" data-label="Unit">$'+p.price.toFixed(2)+'</div>'
           + '<div class="rp-qty" data-label="Qty">'+qty+'</div>'
