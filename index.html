@@ -446,7 +446,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
 
   /* CHECKOUT */
   .checkout-layout{grid-template-columns:1fr!important;gap:18px!important}
-  .checkout-layout>div{padding:18px!important}
+  .checkout-layout>div{padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important}
   .checkout-right-col{position:static!important}
 
   /* CONTAINER + FOOTER */
@@ -2540,7 +2540,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
       <div class="anim-fade-up anim-d1" style="font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Research-grade peptides</div>
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> <span style="white-space:nowrap;display:block">your <span id="hero-flip-word" class="hero-colourful"></span></span></div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> <span style="white-space:nowrap;display:block">your<span id="hero-flip-word" class="hero-colourful" style="margin-left:0.22em"></span></span></div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
         <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">View COAs <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
