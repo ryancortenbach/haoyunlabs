@@ -2077,8 +2077,8 @@ select.form-input{
 .hyl-rp-row{display:grid;grid-template-columns:72px 1fr;column-gap:14px;row-gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
 .hyl-rp-row:first-child{padding-top:6px}
 .hyl-rp-row:last-child{border-bottom:none}
-.hyl-rp-row .rp-img{grid-row:1/span 4;width:72px;border:1px solid var(--stroke);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:140px}
-.hyl-rp-row .rp-img img{width:100%;height:100%;object-fit:contain;padding:6px}
+.hyl-rp-row .rp-img{grid-row:1/span 4;width:72px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:140px}
+.hyl-rp-row .rp-img img{width:100%;height:100%;object-fit:contain}
 .hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0;margin-bottom:4px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
 .hyl-rp-row .rp-title{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;white-space:normal;word-break:break-word}
@@ -7093,10 +7093,15 @@ function renderReceipt(){
         const p = getProduct(sku);
         if(!p) return;
         const lineTotal = p.price * qty;
-        const imgPath = p.isBundle ? `media/bundles/${sku}.png` : (p.isKit ? `media/kits/${sku}.png` : `media/products/${sku}.png`);
+        const _imgGated = (typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(sku));
+        const _imgKit = p.isKit && (typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(sku)) && !_imgGated;
+        const imgPath = p.isBundle ? `media/bundles/${sku}.png` : (_imgKit ? `media/kits/${sku}.png` : (_imgGated ? '' : `media/products/${sku}.png`));
+        const imgHtml = imgPath
+          ? '<img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.parentNode.innerHTML=\'\'">'
+          : '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg>';
         rowsHtml.push(
           '<div class="hyl-rp-row">'
-          + '<div class="rp-img"><img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.style.display=\'none\'"></div>'
+          + '<div class="rp-img">'+imgHtml+'</div>'
           + '<div class="rp-name"><span class="rp-sku">'+escHtml(sku)+'</span><span class="rp-title">'+escHtml(p.name || sku)+'</span></div>'
           + '<div class="rp-unit" data-label="Unit">$'+p.price.toFixed(2)+'</div>'
           + '<div class="rp-qty" data-label="Qty">'+qty+'</div>'
