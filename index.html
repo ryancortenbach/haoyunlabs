@@ -308,7 +308,7 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   box-shadow:0 0 0 2px var(--bg);
   pointer-events:none;
 }
-.nav-btn .nav-cart-badge svg{width:11px!important;height:11px!important;display:block;stroke:#fff!important;opacity:1!important;color:#fff}
+.nav-btn .nav-cart-badge svg{width:11px!important;height:11px!important;display:block;fill:#fff!important;stroke:none!important;opacity:1!important;color:#fff}
 .nav-cart-wrap.has-items .nav-cart-badge{display:inline-flex}
 .nav-cart-wrap.has-items .nav-cart-badge svg{
   transform-origin:50% 4px;
@@ -2406,7 +2406,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <button class="nav-btn nav-cart-wrap" onclick="navigate('order')" aria-label="Cart">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M3 4h2.2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.55L21 8H6.2"/></svg>
         <span class="nav-cart-badge" id="cart-badge" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+          <svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 22a2.5 2.5 0 002.45-2H9.55A2.5 2.5 0 0012 22zm7-6.5V11a7 7 0 10-14 0v4.5L3 18v1h18v-1l-2-2.5z"/></svg>
         </span>
       </button>
       <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
