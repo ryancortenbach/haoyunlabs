@@ -2834,11 +2834,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
             </div>
           </div>
         </form>
-        <label class="discreet-toggle" id="billing-same-toggle" onclick="toggleBillingSame()" style="margin-top:8px">
-          <input type="checkbox" class="discreet-check-input" id="billing-same-check-input" checked style="position:absolute;opacity:0;width:0;height:0;pointer-events:none" tabindex="-1" aria-labelledby="billing-same-label">
-          <div class="discreet-check checked" id="billing-same-check"></div>
-          <div id="billing-same-label">Billing address same as shipping</div>
-        </label>
+        <input type="checkbox" id="billing-same-check-input" checked hidden>
         <div id="billing-section" style="display:none;margin-top:12px;padding:16px;border:1px solid var(--stroke);border-radius:12px;background:#fafafa">
           <div class="hyl-rp-eyebrow">Billing</div>
           <div class="hyl-rp-headline" style="margin-top:2px;font-size:1rem">Billing address</div>
