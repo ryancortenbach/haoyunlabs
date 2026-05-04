@@ -541,6 +541,8 @@ body:has(#screen-order.active) #ripple-grid{display:none}
     align-items:flex-start;
   }
   .product-card .card-sku{font-size:0.6rem!important;opacity:0.6}
+  .research-card{grid-template-columns:1fr!important}
+  .research-card .research-card-img{border-right:none!important;border-bottom:1px solid var(--stroke);min-height:200px!important}
   .product-card .card-header .card-price{
     font-size:1rem!important;font-weight:800;margin-top:2px;display:block;
   }
@@ -785,12 +787,13 @@ body:has(#screen-order.active) #ripple-grid{display:none}
 .type-tab.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 
 /* ZYL-style search + sort */
-.zyl-search-wrap{position:relative;width:200px}
-.zyl-search-input{width:100%;padding:12px 42px 12px 18px;font-size:0.92rem;border:1px solid var(--stroke);background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.2s ease,border-color 0.2s ease;color:#111}
-.zyl-search-input::placeholder{color:#9b9b9b}
+.search-sort{flex:1 1 auto}
+.zyl-search-wrap{position:relative;flex:1 1 auto;width:auto;min-width:0}
+.zyl-search-input{width:100%;padding:12px 42px 12px 18px;font-size:0.92rem;border:1px solid var(--stroke);background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.2s ease,border-color 0.2s ease;color:#111;font-weight:500}
+.zyl-search-input::placeholder{color:#9b9b9b;font-weight:500}
 .zyl-search-input:focus{outline:none;border-color:#9aa0a6;box-shadow:0 1px 3px rgba(0,0,0,0.08),0 0 0 3px rgba(0,0,0,0.04)}
 .zyl-search-icon{width:16px;height:16px;position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#6b6b6b;pointer-events:none}
-.zyl-sort{padding:12px 36px 12px 18px;font-size:0.92rem;border:1px solid var(--stroke);background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.04);cursor:pointer;color:#111;font-weight:600;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;min-width:140px}
+.zyl-sort{padding:12px 36px 12px 18px;font-size:0.92rem;border:1px solid var(--stroke);background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.04);cursor:pointer;color:#111;font-weight:500;text-transform:none;letter-spacing:0;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;min-width:130px;flex:0 0 auto}
 
 /* ── DYNAMIC PRICING TOGGLE ── */
 .pricing-toggle{display:flex;align-items:center;gap:8px;font-size:0.72rem;font-weight:600;color:var(--muted);letter-spacing:0.04em}
@@ -1219,9 +1222,11 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   /* Email popup: top-center on phones (instead of bottom-right) */
   #email-popup{bottom:auto!important;right:16px!important;left:16px!important;top:max(20px,env(safe-area-inset-top,20px))!important;width:auto!important;max-width:none!important}
   /* Footer email grid */
-  .footer,.footer>div,#footer-top{grid-template-columns:1fr!important}
-  .footer-inner{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:18px!important}
-  .footer-inner .footer-brand-col{grid-column:1 / -1}
+  .footer,#footer-top{grid-template-columns:1fr!important}
+  .footer>div:not(.footer-inner){grid-template-columns:1fr!important}
+  .footer .footer-inner{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:14px!important}
+  .footer .footer-inner .footer-col{min-width:0}
+  .footer .footer-inner .footer-brand-col{grid-column:1 / -1;margin-top:6px}
   .footer-col-title{font-size:0.62rem!important}
   .footer-col a{font-size:0.78rem!important;padding:4px 0!important}
   /* Sticky mobile cart CTA */
@@ -5792,7 +5797,11 @@ function handleRoute(){
   // Hide top nav on checkout + product screens so the back-pill is the only header chrome
   const hideNavOn = ['order','product'];
   document.body.classList.toggle('no-nav', hideNavOn.includes(hash));
+  // Force instant jump (suppress any smooth-scroll). Re-enable smooth on next frame.
+  const _hadSmooth = document.documentElement.classList.contains('smooth-ready');
+  if(_hadSmooth) document.documentElement.classList.remove('smooth-ready');
   window.scrollTo(0,0);
+  if(_hadSmooth) requestAnimationFrame(()=>document.documentElement.classList.add('smooth-ready'));
 
   if(hash==='product' && !window._pdpSku){
     // Recover from page reload: sessionStorage holds the last-viewed SKU.
@@ -6279,7 +6288,18 @@ function buildCatTabs(containerId, activeVar, clickFn){
   // Hide category row when viewing Bundles (bundles aren't categorized)
   const catRow = c.querySelector('.cat-tabs-inner');
   if(catRow) catRow.style.display = (productType === 'bundles') ? 'none' : '';
-  requestAnimationFrame(()=>slideCatTab(containerId));
+  requestAnimationFrame(()=>{ slideCatTab(containerId); updateCatTabsOverflow(c); });
+  if(!c._hylOverflowBound){
+    c._hylOverflowBound = true;
+    c.addEventListener('scroll', ()=>updateCatTabsOverflow(c), {passive:true});
+    window.addEventListener('resize', ()=>updateCatTabsOverflow(c), {passive:true});
+  }
+}
+
+function updateCatTabsOverflow(c){
+  if(!c) return;
+  const hasRight = c.scrollLeft + c.clientWidth < c.scrollWidth - 1;
+  c.classList.toggle('has-right-overflow', hasRight);
 }
 
 function slideCatTab(containerId){
@@ -6616,11 +6636,19 @@ function openProduct(sku){
     </div>
   `;
 
+  const _firstFour = others.slice(0,4).map(cardHTML).join('');
+  const _restFour = others.slice(4,8).map(cardHTML).join('');
   document.getElementById('pdp-commonly').innerHTML = others.length ? `
     <div class="pdp-commonly-card">
       <h2>Frequently Stacked With</h2>
       <div class="pdp-commonly-sub">Compounds researchers commonly run alongside ${compoundName} in published protocols.</div>
-      <div class="product-grid">${others.slice(0,4).map(cardHTML).join('')}</div>
+      <div class="product-grid" id="pdp-commonly-grid">${_firstFour}</div>
+      ${_restFour ? `
+        <div class="product-grid" id="pdp-commonly-rest" style="display:none;margin-top:14px">${_restFour}</div>
+        <div style="display:flex;justify-content:center;margin-top:18px">
+          <button id="pdp-commonly-more" type="button" onclick="toggleStackedMore(this)" style="padding:11px 26px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.18s" onmouseover="this.style.background='#000';this.style.color='#fff';this.style.borderColor='#000'" onmouseout="this.style.background='#fff';this.style.color='var(--text)';this.style.borderColor='var(--stroke)'">Load More</button>
+        </div>
+      ` : ''}
     </div>
   ` : '';
 
@@ -6658,18 +6686,27 @@ function renderCoaCanvas(){
   start();
 }
 
+function toggleStackedMore(btn){
+  const rest = document.getElementById('pdp-commonly-rest');
+  if(!rest) return;
+  const open = rest.style.display !== 'none';
+  rest.style.display = open ? 'none' : '';
+  btn.textContent = open ? 'Load More' : 'Show Less';
+}
 function _pdpShareUrl(sku){ return location.origin + '/?sku=' + encodeURIComponent(sku); }
 async function togglePdpShare(e){
   if(e) e.stopPropagation();
   const url = location.href;
   const titleEl = document.querySelector('#pdp-layout .pdp-name');
   const title = titleEl ? titleEl.textContent.trim() : 'Hao Yun Labs';
+  const panel = document.getElementById('pdp-share-panel');
   if(navigator.share){
-    try { await navigator.share({title, text:'Take a look at '+title, url}); return; }
-    catch(err){ if(err && err.name === 'AbortError') return; }
+    try { await navigator.share({title, text:'Take a look at '+title, url}); }
+    catch(err){ /* fall through to in-page panel even on AbortError */ }
+    if(panel) panel.classList.add('is-open');
+    return;
   }
-  const el = document.getElementById('pdp-share-panel');
-  if(el) el.classList.toggle('is-open');
+  if(panel) panel.classList.toggle('is-open');
 }
 function copyPdpLink(sku){ const url = _pdpShareUrl(sku); const done = ()=>{ try{ showToast('Link copied','success'); }catch(e){} }; if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(url).then(done).catch(()=>{}); } else { try{ const t=document.createElement('textarea'); t.value=url; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); done(); }catch(e){} } }
 function textPdpLink(sku, name){ const url = _pdpShareUrl(sku); window.location.href = 'sms:?body=' + encodeURIComponent((name||'Hao Yun Labs')+' — '+url); }
@@ -9020,8 +9057,8 @@ function renderResearch(){
     const sku = RESEARCH_SKU_MAP[r.compound.toLowerCase()] || '';
     const hasImg = sku && ALL_PRODUCTS.some(p=>p.sku===sku);
     return `
-    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease;display:grid;grid-template-columns:${hasImg?'220px ':''} 1fr;gap:0" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-      ${hasImg ? `<div style="background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;border-right:1px solid var(--stroke);min-height:240px" onclick="navigateToProduct('${sku}')"><img src="media/products/${sku}.png" alt="${r.compound}" style="width:100%;height:auto;max-height:240px;object-fit:contain;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform=''"></div>` : ''}
+    <div class="research-card" style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);overflow:hidden;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s ease;display:grid;grid-template-columns:${hasImg?'220px ':''} 1fr;gap:0" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.06)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      ${hasImg ? `<div class="research-card-img" style="background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;border-right:1px solid var(--stroke);min-height:240px" onclick="navigateToProduct('${sku}')"><img src="media/products/${sku}.png" alt="${r.compound}" style="width:100%;height:auto;max-height:240px;object-fit:contain;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform=''"></div>` : ''}
       <div style="padding:18px 20px;display:flex;flex-direction:column">
         <div style="font-family:var(--display);font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px${hasImg?';cursor:pointer':''}" ${hasImg?`onclick="navigateToProduct('${sku}')"`:''}>${r.compound}</div>
         <div style="font-size:0.78rem;color:var(--muted);margin-bottom:12px">${r.desc}</div>
