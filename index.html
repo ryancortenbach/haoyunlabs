@@ -1195,7 +1195,11 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   /* Email popup: top-center on phones (instead of bottom-right) */
   #email-popup{bottom:auto!important;right:16px!important;left:16px!important;top:max(20px,env(safe-area-inset-top,20px))!important;width:auto!important;max-width:none!important}
   /* Footer email grid */
-  .footer,.footer>div,.footer-inner,#footer-top{grid-template-columns:1fr!important}
+  .footer,.footer>div,#footer-top{grid-template-columns:1fr!important}
+  .footer-inner{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:18px!important}
+  .footer-inner .footer-brand-col{grid-column:1 / -1}
+  .footer-col-title{font-size:0.62rem!important}
+  .footer-col a{font-size:0.78rem!important;padding:4px 0!important}
   /* Sticky mobile cart CTA */
   body.has-cart-items #mobile-cart-cta{display:flex}
 }
