@@ -212,8 +212,8 @@ ul{list-style:none}
 body:has(#screen-order.active) #ripple-grid{display:none}
 #ripple-grid{
   display:grid;width:100%;height:100%;position:relative;
-  grid-template-columns:repeat(var(--cols),1fr);
-  grid-template-rows:repeat(var(--rows),1fr);
+  grid-template-columns:repeat(var(--cols),28px);
+  grid-auto-rows:28px;
 }
 .rp-cell{
   border:0.5px solid rgba(0,0,0,0.05);
@@ -422,16 +422,16 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:5px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:42px}
-  .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:32px!important;padding:0 16px!important;line-height:1!important;font-size:0.78rem!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:42px;height:42px}
+  .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:34px!important;padding:0 16px!important;line-height:1!important;font-size:0.78rem!important}
   .cat-tab,.type-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   .cat-tab:focus,.type-tab:focus{outline:none}
   /* Search + Featured: centered same line */
   .toolbar-card .toolbar,.toolbar{align-items:center}
   .search-sort{width:100%;flex-wrap:nowrap!important;gap:8px!important;align-items:center;justify-content:center!important;margin-left:0!important}
-  .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0;max-width:340px}
+  .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0;max-width:none}
   .search-sort>div[style*="position:relative"] input{width:100%!important;font-size:16px!important}
-  .search-sort .sort-select,.search-sort .zyl-sort{flex:0 0 auto;font-size:12px!important;width:auto!important;min-width:104px;color:#000!important}
+  .search-sort .sort-select,.search-sort .zyl-sort{flex:0 0 auto;font-size:16px!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important;width:auto!important;min-width:118px;color:#000!important}
   .search-sort .pricing-toggle{flex:0 0 auto;order:0}
   .search-input{flex:1;min-width:0}
 
@@ -596,8 +596,10 @@ body:has(#screen-order.active) #ripple-grid{display:none}
   .tilt-card,.feature-card{border-radius:18px!important}
   .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card:has(.inline-marquee){padding:0!important}
-  .big-feature-card>div[style*="grid-template-columns"]{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important}
+  .big-feature-card>div[style*="grid-template-columns"]{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card>div:not(.card-3d-wrap){display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;width:100%}
+  .big-feature-card>div[style*="grid-template-columns"]>div:not(.card-3d-wrap){display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;width:100%}
+  .big-feature-card>div[style*="grid-template-columns"]>div:not(.card-3d-wrap)>*{text-align:center!important;align-self:center!important}
   .big-feature-card .card-3d-wrap{width:100%!important;aspect-ratio:1/1!important;max-height:none!important}
   .hero-feature-grid{grid-template-columns:1fr!important}
   /* Mobile menu safe areas */
@@ -2107,10 +2109,10 @@ select.form-input{
 .hyl-rp-helper{font-size:0.92rem;color:var(--muted);line-height:1.5;margin-top:-2px}
 .hyl-rp-table-head{display:none}
 .hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:0}
-.hyl-rp-row{display:grid;grid-template-columns:84px 1fr;column-gap:14px;row-gap:3px;padding:8px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
-.hyl-rp-row:first-child{padding-top:4px}
+.hyl-rp-row{display:grid;grid-template-columns:64px 1fr;column-gap:12px;row-gap:1px;padding:6px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
+.hyl-rp-row:first-child{padding-top:3px}
 .hyl-rp-row:last-child{border-bottom:none}
-.hyl-rp-row .rp-img{grid-row:1/span 4;width:84px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:96px}
+.hyl-rp-row .rp-img{grid-row:1/span 4;width:64px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:start;min-height:64px;max-height:80px}
 .hyl-rp-row .rp-img img{width:100%;height:100%;object-fit:contain}
 .hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:1px;min-width:0;margin-bottom:2px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
@@ -2566,7 +2568,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 
     <!-- HERO -->
     <div class="hero" style="padding:160px 0 60px">
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> <span style="white-space:nowrap;display:block">your&nbsp;<span id="hero-flip-word" class="hero-colourful"></span></span></div>
+      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> <span style="white-space:nowrap;display:inline-flex;align-items:baseline;gap:0.18em">your<span id="hero-flip-word" class="hero-colourful"></span></span></div>
       <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
         <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
         <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">View COAs <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
@@ -7187,9 +7189,10 @@ function renderReceipt(){
         const _imgGated = (typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(sku));
         const _imgKit = p.isKit && (typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(sku));
         const imgPath = p.isBundle ? `media/bundles/${sku}.png` : (_imgKit ? `media/kits/${sku}.png` : (_imgGated ? '' : `media/products/${sku}.png`));
+        const fallbackSvg = '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg>';
         const imgHtml = imgPath
-          ? '<img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.parentNode.innerHTML=\'\'">'
-          : '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg>';
+          ? '<img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.outerHTML=\''+fallbackSvg.replace(/'/g,"\\'")+'\'">'
+          : fallbackSvg;
         rowsHtml.push(
           '<div class="hyl-rp-row">'
           + '<div class="rp-img">'+imgHtml+'</div>'
@@ -7330,6 +7333,21 @@ function onOrderCatChange(){
   if(inp){ inp.placeholder = ph; }
   renderOrderSearch(true);
 }
+window._orderSearchQty = window._orderSearchQty || {};
+function orderSearchQtyChange(sku, delta){
+  const cur = window._orderSearchQty[sku] || 1;
+  const next = Math.max(1, cur + delta);
+  window._orderSearchQty[sku] = next;
+  const el = document.getElementById('os-qty-'+sku);
+  if(el) el.textContent = next;
+}
+function orderSearchAdd(sku){
+  const qty = window._orderSearchQty[sku] || 1;
+  if(typeof addToCartQty === 'function'){ addToCartQty(sku, qty); }
+  else { for(let i=0;i<qty;i++) addToCart(sku); }
+  delete window._orderSearchQty[sku];
+  if(typeof renderOrder === 'function') renderOrder();
+}
 function renderOrderSearch(showAll){
   const q = document.getElementById('order-product-search').value.toLowerCase().trim();
   const el = document.getElementById('order-search-results');
@@ -7345,15 +7363,35 @@ function renderOrderSearch(showAll){
     matches = ALL_PRODUCTS.filter(p=>inCat(p) && (p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q))).slice(0,8);
   }
   if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
-  el.innerHTML = matches.map(p=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--stroke);font-size:0.78rem">
-      <div style="cursor:pointer;min-width:0;flex:1;margin-right:8px" onclick="openProduct('${p.sku}')"><span style="font-weight:700;text-transform:uppercase;text-decoration:underline;text-underline-offset:2px">${p.name}</span> <span style="font-family:var(--mono);color:var(--muted);font-size:0.7rem;margin-left:6px">${p.sku}</span></div>
-      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
-        <span style="font-family:var(--mono);font-weight:700">$${p.price.toFixed(2)}</span>
-        <button class="btn-add" style="width:auto;padding:6px 14px;font-size:0.68rem" onclick="addToCart('${p.sku}');renderOrder()">ADD</button>
-      </div>
-    </div>
-  `).join('');
+  const _imgFor = p => {
+    if(p.isBundle) return `media/bundles/${p.sku}.png`;
+    if(p.isKit && typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(p.sku) && !(typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(p.sku))) return `media/kits/${p.sku}.png`;
+    if(typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(p.sku)) return '';
+    return `media/products/${p.sku}.png`;
+  };
+  const cartSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>';
+  el.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px">${matches.map(p=>{
+    const qty = window._orderSearchQty[p.sku] || 1;
+    const img = _imgFor(p);
+    const oldPrice = (Math.floor(p.price*1.8)-0.01).toFixed(2);
+    const imgHTML = img
+      ? `<img src="${img}" alt="${p.name}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">`
+      : `<div style="width:40px;height:40px;flex-shrink:0;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg></div>`;
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--stroke);border-radius:8px;background:#fff">
+        ${imgHTML}
+        <div style="flex:1;min-width:0;cursor:pointer" onclick="openProduct('${p.sku}')">
+          <div style="font-size:0.78rem;font-weight:700;line-height:1.2">${p.name}</div>
+          <div style="font-family:var(--mono);margin-top:4px;display:flex;align-items:baseline;gap:8px"><span style="font-size:0.82rem;font-weight:800;color:var(--text)">$${p.price.toFixed(2)}</span><span style="font-size:0.68rem;text-decoration:line-through;color:#9b9b9b">$${oldPrice}</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--stroke);border-radius:6px;padding:2px">
+          <button onclick="orderSearchQtyChange('${p.sku}',-1)" style="width:22px;height:22px;background:transparent;border:none;border-radius:4px;font-size:0.85rem;font-weight:700;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center" aria-label="Decrease">&minus;</button>
+          <span id="os-qty-${p.sku}" style="min-width:18px;text-align:center;font-size:0.78rem;font-weight:700;font-family:var(--mono)">${qty}</span>
+          <button onclick="orderSearchQtyChange('${p.sku}',1)" style="width:22px;height:22px;background:transparent;border:none;border-radius:4px;font-size:0.85rem;font-weight:700;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center" aria-label="Increase">+</button>
+        </div>
+        <button type="button" onclick="orderSearchAdd('${p.sku}')" style="padding:8px 14px;background:var(--brand);color:#fff;border:none;border-radius:6px;font-size:0.7rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;display:inline-flex;align-items:center;gap:6px" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">${cartSvg}Add</button>
+      </div>`;
+  }).join('')}</div>`;
 }
 
 /* ── PAYMENT METHODS ── */
