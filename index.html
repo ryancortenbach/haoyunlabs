@@ -1371,7 +1371,7 @@ body.admin-open{overflow:hidden}
   #screen-research #research-cards a[style*="font-size:0.72rem"]{font-size:13px!important}
   .footer-subscribe-row button,button[onclick="subscribeFooterEmail()"]{padding-top:14px!important;padding-bottom:14px!important}
   .footer-social a{width:44px!important;height:44px!important}
-  .cat-tab{min-height:44px;padding-top:12px!important;padding-bottom:12px!important}
+  .cat-tab,.type-tab{min-height:34px!important;padding-top:0!important;padding-bottom:0!important}
   /* Sticky Complete Order CTA on mobile checkout */
   #screen-order.active #btn-pay{position:sticky;bottom:0;z-index:40;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
   /* Sticky Add-to-Cart on mobile PDP (mirrors #btn-pay pattern) */
@@ -2341,8 +2341,10 @@ body.no-nav{padding-top:0 !important}
 .pdp-commonly h2{font-family:var(--display);font-size:2rem;font-weight:900;margin:0 0 6px;letter-spacing:0;text-transform:none}
 .pdp-commonly .pdp-commonly-sub{font-size:0.85rem;color:var(--muted);margin-bottom:18px}
 .pdp-commonly .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.pdp-commonly .product-grid.is-hidden{display:none!important}
 .pdp-commonly .product-card .prod-img{padding-top:46px!important;padding-left:8px!important;padding-right:8px!important;box-sizing:border-box}
 .pdp-commonly .product-card .prod-img img{max-height:80%;width:auto!important;height:auto;margin:0 auto}
+.pdp-commonly .product-card .card-name{padding-right:80px}
 .pdp-commonly .reveal,.pdp-commonly .reveal-left,.pdp-commonly .reveal-right,.pdp-commonly .reveal-scale{opacity:1!important;transform:none!important}
 @media(max-width:980px){.pdp-commonly .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.pdp-commonly .product-grid{grid-template-columns:1fr!important}}
@@ -4937,7 +4939,7 @@ function updateBadge(){
   let total = 0;
   cart.forEach(v => total += v);
   if(badge){
-    badge.textContent = total > 0 ? ' ' : '';
+    // badge content is the bell SVG — don't overwrite
     const wrap = badge.closest('.nav-cart-wrap');
     if(wrap) wrap.classList.toggle('has-items', total > 0);
   }
@@ -6470,6 +6472,11 @@ window.pdpSliderNext = function(){ window.pdpSliderGo((window._pdpSliderIdx || 0
 function openProduct(sku){
   const p = getProduct(sku);
   if(!p) return;
+  // Force instant jump to top before any layout work, suppressing smooth-scroll
+  document.documentElement.classList.remove('smooth-ready');
+  document.documentElement.style.scrollBehavior = 'auto';
+  document.body.style.scrollBehavior = 'auto';
+  window.scrollTo(0,0);
   window._pdpSku = sku;
   try { sessionStorage.setItem('hyl_pdp_sku', sku); } catch(e){}
   pdpQty = 1;
@@ -6652,7 +6659,7 @@ function openProduct(sku){
       <div class="pdp-commonly-sub">Compounds researchers commonly run alongside ${compoundName} in published protocols.</div>
       <div class="product-grid" id="pdp-commonly-grid">${_firstFour}</div>
       ${_restFour ? `
-        <div class="product-grid" id="pdp-commonly-rest" style="display:none;margin-top:14px">${_restFour}</div>
+        <div class="product-grid is-hidden" id="pdp-commonly-rest" style="margin-top:14px">${_restFour}</div>
         <div style="display:flex;justify-content:center;margin-top:18px">
           <button id="pdp-commonly-more" type="button" onclick="toggleStackedMore(this)" style="padding:11px 26px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.18s" onmouseover="this.style.background='#000';this.style.color='#fff';this.style.borderColor='#000'" onmouseout="this.style.background='#fff';this.style.color='var(--text)';this.style.borderColor='var(--stroke)'">Load More</button>
         </div>
@@ -6661,6 +6668,14 @@ function openProduct(sku){
   ` : '';
 
   navigate('product');
+  // Hard-jump to top after navigate too — covers Safari/iOS edge cases.
+  window.scrollTo(0,0);
+  requestAnimationFrame(()=>{
+    window.scrollTo(0,0);
+    document.documentElement.style.scrollBehavior = '';
+    document.body.style.scrollBehavior = '';
+    document.documentElement.classList.add('smooth-ready');
+  });
   // Render COA via PDF.js into canvas (eliminates Chrome PDF viewer dark mode)
   setTimeout(()=>{ try { renderCoaCanvas(); } catch(e){ console.warn('[coa]', e); } }, 50);
 }
