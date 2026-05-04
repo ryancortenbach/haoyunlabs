@@ -2074,10 +2074,10 @@ select.form-input{
 .hyl-rp-helper{font-size:0.92rem;color:var(--muted);line-height:1.5;margin-top:-2px}
 .hyl-rp-table-head{display:none}
 .hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:0}
-.hyl-rp-row{display:grid;grid-template-columns:72px 1fr;column-gap:14px;row-gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
+.hyl-rp-row{display:grid;grid-template-columns:104px 1fr;column-gap:18px;row-gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
 .hyl-rp-row:first-child{padding-top:6px}
 .hyl-rp-row:last-child{border-bottom:none}
-.hyl-rp-row .rp-img{grid-row:1/span 4;width:72px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:140px}
+.hyl-rp-row .rp-img{grid-row:1/span 4;width:104px;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:140px}
 .hyl-rp-row .rp-img img{width:100%;height:100%;object-fit:contain}
 .hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0;margin-bottom:4px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
@@ -2735,15 +2735,14 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: ORDER / CHECKOUT ═══════════════ -->
 <div class="screen" id="screen-order">
   <div class="container">
-    <div style="margin:32px 0 18px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:20px 22px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--stroke)">
+    <div class="checkout-card" style="margin:32px 0 18px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--stroke);margin-bottom:14px">
         <div onclick="history.back()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div>
         <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:1.6rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div>
       </div>
-      <div style="padding-top:16px">
-        <div style="font-family:var(--display);font-size:1.4rem;font-weight:900;color:var(--text);letter-spacing:0.03em;text-transform:uppercase">CHECKOUT</div>
-        <div style="font-size:0.92rem;font-weight:500;color:var(--muted);margin-top:6px">Complete your order</div>
-      </div>
+      <div class="hyl-rp-eyebrow">Checkout</div>
+      <div class="hyl-rp-headline" style="margin-top:0">Review and pay</div>
+      <div class="hyl-rp-helper" style="margin-top:2px">Complete your order.</div>
     </div>
     <div class="checkout-layout">
       <!-- LEFT COLUMN -->
@@ -7094,7 +7093,7 @@ function renderReceipt(){
         if(!p) return;
         const lineTotal = p.price * qty;
         const _imgGated = (typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(sku));
-        const _imgKit = p.isKit && (typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(sku)) && !_imgGated;
+        const _imgKit = p.isKit && (typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(sku));
         const imgPath = p.isBundle ? `media/bundles/${sku}.png` : (_imgKit ? `media/kits/${sku}.png` : (_imgGated ? '' : `media/products/${sku}.png`));
         const imgHtml = imgPath
           ? '<img src="'+imgPath+'" alt="'+escHtml(p.name||sku)+'" loading="lazy" onerror="this.parentNode.innerHTML=\'\'">'
