@@ -2072,19 +2072,17 @@ select.form-input{
 .hyl-rp-eyebrow{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
 .hyl-rp-headline{font-family:var(--display);font-size:1.35rem;font-weight:900;letter-spacing:0.005em;line-height:1.15;color:var(--text);margin-top:-4px}
 .hyl-rp-helper{font-size:0.92rem;color:var(--muted);line-height:1.5;margin-top:-2px}
-.hyl-rp-table-head{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;font-size:0.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:8px 0 6px;border-bottom:1px solid var(--stroke)}
-.hyl-rp-table-head>span:nth-child(2),.hyl-rp-table-head>span:nth-child(3){text-align:right}
-.hyl-rp-table-head>span:nth-child(4){text-align:right}
+.hyl-rp-table-head{display:none}
 .hyl-rp-items{display:flex;flex-direction:column;gap:0;margin-top:0}
-.hyl-rp-row{display:grid;grid-template-columns:1fr 80px 50px 80px;gap:12px;align-items:center;padding:10px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
-.hyl-rp-row:first-child{padding-top:2px}
+.hyl-rp-row{display:flex;flex-direction:column;gap:6px;padding:14px 0;border:none;border-bottom:1px solid var(--stroke);border-radius:0;background:transparent}
+.hyl-rp-row:first-child{padding-top:6px}
 .hyl-rp-row:last-child{border-bottom:none}
-.hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:2px;min-width:0;margin-bottom:4px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
-.hyl-rp-row .rp-title{font-size:0.92rem;font-weight:700;color:var(--text);line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hyl-rp-row .rp-unit{font-family:var(--mono);font-size:0.86rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
-.hyl-rp-row .rp-qty{text-align:right;font-size:0.92rem;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
-.hyl-rp-row .rp-line{text-align:right;font-family:var(--mono);font-size:0.92rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
+.hyl-rp-row .rp-title{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;white-space:normal;word-break:break-word}
+.hyl-rp-row .rp-unit,.hyl-rp-row .rp-qty,.hyl-rp-row .rp-line{display:flex;align-items:baseline;gap:8px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:0.92rem;font-weight:600;color:var(--text);text-align:left}
+.hyl-rp-row .rp-unit::before,.hyl-rp-row .rp-qty::before,.hyl-rp-row .rp-line::before{content:attr(data-label) ":";font-family:var(--sans);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);min-width:46px}
+.hyl-rp-row .rp-line{font-weight:800}
 .hyl-rp-empty-row{padding:22px;border:1px dashed var(--stroke);border-radius:12px;text-align:center;color:var(--muted);font-size:0.82rem;background:#fafafa}
 
 .hyl-rp-section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
@@ -2140,50 +2138,12 @@ select.form-input{
 .hyl-rp-trust li svg{flex-shrink:0;color:var(--muted)}
 
 @media(max-width:900px){
-  .hyl-rp-table-head,.hyl-rp-row{grid-template-columns:1fr 70px 40px 70px;gap:8px}
   .hyl-rp{padding:22px}
 }
 
-/* Mobile: hide the table header and stack each row — name+sku on top,
-   then UNIT / QTY / LINE in a labeled three-column row below so they wrap
-   onto a new line and don't fight for space with the product name. */
+/* Mobile: keep the same stacked-row layout, just tighten paddings */
 @media(max-width:640px){
   .hyl-rp{padding:18px 14px}
-  .hyl-rp-table-head{display:none}
-  .hyl-rp-row{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    grid-template-areas:
-      "name name name"
-      "unit qty line";
-    gap:8px 12px;
-    padding:14px 0;
-    background:transparent;
-  }
-  .hyl-rp-row .rp-name{grid-area:name;display:flex;flex-direction:column;gap:2px;min-width:0}
-  .hyl-rp-row .rp-sku{font-size:0.62rem;letter-spacing:0.06em}
-  .hyl-rp-row .rp-title{
-    font-size:0.92rem;line-height:1.25;
-    white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;
-  }
-  .hyl-rp-row .rp-unit,
-  .hyl-rp-row .rp-qty,
-  .hyl-rp-row .rp-line{
-    display:flex;flex-direction:column;gap:3px;
-    text-align:left;
-    font-family:var(--mono);font-variant-numeric:tabular-nums;
-    font-size:0.86rem;font-weight:700;color:var(--text);
-  }
-  .hyl-rp-row .rp-unit{grid-area:unit}
-  .hyl-rp-row .rp-qty{grid-area:qty;text-align:center}
-  .hyl-rp-row .rp-line{grid-area:line;text-align:right}
-  .hyl-rp-row .rp-unit::before,
-  .hyl-rp-row .rp-qty::before,
-  .hyl-rp-row .rp-line::before{
-    content:attr(data-label);
-    font-family:var(--sans);font-size:0.58rem;font-weight:700;
-    letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);
-  }
   /* Discount/affiliate code: stack input above apply button on mobile */
   .hyl-rp-discount-row{flex-direction:column;gap:10px}
   .hyl-rp-discount-btn{padding:14px 22px;width:100%}
@@ -2239,6 +2199,11 @@ body.no-nav{padding-top:0 !important}
 .footer-subscribe-row button{padding:10px 20px;background:var(--brand);color:var(--bg);border:none;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:8px}
 .footer-subscribe-msg{font-size:0.72rem;margin-top:6px;min-height:1em}
 @media(max-width:768px){.footer-inner{grid-template-columns:repeat(2,1fr);gap:24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+@media(max-width:768px){
+  /* Find My Order + Join Discord cards: stack vertically and span the button full width */
+  body > div > div[style*="border-radius:16px"][style*="display:flex"] .cssbuttons-io,
+  body > div > div[style*="border-radius:16px"][style*="display:flex"] > button{width:100%!important;min-width:0!important}
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width:1080px){
@@ -5788,7 +5753,7 @@ function handleRoute(){
     if(el) el.classList.toggle('active', s===hash);
   });
   // Hide footer on checkout/payment screens where it creates awkward whitespace
-  const hideFooterOn = ['order','payment-confirmed','card-return'];
+  const hideFooterOn = ['payment-confirmed','card-return'];
   document.body.classList.toggle('no-footer', hideFooterOn.includes(hash));
   // Hide top nav on checkout + product screens so the back-pill is the only header chrome
   const hideNavOn = ['order','product'];
