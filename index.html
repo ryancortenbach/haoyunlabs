@@ -7436,9 +7436,9 @@ function renderOrderSearch(showAll){
   if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
   const _imgFor = p => {
     if(p.isBundle) return `media/bundles/${p.sku}.png`;
-    if(p.isKit && typeof KIT_SKUS_WITH_IMAGES !== 'undefined' && KIT_SKUS_WITH_IMAGES.has(p.sku) && !(typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(p.sku))) return `media/kits/${p.sku}.png`;
-    if(typeof OLD_IMAGE_SKUS !== 'undefined' && OLD_IMAGE_SKUS.has(p.sku)) return '';
-    return `media/products/${p.sku}.png`;
+    if(p.isKit && hasImageOnDisk(p.sku)) return `media/kits/${p.sku}.png`;
+    if(hasImageOnDisk(p.sku)) return `media/products/${p.sku}.png`;
+    return '';
   };
   const cartSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>';
   const _typeLabel = p => p.isBundle ? 'Stack' : (p.isKit ? 'Kit' : 'Single Vial');
