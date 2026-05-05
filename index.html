@@ -713,6 +713,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 /* ── SCREEN TRANSITIONS ── */
 .screen{display:none;opacity:0;transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1)}
 .screen.active{display:block;opacity:1}
+#screen-order{transition:none}
+#screen-order.active{opacity:1}
+#screen-order .reveal,#screen-order .reveal-left,#screen-order .reveal-right,#screen-order .reveal-scale{opacity:1!important;transform:none!important;transition:none!important}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -2653,12 +2656,12 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div class="banner-track" id="inline-banner-track"></div>
       </div>
       <div style="padding:36px 32px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
-        <div>
+        <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
-          <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Built for Serious Research</div>
-          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Lot-traceable, COA-backed, sealed for integrity.</div>
-          <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.04em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
-          <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
+          <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
+          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Lot-traceable, COA-backed, sealed for integrity.</div>
+          <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.02em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
+          <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
         </div>
         <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
           <img src="https://i.pinimg.com/736x/60/a1/1e/60a11ec6b61677230fc6fdd7f5e18344.jpg" class="pin-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.5s ease;opacity:1;pointer-events:none;-webkit-touch-callout:none" alt="Lab">
@@ -2674,20 +2677,20 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">One Click. Better Value.</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price.</div>
+        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price.</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
       </div>
     </div>
 
     <!-- COA / PURITY (image right) -->
     <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('coa')">
-      <div>
+      <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Purity You Can Prove</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive. Search by SKU or compound name and download the PDF.</div>
-        <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
-        <div style="text-align:center;margin-top:10px"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
+        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive. Search by SKU or compound name and download the PDF.</div>
+        <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
+        <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
       <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
         <video src="media/coa-v5.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" tabindex="-1"></video>
@@ -2702,9 +2705,9 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px">Join The Lab</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate. 20% revenue on every sale + free peptides monthly.</strong> Plus open roles across research, quality, operations, customer experience, and growth.</div>
-        <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
+        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate. 20% revenue on every sale + free peptides monthly.</strong> Plus open roles across research, quality, operations, customer experience, and growth.</div>
+        <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
       </div>
     </a>
@@ -6881,6 +6884,7 @@ function getFilteredProducts(cat, searchId, sortId){
   else if(productType === 'bundles') items = ALL_PRODUCTS.filter(p=>p.isBundle);
   else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && p.isKit);
   else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && !p.isKit);
+  items = items.filter(p => p.isBundle || hasImageOnDisk(p.sku));
   const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
   if(q) items = items.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q));
   const sort = document.getElementById(sortId)?.value||'featured';
@@ -7420,13 +7424,14 @@ function renderOrderSearch(showAll){
   const catSel = document.getElementById('order-cat-filter');
   const cat = catSel ? catSel.value : 'singles';
   const inCat = p => _orderCatTypeOf(p) === cat;
+  const hasImg = p => p.isBundle || (typeof hasImageOnDisk === 'function' && hasImageOnDisk(p.sku));
   let matches;
   if(!q){
     if(!showAll){el.innerHTML='';return;}
-    matches = ALL_PRODUCTS.filter(p => inCat(p) && /\b10\s*(mg|ml)\b/i.test(p.name)).slice(0,8);
-    if(!matches.length) matches = ALL_PRODUCTS.filter(inCat).slice(0,8);
+    matches = ALL_PRODUCTS.filter(p => inCat(p) && hasImg(p) && /\b10\s*(mg|ml)\b/i.test(p.name)).slice(0,8);
+    if(!matches.length) matches = ALL_PRODUCTS.filter(p=>inCat(p) && hasImg(p)).slice(0,8);
   } else {
-    matches = ALL_PRODUCTS.filter(p=>inCat(p) && (p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q))).slice(0,8);
+    matches = ALL_PRODUCTS.filter(p=>inCat(p) && hasImg(p) && (p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q))).slice(0,8);
   }
   if(!matches.length){el.innerHTML='<div style="font-size:0.78rem;color:#707070;padding:4px 0">No products found</div>';return;}
   const _imgFor = p => {
@@ -9901,6 +9906,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     const els = document.querySelectorAll(selectors.join(','));
     let delay = 0;
     els.forEach((el,i) => {
+      if(el.closest('#screen-order')) return;
       if(el.classList.contains('visible') || el.classList.contains('reveal')) return;
       // Check if already in viewport (don't animate things already visible)
       const rect = el.getBoundingClientRect();
