@@ -66,13 +66,26 @@ async function submitOrder() {
   if (j.ok && j.redirect_url) {
     lastOrderNumber = body.orderNumber;
     lastSessionId   = j.redirect_url.split("/").pop();
-    refresh();
-    // Open the fake Stripe page in a new tab so the original stays focused
-    // on the live data view.
-    window.open(j.redirect_url, "stripe-fake");
-  } else {
-    refresh();
+    // Show a big visible button on the page. window.open() after a fetch
+    // tends to be popup-blocked, so we let the user click directly.
+    const old = document.getElementById("stripe-link-banner");
+    if (old) old.remove();
+    const banner = document.createElement("a");
+    banner.id = "stripe-link-banner";
+    banner.href = j.redirect_url;
+    banner.target = "_blank";
+    banner.rel = "noopener";
+    banner.style.cssText =
+      "position:fixed;top:16px;right:16px;background:#635bff;color:#fff;" +
+      "padding:14px 18px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.18);" +
+      "font-weight:700;cursor:pointer;z-index:10;font-size:14px;max-width:320px;" +
+      "text-decoration:none;display:block";
+    banner.innerHTML =
+      `<div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:4px">Step 2 — Open fake Stripe page</div>` +
+      `<div>${body.orderNumber} · click to pay</div>`;
+    document.body.appendChild(banner);
   }
+  refresh();
 }
 
 async function postJson(path, body) {
