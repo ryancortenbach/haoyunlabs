@@ -2055,19 +2055,19 @@ select.form-input{
 .uv-pay-btn{position:relative;width:100%;padding:14px 18px;font-size:0.86rem;background:#1a1a1a;color:#fff;border:none;border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s ease;font-family:var(--sans);letter-spacing:0.04em}
 .uv-pay-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.4)}
 .uv-pay-btn:disabled{background:#9d9da3;cursor:not-allowed;transform:none;box-shadow:none}
-.uv-pay-btn .uv-icon-container{position:relative;width:18px;height:18px;flex:0 0 18px}
-.uv-pay-btn .uv-icon{position:absolute;top:0;left:0;width:18px;height:18px;color:#22c55e;opacity:0;visibility:hidden}
+.uv-pay-btn .uv-icon-container{position:relative;width:24px;height:24px;flex:0 0 24px;transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.uv-pay-btn:hover .uv-icon-container{transform:scale(1.15)}
+.uv-pay-btn .uv-icon{position:absolute;top:0;left:0;width:24px;height:24px;color:#22c55e;opacity:0;visibility:hidden;filter:drop-shadow(0 0 6px rgba(34,197,94,0.4))}
 .uv-pay-btn .uv-default-icon{opacity:1;visibility:visible}
-.uv-pay-btn:hover .uv-icon{animation:none}
-.uv-pay-btn:hover .uv-wallet-icon{opacity:0;visibility:hidden}
-.uv-pay-btn:hover .uv-card-icon{animation:uvIconRotate 2.5s infinite;animation-delay:0s}
-.uv-pay-btn:hover .uv-payment-icon{animation:uvIconRotate 2.5s infinite;animation-delay:0.5s}
-.uv-pay-btn:hover .uv-dollar-icon{animation:uvIconRotate 2.5s infinite;animation-delay:1s}
-.uv-pay-btn:hover .uv-check-icon{animation:uvIconRotate 2.5s infinite;animation-delay:1.5s}
+.uv-pay-btn:hover .uv-wallet-icon{animation:uvIconRotate 4s infinite;animation-delay:0s}
+.uv-pay-btn:hover .uv-card-icon{animation:uvIconRotate 4s infinite;animation-delay:0.8s}
+.uv-pay-btn:hover .uv-payment-icon{animation:uvIconRotate 4s infinite;animation-delay:1.6s}
+.uv-pay-btn:hover .uv-dollar-icon{animation:uvIconRotate 4s infinite;animation-delay:2.4s}
+.uv-pay-btn:hover .uv-check-icon{animation:uvIconRotate 4s infinite;animation-delay:3.2s}
 .uv-pay-btn:active .uv-icon{animation:none;opacity:0;visibility:hidden;transition:all 0.3s ease}
 .uv-pay-btn:active .uv-check-icon{animation:uvCheckmarkAppear 0.6s ease forwards;visibility:visible}
 .uv-pay-btn .uv-btn-text{font-weight:700;font-family:var(--sans);letter-spacing:0.08em;text-transform:uppercase}
-@keyframes uvIconRotate{0%{opacity:0;visibility:hidden;transform:translateY(10px) scale(0.5)}5%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}15%{opacity:1;visibility:visible;transform:translateY(0) scale(1)}20%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}100%{opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.5)}}
+@keyframes uvIconRotate{0%{opacity:0;visibility:hidden;transform:translateY(12px) scale(0.5) rotate(-15deg)}5%{opacity:1;visibility:visible;transform:translateY(0) scale(1) rotate(0deg)}20%{opacity:1;visibility:visible;transform:translateY(0) scale(1) rotate(0deg)}25%{opacity:0;visibility:hidden;transform:translateY(-12px) scale(0.5) rotate(15deg)}100%{opacity:0;visibility:hidden;transform:translateY(-12px) scale(0.5) rotate(15deg)}}
 @keyframes uvCheckmarkAppear{0%{opacity:0;transform:scale(0.5) rotate(-45deg)}50%{opacity:0.5;transform:scale(1.2) rotate(0deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
 @media (prefers-reduced-motion:reduce){.uv-pay-btn,.uv-pay-btn:hover,.uv-pay-btn .uv-icon{transition:none!important;transform:none!important;animation:none!important}}
 
