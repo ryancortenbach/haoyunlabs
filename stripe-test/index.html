@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HYL Stripe Test Harness</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-family:'Inter',system-ui,-apple-system,sans-serif;color:#222;background:#f5f3f0}
+    body{padding:24px;line-height:1.4;font-size:14px}
+    h1{font-size:18px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+    h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#666;font-weight:600;margin:16px 0 8px}
+    h3{font-size:12px;font-weight:700;margin:12px 0 6px}
+    .layout{display:grid;grid-template-columns:380px 1fr;gap:24px;max-width:1400px;margin:0 auto}
+    .panel{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+    label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#888;margin:8px 0 2px}
+    input,select{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:6px;font:inherit}
+    button{padding:10px 14px;border:0;border-radius:6px;cursor:pointer;font:inherit;font-weight:600;font-size:13px}
+    .row{display:flex;gap:8px}
+    .row > *{flex:1}
+    .pay{background:#000;color:#fff;width:100%;margin-top:14px;padding:14px}
+    .danger{background:#fff;border:1px solid #d00;color:#d00;font-size:11px;padding:8px;width:100%;margin-bottom:6px}
+    .danger:hover{background:#fef0f0}
+    .ghost{background:#eee;color:#333;font-size:11px;padding:6px;width:100%}
+    .total{font-size:24px;font-weight:700;font-family:'Roboto Mono',monospace;margin:8px 0}
+    table{width:100%;border-collapse:collapse;font-size:11px}
+    th{text-align:left;padding:6px 8px;background:#f9f7f4;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#666;font-size:10px}
+    td{padding:6px 8px;border-bottom:1px solid #f0ede8;font-family:'Roboto Mono',monospace;font-size:11px;vertical-align:top}
+    .pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+    .pill-pending{background:#fff3cd;color:#856404}
+    .pill-paid{background:#d4edda;color:#155724}
+    .pill-expired,.pill-amount_mismatch,.pill-failed,.pill-cancelled,.pill-rejected{background:#f8d7da;color:#721c24}
+    .pill-marked_paid{background:#d4edda;color:#155724}
+    .pill-idempotent,.pill-ignored_event_type{background:#e2e3e5;color:#383d41}
+    .pill-rejected_no_bridge,.pill-rejected_amount_mismatch,.pill-rejected_expired,.pill-rejected_signature{background:#f8d7da;color:#721c24}
+    .pill-ok{background:#d4edda;color:#155724}
+    .pill-mismatch,.pill-absent,.pill-malformed{background:#f8d7da;color:#721c24}
+    .stage-fail_total_mismatch,.stage-fail_signature,.stage-fail_amount_mismatch,.stage-fail_expired,.stage-fail_no_bridge,.stage-fail_missing_fields,.stage-fail_unhandled,.stage-fail_bridge_insert,.stage-fail_stripe_api{color:#d00}
+    .stage-marked_paid,.stage-stripe_session_ok,.stage-bridge_inserted,.stage-total_verified{color:#155724}
+    pre{font-family:'Roboto Mono',monospace;font-size:10px;background:#f9f7f4;padding:8px;border-radius:4px;overflow:auto;max-height:200px}
+    .badge{font-size:10px;padding:2px 6px;background:#fef3c7;color:#92400e;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+    .info{font-size:11px;color:#666;line-height:1.6;margin-top:8px}
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .legend > span{font-size:10px;color:#666}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- LEFT: order form + failure-mode buttons -->
+    <div>
+      <div class="panel">
+        <h1>HYL Stripe Test</h1>
+        <div class="badge">Local mock — no real Stripe, no real DB</div>
+        <p class="info">Submit the form to create a bridge row + fake Stripe session. Click pay on the next page to fire a signed webhook back to the harness. Watch the right panel for the live state machine.</p>
+
+        <h2>Order form</h2>
+        <label>Order number</label>
+        <input id="orderNumber" type="text">
+        <div class="row">
+          <div><label>Email</label><input id="email" type="email" value="test@haoyunlabs.invalid"></div>
+        </div>
+        <div class="row">
+          <div><label>First name</label><input id="fname" value="Test"></div>
+          <div><label>Last name</label><input id="lname" value="Customer"></div>
+        </div>
+        <label>Phone</label><input id="phone" value="5551234567">
+        <label>Street</label><input id="street" value="123 Main St">
+        <div class="row">
+          <div><label>City</label><input id="city" value="Brooklyn"></div>
+          <div><label>State</label><input id="state" value="NY"></div>
+          <div><label>ZIP</label><input id="zip" value="11201"></div>
+        </div>
+
+        <h2>Cart</h2>
+        <div class="row">
+          <div><label>SKU</label><input id="sku" value="BPC-157-5MG"></div>
+          <div><label>Qty</label><input id="qty" type="number" value="1"></div>
+          <div><label>Unit price</label><input id="unitPrice" type="number" value="100" step="0.01"></div>
+        </div>
+
+        <h2>Modifiers</h2>
+        <label>Discount / affiliate code</label>
+        <select id="codePicker">
+          <option value="">— none —</option>
+          <option value="PENNY">PENNY (99.99% off)</option>
+          <option value="ZARA20">ZARA20 (20% off, affiliate)</option>
+          <option value="SAVE10">SAVE10 (10% off)</option>
+          <option value="GARBAGE';drop">';drop;-- (garbage — should force discount=0)</option>
+        </select>
+        <label><input id="discreet" type="checkbox"> Discreet packaging (+$5)</label>
+
+        <h2>Total (you propose)</h2>
+        <div class="total">$<span id="proposedTotal">112.00</span></div>
+        <div class="row">
+          <button onclick="recalc()" class="ghost">Recalculate</button>
+          <button onclick="tamper()" class="ghost">Tamper (-$50)</button>
+        </div>
+
+        <button class="pay" onclick="submitOrder()">Submit to /stripe-checkout</button>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h2>Failure-mode tests</h2>
+        <p class="info">Submit an order first, then click these to fire the webhook with a deliberately broken payload.</p>
+        <button class="danger" onclick="failureBadSig()">Bad signature → 401</button>
+        <button class="danger" onclick="failureAmount()">Amount mismatch → bridge=amount_mismatch</button>
+        <button class="danger" onclick="failureExpired()">Backdate bridge → expired</button>
+        <button class="danger" onclick="failureReplay()">Replay event_id → idempotent</button>
+        <button class="danger" onclick="failureWrongEvent()">Wrong event type → ignored</button>
+        <button class="ghost" onclick="resetAll()">Reset everything</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: live tables -->
+    <div>
+      <div class="panel">
+        <h2>Last response</h2>
+        <pre id="lastResp">(no requests yet)</pre>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h2>checkout_bridge_sessions <span class="badge">single source of verified truth</span></h2>
+        <div id="bridgesTable"></div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h2>orders</h2>
+        <div id="ordersTable"></div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h2>stripe_callbacks <span class="badge">webhook event log</span></h2>
+        <div id="callbacksTable"></div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h2>checkout_attempt_log <span class="badge">MAEF §9 stage debug</span></h2>
+        <div id="attemptTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
