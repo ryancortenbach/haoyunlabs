@@ -1002,9 +1002,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .hero-btn:hover svg{transform:translateX(4px)}
 .hero-btn-primary{background:#fff;color:var(--brand);border-color:var(--stroke)}
 .hero-btn-primary:hover{background:#f5f5f5}
-.hero-btn-invert{transition:all 0.3s ease}
-.hero-btn-invert:hover{background:var(--brand)!important;color:var(--bg)!important}
-.tilt-card:hover .hero-btn-invert{background:var(--brand);color:var(--bg)}
+.hero-btn-invert{position:relative;overflow:hidden;isolation:isolate;transition:color 0.45s ease}
+.hero-btn-invert::before{content:"";position:absolute;inset:0;z-index:-1;--r:0px;background:radial-gradient(circle var(--r) at 50% 50%, #000 0%, #000 70%, transparent 100%);transition:--r 0.55s ease}
+.hero-btn-invert:hover{color:#fff!important;background:var(--bg)!important}
+.hero-btn-invert:hover::before{--r:600px}
+.tilt-card:hover .hero-btn-invert{color:#fff}
+.tilt-card:hover .hero-btn-invert::before{--r:600px}
+.big-feature-card:hover .hero-btn-invert{color:#fff!important}
+.big-feature-card:hover .hero-btn-invert::before{--r:600px}
 .hero-btn-invert-dark{transition:all 0.3s ease}
 .hero-btn-invert-dark:hover{background:#fff!important;color:#000!important;border-color:#fff!important}
 .tilt-card:hover .hero-btn-invert-dark{background:#fff;color:#000;border-color:#fff}
@@ -2661,7 +2666,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
           <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
-          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Every vial is lot-traceable, COA-backed, lyophilized in nitrogen-purged borosilicate glass, and sealed for integrity. Peptides, GLP-1s, growth, recovery, sleep, libido, longevity &mdash; one catalog, one purity standard.</div>
+          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Every batch is lot-traceable and COA-backed, with consistency standards you can actually check. Peptides, GLP-1s, growth, recovery, sleep, libido, longevity. One catalog, one purity bar.</div>
           <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.02em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
           <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
         </div>
@@ -2680,7 +2685,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Save up to 45% vs. single-vial pricing &mdash; same lot, same purity, same COA across the kit. Build a multi-week study supply in one click and skip re-ordering between cycles.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price. Save up to 45% versus singles. Same lot, same purity, same paperwork across the whole kit.</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
       </div>
     </div>
@@ -2690,7 +2695,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive &mdash; no email gate, no account required. Search by SKU or compound name, cross-check the lot printed on your vial, and download the PDF for your records.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Workflows built around repeatability and documentation, so every batch meets the same measurable bar. Search by SKU or compound name, cross-check the lot printed on your vial, and download the PDF. No email gate, no account required.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
@@ -2708,7 +2713,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate. 20% revenue on every sale + free peptides monthly.</strong> Custom discount codes for your audience, real-time dashboards, and weekly payouts. Plus open roles across research, quality, operations, customer experience, and growth &mdash; remote-friendly, equity available.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become an affiliate. 20% revenue on every sale plus free peptides each month.</strong> Custom discount codes for your audience, real dashboards, weekly payouts. Plus open roles across research, quality, ops, support, and growth. Remote-friendly. Equity available.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
       </div>
