@@ -716,6 +716,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 #screen-order{transition:none}
 #screen-order.active{opacity:1}
 #screen-order .reveal,#screen-order .reveal-left,#screen-order .reveal-right,#screen-order .reveal-scale{opacity:1!important;transform:none!important;transition:none!important}
+#screen-order *{animation:none!important}
+#screen-order .product-card,#screen-order .anim-fade-up,#screen-order .anim-fade-in,#screen-order .anim-scale-in{opacity:1!important;transform:none!important}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -2659,7 +2661,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
           <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
-          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Lot-traceable, COA-backed, sealed for integrity.</div>
+          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Every vial is lot-traceable, COA-backed, lyophilized in nitrogen-purged borosilicate glass, and sealed for integrity. Peptides, GLP-1s, growth, recovery, sleep, libido, longevity &mdash; one catalog, one purity standard.</div>
           <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.02em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
           <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
         </div>
@@ -2678,7 +2680,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Save up to 45% vs. single-vial pricing &mdash; same lot, same purity, same COA across the kit. Build a multi-week study supply in one click and skip re-ordering between cycles.</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
       </div>
     </div>
@@ -2688,7 +2690,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive. Search by SKU or compound name and download the PDF.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Full chromatography reports published to our open archive &mdash; no email gate, no account required. Search by SKU or compound name, cross-check the lot printed on your vial, and download the PDF for your records.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
@@ -2706,7 +2708,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
         <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate. 20% revenue on every sale + free peptides monthly.</strong> Plus open roles across research, quality, operations, customer experience, and growth.</div>
+        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become An Affiliate. 20% revenue on every sale + free peptides monthly.</strong> Custom discount codes for your audience, real-time dashboards, and weekly payouts. Plus open roles across research, quality, operations, customer experience, and growth &mdash; remote-friendly, equity available.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
       </div>
