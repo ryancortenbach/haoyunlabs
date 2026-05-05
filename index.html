@@ -3008,6 +3008,10 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
                 <svg viewBox="0 0 24 24" class="uv-icon uv-check-icon"><path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z" fill="currentColor"></path></svg>
               </div>
             </button>
+            <!-- TEMP: Stripe test button. Remove once Stripe path is the default. -->
+            <button class="uv-pay-btn" id="btn-pay-stripe" onclick="submitOrder('stripe')" type="button" style="margin-top:8px;background:#635bff">
+              <span class="uv-btn-text">Stripe (TEST)</span>
+            </button>
             <ul class="hyl-rp-trust">
               <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>256-bit secure encryption</li>
               <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>Tracking updates after label creation</li>
@@ -5136,11 +5140,6 @@ function navigate(screen){
   window.location.hash = '#' + screen;
 }
 window.pdpBack = function(){
-  try {
-    const prev = sessionStorage.getItem('hyl_prev_screen') || '';
-    if(prev && prev !== 'product'){ navigate(prev); return; }
-  } catch(e){}
-  try { if(history.length > 1){ history.back(); setTimeout(()=>{ const stillOnPdp = location.hash === '#product' || document.getElementById('screen-product')?.classList.contains('active'); if(stillOnPdp) navigate('catalog'); }, 250); return; } } catch(e){}
   navigate('catalog');
 };
 
@@ -7232,7 +7231,7 @@ function renderReceipt(){
     if(diff){ cart = lsMap; try { updateBadge(); } catch(e){} }
   } catch(e){}
   const sub = getSubtotal();
-  const isPennyTest = discountCode === 'PENNY';
+  const isPennyTest = discountCode === 'PENNY' || discountCode === 'STRIPETEST';
   const shipping = isPennyTest ? 0 : (sub > 0 ? (sub >= 250 ? 0 : 12) : 0);
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
@@ -8309,7 +8308,8 @@ function cryptoSubmitRecovery(){
 /* ═════════════════════════════════════════════════════
    SUBMIT ORDER
    ═════════════════════════════════════════════════════ */
-async function submitOrder(){
+async function submitOrder(provider){
+  provider = provider || 'bankful';
   if(cart.size===0){showToast('Add at least one item to continue','error');return;}
   const fieldLabels = {
     'f-fname':  'Please enter your first name',
@@ -8433,7 +8433,7 @@ async function submitOrder(){
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
-  const shipping = (discountCode === 'PENNY') ? 0 : (sub >= 250 ? 0 : 12);
+  const shipping = (discountCode === 'PENNY' || discountCode === 'STRIPETEST') ? 0 : (sub >= 250 ? 0 : 12);
   const disc = sub * (discountPct / 100);
   const afterDisc = sub - disc;
   const feeRate = getProcessingRate();
@@ -8466,11 +8466,13 @@ async function submitOrder(){
   // Auto-subscribe email at checkout
   try { await hylSubscribe(email, 'checkout'); } catch(e){}
 
-  // CARD flow (Bankful Hosted Payment Page)
-  if(selectedPayMethod === 'card'){
+  // CARD flow (Bankful Hosted Payment Page) OR Stripe Checkout (test override)
+  if(selectedPayMethod === 'card' || provider === 'stripe'){
+    const fnName = provider === 'stripe' ? 'stripe-checkout' : 'bankful-invoice';
+    const tag = provider === 'stripe' ? '[stripe]' : '[bankful]';
     try {
-      try { track('initiate_payment', { method: 'card', total }); } catch(e){}
-      const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/bankful-invoice', {
+      try { track('initiate_payment', { method: 'card', provider, total }); } catch(e){}
+      const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/' + fnName, {
         method:'POST',
         headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},
         body:JSON.stringify({
@@ -8485,19 +8487,17 @@ async function submitOrder(){
       });
       const data = await resp.json();
       if(data.ok && data.redirect_url){
-        // Don't clear the cart on redirect — wait for paid confirmation in
-        // card-return. Otherwise cancelling at Bankful empties the cart.
-        try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total}));}catch(e){}
+        try{localStorage.setItem('hyl_card_pending', JSON.stringify({orderNumber:orderNum,total,provider}));}catch(e){}
         hidePayLoadingToast();
         window.location.replace(data.redirect_url);
         return;
       }
       hidePayLoadingToast();
       showToast('Payment setup failed: ' + (data.error || 'try again'), 'error');
-      console.error('[bankful] error', data);
+      console.error(tag + ' error', data);
     } catch(e){
       hidePayLoadingToast();
-      console.error('[bankful] request failed', e);
+      console.error(tag + ' request failed', e);
       showToast('Payment setup failed. Please try another method.', 'error');
     }
     window._submittingOrder = false;
