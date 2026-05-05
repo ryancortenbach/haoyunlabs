@@ -7231,15 +7231,24 @@ function renderReceipt(){
     if(diff){ cart = lsMap; try { updateBadge(); } catch(e){} }
   } catch(e){}
   const sub = getSubtotal();
-  const isPennyTest = discountCode === 'PENNY' || discountCode === 'STRIPETEST';
-  const shipping = isPennyTest ? 0 : (sub > 0 ? (sub >= 250 ? 0 : 12) : 0);
-  const disc = sub * (discountPct / 100);
-  const afterDisc = sub - disc;
+  const isStripeTest = discountCode === 'STRIPETEST' && sub > 0;
+  const isPennyTest = discountCode === 'PENNY' || isStripeTest;
+  let shipping = isPennyTest ? 0 : (sub > 0 ? (sub >= 250 ? 0 : 12) : 0);
+  let disc = sub * (discountPct / 100);
+  let afterDisc = sub - disc;
   const feeRate = getProcessingRate();
   const feePct = Math.round(feeRate * 100);
-  const processingFee = Math.round(afterDisc * feeRate * 100) / 100;
-  const discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
-  const total = afterDisc + shipping + processingFee + discreetSurcharge;
+  let processingFee = Math.round(afterDisc * feeRate * 100) / 100;
+  let discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
+  let total = afterDisc + shipping + processingFee + discreetSurcharge;
+  if(isStripeTest){
+    shipping = 0;
+    processingFee = 0;
+    discreetSurcharge = 0;
+    disc = sub - 0.50;
+    afterDisc = 0.50;
+    total = 0.50;
+  }
   const isAffiliate = !!window._affiliateCode;
 
   // Iter 134: renderReceipt now populates the Zhuo-Yue right-column
@@ -8433,19 +8442,22 @@ async function submitOrder(provider){
 
   const orderNum = 'HYL-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   const sub = getSubtotal();
-  const shipping = (discountCode === 'PENNY' || discountCode === 'STRIPETEST') ? 0 : (sub >= 250 ? 0 : 12);
-  const disc = sub * (discountPct / 100);
-  const afterDisc = sub - disc;
+  const isStripeTest = discountCode === 'STRIPETEST' && sub > 0;
+  let shipping = (discountCode === 'PENNY' || isStripeTest) ? 0 : (sub >= 250 ? 0 : 12);
+  let disc = sub * (discountPct / 100);
+  let afterDisc = sub - disc;
   const feeRate = getProcessingRate();
-  const processingFee = Math.round(afterDisc * feeRate * 100) / 100;
-  // Iter 134: include discreet packaging surcharge in submitOrder's total.
-  // Pre-iter-134 renderReceipt added the +$5 to the displayed total but
-  // submitOrder built `total = afterDisc + shipping + processingFee`,
-  // so the customer was redirected to bankful-invoice with the pre-surcharge
-  // amount and the server's expectedTotal recompute (which now also adds
-  // the surcharge) returned "Total mismatch — refresh checkout and retry".
-  const discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
-  const total = afterDisc + shipping + processingFee + discreetSurcharge;
+  let processingFee = Math.round(afterDisc * feeRate * 100) / 100;
+  let discreetSurcharge = (typeof discreetPackaging !== 'undefined' && discreetPackaging) ? 5 : 0;
+  let total = afterDisc + shipping + processingFee + discreetSurcharge;
+  if(isStripeTest){
+    shipping = 0;
+    processingFee = 0;
+    discreetSurcharge = 0;
+    disc = sub - 0.50;
+    afterDisc = 0.50;
+    total = 0.50;
+  }
 
   const fname = document.getElementById('f-fname').value.trim();
   const lname = document.getElementById('f-lname').value.trim();
