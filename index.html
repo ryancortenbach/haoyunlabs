@@ -3143,11 +3143,15 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   .cc-pill-outline:hover{background:#fafafa;border-color:#d4d4d4}
   .cc-split-right{padding:44px 44px 36px;background:#fafafa}
   .cc-manifest-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-  .cc-line{padding:18px 0;border-bottom:1px solid var(--stroke)}
+  .cc-line{display:grid;grid-template-columns:64px 1fr;column-gap:14px;padding:18px 0;border-bottom:1px solid var(--stroke);align-items:center}
   .cc-line:first-of-type{border-top:1px solid var(--stroke)}
-  .cc-line-row1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-  .cc-line-name{font-size:15px;font-weight:700;letter-spacing:-0.005em;color:var(--text)}
-  .cc-line-amt{font-size:14px;font-family:var(--mono);font-weight:600;color:var(--text)}
+  .cc-line-img{width:64px;height:80px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--stroke);border-radius:8px;overflow:hidden}
+  .cc-line-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+  .cc-line-img.is-empty{background:#fafafa;border-style:dashed}
+  .cc-line-body{min-width:0}
+  .cc-line-row1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:8px}
+  .cc-line-name{font-size:15px;font-weight:700;letter-spacing:-0.005em;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .cc-line-amt{font-size:14px;font-family:var(--mono);font-weight:600;color:var(--text);flex-shrink:0}
   .cc-line-meta{display:flex;gap:12px;font-size:11px;color:var(--muted);font-family:var(--mono)}
   .cc-line-meta .sep{color:#d4d4d4}
   .cc-total-block{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px}
@@ -3174,10 +3178,15 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   .cc-r-meta-row{display:flex;justify-content:space-between;padding:4px 0}
   .cc-r-meta-row .k{color:var(--muted)}
   .cc-r-items{padding:16px 32px;border-bottom:1px dashed var(--stroke)}
-  .cc-r-item{margin-bottom:10px}
+  .cc-r-item{display:grid;grid-template-columns:48px 1fr;column-gap:12px;align-items:center;margin-bottom:14px}
   .cc-r-item:last-child{margin-bottom:0}
-  .cc-r-item-row{display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;color:var(--text)}
-  .cc-r-item-row .price{font-family:var(--mono);font-weight:600}
+  .cc-r-item-img{width:48px;height:60px;display:flex;align-items:center;justify-content:center;background:#fafafa;border:1px solid var(--stroke);border-radius:6px;overflow:hidden}
+  .cc-r-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+  .cc-r-item-img.is-empty{border-style:dashed}
+  .cc-r-item-body{min-width:0}
+  .cc-r-item-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;font-weight:700;color:var(--text);gap:8px}
+  .cc-r-item-row .name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cc-r-item-row .price{font-family:var(--mono);font-weight:600;flex-shrink:0}
   .cc-r-item-meta{font-size:10.5px;font-family:var(--mono);color:var(--muted);margin-top:2px;letter-spacing:0.05em;text-transform:uppercase}
   .cc-r-totals{padding:14px 32px;font-family:var(--mono);font-size:11.5px}
   .cc-r-totals-row{display:flex;justify-content:space-between;padding:3px 0;color:var(--muted)}
@@ -3366,13 +3375,22 @@ window.ccPopulate = function(d){
       set('cc-firstname-italic', firstName + '.');
     }
 
+    const ccImgFor = (sku) => {
+      const safe = String(sku || '').replace(/[^A-Za-z0-9_-]/g,'');
+      if(!safe) return '<div class="cc-line-img is-empty"></div>';
+      return `<div class="cc-line-img"><img src="media/products/${safe}.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('is-empty');this.remove()"></div>`;
+    };
     const manifest = items.map(it => {
       const name = String(it?.name || it?.sku || 'Item');
+      const sku = String(it?.sku || '');
       const qty = Number(it?.quantity || 1);
       const lineTotal = Number(it?.lineTotal ?? Number(it?.unitPrice||0) * qty);
       return `<div class="cc-line">
-        <div class="cc-line-row1"><div class="cc-line-name">${name}</div><div class="cc-line-amt">$${lineTotal.toFixed(2)}</div></div>
-        <div class="cc-line-meta"><span>${qty} vial${qty===1?'':'s'}</span><span class="sep">·</span><span>HPLC ≥ 98%</span></div>
+        ${ccImgFor(sku)}
+        <div class="cc-line-body">
+          <div class="cc-line-row1"><div class="cc-line-name">${name}</div><div class="cc-line-amt">$${lineTotal.toFixed(2)}</div></div>
+          <div class="cc-line-meta"><span>${qty} vial${qty===1?'':'s'}</span><span class="sep">·</span><span>HPLC ≥ 98%</span></div>
+        </div>
       </div>`;
     }).join('');
     setHTML('cc-manifest-list', manifest || '<div style="color:#a3a3a3;font-size:13px;padding:18px 0">No items recorded.</div>');
@@ -3388,13 +3406,22 @@ window.ccPopulate = function(d){
     set('cc-r-fees', '$' + fees.toFixed(2));
     set('cc-r-total', '$' + total.toFixed(2));
 
+    const ccRImgFor = (sku) => {
+      const safe = String(sku || '').replace(/[^A-Za-z0-9_-]/g,'');
+      if(!safe) return '<div class="cc-r-item-img is-empty"></div>';
+      return `<div class="cc-r-item-img"><img src="media/products/${safe}.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('is-empty');this.remove()"></div>`;
+    };
     const rItems = items.map(it => {
       const name = String(it?.name || it?.sku || 'Item');
+      const sku = String(it?.sku || '');
       const qty = Number(it?.quantity || 1);
       const lineTotal = Number(it?.lineTotal ?? Number(it?.unitPrice||0) * qty);
       return `<div class="cc-r-item">
-        <div class="cc-r-item-row"><span>${name}</span><span class="price">$${lineTotal.toFixed(2)}</span></div>
-        <div class="cc-r-item-meta">${qty} VIAL${qty===1?'':'S'} · ≥98.0% HPLC · USP RG</div>
+        ${ccRImgFor(sku)}
+        <div class="cc-r-item-body">
+          <div class="cc-r-item-row"><span class="name">${name}</span><span class="price">$${lineTotal.toFixed(2)}</span></div>
+          <div class="cc-r-item-meta">${qty} VIAL${qty===1?'':'S'} · ≥98.0% HPLC · USP RG</div>
+        </div>
       </div>`;
     }).join('');
     setHTML('cc-r-items', rItems || '<div style="color:#a3a3a3;font-size:11px;text-align:center;padding:8px 0">—</div>');
