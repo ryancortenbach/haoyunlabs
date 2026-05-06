@@ -53,6 +53,7 @@
     var params=new URLSearchParams(location.search);
     var pay=params.get('payment');
     var ord=params.get('order');
+    var sid=params.get('session_id');
     if(pay && ord){
       // Strip any trailing ?REQUEST_ACTION fragment from Bankful
       ord = ord.split('?')[0];
@@ -61,8 +62,9 @@
       // payload can't blow up localStorage either.
       var ordOk = /^[A-Za-z0-9_-]{1,64}$/.test(ord);
       var payOk = ['success','failed','pending','cancel'].indexOf(pay) >= 0;
+      var sidOk = sid && /^cs_(live|test)_[A-Za-z0-9]{1,256}$/.test(sid);
       if(ordOk && payOk){
-        localStorage.setItem('hyl_card_result',JSON.stringify({status:pay,order:ord,t:Date.now()}));
+        localStorage.setItem('hyl_card_result',JSON.stringify({status:pay,order:ord,session_id:sidOk?sid:'',t:Date.now()}));
         // Clean URL and navigate to confirmation screen
         history.replaceState(null,'',location.pathname+'#card-return');
       } else {
@@ -3112,152 +3114,113 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     .pc-v2 .pc-step-row::before{left:8%;right:8%}
   }
 </style>
-<div class="screen pc-v2" id="screen-payment-confirmed">
-  <!-- Hero band -->
-  <section class="pc-hero">
-    <div class="pc-hero-inner">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="pc-check-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <span class="pc-kicker">Order Confirmed</span>
-      </div>
-      <h1 class="pc-h1">Thanks, <span id="pc-first-name">Researcher</span>.<br><span class="pc-ital">Your order is in.</span></h1>
-      <p class="pc-lead">Your order is confirmed and in our queue. A receipt is on its way to <strong id="pc-email">your email</strong>. We'll email tracking the moment your package ships.</p>
-      <div class="pc-meta-row">
-        <div class="pc-meta"><div class="pc-meta-label">Order Number</div><div class="pc-meta-val" id="conf-order-num">—</div></div>
-        <div class="pc-meta"><div class="pc-meta-label">Placed</div><div class="pc-meta-val" id="pc-placed">—</div></div>
-        <div class="pc-meta"><div class="pc-meta-label">Estimated Delivery</div><div class="pc-meta-val" id="pc-eta">—</div></div>
-        <div></div>
-        <div class="pc-cta-row">
-          <a class="pc-btn" onclick="navigate('tracking')">Track this order <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <button class="pc-btn pc-btn-outline" onclick="pcCopyTracking(this)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span class="pc-copy-label">Copy tracking link</span>
-          </button>
-        </div>
-      </div>
+<style>
+  /* Clean centered confirmation card (ZYL-style) */
+  #screen-payment-confirmed.cc-clean{background:#fafaf7;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+  .cc-card{background:#0a0a0a;color:#fff;border-radius:18px;padding:48px 40px 36px;max-width:520px;width:100%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.18)}
+  .cc-check{width:56px;height:56px;border-radius:50%;border:3px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 28px}
+  .cc-headline{font-family:'Instrument Sans',sans-serif;font-size:1.7rem;font-weight:700;line-height:1.25;letter-spacing:-0.01em;margin-bottom:36px;color:#fff}
+  .cc-rows{display:flex;flex-direction:column;gap:0;margin-bottom:32px;text-align:left}
+  .cc-row{display:flex;justify-content:space-between;align-items:center;font-size:0.95rem;color:#a8a8a8;font-weight:500;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+  .cc-row:last-child{border-bottom:none}
+  .cc-row > span:last-child{color:#fff;font-weight:500}
+  .cc-row .cc-itembtn{background:transparent;border:1px solid rgba(255,255,255,0.22);color:#fff;padding:7px 14px;border-radius:7px;font-size:0.85rem;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background 0.15s,border-color 0.15s;font-family:inherit}
+  .cc-row .cc-itembtn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.4)}
+  .cc-browse{width:100%;background:#fff;color:#0a0a0a;border:none;padding:18px 24px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;letter-spacing:-0.005em;transition:background 0.15s,transform 0.08s}
+  .cc-browse:hover{background:#f0f0f0}
+  .cc-browse:active{transform:scale(0.99)}
+  .cc-itempanel{background:#161616;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 16px;margin:-8px 0 24px;text-align:left;font-size:0.88rem;color:#d8d8d8;display:none}
+  .cc-itempanel.open{display:block}
+  .cc-itempanel-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+  .cc-itempanel-row:last-child{border-bottom:none}
+  .cc-itempanel-name{color:#fff;font-weight:500}
+  .cc-itempanel-meta{color:#888;font-size:0.78rem;margin-left:8px}
+  .cc-itempanel-amt{color:#fff;font-weight:500}
+  @media (max-width:540px){.cc-card{padding:36px 24px 28px;border-radius:14px}.cc-headline{font-size:1.45rem;margin-bottom:28px}}
+</style>
+<div class="screen cc-clean" id="screen-payment-confirmed">
+  <div class="cc-card">
+    <div class="cc-check">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
-  </section>
-
-  <!-- Two-column body -->
-  <section class="pc-body">
-    <div class="pc-col-left">
-      <!-- What happens next -->
-      <div>
-        <div class="pc-kicker" style="margin-bottom:12px">What Happens Next</div>
-        <div class="pc-card" style="padding:18px 22px">
-          <div class="pc-step-row">
-            <div class="pc-step done"><div class="pc-step-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="pc-step-label">Placed</div></div>
-            <div class="pc-step active"><div class="pc-step-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"/></svg></div><div class="pc-step-label">Packing</div></div>
-            <div class="pc-step"><div class="pc-step-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13l5 5v5H3z"/><circle cx="8" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg></div><div class="pc-step-label">Shipped</div></div>
-            <div class="pc-step"><div class="pc-step-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div><div class="pc-step-label">Out for Delivery</div></div>
-            <div class="pc-step"><div class="pc-step-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l3 3 6-6 6 6 3-3"/></svg></div><div class="pc-step-label">Delivered</div></div>
-          </div>
-        </div>
+    <h1 class="cc-headline">Your order has been<br>successfully submitted</h1>
+    <div class="cc-rows">
+      <div class="cc-row"><span>Order ID</span><span id="conf-order-num">—</span></div>
+      <div class="cc-row"><span>Payment Method</span><span id="cc-paymethod">—</span></div>
+      <div class="cc-row"><span>Date &amp; Time</span><span id="cc-datetime">—</span></div>
+      <div class="cc-row"><span>Items</span>
+        <button class="cc-itembtn" id="cc-items-btn" type="button" onclick="ccToggleItems()">View items <span id="cc-items-count">0</span> <span style="font-size:0.9em;opacity:0.7">›</span></button>
       </div>
-
-      <!-- Shipping + Packaging -->
-      <div class="pc-two-col">
-        <div class="pc-card pc-card-pad">
-          <div class="pc-kicker" style="margin-bottom:10px">Shipping To</div>
-          <div id="pc-ship-block" style="font-weight:500;color:var(--pc-ink);font-size:15px;line-height:1.55">Your shipping details were captured at checkout.</div>
-          <div style="font-size:12.5px;color:var(--pc-t2);margin-top:10px">Need to change it? Email us within 2 hours and we'll adjust before the label prints.</div>
-        </div>
-        <div class="pc-card pc-card-pad pc-checker">
-          <div class="pc-kicker" style="margin-bottom:10px">Packaging</div>
-          <div style="font-weight:500;font-size:15px">Discreet. Plain unmarked carton.</div>
-          <div style="color:var(--pc-t2);font-size:13px;margin-top:6px;line-height:1.5">No Hao Yun Labs branding on the outside. No compound names. Return label reads a generic sender address.</div>
-          <div style="margin-top:14px"><span class="pc-pill">Default on all orders</span></div>
-        </div>
-      </div>
-
-      <!-- Research Use Only -->
-      <div style="padding:18px 22px;background:#fff;border:1px solid var(--pc-line-strong);border-radius:12px;display:flex;gap:14px;align-items:flex-start">
-        <div style="width:36px;height:36px;border-radius:8px;background:var(--pc-ink);color:#fff;display:grid;place-items:center;flex-shrink:0">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6L4 18a2 2 0 0 0 1.8 3h12.4A2 2 0 0 0 20 18L15 8V2"/><line x1="9" y1="2" x2="15" y2="2"/></svg>
-        </div>
-        <div>
-          <div style="font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--pc-ink)">Research Use Only. Not For Human Consumption.</div>
-          <div style="color:var(--pc-t2);font-size:13px;margin-top:5px;line-height:1.55">Store lyophilized vials at 2 to 8 °C. Once reconstituted, use within 30 days. Each lot's COA is accessible in the <a onclick="navigate('coa')" style="color:var(--pc-ink);font-weight:600;cursor:pointer;text-decoration:underline">COA archive</a> once your package ships.</div>
-        </div>
-      </div>
-
-      <!-- Affiliate -->
-      <div class="pc-affiliate">
-        <div class="pc-ring-a"></div><div class="pc-ring-b"></div>
-        <div class="pc-aff-copy">
-          <div class="pc-kicker" style="color:#c0c0b8;margin-bottom:10px">Share The Lab</div>
-          <div class="pc-aff-head">Earn 20% on every order your friends place.</div>
-          <div style="color:#c0c0b8;font-size:13.5px;margin-top:8px;max-width:440px;line-height:1.5">Your affiliate code is ready. Share it and get monthly free vials on top.</div>
-        </div>
-        <div style="position:relative;display:flex;flex-direction:column;gap:8px;z-index:1">
-          <a href="https://admin.haoyunlabs.com" target="_blank" class="pc-btn" style="background:#fff;color:var(--pc-ink);border:1px solid #fff">Open Partner Portal</a>
-          <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="pc-btn pc-btn-outline" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3)">Join Discord</a>
-        </div>
-      </div>
+      <div class="cc-row" style="font-weight:600"><span style="color:#fff">Total</span><span id="cc-total" style="font-size:1.05rem">—</span></div>
     </div>
-
-    <!-- Right column — Receipt -->
-    <aside>
-      <div class="pc-card pc-receipt">
-        <div class="pc-receipt-head">
-          <div>
-            <div class="pc-receipt-title">Receipt</div>
-            <div class="pc-receipt-num" id="pc-receipt-num">—</div>
-          </div>
-          <span class="pc-pill">Paid</span>
-        </div>
-        <div class="pc-receipt-body" id="conf-details">
-          <div style="color:var(--pc-t2);font-size:13px">Receipt details will appear here.</div>
-        </div>
-        <div class="pc-receipt-footer">
-          <button class="pc-btn pc-btn-outline pc-btn-sm" style="flex:1" onclick="window.print()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-            PDF
-          </button>
-          <button class="pc-btn pc-btn-outline pc-btn-sm" style="flex:1" onclick="showToast('Receipt re-sent to your email','success')">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Resend email
-          </button>
-        </div>
-      </div>
-
-      <!-- TX VERIFICATION (crypto only) -->
-      <div id="conf-tx-block" class="pc-card pc-card-pad" style="display:none;margin-top:20px">
-        <div class="pc-kicker" style="margin-bottom:10px">Blockchain Receipt</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><span style="font-size:12px;color:var(--pc-t2)">Transaction</span><a id="conf-tx-link" href="#" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--pc-ink);text-decoration:underline"></a></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span style="font-size:12px;color:var(--pc-t2)">Confirmations</span><span id="conf-tx-confirms" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600">—</span></div>
-      </div>
-
-      <!-- Support — 4 tile grid -->
-      <div class="pc-card pc-card-pad" style="margin-top:20px">
-        <div class="pc-kicker" style="text-align:center;margin-bottom:14px">Need Help</div>
-        <div class="pc-support-grid">
-          <a class="pc-support-tile" href="https://discord.gg/WDYVkgt5dB" target="_blank"><div class="pc-support-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 5L20 8l-4 3.8.9 5.5L12 14.8 7.1 17.3 8 11.8 4 8l5.5-1L12 2z"/></svg></div><div class="pc-support-label">AI Chat</div></a>
-          <a class="pc-support-tile" href="https://discord.gg/WDYVkgt5dB" target="_blank"><div class="pc-support-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div><div class="pc-support-label">Live Chat</div></a>
-          <a class="pc-support-tile" href="mailto:support@haoyunlabs.com"><div class="pc-support-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="pc-support-label">Email</div></a>
-          <a class="pc-support-tile" onclick="navigate('help')" style="cursor:pointer"><div class="pc-support-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="pc-support-label">FAQ</div></a>
-        </div>
-      </div>
-    </aside>
-  </section>
-
-  <!-- Reorder / Pair-well row -->
-  <section class="pc-reorder">
-    <div class="pc-reorder-inner">
-      <div class="pc-reorder-head">
-        <div>
-          <div class="pc-kicker">Researchers Often Add</div>
-          <h2>Pair Well With Your Order</h2>
-        </div>
-        <a onclick="navigate('catalog')" style="font-size:13px;color:var(--pc-ink);text-decoration:none;font-weight:500;border-bottom:1px solid var(--pc-ink);cursor:pointer">Full catalog →</a>
-      </div>
-      <div class="pc-reorder-grid" id="pc-reorder-grid">
-        <!-- Populated by JS on screen entry -->
-      </div>
-    </div>
-  </section>
+    <div class="cc-itempanel" id="cc-itempanel"></div>
+    <button class="cc-browse" type="button" onclick="navigate('catalog')">Browse catalog</button>
+  </div>
+  <!-- Hidden compat block for legacy crypto/zelle render path -->
+  <div id="conf-details" style="display:none"></div>
+</div>
+<div style="display:none">
+  <span id="pc-first-name"></span><span id="pc-email"></span><span id="pc-placed"></span><span id="pc-eta"></span>
+  <div id="pc-receipt-num"></div>
+  <div id="pc-ship-block"></div>
+  <div id="conf-tx-block"></div>
+  <div id="conf-tx-link"></div>
+  <div id="conf-tx-confirms"></div>
+  <div id="pc-reorder-grid"></div>
 </div>
 <script>
+// Centered confirmation card populate + items toggle.
+// Called by gateConfirmation after order-receipt fetches order details.
+window.ccPopulate = function(d){
+  if(!d) return;
+  try {
+    const num = d.order_number || '';
+    const total = (typeof d.total === 'number') ? d.total : Number(d.total || 0);
+    const items = Array.isArray(d.items) ? d.items : [];
+    const paid = d.paid_at ? new Date(d.paid_at) : new Date();
+    const paymentMethodLabel = ({
+      stripe_card: 'Card (Stripe)',
+      bankful_card: 'Card (Bankful)',
+      crypto: 'Crypto',
+      zelle: 'Zelle',
+    })[d.payment_method] || (d.payment_method || 'Card');
+
+    const el = (id)=>document.getElementById(id);
+    if(el('conf-order-num')) el('conf-order-num').textContent = num;
+    if(el('cc-paymethod')) el('cc-paymethod').textContent = paymentMethodLabel;
+    if(el('cc-datetime')){
+      const dt = paid.toLocaleString('en-US', { month:'2-digit', day:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit', hour12:true });
+      el('cc-datetime').textContent = dt.replace(',', '');
+    }
+    if(el('cc-items-count')){
+      const n = items.reduce((s,it)=> s + Number(it?.quantity || 1), 0);
+      el('cc-items-count').textContent = n;
+    }
+    if(el('cc-total')) el('cc-total').textContent = '$' + total.toFixed(2);
+
+    const panel = el('cc-itempanel');
+    if(panel){
+      const rows = items.map(it=>{
+        const name = String(it?.name || it?.sku || 'Item');
+        const qty = Number(it?.quantity || 1);
+        const lineTotal = Number(it?.lineTotal ?? (Number(it?.unitPrice || 0) * qty));
+        return `<div class="cc-itempanel-row"><span><span class="cc-itempanel-name">${name}</span><span class="cc-itempanel-meta">×${qty}</span></span><span class="cc-itempanel-amt">$${lineTotal.toFixed(2)}</span></div>`;
+      }).join('');
+      panel.innerHTML = rows || '<div style="color:#888;font-size:0.85rem;padding:6px 0">No item details available.</div>';
+    }
+  } catch(e){ console.warn('[cc] populate failed', e); }
+};
+window.ccToggleItems = function(){
+  const panel = document.getElementById('cc-itempanel');
+  const btn = document.getElementById('cc-items-btn');
+  if(!panel) return;
+  const open = panel.classList.toggle('open');
+  if(btn){
+    const arrow = btn.querySelector('span:last-child');
+    if(arrow) arrow.style.transform = open ? 'rotate(90deg)' : '';
+  }
+};
+
 function pcCopyTracking(btn){
   const num = document.getElementById('conf-order-num')?.textContent?.trim() || '';
   const url = 'https://haoyunlabs.com/#tracking' + (num ? '?order=' + encodeURIComponent(num) : '');
@@ -5861,16 +5824,26 @@ function handleRoute(){
     // a paid-tier value. Anything else routes to home with a toast.
     (async function gateConfirmation(){
       let orderNum = '';
+      let sessionId = '';
       try {
         const pp = window._lastPaidInvoice || {};
         orderNum = String(pp.order_id || pp.orderNumber || '').trim();
+        sessionId = String(pp.session_id || '').trim();
         if(!orderNum){
           const pending = JSON.parse(localStorage.getItem('hyl_card_pending') || 'null');
-          if(pending && typeof pending.orderNumber === 'string') orderNum = pending.orderNumber;
+          if(pending && typeof pending.orderNumber === 'string'){ orderNum = pending.orderNumber; }
+          if(pending && typeof pending.sessionId === 'string'){ sessionId = sessionId || pending.sessionId; }
         }
-        if(!orderNum){
-          const m = (location.hash || '').match(/[?&]order=([A-Za-z0-9_-]{1,64})/);
-          if(m) orderNum = m[1];
+        if(!orderNum || !sessionId){
+          const hashStr = location.hash || '';
+          if(!orderNum){
+            const m = hashStr.match(/[?&]order=([A-Za-z0-9_-]{1,64})/);
+            if(m) orderNum = m[1];
+          }
+          if(!sessionId){
+            const m2 = hashStr.match(/[?&]session_id=(cs_(?:live|test)_[A-Za-z0-9]{1,256})/);
+            if(m2) sessionId = m2[1];
+          }
         }
         if(!orderNum){
           try { showToast('No order to confirm.', 'error'); } catch(_){}
@@ -5878,20 +5851,46 @@ function handleRoute(){
           location.hash = 'home';
           return;
         }
-        // Server verify. Don't trust localStorage / URL alone --- the
-        // order-status function returns {status,paid_at} only, slimmed in
-        // iter 69, so this is a tight gate.
-        const resp = await fetch(SUPABASE_URL + '/functions/v1/order-status?order=' + encodeURIComponent(orderNum), {
-          headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
-        });
-        const j = await resp.json().catch(() => ({}));
-        const st = (j?.order?.status || '').toLowerCase();
-        const ok = ['paid','shipped','delivered','finalized'].includes(st);
-        if(!ok){
-          try { showToast('That order is not confirmed yet.', 'error'); } catch(_){}
-          history.replaceState(null,'',location.pathname);
-          location.hash = 'home';
-          return;
+        // Try the rich order-receipt endpoint first (requires session_id).
+        // Falls back to order-status (slim, just verifies paid) when no
+        // session_id is present (e.g. legacy zelle/crypto paths).
+        let renderedFromReceipt = false;
+        if(sessionId){
+          try {
+            const r = await fetch(SUPABASE_URL + '/functions/v1/order-receipt?order=' + encodeURIComponent(orderNum) + '&session_id=' + encodeURIComponent(sessionId), {
+              headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+            });
+            const rj = await r.json().catch(() => ({}));
+            if(rj?.ok && rj?.order?.status === 'paid'){
+              try { window.ccPopulate(rj.order); } catch(_){}
+              renderedFromReceipt = true;
+            }
+          } catch(_){ /* fall through to slim verify */ }
+        }
+        if(!renderedFromReceipt){
+          const resp = await fetch(SUPABASE_URL + '/functions/v1/order-status?order=' + encodeURIComponent(orderNum), {
+            headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+          });
+          const j = await resp.json().catch(() => ({}));
+          const st = (j?.order?.status || '').toLowerCase();
+          const ok = ['paid','shipped','delivered','finalized'].includes(st);
+          if(!ok){
+            try { showToast('That order is not confirmed yet.', 'error'); } catch(_){}
+            history.replaceState(null,'',location.pathname);
+            location.hash = 'home';
+            return;
+          }
+          // Slim path: render with what we have (order number + paid_at).
+          try {
+            window.ccPopulate({
+              order_number: orderNum,
+              status: st,
+              paid_at: j?.order?.paid_at || new Date().toISOString(),
+              total: (window._lastPaidInvoice?.total) || 0,
+              payment_method: (window._lastPaidInvoice?.network === 'card') ? 'stripe_card' : (window._lastPaidInvoice?.method || ''),
+              items: [],
+            });
+          } catch(_){}
         }
         // Verified. Fire purchase_complete exactly once per order.
         if(window._hylLastReportedPurchase !== orderNum){
@@ -6998,11 +6997,13 @@ async function renderCardReturn(){
       const res = await resp.json();
       const data = res.order;
       if(data && data.status === 'paid'){
+        const _sid = (result && result.session_id) ? result.session_id : '';
         localStorage.removeItem('hyl_card_result');
         localStorage.removeItem('hyl_card_pending');
         cart.clear(); saveCart(); updateBadge();
-        window._lastPaidInvoice = { tx_hash: data.payment_reference, network: 'card' };
-        navigate('payment-confirmed');
+        window._lastPaidInvoice = { tx_hash: data.payment_reference, network: 'card', orderNumber: result.order, session_id: _sid };
+        const qs = '?order=' + encodeURIComponent(result.order) + (_sid ? '&session_id=' + encodeURIComponent(_sid) : '');
+        navigate('payment-confirmed' + qs);
         return;
       }
       // Bail out early on terminal non-paid statuses instead of grinding the
