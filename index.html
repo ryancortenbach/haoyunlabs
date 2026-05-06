@@ -3141,24 +3141,26 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   .cc-pill-dark:active{transform:scale(0.99)}
   .cc-pill-outline{background:transparent;color:var(--text);border:1px solid var(--stroke)}
   .cc-pill-outline:hover{background:#fafafa;border-color:#d4d4d4}
-  .cc-split-right{padding:44px 44px 36px;background:#fafafa}
-  .cc-manifest-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-  .cc-line{display:grid;grid-template-columns:64px 1fr;column-gap:14px;padding:18px 0;border-bottom:1px solid var(--stroke);align-items:center}
-  .cc-line:first-of-type{border-top:1px solid var(--stroke)}
-  .cc-line-img{width:64px;height:80px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--stroke);border-radius:8px;overflow:hidden}
+  .cc-split-right{padding:44px 44px 36px;background:#fff}
+  .cc-manifest-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .cc-line{display:grid;grid-template-columns:72px 1fr;column-gap:14px;padding:14px 0;border-bottom:1px solid var(--stroke);align-items:center}
+  .cc-line:last-of-type{border-bottom:none}
+  .cc-line-img{width:72px;height:88px;display:flex;align-items:center;justify-content:center;background:transparent;border-radius:8px;overflow:hidden}
   .cc-line-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
-  .cc-line-img.is-empty{background:#fafafa;border-style:dashed}
-  .cc-line-body{min-width:0}
-  .cc-line-row1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:8px}
-  .cc-line-name{font-size:15px;font-weight:700;letter-spacing:-0.005em;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis}
-  .cc-line-amt{font-size:14px;font-family:var(--mono);font-weight:600;color:var(--text);flex-shrink:0}
-  .cc-line-meta{display:flex;gap:12px;font-size:11px;color:var(--muted);font-family:var(--mono)}
-  .cc-line-meta .sep{color:#d4d4d4}
-  .cc-total-block{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px}
-  .cc-total-incl{font-size:11px;color:#9c9c9c;margin-top:2px;font-family:var(--mono)}
-  .cc-total-big{font-size:28px;font-weight:700;letter-spacing:-0.01em;font-family:var(--mono);color:var(--text)}
-  .cc-coa-btn{width:100%;margin-top:20px;padding:14px;background:#fff;border:1px solid var(--stroke);border-radius:8px;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text);transition:background 0.15s,border-color 0.15s}
-  .cc-coa-btn:hover{background:#fafafa;border-color:#d4d4d4}
+  .cc-line-img.is-empty{background:#fafafa;border:1px dashed var(--stroke)}
+  .cc-line-body{min-width:0;display:flex;flex-direction:column;gap:3px}
+  .cc-line-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
+  .cc-line-name{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;word-break:break-word}
+  .cc-line-priceqty{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:0.78rem;font-weight:700;color:var(--muted);margin-top:3px}
+  .cc-line-priceqty .qty{color:var(--muted)}
+  .cc-line-priceqty .amt{color:var(--text);font-size:0.92rem}
+  .cc-totals{display:flex;flex-direction:column;gap:0;margin-top:18px;padding-top:14px;border-top:1px solid var(--stroke)}
+  .cc-totals-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:0.78rem}
+  .cc-totals-label{font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text)}
+  .cc-totals-val{font-family:var(--mono);font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+  .cc-totals-row.grand{border-top:1px solid var(--stroke);padding-top:10px;margin-top:6px}
+  .cc-totals-row.grand .cc-totals-label{font-size:0.86rem}
+  .cc-totals-row.grand .cc-totals-val{font-size:1.05rem}
 
   /* ── Variation C (mobile, < 880px) ── perforated receipt ──────── */
   .cc-receipt-wrap{display:flex;flex-direction:column;align-items:center;width:100%}
@@ -3223,7 +3225,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <span class="cc-mono">Confirmed · Awaiting QC</span>
       </div>
       <h1 class="cc-h1">Thank you,<br><span class="cc-h1-italic" id="cc-firstname-italic">Researcher.</span></h1>
-      <p class="cc-lead">Order <span id="cc-lead-order" style="font-family:'JetBrains Mono',monospace;font-size:13px">—</span> has entered our queue. Each vial is re-tested by HPLC at &gt;98% purity before it leaves the lab.</p>
+      <p class="cc-lead">You'll get a tracking link by email the moment your package ships. Shipped discreetly in plain unmarked packaging.</p>
       <div class="cc-meta-grid">
         <div>
           <span class="cc-meta-label">Order</span>
@@ -3238,8 +3240,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <div class="cc-meta-val" id="cc-paymethod">—</div>
         </div>
         <div>
-          <span class="cc-meta-label">Ship to</span>
-          <div class="cc-meta-val" id="cc-shipto">—</div>
+          <span class="cc-meta-label">Status</span>
+          <div class="cc-meta-val" style="color:#16a34a;font-weight:600">Awaiting QC</div>
         </div>
       </div>
       <div class="cc-pill-row">
@@ -3249,21 +3251,15 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     </div>
     <div class="cc-split-right">
       <div class="cc-manifest-head">
-        <span class="cc-mono">Manifest · <span id="cc-mfst-count">0</span> items</span>
-        <span class="cc-mono" style="color:#16a34a">HPLC ≥ 98%</span>
+        <span class="cc-mono">Items · <span id="cc-mfst-count">0</span></span>
       </div>
       <div id="cc-manifest-list"></div>
-      <div class="cc-total-block">
-        <div>
-          <span class="cc-meta-label">Total</span>
-          <div class="cc-total-incl">incl. shipping &amp; QC</div>
-        </div>
-        <div class="cc-total-big" id="cc-total">—</div>
+      <div class="cc-totals">
+        <div class="cc-totals-row"><span class="cc-totals-label">Subtotal</span><span class="cc-totals-val" id="cc-tot-subtotal">—</span></div>
+        <div class="cc-totals-row"><span class="cc-totals-label">Shipping</span><span class="cc-totals-val" id="cc-tot-shipping">FREE</span></div>
+        <div class="cc-totals-row"><span class="cc-totals-label">Processing fee</span><span class="cc-totals-val" id="cc-tot-fees">—</span></div>
+        <div class="cc-totals-row grand"><span class="cc-totals-label">Total</span><span class="cc-totals-val" id="cc-total">—</span></div>
       </div>
-      <button class="cc-coa-btn" type="button" onclick="window.print()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16"/></svg>
-        Download Receipt · PDF
-      </button>
     </div>
   </div>
 
@@ -3388,12 +3384,25 @@ window.ccPopulate = function(d){
       return `<div class="cc-line">
         ${ccImgFor(sku)}
         <div class="cc-line-body">
-          <div class="cc-line-row1"><div class="cc-line-name">${name}</div><div class="cc-line-amt">$${lineTotal.toFixed(2)}</div></div>
-          <div class="cc-line-meta"><span>${qty} vial${qty===1?'':'s'}</span><span class="sep">·</span><span>HPLC ≥ 98%</span></div>
+          ${sku ? `<div class="cc-line-sku">SKU · ${sku}</div>` : ''}
+          <div class="cc-line-name">${name}</div>
+          <div class="cc-line-priceqty">
+            <span class="qty">QTY ${qty}</span>
+            <span class="amt">$${lineTotal.toFixed(2)}</span>
+          </div>
         </div>
       </div>`;
     }).join('');
     setHTML('cc-manifest-list', manifest || '<div style="color:#a3a3a3;font-size:13px;padding:18px 0">No items recorded.</div>');
+
+    // Cart-style breakdown for desktop totals
+    const fmt = (n) => '$' + Number(n||0).toFixed(2);
+    const subtotalEl = document.getElementById('cc-tot-subtotal');
+    const feesEl = document.getElementById('cc-tot-fees');
+    const shipEl = document.getElementById('cc-tot-shipping');
+    if(subtotalEl) subtotalEl.textContent = fmt(computedSubtotal);
+    if(feesEl) feesEl.textContent = fees > 0 ? fmt(fees) : '—';
+    if(shipEl) shipEl.textContent = 'FREE';
 
     // ── Variation C (mobile receipt) ────────────────────
     set('cc-toast-order', num);
