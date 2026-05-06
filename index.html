@@ -6059,6 +6059,26 @@ function handleRoute(){
     // OR ?order= URL param; hit order-status; only render if status is
     // a paid-tier value. Anything else routes to home with a toast.
     (async function gateConfirmation(){
+      // Design preview: #payment-confirmed?preview=1 renders with mock
+      // data and skips the gate. Mock-only — no real order data exposed.
+      if((location.hash || '').match(/[?&]preview=1\b/)){
+        try {
+          window.ccPopulate({
+            order_number: 'HYL-PREVIEW-DEMO',
+            status: 'paid',
+            paid_at: new Date().toISOString(),
+            total: 119.98,
+            payment_method: 'stripe_card',
+            first_name: 'Researcher',
+            ship_to: 'Researcher · 123 Lab St, Cambridge MA 02139',
+            items: [
+              { sku:'BPC-157-5MG', name:'BPC-157 · 5 mg', quantity:1, unitPrice:59.99, lineTotal:59.99 },
+              { sku:'TB-500-5MG',  name:'TB-500 · 5 mg',  quantity:1, unitPrice:59.99, lineTotal:59.99 },
+            ],
+          });
+        } catch(_){}
+        return;
+      }
       let orderNum = '';
       let sessionId = '';
       try {
