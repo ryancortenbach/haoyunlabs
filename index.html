@@ -3115,33 +3115,42 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   }
 </style>
 <style>
-  /* Order Confirmation — single centered card, site aesthetic. */
-  #screen-payment-confirmed.cc-paper{background:#fafafa;min-height:100vh;font-family:var(--sans);color:var(--text);padding:48px 20px 64px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  /* Order Confirmation — borderless layout, content sits on page bg.
+     The alternating gray/white squares are the only visual rhythm.
+     Scope display:flex to .active so the screen stays display:none everywhere else
+     (the .screen{display:none} base rule loses on specificity to .cc-paper). */
+  #screen-payment-confirmed.cc-paper.active{background:#fafafa;min-height:100vh;font-family:var(--sans);color:var(--text);padding:96px 20px 64px;display:flex;flex-direction:column;align-items:center}
   body:has(#screen-payment-confirmed.active) #mobile-cart-cta{display:none!important}
 
-  .cc-card{width:100%;max-width:600px;background:#fff;border:1px solid var(--stroke);border-radius:16px;padding:48px 44px 32px;box-shadow:0 1px 1px rgba(0,0,0,0.02),0 24px 60px -20px rgba(0,0,0,0.12);margin:auto 0}
+  /* No card chrome — just a width container. */
+  .cc-card{width:100%;max-width:600px;background:transparent;border:none;border-radius:0;padding:0;box-shadow:none;margin:0;display:flex;flex-direction:column}
+  .cc-card-mono{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .cc-card-seal{display:flex;justify-content:center;margin-bottom:18px}
-  .cc-card-h1{font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:0.005em;line-height:1.08;text-align:center;text-transform:uppercase;color:var(--text);margin:0 0 32px}
-  .cc-card-rows{border-top:1px solid var(--stroke);margin-bottom:22px}
-  .cc-card-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--stroke);font-size:14px;gap:12px}
+  .cc-card-h1{font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:0.005em;line-height:1.08;text-align:center;text-transform:uppercase;color:var(--text);margin:0 0 28px}
+  .cc-card-rows{border-top:1px solid var(--stroke)}
+  .cc-card-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--stroke);font-size:14px;gap:12px}
   .cc-card-label{color:var(--muted);font-weight:500}
   .cc-card-val{color:var(--text);font-weight:600;text-align:right}
   .cc-card-val.mono{font-family:var(--mono);font-size:13px}
-  .cc-items-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--stroke);background:transparent;padding:8px 16px;border-radius:999px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);transition:background 0.15s,border-color 0.15s}
-  .cc-items-btn:hover{background:#fafafa;border-color:#d4d4d4}
-  .cc-items-arrow{display:inline-block;transition:transform 0.18s}
-  .cc-items-btn.is-open .cc-items-arrow{transform:rotate(90deg)}
-  .cc-card-items{padding:10px 0 18px;border-bottom:1px solid var(--stroke);display:flex;flex-direction:column;gap:20px}
+
+  /* Items reveal — hidden by default, animated max-height on toggle. */
+  .cc-items-btn{appearance:none;background:transparent;border:none;padding:0;cursor:pointer;color:var(--text);font-family:var(--sans);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+  .cc-items-btn .cc-items-arrow{display:inline-block;font-size:18px;line-height:1;transform:rotate(90deg);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1);color:var(--muted)}
+  .cc-items-btn.is-open .cc-items-arrow{transform:rotate(-90deg)}
+  .cc-card-items-wrap{overflow:hidden;max-height:0;transition:max-height 0.42s cubic-bezier(0.22,1,0.36,1),padding 0.32s ease,opacity 0.32s ease;opacity:0}
+  .cc-card-items-wrap.is-open{max-height:4000px;opacity:1}
+  .cc-card-items{padding:14px 0;border-bottom:1px solid var(--stroke);display:flex;flex-direction:column;gap:18px}
   .cc-card-item{display:grid;grid-template-columns:92px 1fr;column-gap:16px;align-items:start;padding:0}
-  .cc-card-item-img{width:92px;height:115px;display:flex;align-items:center;justify-content:center;background:transparent;overflow:hidden}
-  .cc-card-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
-  .cc-card-item-info{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .cc-card-item-img{width:92px;height:115px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:transparent;overflow:hidden}
+  .cc-card-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+  .cc-card-item-info{display:flex;flex-direction:column;gap:4px;min-width:0}
   .cc-card-item-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
-  .cc-card-item-title{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:3px;word-break:break-word}
-  .cc-card-item-row{display:flex;align-items:center;justify-content:space-between;column-gap:18px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:0.92rem;font-weight:600;color:var(--text);padding:8px 10px;border-radius:4px;min-height:32px}
-  .cc-card-item-row.gray{background:#fafafa}
+  .cc-card-item-title{font-size:0.95rem;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:2px;word-break:break-word}
+  .cc-card-item-row{display:flex;align-items:center;justify-content:space-between;column-gap:18px;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:0.92rem;font-weight:600;color:var(--text);padding:3px 10px;border-radius:4px;min-height:24px}
+  .cc-card-item-row.gray{background:#f1f1f1}
   .cc-card-item-row::before{content:attr(data-label) ":";font-family:var(--sans);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
   .cc-card-item-row.line{font-weight:800}
+
   /* Totals breakdown — cart-style */
   .cc-card-breakdown{padding:14px 0 0;display:flex;flex-direction:column}
   .cc-card-breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.78rem}
@@ -3151,32 +3160,29 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   .cc-card-breakdown-row.total .label{font-size:0.86rem}
   .cc-card-breakdown-row.total .val{font-size:1rem}
   .cc-card-saving{color:#22c55e;font-size:0.65rem;margin-left:8px;font-weight:700;letter-spacing:0;text-transform:none}
-  .cc-card-row.total{border-bottom:none;padding-top:20px;font-size:16px}
-  .cc-card-row.total .cc-card-label{font-weight:700;color:var(--text)}
-  .cc-card-row.total .cc-card-val{font-size:18px}
-  .cc-card-browse{display:block;width:100%;padding:16px 24px;background:var(--text);color:var(--bg);border:none;border-radius:999px;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background 0.15s,transform 0.08s;text-align:center;text-decoration:none;box-sizing:border-box}
-  .cc-card-browse:hover{background:#1f1f1f}
-  .cc-card-browse:active{transform:scale(0.99)}
-  .cc-card-discord{margin-top:10px;background:#5865F2;color:#fff}
-  .cc-card-discord:hover{background:#4752c4}
+
+  /* Buttons — outline pill with hero-btn-invert hover (footer pattern). */
+  .cc-card-actions{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+  .cc-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 24px;background:#000;color:#fff;border:1px solid #000;border-radius:999px;font-family:var(--sans);font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.18s,color 0.18s,border-color 0.18s;text-align:center;text-decoration:none;box-sizing:border-box}
+  .cc-btn:hover{background:#fff;color:#000;border-color:#000}
+  .cc-btn-discord{background:#5865F2;color:#fff;border-color:#5865F2}
+  .cc-btn-discord:hover{background:#fff;color:#5865F2;border-color:#5865F2}
 
   /* Legacy compat — old code paths reference these IDs/classes. */
   .cc-itempanel{display:none}
 
   @media (max-width:600px){
-    #screen-payment-confirmed.cc-paper{padding:48px 16px 48px}
-    .cc-card{padding:28px 22px 22px;border-radius:12px}
-    .cc-card-h1{font-size:24px;margin-bottom:24px}
-    .cc-card-row{padding:14px 0}
+    #screen-payment-confirmed.cc-paper{padding:80px 16px 48px}
+    .cc-card-h1{font-size:24px;margin-bottom:22px}
+    .cc-card-row{padding:12px 0}
   }
 </style>
 <div class="screen cc-paper" id="screen-payment-confirmed">
   <div class="cc-card">
     <div class="cc-card-seal" aria-hidden="true">
-      <svg width="84" height="84" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="30" fill="none" stroke="#0a0a0a" stroke-width="0.6" stroke-dasharray="2 3" opacity="0.4"/>
-        <circle cx="32" cy="32" r="22" fill="#fafafa" stroke="#0a0a0a" stroke-width="1"/>
-        <path d="M22 32.5l6 6 14-14" fill="none" stroke="#16a34a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="68" height="68" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="30" fill="#16a34a"/>
+        <path d="M19 32.5l9 9 18-18" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
     <h1 class="cc-card-h1">Your order has been<br>successfully submitted</h1>
@@ -3190,23 +3196,26 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <span class="cc-card-val" id="cc-payment-method">—</span>
       </div>
       <div class="cc-card-row">
-        <span class="cc-card-label">Date &amp; Time</span>
+        <span class="cc-card-label">Date</span>
         <span class="cc-card-val mono" id="cc-datetime-row">—</span>
       </div>
       <div class="cc-card-row">
         <span class="cc-card-label">Items</span>
-        <button type="button" class="cc-items-btn" id="cc-items-btn" onclick="ccToggleItems()">
-          View items <span id="cc-items-count">0</span> <span class="cc-items-arrow">›</span>
+        <button type="button" class="cc-items-btn" id="cc-items-btn" onclick="ccToggleItems()" aria-expanded="false" aria-controls="cc-card-items-wrap">
+          View items <span id="cc-items-count">0</span> <span class="cc-items-arrow" aria-hidden="true">›</span>
         </button>
       </div>
-      <div class="cc-card-items" id="cc-card-items" hidden></div>
+      <div class="cc-card-items-wrap" id="cc-card-items-wrap">
+        <div class="cc-card-items" id="cc-card-items"></div>
+      </div>
     </div>
     <div class="cc-card-breakdown" id="cc-card-breakdown"></div>
-    <div style="height:24px"></div>
-    <button class="cc-card-browse" type="button" onclick="navigate('catalog')">Browse catalog</button>
-    <a class="cc-card-browse cc-card-discord" href="https://discord.gg/WDYVkgt5dB" target="_blank" rel="noopener">
-      <svg width="16" height="13" viewBox="0 0 71 55" fill="currentColor" aria-hidden="true" style="margin-right:8px;display:inline-block;vertical-align:-2px"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>Join Discord
-    </a>
+    <div class="cc-card-actions">
+      <button class="cc-btn" type="button" onclick="navigate('catalog')">Browse catalog</button>
+      <a class="cc-btn cc-btn-discord" href="https://discord.gg/WDYVkgt5dB" target="_blank" rel="noopener">
+        <svg width="16" height="13" viewBox="0 0 71 55" fill="currentColor" aria-hidden="true" style="display:inline-block;vertical-align:-2px"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>Join Discord
+      </a>
+    </div>
   </div>
 
   <!-- Hidden compat block for legacy crypto/zelle render path -->
@@ -3234,16 +3243,14 @@ window.ccPopulate = function(d){
     const paid = d.paid_at ? new Date(d.paid_at) : new Date();
     const cardLast4 = String(d.card_last4 || '').trim();
 
-    // Stripe brand wordmark — used only when no card last4 available.
+    // Stripe brand wordmark — shown alongside the masked card number.
     const stripeLogoSvg = '<svg viewBox="0 0 60 25" xmlns="http://www.w3.org/2000/svg" fill="#635BFF" style="height:12px;width:auto;display:block" aria-label="Stripe"><path fill-rule="evenodd" clip-rule="evenodd" d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a8.33 8.33 0 0 1-4.56 1.1c-4.01 0-6.83-2.5-6.83-7.48 0-4.19 2.39-7.52 6.3-7.52 3.92 0 5.96 3.28 5.96 7.5 0 .4-.04 1.26-.06 1.48zm-5.92-5.62c-1.03 0-2.17.73-2.17 2.58h4.25c0-1.85-1.07-2.58-2.08-2.58zM40.95 20.3c-1.44 0-2.32-.6-2.91-1.04l-.02 4.63-4.12.87V5.57h3.63l.21 1.03c.57-.53 1.61-1.31 3.22-1.31 2.89 0 5.62 2.6 5.62 7.4 0 5.23-2.7 7.61-5.63 7.61zm-.96-11.36c-.95 0-1.54.34-1.97.81l.02 6.12c.4.43.98.78 1.95.78 1.52 0 2.54-1.65 2.54-3.87 0-2.15-1.04-3.84-2.54-3.84zM28.24 5.85h4.13v14.25h-4.13V5.85zm0-4.7L32.37.27v3.36l-4.13.88V1.15zm-4.32 9.35v9.6h-4.11V5.85h3.55l.26 1.2c.96-1.76 2.89-1.4 3.43-1.2v3.79c-.51-.17-2.15-.42-3.13.86zm-8.55 4.72c0 2.43 2.6 1.68 3.13 1.46v3.36c-.55.3-1.54.54-2.89.54a4.15 4.15 0 0 1-4.27-4.24l.01-13.17 4.02-.86v3.54h3.14V9.4h-3.14v5.85zm-4.91.7c0 2.97-2.31 4.66-5.73 4.66a11.2 11.2 0 0 1-4.46-.93v-3.93c1.38.75 3.1 1.31 4.46 1.31.92 0 1.58-.24 1.58-1C6.31 14.1 0 14.94 0 10.34 0 7.41 2.24 5.66 5.58 5.66c1.32 0 2.64.2 3.96.72v3.88a9.04 9.04 0 0 0-3.96-1.03c-.86 0-1.4.25-1.4.93 0 1.83 6.34.97 6.34 5.86z"/></svg>';
 
     let paymentHTML;
     if (d.payment_method === 'stripe_card' || d.payment_method === 'bankful_card') {
-      paymentHTML = cardLast4
-        ? 'Card ending in &bull;&bull;&bull;&bull; ' + cardLast4
-        : '<span style="display:inline-flex;align-items:center;gap:6px;line-height:1">Card &middot; ' + stripeLogoSvg + '</span>';
+      const last4Str = cardLast4 ? cardLast4 : '****';
+      paymentHTML = '<span style="display:inline-flex;align-items:center;gap:6px;line-height:1">' + stripeLogoSvg + '<span style="color:var(--muted);font-weight:500">&middot;</span>Card **** ' + last4Str + '</span>';
     } else if (d.payment_method === 'crypto') paymentHTML = 'Crypto';
-    else if (d.payment_method === 'zelle') paymentHTML = 'Zelle';
     else paymentHTML = d.payment_method || 'Card';
 
     const dtPretty = paid.toLocaleString('en-US', {
@@ -3308,11 +3315,13 @@ window.ccPopulate = function(d){
 };
 
 window.ccToggleItems = function(){
-  const wrap = document.getElementById('cc-card-items');
+  const wrap = document.getElementById('cc-card-items-wrap');
   const btn = document.getElementById('cc-items-btn');
   if(!wrap || !btn) return;
-  if (wrap.hasAttribute('hidden')) { wrap.removeAttribute('hidden'); btn.classList.add('is-open'); }
-  else { wrap.setAttribute('hidden',''); btn.classList.remove('is-open'); }
+  const open = !wrap.classList.contains('is-open');
+  wrap.classList.toggle('is-open', open);
+  btn.classList.toggle('is-open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 };
 
 function pcCopyTracking(btn){
@@ -6067,31 +6076,6 @@ function handleRoute(){
                 { sku:'TR10SV', name:'Tirzepatide 10mg', quantity:1, unitPrice:50.40, lineTotal:50.40 },
               ],
             },
-            'zelle': {
-              order_number: 'HYL-ZELLE-DEMO',
-              total: 86.40,
-              subtotal: 86.40,
-              shipping: 0,
-              processing_fee: 0,
-              payment_method: 'zelle',
-              items: [
-                { sku:'SM5SV',  name:'Semaglutide 5mg',  quantity:1, unitPrice:36,    lineTotal:36 },
-                { sku:'TR10SV', name:'Tirzepatide 10mg', quantity:1, unitPrice:50.40, lineTotal:50.40 },
-              ],
-            },
-            'missing-image': {
-              order_number: 'HYL-NOIMG-DEMO',
-              total: 66.00,
-              subtotal: 60.00,
-              shipping: 0,
-              processing_fee: 6.00,
-              fee_pct: 10,
-              payment_method: 'stripe_card',
-              card_last4: '4242',
-              items: [
-                { sku:'NONEXISTENT-SKU-XYZ', name:'Mystery Compound 5mg', quantity:1, unitPrice:60, lineTotal:60 },
-              ],
-            },
           };
           const c = cases[caseName] || cases['default'];
           window.ccPopulate(Object.assign({
@@ -6114,8 +6098,6 @@ function handleRoute(){
               'high-total':'High total ($2k+)',
               'no-last4':'No card last4 (logo)',
               'crypto':'Crypto payment',
-              'zelle':'Zelle payment',
-              'missing-image':'Missing image',
             };
             const lis = Object.keys(labels).map(k => {
               const active = k === caseName;
