@@ -747,7 +747,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .reveal-scale.visible{opacity:1;transform:scale(1)}
 
 /* ── HERO ── */
-.hero{text-align:center;padding:32px 0 40px}
+.hero{text-align:center;padding:8px 0 32px}
+#screen-home .hero{padding:8px 0 32px}
 .hero-banner{
   width:100%;max-width:700px;margin:0 auto 32px;border-radius:8px;overflow:hidden;
 }
@@ -6630,11 +6631,19 @@ function scrollActiveTabIntoView(c){
   if(!c) return;
   const active = c.querySelector('.cat-tab.active, .type-tab.active');
   if(!active) return;
-  const cRect = c.getBoundingClientRect();
+  // Find nearest horizontally scrollable ancestor (cat-tabs OR cat-tabs-inner OR c itself)
+  let scroller = active.parentElement;
+  while(scroller && scroller !== document.body){
+    const cs = getComputedStyle(scroller);
+    if((cs.overflowX === 'auto' || cs.overflowX === 'scroll') && scroller.scrollWidth > scroller.clientWidth + 1) break;
+    scroller = scroller.parentElement;
+  }
+  if(!scroller || scroller === document.body) scroller = c;
+  const sRect = scroller.getBoundingClientRect();
   const aRect = active.getBoundingClientRect();
-  const target = c.scrollLeft + (aRect.left - cRect.left) - (cRect.width - aRect.width)/2;
-  const max = c.scrollWidth - c.clientWidth;
-  c.scrollTo({left: Math.max(0, Math.min(max, target)), behavior:'smooth'});
+  const target = scroller.scrollLeft + (aRect.left - sRect.left) - (sRect.width - aRect.width)/2;
+  const max = scroller.scrollWidth - scroller.clientWidth;
+  scroller.scrollTo({left: Math.max(0, Math.min(max, target)), behavior:'smooth'});
 }
 
 function updateCatTabsOverflow(c){
