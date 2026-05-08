@@ -463,7 +463,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .pdp-name{font-size:1.75rem!important}
   .pdp-price{font-size:1.85rem!important}
   .pdp-dose{font-size:1.05rem!important}
-  .pdp-info .badge-bestseller,.pdp-info .badge-purity,.pdp-info .pdp-badge-purity{font-size:0.7rem!important;padding:6px 14px!important;height:auto!important;width:auto!important;min-width:0!important;letter-spacing:0.06em!important}
+  .pdp-info .pdp-info-badge{font-size:0.78rem!important;padding:7px 16px!important;height:auto!important;width:auto!important;min-width:0!important;letter-spacing:0.06em!important;line-height:1!important}
   .pdp-image{max-width:100%!important;padding:0!important;margin:0!important}
   .pdp-image img{max-width:100%!important;height:auto!important;width:auto!important}
   .pdp-info{min-width:0;position:relative;z-index:2}
@@ -2815,7 +2815,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: PRODUCT DETAIL ═══════════════ -->
 <div class="screen" id="screen-product">
   <div class="container">
-    <div class="pdp-back-row" style="margin:32px 0 18px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:0 1px 4px rgba(0,0,0,0.04);position:relative;z-index:5"><div class="pdp-back" onclick="pdpBack()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div><div class="pdp-brand" onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:1.6rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div></div>
+    <div class="pdp-back-row" style="margin:32px 0 18px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:0 1px 4px rgba(0,0,0,0.04);position:relative;z-index:5"><div class="pdp-back" onclick="pdpBack()" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div><div style="display:flex;align-items:center;gap:14px"><div class="pdp-brand" onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:1.6rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div><button class="nav-btn nav-cart-wrap pdp-cart-btn" onclick="navigate('order')" aria-label="Cart" style="background:transparent;border:none;cursor:pointer;padding:6px;position:relative;display:inline-flex;align-items:center;justify-content:center;color:var(--text)"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M3 4h2.2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.55L21 8H6.2"/></svg><span class="nav-cart-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="white" stroke="none" xmlns="http://www.w3.org/2000/svg"><path fill="white" stroke="none" d="M12 2a1 1 0 011 1v1.07A7 7 0 0119 11v3.5l1.4 1.4a1 1 0 01.6.9V18a1 1 0 01-1 1H4a1 1 0 01-1-1v-1.2a1 1 0 01.6-.9L5 14.5V11a7 7 0 016-6.93V3a1 1 0 011-1zm0 19a2 2 0 002-2H10a2 2 0 002 2z"/></svg></span></button></div></div>
     <div class="pdp-layout" id="pdp-layout"></div>
     <div class="pdp-commonly" id="pdp-commonly"></div>
   </div>
@@ -5036,14 +5036,11 @@ function setQty(sku, delta){
   renderOrder();
 }
 function updateBadge(){
-  const badge = document.getElementById('cart-badge');
   let total = 0;
   cart.forEach(v => total += v);
-  if(badge){
-    // badge content is the bell SVG — don't overwrite
-    const wrap = badge.closest('.nav-cart-wrap');
-    if(wrap) wrap.classList.toggle('has-items', total > 0);
-  }
+  document.querySelectorAll('.nav-cart-wrap').forEach(wrap => {
+    wrap.classList.toggle('has-items', total > 0);
+  });
   const mcta = document.getElementById('mobile-cart-cta');
   const mctaNum = document.getElementById('mcta-num');
   if(mcta){
@@ -6936,8 +6933,8 @@ function openProduct(sku){
           <div class="pdp-dose" style="font-size:0.92rem;color:var(--muted);font-weight:700">${doseText}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
-          ${BESTSELLER_SKUS.includes(p.sku) ? '<span class="badge-bestseller" style="font-size:0.62rem;letter-spacing:0.08em;padding:5px 12px;border-radius:999px;font-weight:800;text-transform:uppercase;white-space:nowrap">Best Seller</span>' : ''}
-          <span class="pdp-badge-purity" style="background:#fff;color:var(--text);border:1px solid var(--text);padding:5px 12px;border-radius:999px;font-size:0.68rem;font-weight:800;letter-spacing:0.04em;white-space:nowrap">${purityText}</span>
+          ${BESTSELLER_SKUS.includes(p.sku) ? '<span class="badge-bestseller pdp-info-badge" style="font-size:0.66rem;letter-spacing:0.06em;padding:6px 14px;border-radius:999px;font-weight:800;text-transform:uppercase;white-space:nowrap;height:auto;width:auto;min-width:0;line-height:1">Best Seller</span>' : ''}
+          <span class="pdp-badge-purity pdp-info-badge" style="background:#fff;color:var(--text);border:1px solid var(--text);padding:6px 14px;border-radius:999px;font-size:0.66rem;font-weight:800;letter-spacing:0.06em;white-space:nowrap;text-transform:uppercase;height:auto;line-height:1">${purityText}</span>
           <div style="display:flex;align-items:baseline;gap:8px;justify-content:flex-end;flex-wrap:wrap">
             <div class="pdp-price" id="pdp-price-display" style="font-size:1.7rem;font-weight:900;color:var(--text);font-family:var(--display);line-height:1">$${p.price.toFixed(2)}</div>
             <div class="pdp-price-old" id="pdp-price-old-display" style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.92rem;font-weight:700;color:#9b9b9b;text-decoration:line-through;line-height:1">$${(Math.floor(p.price*1.8)-0.01).toFixed(2)}</div>
