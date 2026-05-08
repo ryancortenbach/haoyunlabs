@@ -1523,6 +1523,14 @@ select.form-input{
 .form-input:valid:not(:placeholder-shown){border-color:var(--stroke)}
 
 /* ── CART LIST IN CHECKOUT ── */
+.cart-item-img{width:56px;height:56px;flex-shrink:0;background:#fff;border:1px solid var(--stroke);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:14px;transition:transform 0.18s ease}
+.cart-item-img:hover{transform:scale(1.04)}
+.cart-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.cart-img-zoom-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:10500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;cursor:zoom-out;padding:24px}
+.cart-img-zoom-overlay.open{opacity:1}
+.cart-img-zoom-overlay img{max-width:min(92vw,720px);max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,0.5);transform:scale(0.92);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1)}
+.cart-img-zoom-overlay.open img{transform:scale(1)}
+.cart-img-zoom-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cart-item{background:#fafafa;border:1px solid var(--stroke);border-radius:12px;padding:14px 16px;margin-bottom:10px;
   display:flex;justify-content:space-between;align-items:center;
   font-size:0.82rem;
@@ -6631,19 +6639,11 @@ function scrollActiveTabIntoView(c){
   if(!c) return;
   const active = c.querySelector('.cat-tab.active, .type-tab.active');
   if(!active) return;
-  // Find nearest horizontally scrollable ancestor (cat-tabs OR cat-tabs-inner OR c itself)
-  let scroller = active.parentElement;
-  while(scroller && scroller !== document.body){
-    const cs = getComputedStyle(scroller);
-    if((cs.overflowX === 'auto' || cs.overflowX === 'scroll') && scroller.scrollWidth > scroller.clientWidth + 1) break;
-    scroller = scroller.parentElement;
+  // Use native scrollIntoView so the browser picks the right scroll container
+  // (handles nested scrollers correctly and respects each level's overflow).
+  try { active.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'}); } catch(e){
+    active.scrollIntoView();
   }
-  if(!scroller || scroller === document.body) scroller = c;
-  const sRect = scroller.getBoundingClientRect();
-  const aRect = active.getBoundingClientRect();
-  const target = scroller.scrollLeft + (aRect.left - sRect.left) - (sRect.width - aRect.width)/2;
-  const max = scroller.scrollWidth - scroller.clientWidth;
-  scroller.scrollTo({left: Math.max(0, Math.min(max, target)), behavior:'smooth'});
 }
 
 function updateCatTabsOverflow(c){
@@ -7479,6 +7479,24 @@ function renderUpsell(){
   }
 }
 
+function openCartImageZoom(src, name){
+  let overlay = document.getElementById('cart-img-zoom-overlay');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'cart-img-zoom-overlay';
+    overlay.className = 'cart-img-zoom-overlay';
+    overlay.innerHTML = '<button class="cart-img-zoom-close" aria-label="Close">&times;</button><img alt="">';
+    document.body.appendChild(overlay);
+    const close = () => { overlay.classList.remove('open'); setTimeout(()=>overlay.remove(), 280); };
+    overlay.addEventListener('click', e => { if(e.target === overlay || e.target.classList.contains('cart-img-zoom-close')) close(); });
+    document.addEventListener('keydown', function onEsc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', onEsc); } });
+  }
+  const img = overlay.querySelector('img');
+  img.src = src;
+  img.alt = name || '';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
 function renderCartItems(){
   const el = document.getElementById('cart-items-list');
   if(cart.size === 0){
@@ -7500,7 +7518,10 @@ function renderCartItems(){
     const p = getProduct(sku);
     if(!p) return;
     const typeLabel = _orderCatLabelOf(p);
+    const safeSku = String(p.sku||'').replace(/[^A-Za-z0-9_-]/g,'');
+    const imgSrc = safeSku ? `media/products/${safeSku}.png` : '';
     html += `<div class="cart-item">
+      ${imgSrc ? `<div class="cart-item-img" onclick="openCartImageZoom('${imgSrc}','${p.name.replace(/'/g,"\\'")}')"><img src="${imgSrc}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
       <div class="cart-item-info">
         <div class="cart-item-name">${p.name}</div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="cart-item-sku">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
