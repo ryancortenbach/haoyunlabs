@@ -7506,13 +7506,7 @@ function renderCartItems(){
     // dashed-border panel inside the line-items area, copy reads
     // "Cart is empty." with a small Shop Catalog CTA. The shipping form,
     // discount field, and totals around it stay rendered.
-    el.innerHTML = `
-      <div style="border:1px dashed var(--stroke);border-radius:12px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;background:#fafafa">
-        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.35"><path d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"/></svg>
-        <div style="font-family:var(--display);font-size:0.78rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--text)">Your cart is empty</div>
-        <div style="color:var(--muted);font-size:0.78rem;max-width:320px;text-align:center;line-height:1.55">Browse research peptides in the catalog to add some. Your shipping info is saved.</div>
-        <button onclick="navigate('catalog')" style="margin-top:4px;padding:10px 22px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer">Browse Catalog</button>
-      </div>`;
+    el.innerHTML = `<div class="hyl-rp-empty-row">Cart is empty. Search above to add items.</div>`;
     return;
   }
   let html = '';
