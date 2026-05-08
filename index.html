@@ -2881,8 +2881,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <input class="form-input" type="text" id="f-zip" name="postal-code" autocomplete="postal-code" required maxlength="10" placeholder="ZIP code">
             </div>
             <div>
-              <label class="form-label">Phone *</label>
-              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel" required placeholder="+1 ...">
+              <label class="form-label">Phone</label>
+              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel" placeholder="+1 ...">
             </div>
           </div>
         </form>
@@ -8682,9 +8682,10 @@ async function submitOrder(provider){
     showToast('Please enter a valid ZIP code','error');
     return;
   }
-  // Phone: at least 10 digits
-  const phoneDigits = document.getElementById('f-phone').value.replace(/\D/g,'');
-  if(phoneDigits.length < 10){
+  // Phone: optional, but if provided must have at least 10 digits
+  const phoneRaw = document.getElementById('f-phone').value.trim();
+  const phoneDigits = phoneRaw.replace(/\D/g,'');
+  if(phoneRaw && phoneDigits.length < 10){
     document.getElementById('f-phone').focus();
     showToast('Please enter a valid phone number','error');
     return;
