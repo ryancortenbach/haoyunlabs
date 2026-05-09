@@ -331,6 +331,24 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   85%{transform:rotate(-3deg)}
   90%{transform:rotate(0)}
 }
+/* PC nav: ~doubled visual scale (text + icons) per design pass */
+@media(min-width:821px){
+  .nav-inner{height:96px}
+  .nav.shrunk .nav-inner{height:72px}
+  .nav-brand{font-size:2.6rem}
+  .nav.shrunk .nav-brand{font-size:2.1rem}
+  .nav-center{gap:48px}
+  .nav-center a{font-size:1.32rem;padding:6px 0}
+  .nav.shrunk .nav-center a{font-size:1.2rem}
+  .nav-right{gap:10px}
+  .nav-btn{width:60px;height:60px}
+  .nav-btn svg{width:32px;height:32px}
+  .nav-search-bar.open{width:340px}
+  .nav-search-bar input{padding:12px 18px 12px 44px;font-size:1rem;border-radius:999px}
+  .nav-search-bar .search-icon{width:20px;height:20px;left:14px}
+  .nav-cart-badge{width:26px;height:26px;top:-4px;right:-4px}
+  .nav-btn .nav-cart-badge svg{width:15px!important;height:15px!important}
+}
 /* ── WALLETCONNECT BUTTON ── */
 .nav-connect-btn{
   display:flex;align-items:center;gap:6px;
@@ -7095,12 +7113,12 @@ function openProduct(sku){
         </div>
         <div style="font-size:0.7rem;color:var(--muted);margin-top:10px;line-height:1.5">Use your device share sheet, or copy the direct product link.</div>
       </div>
-      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
+      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
         More Details <span class="pdp-more-arrow is-open">&rarr;</span>
       </button>
       <div id="moreDetailsPanel" class="pdp-more-panel is-open">
         <div class="pdp-more-inner">
-          <div style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text);padding-top:14px;margin-top:6px;border-top:1px solid var(--stroke)">
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text);padding-top:14px;margin-top:14px;border-top:1px solid var(--stroke)">
             <div><strong>Description:</strong> ${desc}</div>
             ${getSequenceForSku(p.sku) ? `<div style="word-break:break-word"><strong>Sequence:</strong> <span style="font-family:var(--mono,'SF Mono',monospace);font-size:0.78rem">${getSequenceForSku(p.sku)}</span></div>` : ''}
             <div><strong>Purity:</strong> &ge;99% (HPLC)</div>
