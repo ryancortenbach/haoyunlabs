@@ -6658,7 +6658,9 @@ function buildCatTabs(containerId, activeVar, clickFn){
 
 function scrollActiveTabIntoView(c){
   if(!c) return;
-  const active = c.querySelector('.cat-tab.active, .type-tab.active');
+  // Prefer the category-row active pill over the type-row's active pill, since
+  // the type row (Singles/Kits/Bundles) is fixed-left and never needs scrolling.
+  const active = c.querySelector('.cat-tab.active') || c.querySelector('.type-tab.active');
   if(!active) return;
   // Find the actual horizontally-scrolling ancestor.
   let scroller = active.parentElement;
