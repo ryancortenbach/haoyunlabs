@@ -6638,11 +6638,35 @@ function scrollActiveTabIntoView(c){
   if(!c) return;
   const active = c.querySelector('.cat-tab.active, .type-tab.active');
   if(!active) return;
-  // Use native scrollIntoView so the browser picks the right scroll container
-  // (handles nested scrollers correctly and respects each level's overflow).
-  try { active.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'}); } catch(e){
-    active.scrollIntoView();
+  // Find the actual horizontally-scrolling ancestor.
+  let scroller = active.parentElement;
+  while(scroller && scroller !== document.body){
+    if(scroller.scrollWidth > scroller.clientWidth + 1){
+      const cs = getComputedStyle(scroller);
+      if(cs.overflowX === 'auto' || cs.overflowX === 'scroll') break;
+    }
+    scroller = scroller.parentElement;
   }
+  if(!scroller || scroller === document.body) scroller = c;
+  const sRect = scroller.getBoundingClientRect();
+  const aRect = active.getBoundingClientRect();
+  // Center the active pill in the visible area, clamped to scroll bounds.
+  const target = scroller.scrollLeft + (aRect.left - sRect.left) - (sRect.width - aRect.width)/2;
+  const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+  const dest = Math.max(0, Math.min(max, target));
+  // Custom-tweened scroll for a visible, swipe-like motion (~500ms ease-out).
+  const start = scroller.scrollLeft;
+  const delta = dest - start;
+  if(Math.abs(delta) < 1) return;
+  const duration = 520;
+  const t0 = performance.now();
+  const ease = (t) => 1 - Math.pow(1 - t, 3); // easeOutCubic
+  function step(now){
+    const t = Math.min(1, (now - t0) / duration);
+    scroller.scrollLeft = start + delta * ease(t);
+    if(t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
 }
 
 function updateCatTabsOverflow(c){
