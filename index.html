@@ -2408,7 +2408,7 @@ body.no-nav{padding-top:0 !important}
 .pdp-details-content.open{display:block}
 .pdp-details-content strong{color:var(--text)}
 .pdp-commonly{padding:40px 0 8px}
-.pdp-commonly-card{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:28px 28px 18px}
+.pdp-commonly-card{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:28px 28px 10px}
 .pdp-commonly h3{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.18em;color:var(--text);margin:0 0 8px}
 .pdp-commonly h2{font-family:var(--display);font-size:2rem;font-weight:900;margin:0 0 6px;letter-spacing:0;text-transform:none}
 .pdp-commonly .pdp-commonly-sub{font-size:0.85rem;color:var(--muted);margin-bottom:18px}
@@ -7101,7 +7101,7 @@ function openProduct(sku){
       <div class="product-grid" id="pdp-commonly-grid">${_firstFour}</div>
       ${_restFour ? `
         <div class="product-grid is-hidden" id="pdp-commonly-rest" style="margin-top:14px">${_restFour}</div>
-        <div style="display:flex;justify-content:center;margin-top:6px">
+        <div style="display:flex;justify-content:center;margin-top:0">
           <button id="pdp-commonly-more" type="button" onclick="toggleStackedMore(this)" style="padding:11px 26px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.18s" onmouseover="this.style.background='#000';this.style.color='#fff';this.style.borderColor='#000'" onmouseout="this.style.background='#fff';this.style.color='var(--text)';this.style.borderColor='var(--stroke)'">Load More</button>
         </div>
       ` : ''}
