@@ -2404,6 +2404,9 @@ body.no-nav{padding-top:0 !important}
 .pdp-qty button{width:44px;height:44px;border:none;background:#000;color:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.1s}
 .pdp-qty button:hover{background:#222}
 .pdp-qty span{width:44px;text-align:center;font-family:var(--mono);font-size:0.88rem;font-weight:700}
+.pdp-qty input[type=number]::-webkit-outer-spin-button,
+.pdp-qty input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.pdp-qty input[type=number]{-moz-appearance:textfield;appearance:textfield;padding:0!important;margin:0!important;box-sizing:border-box}
 .pdp-add-btn{flex:1;padding:14px;background:var(--brand);color:var(--bg);border:none;font-size:0.82rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:opacity 0.15s}
 .pdp-add-btn:hover{opacity:0.8}
 .pdp-details-toggle{font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--text)}
@@ -7093,9 +7096,9 @@ function openProduct(sku){
         <div style="font-size:0.7rem;color:var(--muted);margin-top:10px;line-height:1.5">Use your device share sheet, or copy the direct product link.</div>
       </div>
       <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
-        More Details <span class="pdp-more-arrow">&rarr;</span>
+        More Details <span class="pdp-more-arrow is-open">&rarr;</span>
       </button>
-      <div id="moreDetailsPanel" class="pdp-more-panel">
+      <div id="moreDetailsPanel" class="pdp-more-panel is-open">
         <div class="pdp-more-inner">
           <div style="display:flex;flex-direction:column;gap:12px;font-size:0.88rem;line-height:1.6;color:var(--text);padding-top:14px;margin-top:6px;border-top:1px solid var(--stroke)">
             <div><strong>Description:</strong> ${desc}</div>
