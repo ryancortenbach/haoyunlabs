@@ -6629,7 +6629,11 @@ function _pickValidProductType(cat, current){
   return current;
 }
 function setProductType(t){
-  let activeCat = (typeof homeCategory !== 'undefined' && homeCategory) || (typeof catCategory !== 'undefined' && catCategory) || 'weight-loss';
+  // Pick the relevant category based on which screen is active.
+  const onCatalog = location.hash === '#catalog' || document.getElementById('screen-catalog')?.classList.contains('active');
+  let activeCat = onCatalog
+    ? ((typeof catCategory !== 'undefined' && catCategory) || 'weight-loss')
+    : ((typeof homeCategory !== 'undefined' && homeCategory) || 'weight-loss');
   // If user explicitly clicks a type that the current category doesn't have
   // (e.g. clicking Kits while on Supplies), switch to the first category that
   // supports that type instead of silently keeping the old type.
