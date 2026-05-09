@@ -799,6 +799,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
           mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
 }
+.cat-tabs.has-left-overflow{
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 100%);
+          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 100%);
+}
+.cat-tabs.has-left-overflow.has-right-overflow{
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
+          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
+}
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tabs-inner,.type-tabs-inner{
   display:inline-flex;align-items:center;gap:4px;padding:4px;
@@ -2822,7 +2830,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div class="hero-tag">Browse all research compounds</div>
       <div class="hero-divider"></div>
     </div>
-    <div class="toolbar">
+    <div class="toolbar-card">
+      <div class="toolbar">
       <div class="cat-tabs" id="cat-cat-tabs"></div>
       <div class="search-sort">
         <div class="zyl-search-wrap">
@@ -2834,6 +2843,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <option value="low">Price: Low to High</option>
           <option value="high">Price: High to Low</option>
         </select>
+      </div>
       </div>
     </div>
     <div class="product-grid" id="cat-grid"></div>
@@ -6708,7 +6718,9 @@ function scrollActiveTabIntoView(c){
 function updateCatTabsOverflow(c){
   if(!c) return;
   const hasRight = c.scrollLeft + c.clientWidth < c.scrollWidth - 1;
+  const hasLeft = c.scrollLeft > 1;
   c.classList.toggle('has-right-overflow', hasRight);
+  c.classList.toggle('has-left-overflow', hasLeft);
 }
 
 function slideCatTab(containerId){
