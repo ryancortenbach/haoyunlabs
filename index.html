@@ -9175,7 +9175,7 @@ function _normProductName(s){
     .trim();
 }
 (function buildCOASkuIndex(){
-  if(!window.COA_DATA || !window.ALL_PRODUCTS) return;
+  if(typeof COA_DATA === 'undefined' || typeof ALL_PRODUCTS === 'undefined') return;
   COA_DATA.forEach(r => {
     const coaKey = _normProductName(r.p||'');
     r._skus = ALL_PRODUCTS
