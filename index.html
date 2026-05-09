@@ -6629,7 +6629,19 @@ function _pickValidProductType(cat, current){
   return current;
 }
 function setProductType(t){
-  const activeCat = (typeof homeCategory !== 'undefined' && homeCategory) || (typeof catCategory !== 'undefined' && catCategory) || 'weight-loss';
+  let activeCat = (typeof homeCategory !== 'undefined' && homeCategory) || (typeof catCategory !== 'undefined' && catCategory) || 'weight-loss';
+  // If user explicitly clicks a type that the current category doesn't have
+  // (e.g. clicking Kits while on Supplies), switch to the first category that
+  // supports that type instead of silently keeping the old type.
+  if(t !== 'bundles' && !_typeHasProducts(activeCat, t)){
+    const candidateCats = ['weight-loss','growth-recovery','longevity','cognitive-sexual','supplies'];
+    const firstWithType = candidateCats.find(c => _typeHasProducts(c, t));
+    if(firstWithType){
+      activeCat = firstWithType;
+      if(typeof homeCategory !== 'undefined') homeCategory = firstWithType;
+      if(typeof catCategory !== 'undefined') catCategory = firstWithType;
+    }
+  }
   productType = _pickValidProductType(activeCat, t);
   homeShown = 12;
   ['home-search','cat-search'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -6666,10 +6678,21 @@ function buildCatTabs(containerId, activeVar, clickFn){
   const catRow = c.querySelector('.cat-tabs-inner');
   if(catRow) catRow.classList.toggle('is-collapsed', productType === 'bundles');
   requestAnimationFrame(()=>{ slideCatTab(containerId); updateCatTabsOverflow(c); scrollActiveTabIntoView(c); });
-  // Re-evaluate overflow once the collapse/expand transition completes —
-  // otherwise the right-edge fade gradient is computed against a still-
-  // transitioning width and gets stuck off when returning from Bundles.
-  setTimeout(() => { updateCatTabsOverflow(c); slideCatTab(containerId); }, 500);
+  // Continuously re-evaluate overflow during the 450ms collapse/expand transition
+  // so the right-edge fade gradient appears synchronously with the bar growing,
+  // rather than popping in after the transition completes.
+  if(productType !== 'bundles'){
+    // Ensure right-fade is on immediately when expanding back to a state with
+    // overflow (we know singles/kits with all categories overflow on PC).
+    c.classList.add('has-right-overflow');
+  }
+  let frame = 0;
+  const tickOverflow = () => {
+    updateCatTabsOverflow(c);
+    if(frame++ < 30) requestAnimationFrame(tickOverflow);
+    else { slideCatTab(containerId); }
+  };
+  requestAnimationFrame(tickOverflow);
   if(!c._hylOverflowBound){
     c._hylOverflowBound = true;
     c.addEventListener('scroll', ()=>updateCatTabsOverflow(c), {passive:true});
