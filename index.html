@@ -6524,7 +6524,7 @@ function cardHTML(p){
       stockBadge = '<span class="badge-purity" style="background:#fef3c7;color:#92400e;border-color:#fde68a">Low Stock</span>';
     }
   }
-  return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative">
+  return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative" data-sku="${p.sku}" data-coa="${coaMatch ? coaMatch.c : ''}">
     ${getProductImageHTML(p)}
     <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:4px;z-index:2;align-items:flex-end">
       ${isBest ? '<span class="badge-bestseller">Best Seller</span>' : ''}
@@ -10039,6 +10039,104 @@ function setupFlipWord(elId, words, fontSize){
 }
 setupFlipWord('hero-flip-word', ['research.','studies.','trials.','analysis.'], '3.8rem');
 setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem');
+
+/* ── PRODUCT CARD HOVER → COA CYCLE ── */
+(function(){
+  const COA_CACHE = new Map(); // coaCode -> dataURL
+  let activeCard = null;
+  let activeTimer = null;
+  let activeFrame = null;
+
+  async function getCoaDataURL(coaCode){
+    if(COA_CACHE.has(coaCode)) return COA_CACHE.get(coaCode);
+    const lib = window.pdfjsLib;
+    if(!lib) return null;
+    try {
+      const url = (typeof COA_BASE !== 'undefined') ? (COA_BASE + coaCode + '.pdf') : null;
+      if(!url) return null;
+      const pdf = await lib.getDocument(url).promise;
+      const page = await pdf.getPage(1);
+      const vp1 = page.getViewport({scale:1});
+      const targetW = 360;
+      const scale = targetW / vp1.width;
+      const vp = page.getViewport({scale});
+      const cvs = document.createElement('canvas');
+      cvs.width = vp.width; cvs.height = vp.height;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0,0,cvs.width,cvs.height);
+      await page.render({canvasContext: ctx, viewport: vp}).promise;
+      const dataURL = cvs.toDataURL('image/jpeg', 0.86);
+      COA_CACHE.set(coaCode, dataURL);
+      return dataURL;
+    } catch(e) {
+      console.warn('[hover-coa] failed', coaCode, e);
+      return null;
+    }
+  }
+
+  function clearActive(){
+    if(activeTimer){ clearTimeout(activeTimer); activeTimer = null; }
+    if(activeCard){
+      const overlay = activeCard.querySelector('.coa-hover-overlay');
+      if(overlay) overlay.remove();
+      activeCard = null;
+    }
+    activeFrame = null;
+  }
+
+  async function startCycle(card){
+    const coaCode = card.dataset.coa;
+    if(!coaCode) return;
+    clearActive();
+    activeCard = card;
+    const myFrame = activeFrame = Symbol('frame');
+    // Pre-warm the COA so the swap is instant when its turn arrives.
+    const coaPromise = getCoaDataURL(coaCode);
+    function showProduct(){
+      if(activeFrame !== myFrame || !activeCard) return;
+      const overlay = activeCard.querySelector('.coa-hover-overlay');
+      if(overlay) overlay.style.opacity = '0';
+      activeTimer = setTimeout(showCoa, 5000);
+    }
+    async function showCoa(){
+      if(activeFrame !== myFrame || !activeCard) return;
+      const dataURL = await coaPromise;
+      if(activeFrame !== myFrame || !activeCard || !dataURL) return;
+      let overlay = activeCard.querySelector('.coa-hover-overlay');
+      if(!overlay){
+        const prodImg = activeCard.querySelector('.prod-img');
+        if(!prodImg) return;
+        overlay = document.createElement('div');
+        overlay.className = 'coa-hover-overlay';
+        overlay.style.cssText = 'position:absolute;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1);pointer-events:none;z-index:1';
+        const img = document.createElement('img');
+        img.src = dataURL;
+        img.style.cssText = 'max-width:90%;max-height:90%;width:auto;height:auto;object-fit:contain;box-shadow:0 1px 4px rgba(0,0,0,0.08);background:#fff';
+        overlay.appendChild(img);
+        prodImg.style.position = 'relative';
+        prodImg.appendChild(overlay);
+      } else {
+        overlay.querySelector('img').src = dataURL;
+      }
+      requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+      activeTimer = setTimeout(showProduct, 2500);
+    }
+    activeTimer = setTimeout(showCoa, 5000);
+  }
+
+  document.addEventListener('mouseenter', e => {
+    if(!(e.target instanceof Element)) return;
+    const card = e.target.closest && e.target.closest('.product-card');
+    if(!card || !card.dataset.coa) return;
+    startCycle(card);
+  }, true);
+  document.addEventListener('mouseleave', e => {
+    if(!(e.target instanceof Element)) return;
+    const card = e.target.closest && e.target.closest('.product-card');
+    if(!card) return;
+    if(activeCard === card) clearActive();
+  }, true);
+})();
 
 /* ── SEARCH PLACEHOLDER ROTATION ── */
 (function(){
