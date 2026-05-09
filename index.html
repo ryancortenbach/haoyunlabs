@@ -1487,6 +1487,9 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .upsell-overlay{position:fixed;bottom:24px;right:24px;z-index:9100;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1);background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;display:block;padding:0}
 @media(max-width:640px){.upsell-overlay{bottom:auto;right:16px;left:16px;top:max(20px,env(safe-area-inset-top,20px));width:auto;max-width:none}}
 .upsell-overlay.open{opacity:1;pointer-events:auto}
+/* When upsell + email popup both open, stack them with a 12px gap instead of overlapping */
+body.upsell-stack-active #email-popup{bottom:calc(24px + var(--upsell-stack-h, 0px) + 12px)!important;transition:bottom 0.45s cubic-bezier(0.22,1,0.36,1),top 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.4s cubic-bezier(0.22,1,0.36,1)}
+@media(max-width:640px){body.upsell-stack-active #email-popup{bottom:auto!important;top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--upsell-stack-h, 0px) + 12px)!important}}
 .upsell-card{background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;width:100%;max-width:none;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
 .upsell-overlay.open .upsell-card{transform:translateY(0)}
 .upsell-badge{display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px}
@@ -4967,7 +4970,7 @@ function addToCartQty(sku, qty){
   if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
-    setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
+    setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo){ uo.classList.add('open'); setTimeout(_syncUpsellStack, 60); } }, 600);
   }
 }
 function addToCart(sku, btn){
@@ -4988,7 +4991,7 @@ function addToCart(sku, btn){
   // Show supplies upsell if adding a peptide and cart has no supplies yet
   const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
-    setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo) uo.classList.add('open'); }, 600);
+    setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo){ uo.classList.add('open'); setTimeout(_syncUpsellStack, 60); } }, 600);
   }
 }
 /* ── SUPPLIES UPSELL ── */
@@ -5005,12 +5008,27 @@ function addUpsellItems(){
 }
 function closeUpsell(){
   document.getElementById('upsell-overlay').classList.remove('open');
+  _syncUpsellStack();
   _upsellSelected.clear();
   _upsellSelected.add('NEEDLE31G8MM100PK');
   document.querySelectorAll('.upsell-check').forEach(c=>c.classList.remove('checked'));
   const syrCheck=document.getElementById('upsell-check-NEEDLE31G8MM100PK');
   if(syrCheck) syrCheck.classList.add('checked');
 }
+function _syncUpsellStack(){
+  const uo=document.getElementById('upsell-overlay');
+  if(!uo) return;
+  if(uo.classList.contains('open')){
+    const card=uo.querySelector('.upsell-card');
+    const h=card ? Math.round(card.getBoundingClientRect().height) : 0;
+    document.body.style.setProperty('--upsell-stack-h', h + 'px');
+    document.body.classList.add('upsell-stack-active');
+  } else {
+    document.body.classList.remove('upsell-stack-active');
+    document.body.style.removeProperty('--upsell-stack-h');
+  }
+}
+window.addEventListener('resize', ()=>{ try{_syncUpsellStack();}catch(e){} });
 
 function addBacWater(qty){
   qty = Math.max(1, qty|0);
@@ -9292,6 +9310,7 @@ function showEmailPopup(){
   const card = document.getElementById('email-popup-card');
   if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
   if(card) setTimeout(()=>{ card.style.transform='translateY(0)'; },50);
+  try{ _syncUpsellStack(); }catch(e){}
   // Word flip cycle
   const words=['free','exclusive','bonus','surprise'];
   let idx=0;
