@@ -450,13 +450,15 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:42px;height:42px}
-  /* Mobile: type-tabs (Singles/Kits/Bundles) stretches to fill remaining
-     row width. When cat-tabs is collapsed (Bundles selected), type-tabs
-     gets the full row. When cat-tabs expands again (Singles/Kits), the
-     flex transition glides type-tabs back to share space. */
-  .cat-tabs .type-tabs-inner{flex:1 1 auto!important;min-width:0!important;width:100%!important;justify-content:center!important;transition:flex 0.45s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
-  .cat-tabs .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important;transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:42px;height:42px;transition:flex-grow 0.45s cubic-bezier(0.22,1,0.36,1),flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1)!important}
+  /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
+     row claims the freed-up width and its pills stretch to equal shares.
+     When cat-tabs expands again (Singles/Kits), :has() drops back to the
+     base content-sized layout and the flex transition glides type-tabs
+     back to normal. */
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
+  .cat-tabs .type-tabs-inner .type-tab{transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease,padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
   .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:34px!important;padding:0 16px!important;line-height:1!important;font-size:0.78rem!important}
   .cat-tab,.type-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   .cat-tab:focus,.type-tab:focus{outline:none}
