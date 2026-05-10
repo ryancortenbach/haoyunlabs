@@ -128,7 +128,7 @@ button,a,input,select,textarea{touch-action:manipulation}
 input,select,textarea{font-size:16px!important}
 body.modal-open{position:fixed;width:100%;overflow:hidden}
 html,body{overflow-x:hidden;max-width:100vw}
-body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.35;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button,input,select,textarea{font-family:inherit;border-radius:var(--radius);border:1px solid var(--stroke);outline:none}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
@@ -450,7 +450,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:42px;height:42px;transition:flex-grow 0.45s cubic-bezier(0.22,1,0.36,1),flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:1px!important;padding:3px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:36px;height:36px;transition:flex-grow 0.45s cubic-bezier(0.22,1,0.36,1),flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1)!important}
   /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
      row claims the freed-up width and its pills stretch to equal shares.
      When cat-tabs expands again (Singles/Kits), :has() drops back to the
@@ -459,15 +459,18 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
   .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
   .cat-tabs .type-tabs-inner .type-tab{transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease,padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
-  .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:34px!important;padding:0 16px!important;line-height:1!important;font-size:0.78rem!important}
-  .cat-tab,.type-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
+  .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:30px!important;padding:0 10px!important;line-height:1!important;font-size:0.7rem!important}
+  .cat-tab,.type-tab{padding:6px 10px;font-size:0.7rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   .cat-tab:focus,.type-tab:focus{outline:none}
   /* Search + Featured: centered same line */
   .toolbar-card .toolbar,.toolbar{align-items:center}
-  .search-sort{width:100%;flex-wrap:nowrap!important;gap:8px!important;align-items:center;justify-content:center!important;margin-left:0!important}
+  .search-sort{width:100%;flex-wrap:nowrap!important;gap:8px!important;align-items:center;justify-content:flex-start!important;margin-left:0!important}
   .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0;max-width:none}
-  .search-sort>div[style*="position:relative"] input{width:100%!important;font-size:16px!important}
-  .search-sort .sort-select,.search-sort .zyl-sort{flex:0 0 auto;font-size:16px!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important;width:auto!important;min-width:118px;color:#000!important}
+  .search-sort>div[style*="position:relative"] input{width:100%!important;font-size:15px!important}
+  /* Featured dropdown shrinks to fit text + chevron, freeing the rest of
+     the row for the search input. */
+  .search-sort .sort-select,.search-sort .zyl-sort{flex:0 0 auto;font-size:14px!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important;width:auto!important;min-width:0!important;padding:8px 10px!important;color:#000!important}
+  .search-sort .sort-select select,.search-sort .zyl-sort select{padding-right:18px!important}
   .search-sort .pricing-toggle{flex:0 0 auto;order:0}
   .search-input{flex:1;min-width:0}
 
@@ -529,8 +532,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-grid{grid-template-columns:1fr!important;gap:12px!important;padding:6px 0 24px!important}
   .product-card{
     display:grid!important;
-    grid-template-columns:200px minmax(0,1fr)!important;
-    grid-template-areas:"img badges" "img head" "img body" "img size" "img foot"!important;
+    grid-template-columns:150px minmax(0,1fr)!important;
+    grid-template-areas:"img badges" "img head" "img body" "img size" "foot foot"!important;
     gap:0!important;
     border-radius:14px!important;
     border:1px solid #eee;
@@ -593,7 +596,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
     font-size:0.95rem!important;line-height:1.15!important;font-weight:900!important;
     letter-spacing:0.02em!important;
   }
-  .product-card .card-details-toggle{font-size:0.78rem!important;margin-top:8px!important;font-weight:800!important}
+  /* More Details: stretches to full right-column width as a primary affordance */
+  .product-card .card-details-toggle{
+    font-size:0.78rem!important;margin-top:8px!important;font-weight:800!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    width:100%!important;padding:11px 14px!important;
+    border:1px solid var(--stroke)!important;background:#fff!important;color:#000!important;
+    border-radius:12px!important;
+  }
   .product-card .card-details{display:grid!important}
   /* On mobile, "More Details" navigates to PDP instead of expanding inline */
   .product-card .card-details-toggle.mobile-pdp-link{}
@@ -928,6 +938,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .card-body{padding:10px 14px 8px;flex:1;display:flex;flex-direction:column;gap:6px}
 .card-name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1.05rem;font-weight:700;text-transform:none;letter-spacing:-0.01em;line-height:1.2}
 .card-desc{font-size:0.75rem;color:var(--muted);margin-top:2px;line-height:1.4}
+/* Short, 2-line teaser shown on catalog cards. Hidden on PDP commonly. */
+.card-desc-short{font-size:0.74rem;color:var(--muted);line-height:1.35;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
+#screen-product.active .pdp-commonly .card-desc-short{display:none!important}
 .card-components{font-size:0.7rem;color:var(--muted);margin-top:2px;font-family:var(--mono);line-height:1.4}
 .card-details-toggle{
   font-size:0.78rem;text-transform:none;letter-spacing:0;
@@ -2779,7 +2792,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="padding:36px 32px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
         <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
-          <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
+          <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
           <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Every batch is lot-traceable and COA-backed, with consistency standards you can actually check. Peptides, GLP-1s, growth, recovery, sleep, libido, longevity. One catalog, one purity bar.</div>
           <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.02em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
           <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
@@ -2798,7 +2811,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
+        <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
         <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price. Save up to 45% versus singles. Same lot, same purity, same paperwork across the whole kit.</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
       </div>
@@ -2808,7 +2821,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('coa')">
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
+        <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
         <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Workflows built around repeatability and documentation, so every batch meets the same measurable bar. Search by SKU or compound name, cross-check the lot printed on your vial, and download the PDF. No email gate, no account required.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
@@ -2826,7 +2839,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
-        <div class="shimmer-title" style="font-size:2.2rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
+        <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
         <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become an affiliate. 20% revenue on every sale plus free peptides each month.</strong> Custom discount codes for your audience, real dashboards, weekly payouts. Plus open roles across research, quality, ops, support, and growth. Remote-friendly. Equity available.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
@@ -6618,6 +6631,7 @@ function cardHTML(p){
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
+      <div class="card-desc-short">${(descText || '').replace(/<[^>]+>/g,'').slice(0, 110)}${(descText || '').length > 110 ? '…' : ''}</div>
       <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span> <span class="pdp-more-arrow">&rarr;</span></button>
       <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
