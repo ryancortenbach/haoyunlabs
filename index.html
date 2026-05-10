@@ -451,6 +451,12 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
   .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:42px;height:42px}
+  /* Mobile: type-tabs (Singles/Kits/Bundles) stretches to fill remaining
+     row width. When cat-tabs is collapsed (Bundles selected), type-tabs
+     gets the full row. When cat-tabs expands again (Singles/Kits), the
+     flex transition glides type-tabs back to share space. */
+  .cat-tabs .type-tabs-inner{flex:1 1 auto!important;min-width:0!important;width:100%!important;justify-content:center!important;transition:flex 0.45s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important;transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease!important}
   .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:34px!important;padding:0 16px!important;line-height:1!important;font-size:0.78rem!important}
   .cat-tab,.type-tab{padding:8px 14px;font-size:0.78rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   .cat-tab:focus,.type-tab:focus{outline:none}
@@ -1404,18 +1410,23 @@ body.admin-open{overflow:hidden}
 
 #mobile-cart-cta{display:none}
 @media(max-width:820px){
+  /* Always rendered (display:flex) so transform/opacity transitions actually
+     fire when toggling .visible. Off-screen via translateY + opacity until
+     visible. */
   #mobile-cart-cta{
     position:fixed;bottom:12px;left:12px;right:12px;z-index:250;
-    display:none;align-items:center;justify-content:space-between;
+    display:flex;align-items:center;justify-content:space-between;
     padding:14px 20px;background:#000;color:#fff;border-radius:999px;
     box-shadow:0 10px 32px rgba(0,0,0,0.25);
     font-family:var(--display);font-size:0.82rem;font-weight:800;
     text-transform:uppercase;letter-spacing:0.12em;cursor:pointer;
     border:none;
-    transform:translateY(80px);opacity:0;
-    transition:transform 0.4s cubic-bezier(0.22,1,0.36,1),opacity 0.3s;
+    transform:translateY(140%) scale(0.96);opacity:0;pointer-events:none;
+    transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.35s ease,box-shadow 0.25s ease;
   }
-  #mobile-cart-cta.visible{display:flex;transform:translateY(0);opacity:1}
+  #mobile-cart-cta.visible{transform:translateY(0) scale(1);opacity:1;pointer-events:auto}
+  #mobile-cart-cta.visible:hover{transform:translateY(-4px) scale(1.015);box-shadow:0 16px 44px rgba(0,0,0,0.34)}
+  #mobile-cart-cta.visible:active{transform:translateY(-1px) scale(0.985);transition-duration:0.12s}
   #mobile-cart-cta .mcta-count{
     background:#fff;color:#000;border-radius:999px;
     min-width:24px;height:24px;padding:0 8px;
