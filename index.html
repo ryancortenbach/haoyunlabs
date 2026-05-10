@@ -444,13 +444,13 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Mobile menu: slide transition handled in base .mobile-menu rules */
   /* CATALOG */
   .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
-  .toolbar{flex-direction:column;align-items:stretch;gap:2px;padding:6px 0 4px!important}
-  .toolbar-card{padding:6px 10px!important;margin-bottom:12px!important}
-  .toolbar-card .toolbar{gap:2px}
+  .toolbar{flex-direction:column;align-items:stretch;gap:6px;padding:0!important}
+  .toolbar-card{padding:8px 10px!important;margin-bottom:12px!important}
+  .toolbar-card .toolbar{gap:6px;padding:0!important}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:1px!important;padding:3px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:36px;height:36px;transition:flex-grow 0.45s cubic-bezier(0.22,1,0.36,1),flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:flex-grow 0.45s cubic-bezier(0.22,1,0.36,1),flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1)!important}
   /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
      row claims the freed-up width and its pills stretch to equal shares.
      When cat-tabs expands again (Singles/Kits), :has() drops back to the
@@ -458,8 +458,12 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
      back to normal. */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
   .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
+  /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
   .cat-tabs .type-tabs-inner .type-tab{transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease,padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
-  .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:30px!important;padding:0 10px!important;line-height:1!important;font-size:0.7rem!important}
+  .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:30px!important;padding:0 12px!important;line-height:1!important;font-size:0.72rem!important;border-radius:999px}
+  /* Selected/active white pill: same dimensions as the gray pills (no thinning) */
+  .cat-tabs .cat-tab.active,.cat-tabs .type-tab.active{height:30px!important;padding:0 12px!important;margin:0!important}
   .cat-tab,.type-tab{padding:6px 10px;font-size:0.7rem;letter-spacing:0;white-space:nowrap;flex-shrink:0;min-width:max-content}
   .cat-tab:focus,.type-tab:focus{outline:none}
   /* Search + Featured: centered same line */
@@ -468,9 +472,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .search-sort>div[style*="position:relative"]{flex:1 1 auto;min-width:0;max-width:none}
   .search-sort>div[style*="position:relative"] input{width:100%!important;font-size:15px!important}
   /* Featured dropdown shrinks to fit text + chevron, freeing the rest of
-     the row for the search input. */
-  .search-sort .sort-select,.search-sort .zyl-sort{flex:0 0 auto;font-size:14px!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important;width:auto!important;min-width:0!important;padding:8px 10px!important;color:#000!important}
+     the row for the search input. Both pills share an explicit 46px height
+     so they line up perfectly regardless of font-size differences. */
+  .search-sort .sort-select,.search-sort .zyl-sort{flex:0 0 auto;font-size:15px!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important;width:108px!important;min-width:108px!important;max-width:108px!important;padding:0 28px 0 12px!important;color:#000!important;background-position:right 10px center!important;line-height:46px!important;height:46px!important;min-height:46px!important;max-height:46px!important;box-sizing:border-box!important}
   .search-sort .sort-select select,.search-sort .zyl-sort select{padding-right:18px!important}
+  /* Search bar takes all remaining space; explicit 46px to match Featured. */
+  .search-sort .zyl-search-wrap{flex:1 1 auto!important;min-width:0!important}
+  .search-sort .zyl-search-input{padding:0 38px 0 16px!important;font-size:15px!important;line-height:46px!important;height:46px!important;min-height:46px!important;max-height:46px!important;box-sizing:border-box!important}
+  .search-sort .zyl-search-icon{top:50%!important;transform:translateY(-50%)!important}
   .search-sort .pricing-toggle{flex:0 0 auto;order:0}
   .search-input{flex:1;min-width:0}
 
@@ -478,7 +487,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .card-header{padding:12px 12px 0}
   .card-body{padding:14px 12px 10px}
   .card-footer{padding:10px 12px 14px!important}
-  .card-name{font-size:0.82rem!important}
+  .card-name{font-size:1.08rem!important}
   .card-sku{font-size:0.62rem}
   .card-price{font-size:0.88rem}
   .card-desc{font-size:0.7rem}
@@ -564,10 +573,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
     position:absolute!important;top:0!important;left:0!important;
     width:100%!important;height:100%!important;
     max-width:none!important;max-height:none!important;
-    object-fit:contain!important;object-position:center!important;
+    object-fit:contain!important;object-position:right center!important;
     transform:none!important;
     padding:0!important;
+    transition:object-position 0.32s cubic-bezier(0.22,1,0.36,1);
   }
+  /* When More Details is expanded the right-side text grows tall; pin the
+     vial image to the top of its cell instead of letting it float in the middle. */
+  .product-card:has(.card-details.open) .prod-img img{object-position:right top!important}
   .product-card .card-footer{display:block!important;padding:0 12px 12px!important;border-top:none!important;margin-top:0!important}
   /* Size dropdown: keep within card, opens upward when space above, bounded width */
   .product-card .hyl-select-content{
@@ -577,7 +590,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   }
   .product-card .card-header{
     grid-area:head;
-    padding:14px 14px 2px!important;
+    padding:14px 14px 2px 0!important;
     flex-direction:column;
     align-items:flex-start;
   }
@@ -590,22 +603,23 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .card-header .card-price-old{font-size:0.7rem!important}
   .product-card .card-body{
     grid-area:body;
-    padding:2px 14px 8px!important;
+    padding:2px 12px 8px 0!important;
   }
+  .product-card .card-name{padding-right:0!important}
   .product-card .card-name{
-    font-size:0.95rem!important;line-height:1.15!important;font-weight:900!important;
+    font-size:1.26rem!important;line-height:1.1!important;font-weight:900!important;
     letter-spacing:0.02em!important;
   }
-  /* More Details: full-width, black square stroke, arrow spaced from label */
+  /* More Details: full-width, black square stroke, arrow tucked tight to the label */
   .product-card .card-details-toggle{
     font-size:0.78rem!important;margin-top:8px!important;font-weight:800!important;
     display:flex!important;align-items:center!important;justify-content:center!important;
     width:100%!important;padding:11px 14px!important;
     border:1px solid #000!important;background:transparent!important;color:#000!important;
     border-radius:0!important;
-    gap:14px!important;
+    gap:6px!important;
   }
-  .product-card .card-details-toggle .pdp-more-arrow{margin-left:6px!important}
+  .product-card .card-details-toggle .pdp-more-arrow{margin-left:0!important}
   .product-card .card-details{display:grid!important}
   /* On mobile, "More Details" navigates to PDP instead of expanding inline */
   .product-card .card-details-toggle.mobile-pdp-link{}
@@ -623,14 +637,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .card-footer>div{display:flex;gap:8px;align-items:stretch}
   .product-card .card-add-btn{
     padding:16px 8px!important;
-    font-size:0.78rem!important;
+    font-size:0.98rem!important;
     letter-spacing:0.08em!important;
     font-weight:800!important;
     border-radius:10px!important;
     flex:1;
     min-width:0;
   }
-  .product-card .card-add-btn svg{width:14px;height:14px}
+  .product-card .card-add-btn svg{width:16px;height:16px}
   .product-card .btn-add-full{display:inline}
   .product-card .btn-add-short{display:none}
   .product-card .card-footer>div>div{border-radius:12px!important}
@@ -702,15 +716,15 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   position:fixed;left:0;right:0;bottom:0;top:auto;height:80vh;max-height:80vh;z-index:300;
   background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,0.18);
   display:flex;flex-direction:column;padding:28px 24px 32px;
-  transform:translateY(100%);opacity:1;pointer-events:none;
-  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  transform:translateY(110%);opacity:0;pointer-events:none;visibility:hidden;
+  transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.25s ease,visibility 0s linear 0.35s;
   will-change:transform;
 }
 .mobile-menu::before{
   content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
   width:42px;height:5px;border-radius:999px;background:#d4d4d4;
 }
-.mobile-menu.open{transform:translateY(0);pointer-events:auto}
+.mobile-menu.open{transform:translateY(0);opacity:1;pointer-events:auto;visibility:visible;transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),opacity 0.25s ease,visibility 0s linear 0s}
 .mobile-menu-close{
   flex:0 0 auto;width:44px;height:44px;
   border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
@@ -738,6 +752,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .sticky-banner{display:none!important}
 .inline-marquee{
   background:#fff;color:#000;overflow:hidden;
+  border-bottom:1px solid var(--stroke);
 }
 .inline-marquee .banner-track{
   display:flex;width:max-content;
@@ -882,14 +897,23 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   height:34px;padding:0 16px;line-height:1;font-size:0.78rem;letter-spacing:0.02em;
   text-transform:none;font-weight:700;cursor:pointer;
   border:none;background:transparent;color:var(--muted);
-  border-radius:999px;transition:background 0.18s ease,color 0.18s ease;
+  border-radius:999px;
+  transition:background-color 0.32s cubic-bezier(0.22,1,0.36,1),
+             color 0.32s cubic-bezier(0.22,1,0.36,1),
+             box-shadow 0.32s cubic-bezier(0.22,1,0.36,1),
+             transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
 }
-.cat-tab:hover,.type-tab:hover{color:var(--text);transform:none}
+.cat-tab:hover,.type-tab:hover{color:var(--text);background:rgba(0,0,0,0.04);transform:translateY(-0.5px)}
+.cat-tab:active,.type-tab:active{transform:scale(0.94);transition:transform 0.08s ease-out}
 .cat-tab.active,.type-tab.active{
   background:#fff;color:var(--text);font-weight:700;
-  box-shadow:0 1px 3px rgba(0,0,0,0.08);
-  transform:none;
+  box-shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  transform:translateY(0);
 }
+.cat-tab.active:hover,.type-tab.active:hover{background:#fff;transform:translateY(0)}
+.cat-tab.active:active,.type-tab.active:active{transform:scale(0.97)}
 .cat-tab .tab-count{font-family:var(--mono);font-size:0.65rem;margin-left:4px;opacity:0.7}
 
 /* ZYL-style search + sort */
@@ -897,7 +921,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .zyl-search-wrap{position:relative;flex:1 1 auto;width:auto;min-width:0;transition:flex 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1)}
 .cat-tabs{transition:flex 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1)}
 .zyl-search-input{width:100%;padding:12px 42px 12px 18px;font-size:0.92rem;border:1px solid var(--stroke);background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.2s ease,border-color 0.2s ease;color:#111;font-weight:500;--ph-opacity:1}
-.zyl-search-input::placeholder{color:rgba(155,155,155,var(--ph-opacity));font-weight:500;transition:color 0.4s cubic-bezier(0.22,1,0.36,1)}
+.zyl-search-input::placeholder,
+.mobile-menu-search input::placeholder{color:rgba(155,155,155,var(--ph-opacity,1));font-weight:500;transition:color 0.4s cubic-bezier(0.22,1,0.36,1)}
+.mobile-menu-search input{--ph-opacity:1}
 .zyl-search-input:focus{outline:none;border-color:#9aa0a6;box-shadow:0 1px 3px rgba(0,0,0,0.08),0 0 0 3px rgba(0,0,0,0.04)}
 .zyl-search-icon{width:16px;height:16px;position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#6b6b6b;pointer-events:none}
 .zyl-sort{padding:12px 36px 12px 18px;font-size:0.92rem;border:1px solid var(--stroke);background:#fff;border-radius:999px;font-family:var(--sans);box-shadow:0 1px 3px rgba(0,0,0,0.04);cursor:pointer;color:#111;font-weight:500;text-transform:none;letter-spacing:0;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;min-width:130px;flex:0 0 auto}
@@ -955,8 +981,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   align-self:stretch;box-sizing:border-box;
 }
 .card-details-toggle:hover{color:#fff;background:#000}
-.card-details{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1),padding 0.4s ease;padding:0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
-.card-details>*{min-height:0;overflow:hidden}
+.card-details{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1),padding 0.4s cubic-bezier(0.22,1,0.36,1),margin 0.4s cubic-bezier(0.22,1,0.36,1);padding:0;margin:0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono);transform-origin:top}
+.card-details>*{min-height:0;overflow:hidden;transform-origin:top}
+.card-details .card-details-inner{transform-origin:top}
 .card-details.open{grid-template-rows:1fr;padding:8px 0 0}
 /* ── CUSTOM SIZE SELECT (shadcn-style) ── */
 .hyl-select{position:relative;user-select:none}
@@ -1495,7 +1522,7 @@ body.admin-open{overflow:hidden}
   #screen-research #research-cards a[style*="font-size:0.72rem"]{font-size:13px!important}
   .footer-subscribe-row button,button[onclick="subscribeFooterEmail()"]{padding-top:14px!important;padding-bottom:14px!important}
   .footer-social a{width:44px!important;height:44px!important}
-  .cat-tab,.type-tab{min-height:34px!important;padding-top:0!important;padding-bottom:0!important}
+  .cat-tab,.type-tab{min-height:0!important;padding-top:0!important;padding-bottom:0!important}
   /* Sticky Complete Order CTA on mobile checkout */
   #screen-order.active #btn-pay{position:sticky;bottom:0;z-index:40;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
   /* Sticky Add-to-Cart on mobile PDP (mirrors #btn-pay pattern) */
@@ -1503,36 +1530,37 @@ body.admin-open{overflow:hidden}
   #screen-product.active .pdp-add-btn{min-height:48px;padding:14px 18px}
   /* Bigger back button touch target on mobile PDP */
   #screen-product.active .pdp-back{min-height:44px;padding:10px 4px;margin-bottom:4px;font-size:0.82rem}
-  /* Related products: compact 2-up grid on mobile, uniform card sizes (no janky horizontal scroll) */
+  /* Frequently Stacked With: cards mirror the catalog cards (same column
+     widths, paddings, font sizes, image position). The only difference is
+     the grid template — these cards have no size-selector row, so we drop
+     the "img size" row to remove the dead vertical space that would
+     otherwise show up between More Details and ADD TO CART. */
+  #screen-product.active .pdp-commonly{padding-left:0!important;padding-right:0!important}
+  #screen-product.active .pdp-commonly-card{padding:0!important;border:none!important;background:transparent!important;border-radius:0!important}
   #screen-product.active .pdp-commonly .product-grid:not(.is-hidden){display:grid!important;grid-template-columns:1fr!important;gap:12px!important;overflow:visible!important;margin:0!important;padding:0!important}
   #screen-product.active .pdp-commonly .product-grid.is-hidden{display:none!important}
+  /* Keep a 12px breath between the first grid and the "rest" grid that
+     reveals after Show More — otherwise our margin:0 above strips the inline
+     margin-top:14px and the first card in the rest grid kisses the previous
+     card. */
+  #screen-product.active .pdp-commonly #pdp-commonly-rest:not(.is-hidden){margin-top:12px!important}
   #screen-product.active .pdp-commonly .product-card{
-    grid-template-columns:130px minmax(0,1fr)!important;
     grid-template-areas:"img badges" "img head" "img body" "foot foot"!important;
-    flex:none!important;
   }
-  #screen-product.active .pdp-commonly .product-card .card-footer{padding:0 12px 12px!important}
-  #screen-product.active .pdp-commonly .product-card .prod-img{aspect-ratio:unset!important;min-height:100%!important;width:100%!important;height:100%!important;padding:6px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;background:transparent!important;border-radius:0!important}
-  #screen-product.active .pdp-commonly .product-card .prod-img img{width:auto!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;display:block!important;margin:auto!important}
-  #screen-product.active .pdp-commonly .product-card .card-header{padding:8px 12px 0!important}
-  #screen-product.active .pdp-commonly .product-card .card-body{padding:2px 12px 8px!important}
-  #screen-product.active .pdp-commonly .product-card .card-name{font-size:0.72rem!important;padding-right:0!important;white-space:normal;line-height:1.25}
-  /* Same look as the catalog ADD TO CART (no PDP-specific divergence). */
-  /* Move badges out of the image overlay into the card flow as a single
-     horizontal row at the top of the right column, with breathing room. */
-  #screen-product.active .pdp-commonly .product-card > div[style*="position:absolute"][style*="top:10px"]{
-    grid-area:badges!important;
-    position:static!important;
-    flex-direction:row!important;
-    flex-wrap:nowrap!important;
-    justify-content:flex-end!important;
-    align-items:center!important;
-    gap:6px!important;
-    padding:10px 12px 8px!important;
-    z-index:auto!important;
-    top:auto!important;right:auto!important;
+  /* Override the desktop .pdp-commonly .prod-img rule (min-height:240px,
+     padding, max-height) that would otherwise force the image taller than
+     the right-column content and create dead space between More Details
+     and ADD TO CART. */
+  #screen-product.active .pdp-commonly .product-card .prod-img{
+    padding:0!important;min-height:0!important;
   }
-  #screen-product.active .pdp-commonly .product-card .card-header .card-price{font-size:0.88rem!important}
+  #screen-product.active .pdp-commonly .product-card .prod-img img{
+    max-height:none!important;max-width:none!important;
+    width:100%!important;height:100%!important;
+    object-fit:contain!important;object-position:right center!important;
+    margin:0!important;
+  }
+  #screen-product.active .pdp-commonly:has(.card-details.open) .prod-img img{object-position:right top!important}
   /* Hide bottom View Cart bar while on PDP */
   body:has(#screen-product.active) #mobile-cart-cta{display:none!important}
   /* FAQ plus/minus sizing for mobile tap + clarity */
@@ -1572,16 +1600,25 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 /* When upsell + email popup both open, stack them with a 12px gap instead of overlapping */
 body.upsell-stack-active #email-popup{bottom:calc(24px + var(--upsell-stack-h, 0px) + 12px)!important;transition:bottom 0.45s cubic-bezier(0.22,1,0.36,1),top 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.4s cubic-bezier(0.22,1,0.36,1)}
 @media(max-width:640px){body.upsell-stack-active #email-popup{bottom:auto!important;top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--upsell-stack-h, 0px) + 12px)!important}}
-/* Mobile: toast notifications also share the top with the supplies upsell.
-   Push them below the upsell card so they don't overlap. */
+/* Toast stays anchored at top. The upsell + email-popup get pushed below it. */
 @media(max-width:640px){
-  body.upsell-stack-active #atc-toast-container,
-  body.upsell-stack-active #toast-container,
-  body.upsell-stack-active #sonner-toast-container,
-  body.upsell-stack-active [data-sonner-toaster]{
-    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--upsell-stack-h, 0px) + 12px)!important;
+  body.toast-stack-active .upsell-overlay{
+    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--toast-stack-h, 0px) + 12px)!important;
     transition:top 0.45s cubic-bezier(0.22,1,0.36,1);
   }
+  body.toast-stack-active #email-popup{
+    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--toast-stack-h, 0px) + 12px)!important;
+    bottom:auto!important;
+    transition:top 0.45s cubic-bezier(0.22,1,0.36,1),bottom 0.45s cubic-bezier(0.22,1,0.36,1);
+  }
+  body.toast-stack-active.upsell-stack-active #email-popup{
+    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--toast-stack-h, 0px) + var(--upsell-stack-h, 0px) + 24px)!important;
+  }
+  /* When stacked, allow internal scrolling so user can reach all content. */
+  .upsell-overlay{max-height:calc(100vh - max(20px, env(safe-area-inset-top,20px)) - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+  body.toast-stack-active .upsell-overlay{max-height:calc(100vh - max(20px, env(safe-area-inset-top,20px)) - var(--toast-stack-h, 0px) - 32px)}
+  #atc-toast-container,#toast-container{max-height:calc(60vh);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #atc-toast-container::-webkit-scrollbar,#toast-container::-webkit-scrollbar{display:none}
 }
 .upsell-card{background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;width:100%;max-width:none;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
 .upsell-overlay.open .upsell-card{transform:translateY(0)}
@@ -4052,7 +4089,7 @@ function pcPopulateReorder(){
   <div id="email-popup-card" style="background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.45);line-height:1;padding:6px">&times;</button>
     <div style="display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px">Exclusive Access</div>
-    <div style="font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery vial</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery<br>vial</div>
     <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
     <div style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:18px;line-height:1.5">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Name</div>
@@ -5124,7 +5161,35 @@ function _syncUpsellStack(){
     document.body.style.removeProperty('--upsell-stack-h');
   }
 }
-window.addEventListener('resize', ()=>{ try{_syncUpsellStack();}catch(e){} });
+function _syncToastStack(){
+  let total = 0;
+  ['atc-toast-container','toast-container'].forEach(id=>{
+    const c = document.getElementById(id);
+    if(c && c.children.length){
+      total = Math.max(total, Math.round(c.getBoundingClientRect().height));
+    }
+  });
+  if(total > 0){
+    document.body.style.setProperty('--toast-stack-h', total + 'px');
+    document.body.classList.add('toast-stack-active');
+  } else {
+    document.body.classList.remove('toast-stack-active');
+    document.body.style.removeProperty('--toast-stack-h');
+  }
+}
+let _toastStackObserver = null;
+function _initToastStackObserver(){
+  if(_toastStackObserver) return;
+  const targetParent = document.body;
+  _toastStackObserver = new MutationObserver(()=>{ try{_syncToastStack();}catch(e){} });
+  _toastStackObserver.observe(targetParent, {childList:true, subtree:true});
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', _initToastStackObserver);
+} else {
+  _initToastStackObserver();
+}
+window.addEventListener('resize', ()=>{ try{_syncUpsellStack();_syncToastStack();}catch(e){} });
 
 function addBacWater(qty){
   qty = Math.max(1, qty|0);
@@ -5321,9 +5386,9 @@ function showToast(msg, type, extra){
   const isError = type === 'error';
   const action = (extra && extra.action) || null;
   const showCart = action || /added/i.test(msg||'');
-  el.style.cssText=`background:#fff;color:#111;padding:14px 14px 14px 20px;font-size:0.92rem;font-weight:700;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.12),0 1px 3px rgba(0,0,0,0.06);transform:translateY(-24px);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;display:flex;align-items:center;gap:14px;border:1px solid ${isError?'#fecaca':'#e5e7eb'}`;
+  el.style.cssText=`background:#fff;color:#111;padding:14px 14px 14px 20px;font-size:0.92rem;font-weight:700;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.12),0 1px 3px rgba(0,0,0,0.06);transform:translateY(-24px);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;display:flex;align-items:center;gap:14px;border:1px solid #e5e7eb`;
   const text = document.createElement('span');
-  text.style.cssText='flex:1;color:'+(isError?'#991b1b':'#111');
+  text.style.cssText='flex:1;color:#111';
   text.textContent = msg;
   el.appendChild(text);
   if(showCart){
@@ -5336,7 +5401,7 @@ function showToast(msg, type, extra){
   const x = document.createElement('button');
   x.setAttribute('aria-label','Dismiss');
   x.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-  x.style.cssText='width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:#fff;color:#111;border:1px solid #e5e7eb;border-radius:9px;cursor:pointer;flex-shrink:0';
+  x.style.cssText='width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:transparent;color:#111;border:none;border-radius:9px;cursor:pointer;flex-shrink:0';
   x.onclick = ()=> dismiss();
   el.appendChild(x);
   container.appendChild(el);
@@ -6075,10 +6140,18 @@ function handleRoute(){
   const hideNavOn = ['order','product'];
   document.body.classList.toggle('no-nav', hideNavOn.includes(hash));
   // Force instant jump (suppress any smooth-scroll). Re-enable smooth on next frame.
+  // The double rAF + setTimeout chain is intentional — iOS Safari sometimes
+  // restores a prior scroll position after our first scrollTo if it ran while
+  // the screen swap was still rendering. Repeating the reset across frames
+  // covers the popstate/back-gesture race.
   const _hadSmooth = document.documentElement.classList.contains('smooth-ready');
   if(_hadSmooth) document.documentElement.classList.remove('smooth-ready');
   window.scrollTo(0,0);
-  if(_hadSmooth) requestAnimationFrame(()=>document.documentElement.classList.add('smooth-ready'));
+  requestAnimationFrame(()=>{
+    window.scrollTo(0,0);
+    requestAnimationFrame(()=>{ window.scrollTo(0,0); if(_hadSmooth) document.documentElement.classList.add('smooth-ready'); });
+  });
+  setTimeout(()=>{ if(window.scrollY > 0) window.scrollTo(0,0); }, 60);
 
   if(hash==='product' && !window._pdpSku){
     // Recover from page reload: sessionStorage holds the last-viewed SKU.
@@ -6857,6 +6930,13 @@ function scrollActiveTabIntoView(c){
     scroller = scroller.parentElement;
   }
   if(!scroller || scroller === document.body) scroller = c;
+  // Mobile never auto-centers. Always anchor to scroll=0 so the row reads
+  // Singles | Kits | Bundles | <active cat> from left to right.
+  const isMobile = window.matchMedia('(max-width:640px)').matches;
+  if(isMobile){
+    if(scroller.scrollLeft > 0) scroller.scrollLeft = 0;
+    return;
+  }
   const sRect = scroller.getBoundingClientRect();
   const aRect = active.getBoundingClientRect();
   // Center the active pill in the visible area, clamped to scroll bounds.
@@ -6869,7 +6949,7 @@ function scrollActiveTabIntoView(c){
   if(Math.abs(delta) < 1) return;
   const duration = 520;
   const t0 = performance.now();
-  const ease = (t) => 1 - Math.pow(1 - t, 3); // easeOutCubic
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
   function step(now){
     const t = Math.min(1, (now - t0) / duration);
     scroller.scrollLeft = start + delta * ease(t);
@@ -7352,12 +7432,13 @@ function toggleStackedMore(btn){
   }
 }
 window.toggleStackedMore = toggleStackedMore;
-function _pdpShareUrl(sku){ return location.origin + '/?sku=' + encodeURIComponent(sku); }
+function _pdpShareUrl(sku){ return location.origin + '/share/' + encodeURIComponent(sku) + '.html'; }
 async function togglePdpShare(e){
   if(e) e.stopPropagation();
-  const url = location.href;
+  const sku = window._pdpSku;
   const titleEl = document.querySelector('#pdp-layout .pdp-name');
   const title = titleEl ? titleEl.textContent.trim() : 'Hao Yun Labs';
+  const url = sku ? _pdpShareUrl(sku) : location.href;
   const panel = document.getElementById('pdp-share-panel');
   if(navigator.share){
     try { await navigator.share({title, text:'Take a look at '+title, url}); }
@@ -7441,6 +7522,7 @@ function switchPdpTab(tab, el){
 }
 
 function setHomeCat(cat){
+  window._catTabUserClicked = true;
   homeCategory = cat;
   homeShown = 12;
   productType = _pickValidProductType(cat, productType);
@@ -7462,6 +7544,7 @@ function goToCategory(cat){
   }, 50);
 }
 function setCatCat(cat){
+  window._catTabUserClicked = true;
   catCategory = cat;
   productType = _pickValidProductType(cat, productType);
   const s = document.getElementById('cat-search');if(s)s.value='';
@@ -9364,6 +9447,7 @@ function checkAgeGate(){}
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     if(typeof showEmailPopup !== 'function') return;
+    try { if(new URLSearchParams(location.search).has('nopopup')) return; } catch(_){}
     if(sessionStorage.getItem('hyl_popup_shown_session')) return;
     const last = Number(sessionStorage.getItem('hyl_popup_last_shown_at') || 0);
     if(Date.now() - last < 30*60*1000) return;
