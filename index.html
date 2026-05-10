@@ -530,7 +530,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card{
     display:grid!important;
     grid-template-columns:200px minmax(0,1fr)!important;
-    grid-template-areas:"img head" "img body" "img size" "img foot"!important;
+    grid-template-areas:"img badges" "img head" "img body" "img size" "img foot"!important;
     gap:0!important;
     border-radius:14px!important;
     border:1px solid #eee;
@@ -624,7 +624,20 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .card-footer>div>div{border-radius:12px!important}
   .badge-bestseller,.badge-purity{font-size:0.46rem!important;padding:2px 6px!important;letter-spacing:0.04em!important}
   /* Best seller overlay reposition — top-right of image */
-  .product-card div[style*="position:absolute"][style*="top:10px"]{top:6px!important;right:6px!important}
+  /* General mobile catalog card: badges flow inline at top of the right
+     column, single horizontal row with white space above and below. */
+  .product-card>div[style*="position:absolute"][style*="top:10px"]{
+    grid-area:badges!important;
+    position:static!important;
+    flex-direction:row!important;
+    flex-wrap:wrap!important;
+    justify-content:flex-end!important;
+    align-items:center!important;
+    gap:6px!important;
+    padding:12px 14px 6px!important;
+    z-index:auto!important;
+    top:auto!important;right:auto!important;
+  }
 }
 
 /* ── ROUNDED CTAs / CARDS globally on mobile ── */
@@ -1473,7 +1486,7 @@ body.admin-open{overflow:hidden}
   #screen-product.active .pdp-commonly .product-grid.is-hidden{display:none!important}
   #screen-product.active .pdp-commonly .product-card{
     grid-template-columns:130px minmax(0,1fr)!important;
-    grid-template-areas:"img head" "img body" "img size" "img foot"!important;
+    grid-template-areas:"img badges" "img head" "img body" "img foot"!important;
     flex:none!important;
   }
   #screen-product.active .pdp-commonly .product-card .prod-img{aspect-ratio:unset!important;min-height:100%!important;width:100%!important;height:100%!important;padding:6px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;background:transparent!important;border-radius:0!important}
@@ -1482,6 +1495,20 @@ body.admin-open{overflow:hidden}
   #screen-product.active .pdp-commonly .product-card .card-body{padding:2px 12px 8px!important}
   #screen-product.active .pdp-commonly .product-card .card-name{font-size:0.72rem!important;padding-right:0!important;white-space:normal;line-height:1.25}
   #screen-product.active .pdp-commonly .product-card .card-add-btn{padding-top:16px!important;padding-bottom:16px!important;font-size:0.78rem!important}
+  /* Move badges out of the image overlay into the card flow as a single
+     horizontal row at the top of the right column, with breathing room. */
+  #screen-product.active .pdp-commonly .product-card > div[style*="position:absolute"][style*="top:10px"]{
+    grid-area:badges!important;
+    position:static!important;
+    flex-direction:row!important;
+    flex-wrap:wrap!important;
+    justify-content:flex-end!important;
+    align-items:center!important;
+    gap:6px!important;
+    padding:10px 12px 8px!important;
+    z-index:auto!important;
+    top:auto!important;right:auto!important;
+  }
   #screen-product.active .pdp-commonly .product-card .card-header .card-price{font-size:0.88rem!important}
   /* Hide bottom View Cart bar while on PDP */
   body:has(#screen-product.active) #mobile-cart-cta{display:none!important}
