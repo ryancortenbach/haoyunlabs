@@ -596,14 +596,16 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
     font-size:0.95rem!important;line-height:1.15!important;font-weight:900!important;
     letter-spacing:0.02em!important;
   }
-  /* More Details: stretches to full right-column width as a primary affordance */
+  /* More Details: full-width, black square stroke, arrow spaced from label */
   .product-card .card-details-toggle{
     font-size:0.78rem!important;margin-top:8px!important;font-weight:800!important;
     display:flex!important;align-items:center!important;justify-content:center!important;
     width:100%!important;padding:11px 14px!important;
-    border:1px solid var(--stroke)!important;background:#fff!important;color:#000!important;
-    border-radius:12px!important;
+    border:1px solid #000!important;background:transparent!important;color:#000!important;
+    border-radius:0!important;
+    gap:14px!important;
   }
+  .product-card .card-details-toggle .pdp-more-arrow{margin-left:6px!important}
   .product-card .card-details{display:grid!important}
   /* On mobile, "More Details" navigates to PDP instead of expanding inline */
   .product-card .card-details-toggle.mobile-pdp-link{}
@@ -620,8 +622,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   }
   .product-card .card-footer>div{display:flex;gap:8px;align-items:stretch}
   .product-card .card-add-btn{
-    padding:10px 8px!important;
-    font-size:0.7rem!important;
+    padding:16px 8px!important;
+    font-size:0.78rem!important;
     letter-spacing:0.08em!important;
     font-weight:800!important;
     border-radius:10px!important;
@@ -1515,7 +1517,7 @@ body.admin-open{overflow:hidden}
   #screen-product.active .pdp-commonly .product-card .card-header{padding:8px 12px 0!important}
   #screen-product.active .pdp-commonly .product-card .card-body{padding:2px 12px 8px!important}
   #screen-product.active .pdp-commonly .product-card .card-name{font-size:0.72rem!important;padding-right:0!important;white-space:normal;line-height:1.25}
-  #screen-product.active .pdp-commonly .product-card .card-add-btn{padding-top:16px!important;padding-bottom:16px!important;font-size:0.78rem!important}
+  /* Same look as the catalog ADD TO CART (no PDP-specific divergence). */
   /* Move badges out of the image overlay into the card flow as a single
      horizontal row at the top of the right column, with breathing room. */
   #screen-product.active .pdp-commonly .product-card > div[style*="position:absolute"][style*="top:10px"]{
@@ -1570,6 +1572,17 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 /* When upsell + email popup both open, stack them with a 12px gap instead of overlapping */
 body.upsell-stack-active #email-popup{bottom:calc(24px + var(--upsell-stack-h, 0px) + 12px)!important;transition:bottom 0.45s cubic-bezier(0.22,1,0.36,1),top 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.4s cubic-bezier(0.22,1,0.36,1)}
 @media(max-width:640px){body.upsell-stack-active #email-popup{bottom:auto!important;top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--upsell-stack-h, 0px) + 12px)!important}}
+/* Mobile: toast notifications also share the top with the supplies upsell.
+   Push them below the upsell card so they don't overlap. */
+@media(max-width:640px){
+  body.upsell-stack-active #atc-toast-container,
+  body.upsell-stack-active #toast-container,
+  body.upsell-stack-active #sonner-toast-container,
+  body.upsell-stack-active [data-sonner-toaster]{
+    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--upsell-stack-h, 0px) + 12px)!important;
+    transition:top 0.45s cubic-bezier(0.22,1,0.36,1);
+  }
+}
 .upsell-card{background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;width:100%;max-width:none;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
 .upsell-overlay.open .upsell-card{transform:translateY(0)}
 .upsell-badge{display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px}
@@ -6660,7 +6673,6 @@ function cardHTML(p){
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
-      <div class="card-desc-short">${(descText || '').replace(/<[^>]+>/g,'').slice(0, 110)}${(descText || '').length > 110 ? '…' : ''}</div>
       <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span> <span class="pdp-more-arrow">&rarr;</span></button>
       <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
