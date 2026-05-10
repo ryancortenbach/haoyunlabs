@@ -7193,15 +7193,66 @@ function renderCoaCanvas(){
 function toggleStackedMore(btn){
   const rest = document.getElementById('pdp-commonly-rest');
   if(!rest || !btn) return;
-  const isHidden = rest.style.display === 'none' || rest.classList.contains('is-hidden');
+  // Guard against double-clicks mid-transition: an `_animating` flag held on
+  // the element drops follow-up clicks until the current animation finishes.
+  if(rest._animating) return;
+  rest._animating = true;
+  const EASE = 'cubic-bezier(0.22,1,0.36,1)';
+  const DURATION = 460;
+  const isHidden = rest.classList.contains('is-hidden');
   if(isHidden){
-    rest.style.display = 'grid';
+    // Opening: drop the is-hidden gate first so display becomes grid, then
+    // animate from 0 to natural height + fade/slide in.
     rest.classList.remove('is-hidden');
+    rest.style.overflow = 'hidden';
+    rest.style.maxHeight = '0px';
+    rest.style.opacity = '0';
+    rest.style.transform = 'translateY(-8px)';
+    rest.style.transition = `max-height ${DURATION}ms ${EASE}, opacity ${DURATION-60}ms ease, transform ${DURATION}ms ${EASE}`;
+    requestAnimationFrame(() => {
+      const targetH = rest.scrollHeight;
+      requestAnimationFrame(() => {
+        rest.style.maxHeight = targetH + 'px';
+        rest.style.opacity = '1';
+        rest.style.transform = 'translateY(0)';
+      });
+    });
     btn.textContent = 'Show Less';
+    setTimeout(() => {
+      // Clear inline overrides so the grid can re-flow naturally if its
+      // content changes later (e.g., admin tweaks the stacked list).
+      rest.style.maxHeight = '';
+      rest.style.overflow = '';
+      rest.style.transition = '';
+      rest.style.transform = '';
+      rest.style.opacity = '';
+      rest._animating = false;
+    }, DURATION + 30);
   } else {
-    rest.style.display = 'none';
-    rest.classList.add('is-hidden');
+    // Closing: lock to current height, then animate to 0, then re-apply gate.
+    const startH = rest.scrollHeight;
+    rest.style.overflow = 'hidden';
+    rest.style.maxHeight = startH + 'px';
+    rest.style.opacity = '1';
+    rest.style.transform = 'translateY(0)';
+    rest.style.transition = `max-height ${DURATION-40}ms ${EASE}, opacity ${DURATION-100}ms ease, transform ${DURATION-40}ms ${EASE}`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        rest.style.maxHeight = '0px';
+        rest.style.opacity = '0';
+        rest.style.transform = 'translateY(-8px)';
+      });
+    });
     btn.textContent = 'Load More';
+    setTimeout(() => {
+      rest.classList.add('is-hidden');
+      rest.style.maxHeight = '';
+      rest.style.overflow = '';
+      rest.style.transition = '';
+      rest.style.transform = '';
+      rest.style.opacity = '';
+      rest._animating = false;
+    }, DURATION);
   }
 }
 window.toggleStackedMore = toggleStackedMore;
