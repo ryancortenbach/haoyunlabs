@@ -712,7 +712,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .mobile-menu-close{
   flex:0 0 auto;width:44px;height:44px;
   border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:#000;
 }
+.mobile-menu-close svg{stroke:#000;color:#000}
 .mobile-menu-header{display:flex;align-items:center;gap:8px;margin:8px 0 18px}
 .mobile-menu-header .mobile-menu-search{flex:1;margin:0}
 .mobile-menu-close svg{width:26px;height:26px}
@@ -1436,11 +1438,16 @@ body.admin-open{overflow:hidden}
   body.has-cart-items #admin-toggle{bottom:80px}
 }
 
-#mobile-cart-cta{display:none}
+/* User asked for nothing pinned to the very bottom of the phone. We keep
+   the markup so existing JS toggles don't error, but force it hidden. */
+#mobile-cart-cta{display:none!important}
 @media(max-width:820px){
-  /* Always rendered (display:flex) so transform/opacity transitions actually
-     fire when toggling .visible. Off-screen via translateY + opacity until
-     visible. */
+  #mobile-cart-cta,
+  body.has-cart-items #mobile-cart-cta,
+  #mobile-cart-cta.visible{display:none!important}
+}
+@media(max-width:820px) and (min-width:99999px){
+  /* legacy block kept commented out to preserve diff context */
   #mobile-cart-cta{
     position:fixed;bottom:12px;left:12px;right:12px;z-index:250;
     display:flex;align-items:center;justify-content:space-between;
@@ -5940,8 +5947,30 @@ function toggleMobileMenu(){
   menu.classList.toggle('open');
   const backdrop = document.getElementById('mobile-menu-backdrop');
   if(backdrop) backdrop.classList.toggle('open', opening);
-  // Just lock body scroll — don't use position:fixed (that causes the page to snap to top under the menu).
-  document.body.style.overflow = opening ? 'hidden' : '';
+  // True body-scroll lock: position:fixed prevents iOS Safari touch-scroll
+  // bleed-through. We capture and restore window.scrollY so the page doesn't
+  // snap to top when the menu closes.
+  if(opening){
+    const sy = window.scrollY || window.pageYOffset || 0;
+    window._mobileMenuScrollY = sy;
+    const b = document.body.style;
+    b.position = 'fixed';
+    b.top = `-${sy}px`;
+    b.left = '0';
+    b.right = '0';
+    b.width = '100%';
+    b.overflow = 'hidden';
+  } else {
+    const sy = window._mobileMenuScrollY || 0;
+    const b = document.body.style;
+    b.position = '';
+    b.top = '';
+    b.left = '';
+    b.right = '';
+    b.width = '';
+    b.overflow = '';
+    window.scrollTo(0, sy);
+  }
   if(opening){
     // Track last-focused element so we can return focus on close
     try { window._mobileMenuReturnFocus = document.querySelector('.nav-hamburger'); } catch(e){}
@@ -10338,7 +10367,7 @@ setupFlipWord('research-flip-word', ['vial.','batch.','study.','dose.'], '2.8rem
       }, 400);
     }, 3200);
   }
-  ['cat-search','home-search'].forEach(id => {
+  ['cat-search','home-search','mobile-menu-search-input'].forEach(id => {
     const el = document.getElementById(id);
     if(el) rotate(el);
   });
