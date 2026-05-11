@@ -436,7 +436,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* COA + Pinterest image panels: square */
   .big-feature-card .card-3d-wrap{aspect-ratio:1/1!important}
   /* Purity heading: fit one line */
-  .big-feature-card .shimmer-title{font-size:1.85rem!important;white-space:normal;line-height:1.05;letter-spacing:-0.01em}
+  .big-feature-card .shimmer-title{font-size:2.13rem!important;white-space:normal;line-height:1.05;letter-spacing:-0.01em}
   /* Category pill vials */
   .shop-pill-img img{transform:none!important}
   /* FEATURED dropdown: black text */
@@ -643,8 +643,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .card-add-btn{
     padding:16px 8px!important;
     font-size:0.98rem!important;
-    letter-spacing:0.08em!important;
-    font-weight:800!important;
+    letter-spacing:-0.025em!important;
+    font-weight:900!important;
     border-radius:10px!important;
     flex:1;
     min-width:0;
@@ -674,7 +674,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 /* ── ROUNDED CTAs / CARDS globally on mobile ── */
 @media(max-width:820px){
   .btn-add,.hero-btn,.btn-show-more{border-radius:999px!important}
-  .hero-btn{padding:14px 14px!important;font-size:0.92rem!important;font-weight:800;letter-spacing:0.04em!important}
+  .hero-btn{padding:14px 12px!important;font-size:0.78rem!important;font-weight:800;letter-spacing:0.04em!important;white-space:nowrap}
+  .big-feature-card .hero-pill-row .hero-btn{flex:1 1 0;min-width:0;padding-left:8px!important;padding-right:8px!important}
   .tilt-card,.feature-card{border-radius:18px!important}
   .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card:has(.inline-marquee){padding:0!important}
@@ -1039,7 +1040,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .card-footer{padding:6px 14px 14px;margin-top:auto;border-top:none}
 .btn-add{
   width:100%;padding:18px 16px;background:var(--brand);color:var(--bg);
-  border:none;font-size:0.95rem;font-weight:800;letter-spacing:-0.01em;
+  border:none;font-size:0.95rem;font-weight:900;letter-spacing:-0.025em;
   text-transform:uppercase;cursor:pointer;transition:opacity var(--transition);
   border-radius:var(--radius);
   font-family:'Helvetica Neue',Arial,sans-serif;
@@ -2797,15 +2798,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <div class="screen" id="screen-home">
   <div class="container">
 
-    <!-- HERO -->
-    <div class="hero" style="padding:160px 0 60px">
-      <div class="hero-title anim-fade-up anim-d2" style="font-family:'Instrument Serif',serif;font-size:3.8rem;font-weight:400;letter-spacing:-0.01em;line-height:1.1;text-transform:none">Premium peptides to <em style="font-style:italic">fuel</em> <span style="white-space:nowrap;display:inline-flex;align-items:baseline;gap:0.18em">your<span id="hero-flip-word" class="hero-colourful"></span></span></div>
-      <div class="anim-fade-up anim-d6" style="margin-top:28px;display:flex;gap:12px;justify-content:center">
-        <button class="hero-btn hero-btn-primary" onclick="navigate('catalog')">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
-        <button class="hero-btn hero-btn-secondary" onclick="navigate('coa')">View COAs <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
-        <a class="hero-btn hero-btn-secondary" href="/jobs.html" style="text-decoration:none">Careers <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></a>
-      </div>
-    </div>
+    <!-- HERO removed; CTAs now live inside the Built for Serious Research card -->
+    <div class="hero" style="padding:80px 0 20px"></div>
 
     <!-- STATS ROW -->
     <!-- stats-row removed per user request -->
@@ -2858,10 +2852,14 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="padding:36px 32px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
         <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
-          <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
+          <div class="shimmer-title" style="font-size:2.78rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
           <div style="font-size:0.92rem;color:var(--text);line-height:1.44;margin-bottom:14px;letter-spacing:-0.01em;max-width:none;font-weight:800">Research-use-only peptides and compounds with lot-level verification and consistency standards you can trust.</div>
           <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.02em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
-          <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
+          <div class="hero-pill-row" style="display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;margin-top:6px;width:100%" onclick="event.stopPropagation()">
+            <button class="hero-btn hero-btn-primary" onclick="event.stopPropagation();navigate('catalog')">Shop Now</button>
+            <button class="hero-btn hero-btn-secondary" onclick="event.stopPropagation();navigate('coa')">View COAs</button>
+            <a class="hero-btn hero-btn-secondary" href="/jobs.html" onclick="event.stopPropagation()" style="text-decoration:none">Careers</a>
+          </div>
         </div>
         <div class="card-3d-wrap" style="background:#f7f7f7;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;position:relative;overflow:hidden;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
           <img src="https://i.pinimg.com/736x/60/a1/1e/60a11ec6b61677230fc6fdd7f5e18344.jpg" class="pin-slide" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.5s ease;opacity:1;pointer-events:none;-webkit-touch-callout:none" alt="Lab">
@@ -2877,7 +2875,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
-        <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
+        <div class="shimmer-title" style="font-size:2.78rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
         <div style="font-size:0.95rem;color:var(--text);line-height:1.53;margin-bottom:18px;max-width:none;letter-spacing:-0.01em;font-weight:800">Pre-built 10-vial kits of our most-requested compounds. Save up to 45% versus singles, same lot and paperwork across every vial.</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
       </div>
@@ -2887,7 +2885,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
     <div class="reveal big-feature-card" style="padding:36px 32px;border:1px solid var(--stroke);border-radius:var(--radius);background:#fff;margin-bottom:24px;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center" onclick="navigate('coa')">
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
-        <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
+        <div class="shimmer-title" style="font-size:2.78rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
         <div style="font-size:0.95rem;color:var(--text);line-height:1.53;margin-bottom:12px;letter-spacing:-0.01em;max-width:none;font-weight:800">Reverse-phase HPLC on every lot before release. Search by SKU, verify the lot on your vial, download the PDF. No account required.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
@@ -2905,7 +2903,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       </div>
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
-        <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
+        <div class="shimmer-title" style="font-size:2.78rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
         <div style="font-size:0.95rem;color:var(--text);line-height:1.53;margin-bottom:12px;max-width:none;letter-spacing:-0.01em;font-weight:800">Affiliates earn 20% revenue plus free peptides monthly, with custom codes and weekly payouts. Plus open research, ops, and growth roles.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
