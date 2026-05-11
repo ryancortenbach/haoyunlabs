@@ -460,6 +460,11 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
   /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
+  /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
+     better than the dark vignette that shows up when content overflows. */
+  .cat-tabs.has-right-overflow,
+  .cat-tabs.has-left-overflow,
+  .cat-tabs.has-left-overflow.has-right-overflow{-webkit-mask-image:none!important;mask-image:none!important}
   .cat-tabs .type-tabs-inner .type-tab{transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease,padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
   .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:30px!important;padding:0 12px!important;line-height:1!important;font-size:0.72rem!important;border-radius:999px}
   /* Selected/active white pill: same dimensions as the gray pills (no thinning) */
@@ -608,7 +613,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .card-name{padding-right:0!important}
   .product-card .card-name{
     font-size:1.26rem!important;line-height:1.1!important;font-weight:900!important;
-    letter-spacing:0.02em!important;
+    letter-spacing:-0.03em!important;text-transform:uppercase!important;
   }
   /* More Details: full-width, black square stroke, arrow tucked tight to the label */
   .product-card .card-details-toggle{
@@ -648,7 +653,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .btn-add-full{display:inline}
   .product-card .btn-add-short{display:none}
   .product-card .card-footer>div>div{border-radius:12px!important}
-  .badge-bestseller,.badge-purity{font-size:0.46rem!important;padding:2px 6px!important;letter-spacing:0.04em!important}
+  .badge-bestseller,.badge-purity{font-size:0.6rem!important;padding:0 10px!important;letter-spacing:0.02em!important;font-weight:900!important;width:auto!important;min-width:0!important;max-width:none!important}
   /* Best seller overlay reposition — top-right of image */
   /* General mobile catalog card: badges flow inline at top of the right
      column, single horizontal row with white space above and below. */
@@ -669,7 +674,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 /* ── ROUNDED CTAs / CARDS globally on mobile ── */
 @media(max-width:820px){
   .btn-add,.hero-btn,.btn-show-more{border-radius:999px!important}
-  .hero-btn{padding:14px 26px!important;font-weight:800}
+  .hero-btn{padding:14px 14px!important;font-size:0.92rem!important;font-weight:800;letter-spacing:0.04em!important}
   .tilt-card,.feature-card{border-radius:18px!important}
   .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card:has(.inline-marquee){padding:0!important}
@@ -702,8 +707,10 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .nav-hamburger{
   display:none;width:42px;height:42px;align-items:center;justify-content:center;
   border-radius:50%;border:none;background:transparent;cursor:pointer;
-  transition:background 0.15s;
+  transition:background 0.15s;outline:none;-webkit-tap-highlight-color:transparent;
 }
+.nav-hamburger:focus{outline:none}
+.nav-hamburger:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .nav-hamburger:active{background:rgba(0,0,0,0.08)}
 .nav-hamburger svg{width:22px;height:22px;stroke:var(--text)}
 /* MOBILE MENU OVERLAY */
@@ -728,14 +735,16 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .mobile-menu-close{
   flex:0 0 auto;width:44px;height:44px;
   border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
-  color:#000;
+  color:#000;outline:none;-webkit-tap-highlight-color:transparent;
 }
+.mobile-menu-close:focus{outline:none}
+.mobile-menu-close:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .mobile-menu-close svg{stroke:#000;color:#000}
 .mobile-menu-header{display:flex;align-items:center;gap:8px;margin:8px 0 18px}
 .mobile-menu-header .mobile-menu-search{flex:1;margin:0}
 .mobile-menu-close svg{width:26px;height:26px}
 .mobile-menu a{
-  display:block;padding:18px 4px;font-family:var(--display);font-size:1.6rem;font-weight:800;
+  display:block;padding:13px 4px;font-family:var(--display);font-size:1.6rem;font-weight:800;
   text-transform:uppercase;letter-spacing:0.04em;color:var(--brand);cursor:pointer;
   border-bottom:1px solid var(--stroke);text-decoration:none;
 }
@@ -763,7 +772,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .inline-marquee:hover .banner-track{-webkit-animation-play-state:paused;animation-play-state:paused}
 .inline-marquee .banner-track span{
   white-space:nowrap;padding:6px 48px;
-  font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;color:#000;
+  font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:#9b9b9b;
 }
 .banner-track{
   display:flex;width:max-content;
@@ -966,7 +975,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .card-price{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1rem;font-weight:800;letter-spacing:-0.02em;display:inline-flex;flex-direction:column;align-items:flex-end;gap:2px;line-height:1.05}
 .card-price-old{font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:-0.02em;color:#9b9b9b;text-decoration:line-through;margin:0 0 0 8px;line-height:1}
 .card-body{padding:10px 14px 8px;flex:1;display:flex;flex-direction:column;gap:6px}
-.card-name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1.05rem;font-weight:700;text-transform:none;letter-spacing:-0.01em;line-height:1.2}
+.card-name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.03em;line-height:1.2}
 .card-desc{font-size:0.75rem;color:var(--muted);margin-top:2px;line-height:1.4}
 /* Short, 2-line teaser shown on catalog cards. Hidden on PDP commonly. */
 .card-desc-short{font-size:0.74rem;color:var(--muted);line-height:1.35;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
@@ -1078,8 +1087,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 @keyframes badge-shine{0%{background-position:-200% center}100%{background-position:200% center}}
 .badge-bestseller,.badge-purity{
   display:inline-flex;align-items:center;justify-content:center;
-  width:96px;min-width:96px;height:22px;
-  padding:0 10px;font-size:0.58rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;
+  width:auto;min-width:0;height:22px;
+  padding:0 10px;font-size:0.58rem;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;
   border-radius:999px;border:1.5px solid #000;box-sizing:border-box;
   white-space:nowrap;
 }
@@ -1400,11 +1409,11 @@ body.admin-open #admin-toggle{transform:rotate(90deg) scale(1.05)}
   width:380px;max-width:100vw;z-index:9600;
   background:#0a0a0b;color:#fff;
   display:flex;flex-direction:column;
-  transform:translateX(100%)!important;transition:transform 0.38s cubic-bezier(0.22,1,0.36,1)!important;
-  box-shadow:-12px 0 40px rgba(0,0,0,0.5);
+  transform:translateX(100%)!important;transition:transform 0.38s cubic-bezier(0.22,1,0.36,1)!important,box-shadow 0.38s cubic-bezier(0.22,1,0.36,1)!important;
+  box-shadow:none;
   font-family:var(--sans);
 }
-#admin-panel.open{transform:translateX(0)!important}
+#admin-panel.open{transform:translateX(0)!important;box-shadow:-12px 0 40px rgba(0,0,0,0.5)}
 .ap-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;
@@ -2779,7 +2788,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   <a onclick="mobileMenuNav('help')">Help Center</a>
   <a onclick="mobileMenuNav('tracking')">Track Order</a>
   <div style="margin-top:auto;padding-top:24px;display:flex;flex-direction:column;gap:10px">
-    <button onclick="mobileMenuNav('order')" style="padding:14px;border:none;background:#000;color:#fff;font-family:var(--display);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;border-radius:999px;cursor:pointer">View Cart</button>
+    <button onclick="mobileMenuNav('order')" style="padding:16px 14px;border:none;background:#000;color:#fff;font-family:var(--display);font-size:1.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;border-radius:999px;cursor:pointer">View Cart</button>
   </div>
 </div>
 
@@ -2850,7 +2859,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Full Catalog</div>
           <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
-          <div style="font-size:0.92rem;color:var(--muted);line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">125+ HPLC-verified compounds</strong> for research-use-only studies. Every batch is lot-traceable and COA-backed, with consistency standards you can actually check. Peptides, GLP-1s, growth, recovery, sleep, libido, longevity. One catalog, one purity bar.</div>
+          <div style="font-size:0.92rem;color:var(--text);line-height:1.44;margin-bottom:14px;letter-spacing:-0.01em;max-width:none;font-weight:800">Research-use-only peptides and compounds with lot-level verification and consistency standards you can trust.</div>
           <div style="font-family:var(--mono);font-size:0.74rem;letter-spacing:0.02em;color:var(--muted);line-height:1.7;margin-bottom:18px">99%+ HPLC purity &bull; Same-day shipping &bull; Free over $250 &bull; Discreet packaging</div>
           <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Explore the Catalog &rarr;</span></div>
         </div>
@@ -2869,7 +2878,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Curated Kits</div>
         <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">One Click. Better Value.</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:18px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Shop pre-built 10-vial kits of our most-requested research compounds.</strong> Every kit is lot-traceable and COA-backed, the best quality for the lowest per-vial price. Save up to 45% versus singles. Same lot, same purity, same paperwork across the whole kit.</div>
+        <div style="font-size:0.95rem;color:var(--text);line-height:1.53;margin-bottom:18px;max-width:none;letter-spacing:-0.01em;font-weight:800">Pre-built 10-vial kits of our most-requested compounds. Save up to 45% versus singles, same lot and paperwork across every vial.</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">Shop The Kits &rarr;</span></div>
       </div>
     </div>
@@ -2879,12 +2888,12 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Certificates of Analysis</div>
         <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Purity You Can Prove</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;letter-spacing:-0.01em;max-width:560px"><strong style="color:var(--text);font-weight:800">Reverse-phase HPLC on every lot before release.</strong> Workflows built around repeatability and documentation, so every batch meets the same measurable bar. Search by SKU or compound name, cross-check the lot printed on your vial, and download the PDF. No email gate, no account required.</div>
+        <div style="font-size:0.95rem;color:var(--text);line-height:1.53;margin-bottom:12px;letter-spacing:-0.01em;max-width:none;font-weight:800">Reverse-phase HPLC on every lot before release. Search by SKU, verify the lot on your vial, download the PDF. No account required.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Chromatography-verified &bull; Open-access archive &bull; 99%+ purity &bull; Lyophilized &amp; sealed</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View COAs &rarr;</span></div>
       </div>
       <div class="card-3d-wrap" style="background:#fff;border-radius:18px;flex-shrink:0;aspect-ratio:1/1;width:280px;overflow:hidden;position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" onclick="event.stopPropagation()">
-        <video src="media/coa-v5.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" tabindex="-1"></video>
+        <video src="media/coa-v7.mp4" autoplay muted loop playsinline preload="auto" webkit-playsinline="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none" tabindex="-1"></video>
       </div>
     </div>
 
@@ -2897,7 +2906,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
       <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
         <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Careers &amp; Affiliates</div>
         <div class="shimmer-title" style="font-size:2.42rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Join The Lab</div>
-        <div style="font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:12px;max-width:560px;letter-spacing:-0.01em"><strong style="color:var(--text);font-weight:800">Featured: Become an affiliate. 20% revenue on every sale plus free peptides each month.</strong> Custom discount codes for your audience, real dashboards, weekly payouts. Plus open roles across research, quality, ops, support, and growth. Remote-friendly. Equity available.</div>
+        <div style="font-size:0.95rem;color:var(--text);line-height:1.53;margin-bottom:12px;max-width:none;letter-spacing:-0.01em;font-weight:800">Affiliates earn 20% revenue plus free peptides monthly, with custom codes and weekly payouts. Plus open research, ops, and growth roles.</div>
         <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;margin-bottom:18px">Affiliate program &bull; Research &amp; lab &bull; Marketing &amp; creative &bull; Leadership</div>
         <div style="margin-top:10px;width:100%"><span class="hero-btn-invert" style="display:inline-block;width:100%;max-width:min(380px,100%);padding:16px 36px;text-align:center;border:1.5px solid var(--brand);background:var(--bg);color:var(--brand);border-radius:999px;font-size:0.88rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s ease">View Open Roles &rarr;</span></div>
       </div>
@@ -5360,14 +5369,29 @@ function showAddedToCartToast(itemName){
   const safeName = String(itemName || 'Item').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
   const el = document.createElement('div');
   el.setAttribute('role','status');
-  el.style.cssText = 'pointer-events:auto;background:#fff;border:1px solid var(--stroke);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.08);padding:14px 14px 14px 22px;display:flex;align-items:center;gap:14px;font-family:var(--sans);transform:translateY(-12px);opacity:0;transition:opacity 0.25s ease,transform 0.35s cubic-bezier(0.22,1,0.36,1)';
+  el.style.cssText = 'pointer-events:auto;background:#fff;border:1px solid var(--stroke);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.08);padding:14px 14px 14px 22px;display:flex;align-items:center;gap:14px;font-family:var(--sans);transform:translateY(-12px);opacity:0;transition:opacity 0.25s ease,transform 0.35s cubic-bezier(0.22,1,0.36,1);overflow:hidden;box-sizing:border-box';
   el.innerHTML = `
     <div style="flex:1;min-width:0;font-size:0.92rem;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${safeName} added to cart.</div>
     <button type="button" data-act="goto" style="background:#000;color:#fff;border:none;border-radius:10px;padding:11px 22px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:transform 0.2s ease,opacity 0.2s ease">Go To Cart</button>
     <button type="button" data-act="close" aria-label="Dismiss" style="background:transparent;border:none;width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1.2rem;line-height:1;transition:background 0.15s ease">&times;</button>`;
   container.appendChild(el);
   requestAnimationFrame(() => { el.style.transform='translateY(0)'; el.style.opacity='1'; });
-  const dismiss = () => { el.style.transform='translateY(-12px)'; el.style.opacity='0'; setTimeout(() => el.remove(), 280); };
+  const dismiss = () => {
+    if(el._dismissing) return;
+    el._dismissing = true;
+    const h = el.offsetHeight;
+    el.style.maxHeight = h + 'px';
+    el.offsetHeight; // reflow
+    el.style.transition = 'opacity 0.22s ease, transform 0.32s cubic-bezier(0.22,1,0.36,1), max-height 0.36s cubic-bezier(0.22,1,0.36,1), margin 0.36s cubic-bezier(0.22,1,0.36,1), padding 0.36s cubic-bezier(0.22,1,0.36,1)';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-12px)';
+    el.style.maxHeight = '0px';
+    el.style.marginTop = '0';
+    el.style.marginBottom = '-10px'; /* absorb the parent gap so neighbors flow up smoothly */
+    el.style.paddingTop = '0';
+    el.style.paddingBottom = '0';
+    setTimeout(() => el.remove(), 380);
+  };
   el.querySelector('[data-act="close"]').addEventListener('click', dismiss);
   el.querySelector('[data-act="goto"]').addEventListener('click', () => { dismiss(); navigate('order'); });
   setTimeout(dismiss, 4500);
@@ -5386,7 +5410,7 @@ function showToast(msg, type, extra){
   const isError = type === 'error';
   const action = (extra && extra.action) || null;
   const showCart = action || /added/i.test(msg||'');
-  el.style.cssText=`background:#fff;color:#111;padding:14px 14px 14px 20px;font-size:0.92rem;font-weight:700;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.12),0 1px 3px rgba(0,0,0,0.06);transform:translateY(-24px);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;display:flex;align-items:center;gap:14px;border:1px solid #e5e7eb`;
+  el.style.cssText=`background:#fff;color:#111;padding:14px 14px 14px 20px;font-size:0.92rem;font-weight:700;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.12),0 1px 3px rgba(0,0,0,0.06);transform:translateY(-24px);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:auto;display:flex;align-items:center;gap:14px;border:1px solid #e5e7eb;overflow:hidden;box-sizing:border-box`;
   const text = document.createElement('span');
   text.style.cssText='flex:1;color:#111';
   text.textContent = msg;
@@ -5408,10 +5432,21 @@ function showToast(msg, type, extra){
   requestAnimationFrame(()=>{el.style.transform='translateY(0)';el.style.opacity='1'});
   let timer = setTimeout(dismiss, (extra && extra.duration) || 4500);
   function dismiss(){
-    if(!el.isConnected) return;
+    if(!el.isConnected || el._dismissing) return;
+    el._dismissing = true;
     clearTimeout(timer);
-    el.style.transform='translateY(-24px)';el.style.opacity='0';
-    setTimeout(()=>el.remove(),300);
+    const h = el.offsetHeight;
+    el.style.maxHeight = h + 'px';
+    el.offsetHeight; // reflow
+    el.style.transition = 'opacity 0.22s ease, transform 0.32s cubic-bezier(0.22,1,0.36,1), max-height 0.36s cubic-bezier(0.22,1,0.36,1), margin 0.36s cubic-bezier(0.22,1,0.36,1), padding 0.36s cubic-bezier(0.22,1,0.36,1)';
+    el.style.transform='translateY(-12px)';
+    el.style.opacity='0';
+    el.style.maxHeight='0px';
+    el.style.marginTop='0';
+    el.style.marginBottom='-10px';
+    el.style.paddingTop='0';
+    el.style.paddingBottom='0';
+    setTimeout(()=>el.remove(),380);
   }
 }
 
@@ -6930,11 +6965,14 @@ function scrollActiveTabIntoView(c){
     scroller = scroller.parentElement;
   }
   if(!scroller || scroller === document.body) scroller = c;
-  // Mobile never auto-centers. Always anchor to scroll=0 so the row reads
-  // Singles | Kits | Bundles | <active cat> from left to right.
+  // Mobile never auto-centers. On first render (before any user click) we
+  // anchor to scroll=0 so the row reads Singles | Kits | Bundles | <active cat>
+  // from the left. Once the user has tapped a cat-tab we stop touching the
+  // scroll position entirely so whatever they tapped (Longevity, etc.) stays
+  // in view instead of snapping back to the start.
   const isMobile = window.matchMedia('(max-width:640px)').matches;
   if(isMobile){
-    if(scroller.scrollLeft > 0) scroller.scrollLeft = 0;
+    if(!window._catTabUserClicked && scroller.scrollLeft > 0) scroller.scrollLeft = 0;
     return;
   }
   const sRect = scroller.getBoundingClientRect();
@@ -7244,7 +7282,7 @@ function openProduct(sku){
     <div class="pdp-info">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
         <div style="min-width:0;flex:1">
-          <h1 class="pdp-name" style="font-family:var(--display);font-size:2.4rem;font-weight:900;line-height:1.05;color:var(--text);margin:0 0 6px;text-transform:none;letter-spacing:0">${compoundName}</h1>
+          <h1 class="pdp-name" style="font-family:var(--display);font-size:2.4rem;font-weight:900;line-height:1.05;color:var(--text);margin:0 0 6px;text-transform:uppercase;letter-spacing:-0.03em">${compoundName}</h1>
           <div class="pdp-dose" style="font-size:0.92rem;color:var(--muted);font-weight:700">${doseText}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
