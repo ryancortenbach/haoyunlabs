@@ -695,6 +695,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .hero-feature-grid{grid-template-columns:1fr!important}
   /* Mobile menu safe areas */
   .mobile-menu{padding-top:28px!important;padding-bottom:max(32px,env(safe-area-inset-bottom,32px))!important}
+  /* You may also like upsell — hide product image, let name section fill */
+  #order-suggested img{display:none!important}
+  #order-suggested > div > div > div[style*="display:flex"]{gap:10px!important}
   /* Mobile cart CTA safe area */
   #mobile-cart-cta{bottom:max(12px,env(safe-area-inset-bottom,12px))!important}
   /* PDP size grid: 3 cols on small screens */
@@ -1045,6 +1048,55 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 }
 .hyl-select-item.selected .sel-check{opacity:1}
 .hyl-select-separator{height:1px;background:var(--stroke);margin:4px 6px}
+/* ── CUSTOM DROPDOWN (replaces native <select> across site) ── */
+.hyl-cs{position:relative;display:block;width:100%;font-family:inherit}
+.hyl-cs-trigger{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:13px 14px;border:1px solid var(--stroke);border-radius:var(--radius);
+  background:var(--bg);color:#000;font-size:0.88rem;font-family:inherit;
+  font-weight:500;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s,transform 0.18s;
+  text-align:left;box-sizing:border-box;line-height:1.2;
+}
+.hyl-cs-trigger:hover{border-color:#999}
+.hyl-cs-trigger:active{transform:scale(0.995)}
+.hyl-cs.open .hyl-cs-trigger{border-color:#000;box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
+.hyl-cs-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;color:#000}
+.hyl-cs-chev{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px;transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);color:#000;width:14px;height:14px}
+.hyl-cs.open .hyl-cs-chev{transform:rotate(180deg)}
+.hyl-cs-panel{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:300;
+  background:#fff;border:1px solid var(--stroke);border-radius:14px;
+  box-shadow:0 16px 44px rgba(0,0,0,0.14),0 2px 8px rgba(0,0,0,0.05);
+  opacity:0;transform:translateY(-10px) scale(0.96);transform-origin:top center;
+  pointer-events:none;visibility:hidden;
+  transition:opacity 0.22s ease,transform 0.38s cubic-bezier(0.22,1,0.36,1),visibility 0s linear 0.22s;
+  overflow:hidden;
+}
+.hyl-cs.drop-up .hyl-cs-panel{top:auto;bottom:calc(100% + 6px);transform-origin:bottom center;transform:translateY(10px) scale(0.96)}
+.hyl-cs.open .hyl-cs-panel{
+  opacity:1;transform:translateY(0) scale(1);
+  pointer-events:auto;visibility:visible;
+  transition:opacity 0.2s ease,transform 0.4s cubic-bezier(0.22,1,0.36,1),visibility 0s linear 0s;
+}
+.hyl-cs-scroll{max-height:300px;overflow-y:auto;padding:6px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.hyl-cs-item{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 12px;border-radius:8px;cursor:pointer;font-size:0.92rem;
+  color:#000;font-weight:500;transition:background 0.15s,transform 0.12s;user-select:none;
+  font-family:inherit;
+}
+.hyl-cs-item:hover{background:rgba(0,0,0,0.05)}
+.hyl-cs-item:active{transform:scale(0.99)}
+.hyl-cs-item.selected{background:rgba(0,0,0,0.06);font-weight:700}
+.hyl-cs-item-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hyl-cs-item-check{opacity:0;display:inline-flex;flex-shrink:0;color:#000;transition:opacity 0.18s}
+.hyl-cs-item.selected .hyl-cs-item-check{opacity:1}
+/* Sort selector pill variant */
+.hyl-cs-sort{display:inline-block;width:auto;min-width:108px}
+.hyl-cs-sort .hyl-cs-trigger{padding:0 14px;height:46px;font-size:15px;border-radius:999px;line-height:1;font-weight:500}
+.hyl-cs-sort .hyl-cs-panel{border-radius:18px}
+/* Hidden native select (kept for form submission) */
+select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;opacity:0!important;pointer-events:none!important}
 .card-footer{padding:6px 14px 14px;margin-top:auto;border-top:none}
 .btn-add{
   width:100%;padding:18px 16px;background:var(--brand);color:var(--bg);
@@ -1702,15 +1754,18 @@ body.upsell-stack-active #email-popup{bottom:calc(24px + var(--upsell-stack-h, 0
 .form-row.col-2{grid-template-columns:1fr 1fr}
 .form-label{font-family:var(--mono);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;display:block;color:var(--text)}
 .form-input{
-  width:100%;padding:13px 12px;border:1px solid var(--stroke);
+  width:100%;max-width:100%;padding:13px 12px;border:1px solid var(--stroke);
   font-size:0.88rem;background:var(--bg);border-radius:var(--radius);
+  color:#000;
   transition:border-color 0.2s,box-shadow 0.2s;
+  box-sizing:border-box;
 }
 select.form-input{
   appearance:none;-webkit-appearance:none;-moz-appearance:none;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-  background-repeat:no-repeat;background-position:right 10px center;background-size:12px;padding-right:30px;
+  background-image:none;
+  color:#000;
 }
+select.form-input option{color:#000}
 .form-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,0,0,0.06);outline:none}
 .form-input:invalid:not(:placeholder-shown){border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.08)}
 .form-input:valid:not(:placeholder-shown){border-color:var(--stroke)}
@@ -2351,7 +2406,7 @@ select.form-input{
 .hyl-rp-row .rp-line{background:#fafafa}
 .hyl-rp-row .rp-unit::before,.hyl-rp-row .rp-qty::before,.hyl-rp-row .rp-line::before{content:attr(data-label) ":";font-family:var(--sans);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:left}
 .hyl-rp-row .rp-line{font-weight:800}
-.hyl-rp-empty-row{padding:22px;border:1px dashed var(--stroke);border-radius:12px;text-align:center;color:var(--muted);font-size:0.82rem;background:#fafafa}
+.hyl-rp-empty-row{padding:22px;border:1.5px dotted #8a8a8a;border-radius:12px;text-align:center;color:var(--muted);font-size:0.82rem;background:#fafafa}
 
 .hyl-rp-section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 .hyl-rp-discount-row{display:flex;gap:8px;align-items:stretch}
@@ -7935,7 +7990,7 @@ function renderCartItems(){
     // dashed-border panel inside the line-items area, copy reads
     // "Cart is empty." with a small Shop Catalog CTA. The shipping form,
     // discount field, and totals around it stay rendered.
-    el.innerHTML = `<div class="hyl-rp-empty-row">Cart is empty. Search above to add items.</div>`;
+    el.innerHTML = `<div class="hyl-rp-empty-row">Cart is empty</div>`;
     return;
   }
   let html = '';
@@ -8012,7 +8067,7 @@ function renderReceipt(){
   const itemsEl = document.getElementById('hyl-rp-items');
   if(itemsEl){
     if(cart.size === 0){
-      itemsEl.innerHTML = '<div class="hyl-rp-empty-row">Cart is empty.</div>';
+      itemsEl.innerHTML = '<div class="hyl-rp-empty-row">Cart is empty</div>';
     } else {
       const rowsHtml = [];
       cart.forEach((qty, sku) => {
@@ -10340,6 +10395,169 @@ function populateCountrySelects(){
   });
 }
 document.addEventListener('DOMContentLoaded', populateCountrySelects);
+
+/* ── Custom dropdown UI (replaces native <select> across the site) ── */
+(function(){
+  function buildCustomSelect(selectEl){
+    if(!selectEl || selectEl.dataset.csEnhanced === '1') return;
+    if(selectEl.classList.contains('tk-input')) return;
+    if(selectEl.dataset.noCustom === '1') return;
+    selectEl.dataset.csEnhanced = '1';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'hyl-cs';
+    if(selectEl.classList.contains('zyl-sort')) wrap.classList.add('hyl-cs-sort');
+    if(selectEl.classList.contains('form-input')) wrap.classList.add('hyl-cs-form');
+    if(selectEl.id) wrap.dataset.for = selectEl.id;
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'hyl-cs-trigger';
+    trigger.setAttribute('aria-haspopup','listbox');
+    trigger.setAttribute('aria-expanded','false');
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'hyl-cs-label';
+
+    const chevSpan = document.createElement('span');
+    chevSpan.className = 'hyl-cs-chev';
+    chevSpan.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    trigger.appendChild(labelSpan);
+    trigger.appendChild(chevSpan);
+
+    const panel = document.createElement('div');
+    panel.className = 'hyl-cs-panel';
+    panel.setAttribute('role','listbox');
+
+    const scroll = document.createElement('div');
+    scroll.className = 'hyl-cs-scroll';
+    panel.appendChild(scroll);
+
+    wrap.appendChild(trigger);
+    wrap.appendChild(panel);
+
+    selectEl.parentNode.insertBefore(wrap, selectEl);
+    selectEl.classList.add('hyl-cs-hidden');
+    selectEl.tabIndex = -1;
+
+    function buildOptions(){
+      scroll.innerHTML = '';
+      Array.from(selectEl.options).forEach(opt => {
+        const item = document.createElement('div');
+        item.className = 'hyl-cs-item';
+        item.setAttribute('role','option');
+        if(opt.value === selectEl.value) item.classList.add('selected');
+        item.dataset.value = opt.value;
+
+        const txt = document.createElement('span');
+        txt.className = 'hyl-cs-item-label';
+        txt.textContent = opt.textContent;
+
+        const check = document.createElement('span');
+        check.className = 'hyl-cs-item-check';
+        check.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+        item.appendChild(txt);
+        item.appendChild(check);
+
+        item.addEventListener('click', e => {
+          e.stopPropagation();
+          selectEl.value = opt.value;
+          updateLabel();
+          Array.from(scroll.children).forEach(c => c.classList.toggle('selected', c.dataset.value === opt.value));
+          close();
+          selectEl.dispatchEvent(new Event('change',{bubbles:true}));
+          selectEl.dispatchEvent(new Event('input',{bubbles:true}));
+        });
+        scroll.appendChild(item);
+      });
+    }
+
+    function updateLabel(){
+      const opt = selectEl.options[selectEl.selectedIndex];
+      labelSpan.textContent = opt ? opt.textContent : '';
+    }
+
+    function open(){
+      if(wrap.classList.contains('open')) return;
+      document.querySelectorAll('.hyl-cs.open').forEach(o => {
+        o.classList.remove('open');
+        const t = o.querySelector('.hyl-cs-trigger'); if(t) t.setAttribute('aria-expanded','false');
+      });
+      const rect = trigger.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      wrap.classList.toggle('drop-up', spaceBelow < 280 && rect.top > spaceBelow);
+      wrap.classList.add('open');
+      trigger.setAttribute('aria-expanded','true');
+      requestAnimationFrame(() => {
+        const sel = scroll.querySelector('.hyl-cs-item.selected');
+        if(sel) sel.scrollIntoView({block:'nearest'});
+      });
+    }
+
+    function close(){
+      wrap.classList.remove('open');
+      trigger.setAttribute('aria-expanded','false');
+    }
+
+    trigger.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      if(wrap.classList.contains('open')) close(); else open();
+    });
+
+    trigger.addEventListener('keydown', e => {
+      if(e.key === 'Escape'){close(); return;}
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        if(wrap.classList.contains('open')) close(); else open();
+      }
+    });
+
+    const obs = new MutationObserver(() => { buildOptions(); updateLabel(); });
+    obs.observe(selectEl, {childList:true});
+
+    selectEl.addEventListener('change', () => {
+      updateLabel();
+      Array.from(scroll.children).forEach(c => c.classList.toggle('selected', c.dataset.value === selectEl.value));
+    });
+
+    wrap._rebuild = () => { buildOptions(); updateLabel(); };
+
+    buildOptions();
+    updateLabel();
+  }
+
+  function enhanceAll(){
+    document.querySelectorAll('select').forEach(buildCustomSelect);
+  }
+
+  document.addEventListener('click', e => {
+    document.querySelectorAll('.hyl-cs.open').forEach(o => {
+      if(!o.contains(e.target)){
+        o.classList.remove('open');
+        const t = o.querySelector('.hyl-cs-trigger'); if(t) t.setAttribute('aria-expanded','false');
+      }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+      document.querySelectorAll('.hyl-cs.open').forEach(o => {
+        o.classList.remove('open');
+        const t = o.querySelector('.hyl-cs-trigger'); if(t) t.setAttribute('aria-expanded','false');
+      });
+    }
+  });
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', enhanceAll);
+  } else {
+    enhanceAll();
+  }
+
+  window.enhanceCustomSelects = enhanceAll;
+})();
 
 function toggleDiscreet(){
   discreetPackaging = !discreetPackaging;
