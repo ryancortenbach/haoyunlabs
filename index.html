@@ -575,18 +575,20 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .prod-img{
     grid-area:img;
     border-radius:0!important;
-    align-self:center!important;
     display:flex!important;
     align-items:center;justify-content:center;
     padding:0!important;
     border-right:none!important;
     border-bottom:none!important;
     overflow:hidden;
-    position:relative;
-    width:150px;
+    position:absolute!important;
+    top:18px!important;
+    left:0!important;
+    width:150px!important;
     height:155px!important;
     min-height:155px!important;
     aspect-ratio:unset!important;
+    pointer-events:none;
   }
   .product-card .prod-img img{
     position:absolute!important;top:0!important;left:0!important;
@@ -1648,7 +1650,8 @@ body.admin-open{overflow:hidden}
      and ADD TO CART. */
   #screen-product.active .pdp-commonly .product-card .prod-img{
     padding:0!important;min-height:155px!important;height:155px!important;
-    align-self:center!important;
+    position:absolute!important;top:18px!important;left:0!important;width:150px!important;
+    pointer-events:none;
   }
   #screen-product.active .pdp-commonly .product-card .prod-img img{
     max-height:none!important;max-width:none!important;
