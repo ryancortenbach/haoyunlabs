@@ -450,7 +450,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:flex-grow 0.45s cubic-bezier(0.22,1,0.36,1),flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:opacity 0.18s ease-out!important}
   /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
      row claims the freed-up width and its pills stretch to equal shares.
      When cat-tabs expands again (Singles/Kits), :has() drops back to the
@@ -465,7 +465,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs.has-right-overflow,
   .cat-tabs.has-left-overflow,
   .cat-tabs.has-left-overflow.has-right-overflow{-webkit-mask-image:none!important;mask-image:none!important}
-  .cat-tabs .type-tabs-inner .type-tab{transition:flex-basis 0.45s cubic-bezier(0.22,1,0.36,1),background 0.18s ease,color 0.18s ease,padding 0.45s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .type-tabs-inner .type-tab{transition:background 0.18s ease,color 0.18s ease!important}
   .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:30px!important;padding:0 12px!important;line-height:1!important;font-size:0.72rem!important;border-radius:999px}
   /* Selected/active white pill: same dimensions as the gray pills (no thinning) */
   .cat-tabs .cat-tab.active,.cat-tabs .type-tab.active{height:30px!important;padding:0 12px!important;margin:0!important}
@@ -587,14 +587,11 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
     position:absolute!important;top:0!important;left:0!important;
     width:100%!important;height:100%!important;
     max-width:none!important;max-height:none!important;
-    object-fit:contain!important;object-position:right center!important;
+    object-fit:contain!important;object-position:right top!important;
     transform:none!important;
     padding:0!important;
-    transition:object-position 0.32s cubic-bezier(0.22,1,0.36,1);
+    transition:none!important;
   }
-  /* When More Details is expanded the right-side text grows tall; pin the
-     vial image to the top of its cell instead of letting it float in the middle. */
-  .product-card:has(.card-details.open) .prod-img img{object-position:right top!important}
   .product-card .card-footer{display:block!important;padding:0 12px 12px!important;border-top:none!important;margin-top:0!important}
   /* Size dropdown: keep within card, opens upward when space above, bounded width */
   .product-card .hyl-select-content{
@@ -910,7 +907,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   display:inline-flex;align-items:center;gap:4px;padding:4px;
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
   max-width:1200px;opacity:1;overflow:hidden;
-  transition:max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1);
+  transition:opacity 0.18s ease-out;
 }
 .cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
 .cat-tabs-slider{display:none}
@@ -1111,7 +1108,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 /* Sort selector pill variant */
 .hyl-cs-sort{display:inline-block;width:auto;min-width:108px}
 .hyl-cs-sort .hyl-cs-trigger{padding:0 14px;height:46px;font-size:15px;border-radius:999px;line-height:1;font-weight:500}
-.hyl-cs-sort .hyl-cs-panel{border-radius:18px}
+.hyl-cs-sort .hyl-cs-panel{border-radius:18px;left:auto;right:0;width:max-content;min-width:200px;max-width:calc(100vw - 32px)}
 /* Hidden native select (kept for form submission) */
 select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;opacity:0!important;pointer-events:none!important}
 .card-footer{padding:6px 14px 14px;margin-top:auto;border-top:none}
@@ -1648,10 +1645,9 @@ body.admin-open{overflow:hidden}
   #screen-product.active .pdp-commonly .product-card .prod-img img{
     max-height:none!important;max-width:none!important;
     width:100%!important;height:100%!important;
-    object-fit:contain!important;object-position:right center!important;
-    margin:0!important;
+    object-fit:contain!important;object-position:right top!important;
+    margin:0!important;transition:none!important;
   }
-  #screen-product.active .pdp-commonly:has(.card-details.open) .prod-img img{object-position:right top!important}
   /* Hide bottom View Cart bar while on PDP */
   body:has(#screen-product.active) #mobile-cart-cta{display:none!important}
   /* FAQ plus/minus sizing for mobile tap + clarity */
