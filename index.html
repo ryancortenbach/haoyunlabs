@@ -455,6 +455,13 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs .cat-tabs-inner{transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0s,opacity 0.2s ease 0.3s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0s!important}
   /* Collapsed state (going TO bundles): opacity fades first, then max-width shrinks */
   .cat-tabs .cat-tabs-inner.is-collapsed{transition:opacity 0.2s ease 0s,max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s!important}
+  /* Type-tabs: flex-grow transitions smoothly (unlike flex-basis). In bundles
+     state, type-tabs and its pills grow to fill the row in sync with cat-row
+     shrinking. Going back, they shrink first, then cat-row fades back in. */
+  .cat-tabs .type-tabs-inner{transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0s!important}
+  .cat-tabs .type-tabs-inner .type-tab{transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0s,background 0.18s ease,color 0.18s ease!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex-grow:1!important;align-self:stretch;transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex-grow:1!important;min-width:0!important;transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,background 0.18s ease,color 0.18s ease!important}
   /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
   /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
