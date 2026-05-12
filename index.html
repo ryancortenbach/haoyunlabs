@@ -450,14 +450,17 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:max-width 0.36s cubic-bezier(0.22,1,0.36,1),opacity 0.26s ease-out,padding 0.36s cubic-bezier(0.22,1,0.36,1),margin 0.36s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:max-width 0.34s cubic-bezier(0.22,1,0.36,1),opacity 0.2s ease-out,padding 0.34s cubic-bezier(0.22,1,0.36,1),margin 0.34s cubic-bezier(0.22,1,0.36,1)!important}
+  .cat-tabs .cat-tabs-inner.cs-fading{opacity:0!important}
   /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
      row claims the freed-up width and its pills stretch to equal shares.
      When cat-tabs expands again (Singles/Kits), :has() drops back to the
      base content-sized layout and the flex transition glides type-tabs
      back to normal. */
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner,
+  .cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab,
+  .cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
   /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
   /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
@@ -572,7 +575,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .prod-img{
     grid-area:img;
     border-radius:0!important;
-    align-self:start!important;
+    align-self:center!important;
     display:flex!important;
     align-items:center;justify-content:center;
     padding:0!important;
@@ -909,9 +912,12 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   display:inline-flex;align-items:center;gap:4px;padding:4px;
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
   max-width:1200px;opacity:1;overflow:hidden;
-  transition:max-width 0.36s cubic-bezier(0.22,1,0.36,1),opacity 0.26s ease-out,padding 0.36s cubic-bezier(0.22,1,0.36,1),margin 0.36s cubic-bezier(0.22,1,0.36,1);
+  transition:max-width 0.34s cubic-bezier(0.22,1,0.36,1),opacity 0.2s ease-out,padding 0.34s cubic-bezier(0.22,1,0.36,1),margin 0.34s cubic-bezier(0.22,1,0.36,1);
 }
-.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
+.cat-tabs-inner.cs-fading{opacity:0}
+.cat-tabs-inner.is-collapsed{max-width:0!important;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
+.cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner{flex:1 1 auto;width:100%;min-width:0}
+.cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner .type-tab{flex:1 1 0;min-width:0}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
@@ -1642,7 +1648,7 @@ body.admin-open{overflow:hidden}
      and ADD TO CART. */
   #screen-product.active .pdp-commonly .product-card .prod-img{
     padding:0!important;min-height:155px!important;height:155px!important;
-    align-self:start!important;
+    align-self:center!important;
   }
   #screen-product.active .pdp-commonly .product-card .prod-img img{
     max-height:none!important;max-width:none!important;
@@ -7014,9 +7020,35 @@ function buildCatTabs(containerId, activeVar, clickFn){
     t.classList.toggle('active', t.dataset.type === productType);
   });
   // Hide category row when viewing Bundles (bundles aren't categorized).
-  // Use a class so CSS can animate max-width/opacity instead of display:none.
+  // Sequenced animation: when COLLAPSING, fade right out first (cs-fading),
+  // then shrink (is-collapsed) so the left can grow into the freed space.
+  // When EXPANDING BACK, shrink left first (remove is-collapsed but keep
+  // cs-uncollapsing so type-tabs stays stretched), then fade right back in.
   const catRow = c.querySelector('.cat-tabs-inner');
-  if(catRow) catRow.classList.toggle('is-collapsed', productType === 'bundles');
+  if(catRow){
+    const shouldCollapse = productType === 'bundles';
+    const isCollapsed = catRow.classList.contains('is-collapsed');
+    if(catRow._csTimer){ clearTimeout(catRow._csTimer); catRow._csTimer = 0; }
+    if(shouldCollapse && !isCollapsed){
+      catRow.classList.add('cs-fading');
+      catRow._csTimer = setTimeout(() => {
+        catRow.classList.add('is-collapsed');
+        catRow.classList.remove('cs-fading');
+        catRow._csTimer = 0;
+      }, 200);
+    } else if(!shouldCollapse && isCollapsed){
+      catRow.classList.add('cs-fading');
+      catRow.classList.add('cs-uncollapsing');
+      catRow.classList.remove('is-collapsed');
+      catRow._csTimer = setTimeout(() => {
+        catRow.classList.remove('cs-uncollapsing');
+        catRow.classList.remove('cs-fading');
+        catRow._csTimer = 0;
+      }, 340);
+    } else {
+      catRow.classList.toggle('is-collapsed', shouldCollapse);
+    }
+  }
   requestAnimationFrame(()=>{ slideCatTab(containerId); updateCatTabsOverflow(c); scrollActiveTabIntoView(c); });
   // Continuously re-evaluate overflow during the 450ms collapse/expand transition
   // so the right-edge fade gradient appears synchronously with the bar growing,
