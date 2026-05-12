@@ -7030,17 +7030,21 @@ function buildCatTabs(containerId, activeVar, clickFn){
       const flipPills = (from, to) => {
         pills.forEach((p, i) => {
           p.style.transition = 'none';
-          p.style.flex = `0 0 ${from[i]}px`;
-          p.style.minWidth = '0';
+          p.style.setProperty('flex', `0 0 ${from[i]}px`, 'important');
+          p.style.setProperty('min-width', '0', 'important');
         });
         if(typeRow) void typeRow.offsetWidth;
         pills.forEach((p, i) => {
           p.style.transition = 'flex-basis 0.32s cubic-bezier(0.4,0,0.2,1)';
-          p.style.flex = `0 0 ${to[i]}px`;
+          p.style.setProperty('flex', `0 0 ${to[i]}px`, 'important');
         });
       };
       const clearPills = () => {
-        pills.forEach(p => { p.style.transition=''; p.style.flex=''; p.style.minWidth=''; });
+        pills.forEach(p => {
+          p.style.transition = '';
+          p.style.removeProperty('flex');
+          p.style.removeProperty('min-width');
+        });
       };
       if(shouldCollapse){
         catRow.style.transition = 'opacity 0.2s ease-out';
