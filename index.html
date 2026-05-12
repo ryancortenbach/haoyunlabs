@@ -451,17 +451,18 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
   .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px}
-  /* Default state (going BACK from bundles): max-width expands first, then opacity fades in */
-  .cat-tabs .cat-tabs-inner{transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0s,opacity 0.2s ease 0.3s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0s!important}
-  /* Collapsed state (going TO bundles): opacity fades first, then max-width shrinks */
-  .cat-tabs .cat-tabs-inner.is-collapsed{transition:opacity 0.2s ease 0s,max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s!important}
-  /* Type-tabs: flex-grow transitions smoothly (unlike flex-basis). In bundles
-     state, type-tabs and its pills grow to fill the row in sync with cat-row
-     shrinking. Going back, they shrink first, then cat-row fades back in. */
-  .cat-tabs .type-tabs-inner{transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0s!important}
-  .cat-tabs .type-tabs-inner .type-tab{transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0s,background 0.18s ease,color 0.18s ease!important}
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex-grow:1!important;align-self:stretch;transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s!important}
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex-grow:1!important;min-width:0!important;transition:flex-grow 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,background 0.18s ease,color 0.18s ease!important}
+  /* Reverse direction (.is-collapsed removed): type-tabs shrinks 0-300ms,
+     cat-row max-width grows back 0-300ms, cat-row opacity fades in 300-500ms. */
+  .cat-tabs .cat-tabs-inner{transition:max-width 0.3s ease-in-out 0s,opacity 0.2s ease-in-out 0.3s,padding 0.3s ease-in-out 0s,margin 0.3s ease-in-out 0s!important}
+  /* Forward direction (.is-collapsed added): cat-row opacity fades 0-200ms,
+     cat-row max-width shrinks 200-500ms, type-tabs expands 200-500ms. */
+  .cat-tabs .cat-tabs-inner.is-collapsed{transition:opacity 0.2s ease-in-out 0s,max-width 0.3s ease-in-out 0.2s,padding 0.3s ease-in-out 0.2s,margin 0.3s ease-in-out 0.2s!important}
+  /* Type-tabs flex-grow transitions (reverse: shrink immediately) */
+  .cat-tabs .type-tabs-inner{transition:flex-grow 0.3s ease-in-out 0s!important}
+  .cat-tabs .type-tabs-inner .type-tab{transition:flex-grow 0.3s ease-in-out 0s,background 0.18s ease,color 0.18s ease!important}
+  /* Forward: type-tabs grows with 0.2s delay (after cat-row fade) */
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex-grow:1!important;align-self:stretch;transition:flex-grow 0.3s ease-in-out 0.2s!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex-grow:1!important;min-width:0!important;transition:flex-grow 0.3s ease-in-out 0.2s,background 0.18s ease,color 0.18s ease!important}
   /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
   /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
@@ -915,8 +916,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
   max-width:1200px;opacity:1;overflow:hidden;
 }
-.cat-tabs-inner{transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0s,opacity 0.2s ease 0.3s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0s}
-.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none;transition:opacity 0.2s ease 0s,max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s}
+.cat-tabs-inner{transition:max-width 0.3s ease-in-out 0s,opacity 0.2s ease-in-out 0.3s,padding 0.3s ease-in-out 0s,margin 0.3s ease-in-out 0s}
+.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none;transition:opacity 0.2s ease-in-out 0s,max-width 0.3s ease-in-out 0.2s,padding 0.3s ease-in-out 0.2s,margin 0.3s ease-in-out 0.2s}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
@@ -1010,6 +1011,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   align-self:stretch;box-sizing:border-box;
 }
 .card-details-toggle:hover{color:#fff;background:#000}
+.product-card.is-bundle .card-details-toggle{display:flex!important}
+.product-card.is-single .card-details-toggle,
+.product-card.is-kit .card-details-toggle{display:none!important}
 .card-details{display:grid;grid-template-rows:0fr;overflow:hidden;opacity:0;transition:grid-template-rows 0.36s cubic-bezier(0.22,1,0.36,1),padding 0.36s cubic-bezier(0.22,1,0.36,1),opacity 0.22s ease-out;padding:0;font-size:0.72rem;color:var(--muted);line-height:1.6;font-family:var(--mono)}
 .card-details>*{min-height:0;overflow:hidden}
 .card-details.open{grid-template-rows:1fr;padding:8px 0 0;opacity:1;transition:grid-template-rows 0.36s cubic-bezier(0.22,1,0.36,1),padding 0.36s cubic-bezier(0.22,1,0.36,1),opacity 0.26s ease-out 0.08s}
@@ -6865,7 +6869,8 @@ function cardHTML(p){
       stockBadge = '<span class="badge-purity" style="background:#fef3c7;color:#92400e;border-color:#fde68a">Low Stock</span>';
     }
   }
-  return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative" data-sku="${p.sku}" data-coa="${coaMatch ? coaMatch.c : ''}">
+  const typeClass = p.isBundle ? 'is-bundle' : (p.isKit ? 'is-kit' : 'is-single');
+  return `<div class="product-card ${typeClass}" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative" data-sku="${p.sku}" data-coa="${coaMatch ? coaMatch.c : ''}">
     ${getProductImageHTML(p)}
     <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:4px;z-index:2;align-items:flex-end">
       ${isBest ? '<span class="badge-bestseller">Best Seller</span>' : ''}
