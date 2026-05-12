@@ -517,9 +517,18 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .pdp-tab{padding:10px 14px!important;font-size:0.68rem!important;flex:0 0 auto;white-space:nowrap}
 
   /* CHECKOUT */
-  .checkout-layout{grid-template-columns:1fr!important;gap:18px!important}
-  .checkout-layout>div{padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important}
+  .checkout-layout{grid-template-columns:1fr!important;gap:18px!important;width:100%!important;min-width:0!important;max-width:100%!important}
+  .checkout-layout>div{padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important;min-width:0!important;max-width:100%!important;width:100%!important;box-sizing:border-box}
   .checkout-right-col{position:static!important}
+  #screen-order .checkout-card{padding:18px!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden}
+  #screen-order .form-grid,#screen-order .form-row{min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box;gap:14px!important}
+  #screen-order .form-input{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;display:block}
+  #screen-order .container{max-width:100%!important;overflow-x:hidden}
+  #screen-order .hyl-rp-discount-row{flex-wrap:wrap;min-width:0}
+  #screen-order .hyl-rp-discount-input{min-width:0;flex:1 1 0%}
+  #screen-order #order-search-results,#screen-order #cart-items-list{min-width:0;max-width:100%;overflow:hidden}
+  #screen-order *{max-width:100%}
+  #screen-order img{max-width:100%;height:auto}
 
   /* CONTAINER + FOOTER */
   .container{padding:0 14px}
@@ -904,13 +913,6 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   transition:max-width 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.35s cubic-bezier(0.22,1,0.36,1),padding 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s cubic-bezier(0.22,1,0.36,1);
 }
 .cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
-@keyframes catPillIn{from{opacity:0;transform:translateX(-8px) scale(0.92)}to{opacity:1;transform:translateX(0) scale(1)}}
-.cat-tabs-inner:not(.is-collapsed) .cat-tab{animation:catPillIn 0.42s cubic-bezier(0.22,1,0.36,1) backwards}
-.cat-tabs-inner:not(.is-collapsed) .cat-tab:nth-child(1){animation-delay:0.05s}
-.cat-tabs-inner:not(.is-collapsed) .cat-tab:nth-child(2){animation-delay:0.10s}
-.cat-tabs-inner:not(.is-collapsed) .cat-tab:nth-child(3){animation-delay:0.15s}
-.cat-tabs-inner:not(.is-collapsed) .cat-tab:nth-child(4){animation-delay:0.20s}
-.cat-tabs-inner:not(.is-collapsed) .cat-tab:nth-child(5){animation-delay:0.25s}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
@@ -919,15 +921,17 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   text-transform:none;font-weight:700;cursor:pointer;
   border:none;background:transparent;color:var(--muted);
   border-radius:999px;
-  transition:background-color 0.32s cubic-bezier(0.22,1,0.36,1),
-             color 0.32s cubic-bezier(0.22,1,0.36,1),
-             box-shadow 0.32s cubic-bezier(0.22,1,0.36,1),
-             transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  transition:background-color 0.25s cubic-bezier(0.22,1,0.36,1),
+             color 0.25s cubic-bezier(0.22,1,0.36,1),
+             box-shadow 0.25s cubic-bezier(0.22,1,0.36,1),
+             transform 0.15s cubic-bezier(0.22,1,0.36,1);
   -webkit-tap-highlight-color:transparent;
   user-select:none;
 }
-.cat-tab:hover,.type-tab:hover{color:var(--text);background:rgba(0,0,0,0.04);transform:translateY(-0.5px)}
-.cat-tab:active,.type-tab:active{transform:scale(0.94);transition:transform 0.08s ease-out}
+@media(hover:hover){
+  .cat-tab:hover,.type-tab:hover{color:var(--text);background:rgba(0,0,0,0.04)}
+}
+.cat-tab:active,.type-tab:active{transform:scale(0.96);transition:transform 0.08s ease-out}
 .cat-tab.active,.type-tab.active{
   background:#fff;color:var(--text);font-weight:700;
   box-shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
@@ -3097,10 +3101,10 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 <!-- ═══════════════ SCREEN: ORDER / CHECKOUT ═══════════════ -->
 <div class="screen" id="screen-order">
   <div class="container">
-    <div class="checkout-card" style="margin:32px 0 18px">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--stroke);margin-bottom:14px">
-        <div onclick="navigate('catalog')" style="font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase">&#8592; Back</div>
-        <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:1.6rem;letter-spacing:-0.01em;color:var(--brand);line-height:1">Hao Yun Labs</div>
+    <div class="checkout-card" style="margin:32px 0 18px;min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--stroke);margin-bottom:14px;gap:10px;flex-wrap:nowrap;min-width:0">
+        <div onclick="navigate('catalog')" style="font-size:0.72rem;font-weight:700;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid var(--stroke);border-radius:999px;background:#fff;letter-spacing:0.04em;text-transform:uppercase;flex-shrink:0;white-space:nowrap">&#8592; Back</div>
+        <div onclick="navigate('home')" style="cursor:pointer;font-family:'Instrument Serif',serif;font-size:1.4rem;letter-spacing:-0.01em;color:var(--brand);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">Hao Yun Labs</div>
       </div>
       <div class="hyl-rp-eyebrow">Checkout</div>
       <div class="hyl-rp-headline" style="margin-top:0">Review and pay</div>
@@ -7441,7 +7445,7 @@ function openProduct(sku){
   document.getElementById('pdp-commonly').innerHTML = others.length ? `
     <div class="pdp-commonly-card">
       <h2>Frequently Stacked With</h2>
-      <div class="pdp-commonly-sub">Compounds researchers commonly run alongside ${compoundName} in published protocols.</div>
+      <div class="pdp-commonly-sub">Other compounds often paired with ${compoundName}.</div>
       <div class="product-grid" id="pdp-commonly-grid">${_firstFour}</div>
       ${_restFour ? `
         <div class="product-grid is-hidden" id="pdp-commonly-rest" style="margin-top:14px">${_restFour}</div>
