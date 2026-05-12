@@ -450,14 +450,11 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1),opacity 0.22s ease,padding 0.3s cubic-bezier(0.4,0,0.2,1),margin 0.3s cubic-bezier(0.4,0,0.2,1)!important}
-  /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
-     row claims the freed-up width and its pills stretch to equal shares.
-     When cat-tabs expands again (Singles/Kits), :has() drops back to the
-     base content-sized layout and the flex transition glides type-tabs
-     back to normal. */
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px}
+  /* Default state (going BACK from bundles): max-width expands first, then opacity fades in */
+  .cat-tabs .cat-tabs-inner{transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0s,opacity 0.2s ease 0.3s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0s!important}
+  /* Collapsed state (going TO bundles): opacity fades first, then max-width shrinks */
+  .cat-tabs .cat-tabs-inner.is-collapsed{transition:opacity 0.2s ease 0s,max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s!important}
   /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
   /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
@@ -493,8 +490,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .card-body{padding:14px 12px 10px}
   .card-footer{padding:10px 12px 14px!important}
   .card-name{font-size:1.08rem!important}
-  .card-sku{font-size:0.62rem}
-  .card-price{font-size:0.88rem}
+  .card-sku{font-size:0.651rem}
+  .card-price{font-size:0.968rem}
   .card-desc{font-size:0.7rem}
 
   /* PDP */
@@ -608,13 +605,13 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
     flex-direction:column;
     align-items:flex-start;
   }
-  .product-card .card-sku{font-size:0.6rem!important;opacity:0.6}
+  .product-card .card-sku{font-size:0.63rem!important;opacity:0.6}
   .research-card{grid-template-columns:1fr!important}
   .research-card .research-card-img{border-right:none!important;border-bottom:1px solid var(--stroke);min-height:200px!important}
   .product-card .card-header .card-price{
-    font-size:1rem!important;font-weight:800;margin-top:2px;display:block;
+    font-size:1.1rem!important;font-weight:800;margin-top:2px;display:block;
   }
-  .product-card .card-header .card-price-old{font-size:0.7rem!important}
+  .product-card .card-header .card-price-old{font-size:0.77rem!important}
   .product-card .card-body{
     grid-area:body;
     padding:2px 12px 8px 0!important;
@@ -910,9 +907,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   display:inline-flex;align-items:center;gap:4px;padding:4px;
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
   max-width:1200px;opacity:1;overflow:hidden;
-  transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1),opacity 0.22s ease,padding 0.3s cubic-bezier(0.4,0,0.2,1),margin 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
+.cat-tabs-inner{transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0s,opacity 0.2s ease 0.3s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0s}
+.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none;transition:opacity 0.2s ease 0s,max-width 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,padding 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s,margin 0.3s cubic-bezier(0.4,0,0.2,1) 0.2s}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
@@ -987,9 +984,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 0}
-.card-sku{font-family:var(--mono);font-size:0.82rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#5b6478}
-.card-price{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1rem;font-weight:800;letter-spacing:-0.02em;display:inline-flex;flex-direction:column;align-items:flex-end;gap:2px;line-height:1.05}
-.card-price-old{font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:-0.02em;color:#9b9b9b;text-decoration:line-through;margin:0 0 0 8px;line-height:1}
+.card-sku{font-family:var(--mono);font-size:0.861rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#444c61}
+.card-price{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-0.02em;display:inline-flex;flex-direction:column;align-items:flex-end;gap:2px;line-height:1.05}
+.card-price-old{font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.902rem;font-weight:700;letter-spacing:-0.02em;color:#9b9b9b;text-decoration:line-through;margin:0 0 0 8px;line-height:1}
 .card-body{padding:10px 14px 8px;flex:1;display:flex;flex-direction:column;gap:6px}
 .card-name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:-0.03em;line-height:1.2}
 .card-desc{font-size:0.75rem;color:var(--muted);margin-top:2px;line-height:1.4}
@@ -1001,7 +998,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   font-size:0.78rem;text-transform:none;letter-spacing:0;
   margin:6px 0 0;cursor:pointer;color:#000;font-weight:700;
   background:#fff;border:2px solid #000;border-radius:0;padding:8px 14px;text-align:center;
-  display:block;width:100%;transition:background 0.15s,color 0.15s;
+  display:none;width:100%;transition:background 0.15s,color 0.15s;
   font-family:'Helvetica Neue',Arial,sans-serif;
   align-self:stretch;box-sizing:border-box;
 }
@@ -7015,81 +7012,21 @@ function buildCatTabs(containerId, activeVar, clickFn){
     t.classList.toggle('active', t.dataset.type === productType);
   });
   // Hide category row when viewing Bundles (bundles aren't categorized).
-  // Sequenced animation with FLIP:
-  // - TO bundles: fade cat-row out (200ms) → snap cat-row to collapsed instantly
-  //   (so we can measure final pill widths) → FLIP pills from current widths to
-  //   the final equal-share widths (320ms).
-  // - FROM bundles: snap cat-row to expanded (still invisible) → FLIP pills from
-  //   their stretched widths back down to content widths (320ms) → fade cat-row
-  //   back in (200ms).
+  // CSS handles the animation via direction-specific transition delays.
   const catRow = c.querySelector('.cat-tabs-inner');
   if(catRow){
-    const shouldCollapse = productType === 'bundles';
-    const isCollapsed = catRow.classList.contains('is-collapsed');
-    if(shouldCollapse !== isCollapsed){
-      const typeRow = c.querySelector('.type-tabs-inner');
-      const pills = typeRow ? Array.from(typeRow.querySelectorAll('.type-tab')) : [];
-      if(catRow._csTimer){ clearTimeout(catRow._csTimer); catRow._csTimer = 0; }
-      const setPills = (widths, withTransition) => {
-        pills.forEach((p, i) => {
-          p.style.transition = withTransition ? 'flex-basis 0.32s cubic-bezier(0.4,0,0.2,1)' : 'none';
-          p.style.setProperty('flex', `0 0 ${Math.max(0, widths[i])}px`, 'important');
-          p.style.setProperty('min-width', '0', 'important');
-        });
-      };
-      const clearPills = () => {
-        pills.forEach(p => {
-          p.style.transition = '';
-          p.style.removeProperty('flex');
-          p.style.removeProperty('min-width');
-        });
-      };
-      if(shouldCollapse){
-        // Forward direction
-        catRow.style.transition = 'opacity 0.2s ease-out';
-        catRow.style.opacity = '0';
-        catRow._csTimer = setTimeout(() => {
-          if(!pills.length){ catRow.classList.add('is-collapsed'); catRow.style.transition=''; return; }
-          const oldW = pills.map(p => p.offsetWidth);
-          // Snap cat-row to collapsed state with NO transition so we measure the
-          // final layout (not a mid-transition value).
-          catRow.style.transition = 'none';
-          catRow.classList.add('is-collapsed');
-          void catRow.offsetWidth;
-          const newW = pills.map(p => p.offsetWidth);
-          // FLIP: snap pills back to old widths, then transition to new.
-          setPills(oldW, false);
-          void typeRow.offsetWidth;
-          setPills(newW, true);
-          catRow._csTimer = setTimeout(() => {
-            clearPills();
-            catRow.style.transition = '';
-            catRow._csTimer = 0;
-          }, 340);
-        }, 220);
-      } else {
-        // Reverse direction
-        if(!pills.length){ catRow.classList.remove('is-collapsed'); return; }
-        const oldW = pills.map(p => p.offsetWidth);
-        // Snap cat-row to expanded state but keep it invisible during the pill
-        // shrink animation. No transition so layout updates instantly.
-        catRow.style.transition = 'none';
-        catRow.style.opacity = '0';
-        catRow.classList.remove('is-collapsed');
-        void catRow.offsetWidth;
-        const newW = pills.map(p => p.offsetWidth);
-        setPills(oldW, false);
-        void typeRow.offsetWidth;
-        setPills(newW, true);
-        catRow._csTimer = setTimeout(() => {
-          clearPills();
-          // Now fade cat-row back in.
-          catRow.style.transition = 'opacity 0.2s ease-out';
-          catRow.style.opacity = '';
-          catRow._csTimer = 0;
-        }, 340);
-      }
+    // Clean up any stale inline styles from prior animation attempts.
+    catRow.style.removeProperty('opacity');
+    catRow.style.removeProperty('transition');
+    const typeRow = c.querySelector('.type-tabs-inner');
+    if(typeRow){
+      typeRow.querySelectorAll('.type-tab').forEach(p => {
+        p.style.removeProperty('flex');
+        p.style.removeProperty('min-width');
+        p.style.removeProperty('transition');
+      });
     }
+    catRow.classList.toggle('is-collapsed', productType === 'bundles');
   }
   requestAnimationFrame(()=>{ slideCatTab(containerId); updateCatTabsOverflow(c); scrollActiveTabIntoView(c); });
   // Continuously re-evaluate overflow during the 450ms collapse/expand transition
