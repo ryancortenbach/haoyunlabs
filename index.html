@@ -450,17 +450,14 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Category + type tabs on mobile: single horizontal scroll row */
   .cat-tabs{font-size:0.72rem;gap:8px;justify-content:flex-start;width:100%;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;padding:5px 0!important;overflow-x:auto!important;overflow-y:visible!important;align-items:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .cat-tabs::-webkit-scrollbar{display:none}
-  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:max-width 0.34s cubic-bezier(0.22,1,0.36,1),opacity 0.2s ease-out,padding 0.34s cubic-bezier(0.22,1,0.36,1),margin 0.34s cubic-bezier(0.22,1,0.36,1)!important}
-  .cat-tabs .cat-tabs-inner.cs-fading{opacity:0!important}
+  .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px;transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1),opacity 0.22s ease,padding 0.3s cubic-bezier(0.4,0,0.2,1),margin 0.3s cubic-bezier(0.4,0,0.2,1)!important}
   /* Mobile: when cat-tabs row is collapsed (Bundles selected) the type-tabs
      row claims the freed-up width and its pills stretch to equal shares.
      When cat-tabs expands again (Singles/Kits), :has() drops back to the
      base content-sized layout and the flex transition glides type-tabs
      back to normal. */
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner,
-  .cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab,
-  .cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex:1 1 auto!important;width:100%!important;min-width:0!important;justify-content:stretch!important}
+  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex:1 1 0!important;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
   /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
   .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
   /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
@@ -575,20 +572,19 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .product-card .prod-img{
     grid-area:img;
     border-radius:0!important;
+    align-self:start!important;
+    margin-top:18px!important;
     display:flex!important;
     align-items:center;justify-content:center;
     padding:0!important;
     border-right:none!important;
     border-bottom:none!important;
     overflow:hidden;
-    position:absolute!important;
-    top:18px!important;
-    left:0!important;
-    width:150px!important;
+    position:relative;
+    width:150px;
     height:155px!important;
     min-height:155px!important;
     aspect-ratio:unset!important;
-    pointer-events:none;
   }
   .product-card .prod-img img{
     position:absolute!important;top:0!important;left:0!important;
@@ -914,12 +910,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   display:inline-flex;align-items:center;gap:4px;padding:4px;
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
   max-width:1200px;opacity:1;overflow:hidden;
-  transition:max-width 0.34s cubic-bezier(0.22,1,0.36,1),opacity 0.2s ease-out,padding 0.34s cubic-bezier(0.22,1,0.36,1),margin 0.34s cubic-bezier(0.22,1,0.36,1);
+  transition:max-width 0.3s cubic-bezier(0.4,0,0.2,1),opacity 0.22s ease,padding 0.3s cubic-bezier(0.4,0,0.2,1),margin 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-.cat-tabs-inner.cs-fading{opacity:0}
-.cat-tabs-inner.is-collapsed{max-width:0!important;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
-.cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner{flex:1 1 auto;width:100%;min-width:0}
-.cat-tabs:has(.cat-tabs-inner.cs-uncollapsing) .type-tabs-inner .type-tab{flex:1 1 0;min-width:0}
+.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
@@ -1650,8 +1643,7 @@ body.admin-open{overflow:hidden}
      and ADD TO CART. */
   #screen-product.active .pdp-commonly .product-card .prod-img{
     padding:0!important;min-height:155px!important;height:155px!important;
-    position:absolute!important;top:18px!important;left:0!important;width:150px!important;
-    pointer-events:none;
+    align-self:start!important;margin-top:18px!important;
   }
   #screen-product.active .pdp-commonly .product-card .prod-img img{
     max-height:none!important;max-width:none!important;
@@ -7023,33 +7015,63 @@ function buildCatTabs(containerId, activeVar, clickFn){
     t.classList.toggle('active', t.dataset.type === productType);
   });
   // Hide category row when viewing Bundles (bundles aren't categorized).
-  // Sequenced animation: when COLLAPSING, fade right out first (cs-fading),
-  // then shrink (is-collapsed) so the left can grow into the freed space.
-  // When EXPANDING BACK, shrink left first (remove is-collapsed but keep
-  // cs-uncollapsing so type-tabs stays stretched), then fade right back in.
+  // Sequenced animation:
+  // - TO bundles: fade right (cat-row) out, then collapse it while FLIP-
+  //   animating type-tab pills from their current size to their stretched size.
+  // - FROM bundles: FLIP-shrink pills back to content size, then fade right in.
   const catRow = c.querySelector('.cat-tabs-inner');
   if(catRow){
     const shouldCollapse = productType === 'bundles';
     const isCollapsed = catRow.classList.contains('is-collapsed');
-    if(catRow._csTimer){ clearTimeout(catRow._csTimer); catRow._csTimer = 0; }
-    if(shouldCollapse && !isCollapsed){
-      catRow.classList.add('cs-fading');
-      catRow._csTimer = setTimeout(() => {
-        catRow.classList.add('is-collapsed');
-        catRow.classList.remove('cs-fading');
-        catRow._csTimer = 0;
-      }, 200);
-    } else if(!shouldCollapse && isCollapsed){
-      catRow.classList.add('cs-fading');
-      catRow.classList.add('cs-uncollapsing');
-      catRow.classList.remove('is-collapsed');
-      catRow._csTimer = setTimeout(() => {
-        catRow.classList.remove('cs-uncollapsing');
-        catRow.classList.remove('cs-fading');
-        catRow._csTimer = 0;
-      }, 340);
-    } else {
-      catRow.classList.toggle('is-collapsed', shouldCollapse);
+    if(shouldCollapse !== isCollapsed){
+      const typeRow = c.querySelector('.type-tabs-inner');
+      const pills = typeRow ? Array.from(typeRow.querySelectorAll('.type-tab')) : [];
+      if(catRow._csTimer){ clearTimeout(catRow._csTimer); catRow._csTimer = 0; }
+      const flipPills = (from, to) => {
+        pills.forEach((p, i) => {
+          p.style.transition = 'none';
+          p.style.flex = `0 0 ${from[i]}px`;
+          p.style.minWidth = '0';
+        });
+        if(typeRow) void typeRow.offsetWidth;
+        pills.forEach((p, i) => {
+          p.style.transition = 'flex-basis 0.32s cubic-bezier(0.4,0,0.2,1)';
+          p.style.flex = `0 0 ${to[i]}px`;
+        });
+      };
+      const clearPills = () => {
+        pills.forEach(p => { p.style.transition=''; p.style.flex=''; p.style.minWidth=''; });
+      };
+      if(shouldCollapse){
+        catRow.style.transition = 'opacity 0.2s ease-out';
+        catRow.style.opacity = '0';
+        catRow._csTimer = setTimeout(() => {
+          const oldW = pills.map(p => p.offsetWidth);
+          catRow.classList.add('is-collapsed');
+          if(catRow) void catRow.offsetWidth;
+          const newW = pills.map(p => p.offsetWidth);
+          flipPills(oldW, newW);
+          catRow._csTimer = setTimeout(() => {
+            clearPills();
+            catRow.style.transition = '';
+            catRow._csTimer = 0;
+          }, 340);
+        }, 220);
+      } else {
+        const oldW = pills.map(p => p.offsetWidth);
+        catRow.style.transition = 'none';
+        catRow.style.opacity = '0';
+        catRow.classList.remove('is-collapsed');
+        if(catRow) void catRow.offsetWidth;
+        const newW = pills.map(p => p.offsetWidth);
+        flipPills(oldW, newW);
+        catRow._csTimer = setTimeout(() => {
+          clearPills();
+          catRow.style.transition = 'opacity 0.2s ease-out';
+          catRow.style.opacity = '';
+          catRow._csTimer = 0;
+        }, 340);
+      }
     }
   }
   requestAnimationFrame(()=>{ slideCatTab(containerId); updateCatTabsOverflow(c); scrollActiveTabIntoView(c); });
