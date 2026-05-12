@@ -680,6 +680,10 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .pc-hero{display:none!important}
   .big-feature-card .body-copy-pc{display:none!important}
   .big-feature-card .body-copy-mobile{display:block!important}
+  /* Without the PC hero block to push content down, the first feature card
+     hides behind the fixed nav on mobile. Add a top spacer on #screen-home
+     so the kicker (FULL CATALOG) is fully visible below the nav. */
+  #screen-home > .container{padding-top:96px}
   .tilt-card,.feature-card{border-radius:18px!important}
   .big-feature-card{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card:has(.inline-marquee){padding:0!important}
