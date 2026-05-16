@@ -453,21 +453,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .cat-tabs .cat-tabs-inner,.cat-tabs .type-tabs-inner{display:inline-flex!important;flex:0 0 auto;align-items:center!important;gap:2px!important;padding:4px!important;flex-wrap:nowrap;background:#f3f3f3!important;border-radius:999px;min-height:38px;height:38px}
   /* Base cat-row max-width so transition has a target (can't animate to auto) */
   .cat-tabs .cat-tabs-inner{max-width:1200px;opacity:1}
-  /* Reverse direction (.is-collapsed removed): type-tabs shrinks 0-300ms first,
-     then cat-row max-width grows + opacity fades in 300-600ms. */
-  .cat-tabs .cat-tabs-inner{transition:max-width 0.3s ease-in-out 0.3s,opacity 0.25s ease-in-out 0.35s,padding 0.3s ease-in-out 0.3s,margin 0.3s ease-in-out 0.3s!important}
-  /* Forward direction (.is-collapsed added): cat-row opacity fades 0-200ms,
-     cat-row max-width shrinks 200-500ms, type-tabs expands 200-500ms. */
-  .cat-tabs .cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0!important;padding-left:0!important;padding-right:0!important;margin-right:-8px!important;pointer-events:none!important;transition:opacity 0.2s ease-in-out 0s,max-width 0.3s ease-in-out 0.2s,padding 0.3s ease-in-out 0.2s,margin 0.3s ease-in-out 0.2s!important}
-  /* Type-tabs flex-grow transitions */
-  /* Reverse: type-tabs shrinks immediately 0-300ms (no delay) */
-  .cat-tabs .type-tabs-inner{flex-grow:0;transition:flex-grow 0.3s ease-in-out 0s!important}
-  .cat-tabs .type-tabs-inner .type-tab{flex-grow:0;transition:flex-grow 0.3s ease-in-out 0s,background 0.18s ease,color 0.18s ease!important}
-  /* Forward: type-tabs grows with 0.2s delay (after cat-row fade) */
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner{flex-grow:1!important;align-self:stretch;transition:flex-grow 0.3s ease-in-out 0.2s!important}
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed) .type-tabs-inner .type-tab{flex-grow:1!important;min-width:0!important;transition:flex-grow 0.3s ease-in-out 0.2s,background 0.18s ease,color 0.18s ease!important}
-  /* Bundles state: only 3 type-tabs in the row -> nothing to scroll, no right-fade */
-  .cat-tabs:has(.cat-tabs-inner.is-collapsed){-webkit-mask-image:none!important;mask-image:none!important;overflow-x:hidden!important}
+  /* No tab-row animations. Cat-row stays visible always; pill bg snaps instantly. */
+  .cat-tabs .type-tabs-inner{flex-grow:0}
+  .cat-tabs .type-tabs-inner .type-tab{flex-grow:0;transition:background 0s,color 0s!important}
   /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
      better than the dark vignette that shows up when content overflows. */
   .cat-tabs.has-right-overflow,
@@ -919,8 +907,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
   max-width:1200px;opacity:1;overflow:hidden;
 }
-.cat-tabs-inner{transition:max-width 0.3s ease-in-out 0s,opacity 0.2s ease-in-out 0.3s,padding 0.3s ease-in-out 0s,margin 0.3s ease-in-out 0s}
-.cat-tabs-inner.is-collapsed{max-width:0!important;opacity:0;padding-left:0;padding-right:0;margin-right:-8px;pointer-events:none;transition:opacity 0.2s ease-in-out 0s,max-width 0.3s ease-in-out 0.2s,padding 0.3s ease-in-out 0.2s,margin 0.3s ease-in-out 0.2s}
+.cat-tabs-inner{max-width:1200px;opacity:1}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
@@ -1008,7 +995,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .card-details-toggle{
   font-size:0.78rem;text-transform:none;letter-spacing:0;
   margin:6px 0 0;cursor:pointer;color:#000;font-weight:700;
-  background:#fff;border:2px solid #000;border-radius:0;padding:8px 14px;text-align:center;
+  background:#fff;border:2px solid #000;border-radius:0;padding:11px 14px;text-align:center;
   display:block;width:100%;transition:background 0.15s,color 0.15s;
   font-family:'Helvetica Neue',Arial,sans-serif;
   align-self:stretch;box-sizing:border-box;
@@ -2878,7 +2865,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
   <a onclick="mobileMenuNav('research')">Research</a>
   <a onclick="mobileMenuNav('coa')">COAs</a>
   <a onclick="mobileMenuNav('help')">Help Center</a>
-  <a onclick="mobileMenuNav('tracking')">Track Order</a>
+  <a onclick="toggleMobileMenu();window.location.href='https://admin.haoyunlabs.com'">Account</a>
   <div style="margin-top:auto;padding-top:24px;display:flex;flex-direction:column;gap:10px">
     <button onclick="mobileMenuNav('order')" style="padding:16px 14px;border:none;background:#000;color:#fff;font-family:var(--display);font-size:1.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;border-radius:999px;cursor:pointer">View Cart</button>
   </div>
@@ -3677,6 +3664,18 @@ function pcPopulateReorder(){
       <p style="color:var(--muted);margin:12px 0 0;font-size:0.88rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5">Answers to common questions, and a direct line to our support team when you need one.</p>
     </div>
 
+    <!-- Track Order entry point (merged from former Track Order menu item) -->
+    <div style="background:#fff;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 240px">
+        <div style="width:42px;height:42px;border-radius:10px;background:#fafaf7;display:grid;place-items:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l5 5v5H3z"/><circle cx="8" cy="17" r="2"/><circle cx="18" cy="17" r="2"/></svg></div>
+        <div style="min-width:0">
+          <div style="font-size:0.95rem;font-weight:800;letter-spacing:-0.01em;color:var(--text);line-height:1.2">Track your order</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:2px">Live carrier updates with just your order number and email.</div>
+        </div>
+      </div>
+      <button onclick="navigate('tracking')" style="padding:11px 20px;background:#000;color:#fff;border:none;border-radius:999px;font-family:var(--display);font-weight:800;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;flex-shrink:0">Track Order</button>
+    </div>
+
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Frequently Asked Questions</div>
     <div class="faq-list" id="faq-list">
       <div class="faq-item"><button class="faq-q" type="button" onclick="toggleFaq(this)" aria-expanded="false"><span>What are research peptides?</span><span class="faq-icon"></span></button><div class="faq-answer"><div class="faq-answer-inner">Research peptides are synthetic amino acid chains used exclusively for scientific and laboratory research. All products are research-grade compounds intended for laboratory use only. Not for human consumption.</div></div></div>
@@ -4407,6 +4406,19 @@ const BILLING_SERVER = 'https://haoyunlabs-billing-production.up.railway.app';
 // Supabase edge function (which can hold the secret server-side) or the billing
 // server must be updated to accept the anon JWT + rely on RLS/session instead.
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Boot-time fetch of the card-provider switch (admin Settings → Card payment provider).
+// Default to Bankful until the RPC answers, so a slow/failed call never silently routes
+// to Stripe. Result lives on window._hylPaymentProvider for submitOrder() to read.
+window._hylPaymentProvider = 'bankful';
+(async () => {
+  try {
+    const { data } = await sb.rpc('is_stripe_active');
+    window._hylPaymentProvider = data === true ? 'stripe' : 'bankful';
+  } catch (e) {
+    console.warn('[provider] is_stripe_active rpc failed, staying on bankful', e);
+  }
+})();
 
 /* ═════════════════════════════════════════════════════
    KLAVIYO EVENT TRACKING
@@ -6996,6 +7008,11 @@ function setProductType(t){
     }
   }
   productType = _pickValidProductType(activeCat, t);
+  // Clicking Bundles resets the category selection back to Weight Loss.
+  if(productType === 'bundles'){
+    if(typeof homeCategory !== 'undefined') homeCategory = 'weight-loss';
+    if(typeof catCategory !== 'undefined') catCategory = 'weight-loss';
+  }
   homeShown = 12;
   ['home-search','cat-search'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   ['home-sort','cat-sort'].forEach(id=>{const el=document.getElementById(id);if(el)el.selectedIndex=0;});
@@ -7041,7 +7058,7 @@ function buildCatTabs(containerId, activeVar, clickFn){
         p.style.removeProperty('transition');
       });
     }
-    catRow.classList.toggle('is-collapsed', productType === 'bundles');
+    catRow.classList.remove('is-collapsed');
   }
   requestAnimationFrame(()=>{ slideCatTab(containerId); updateCatTabsOverflow(c); scrollActiveTabIntoView(c); });
   // Continuously re-evaluate overflow during the 450ms collapse/expand transition
@@ -7681,6 +7698,10 @@ function setHomeCat(cat){
   window._catTabUserClicked = true;
   homeCategory = cat;
   homeShown = 12;
+  // If we're on Bundles, a category click should kick us back to Singles for
+  // that category. Bundles ignores category filtering, so otherwise the click
+  // would be a visual no-op.
+  if(productType === 'bundles') productType = 'singles';
   productType = _pickValidProductType(cat, productType);
   const s = document.getElementById('home-search');if(s)s.value='';
   const so = document.getElementById('home-sort');if(so)so.selectedIndex=0;
@@ -7702,6 +7723,10 @@ function goToCategory(cat){
 function setCatCat(cat){
   window._catTabUserClicked = true;
   catCategory = cat;
+  // If we're on Bundles, a category click should kick us back to Singles for
+  // that category. Bundles ignores category filtering, so otherwise the click
+  // would be a visual no-op.
+  if(productType === 'bundles') productType = 'singles';
   productType = _pickValidProductType(cat, productType);
   const s = document.getElementById('cat-search');if(s)s.value='';
   const so = document.getElementById('cat-sort');if(so)so.selectedIndex=0;
@@ -7711,15 +7736,17 @@ function setCatCat(cat){
 const BESTSELLER_SKUS = ['RT10SV','CU50SV','SM15SV','TR15SV','BC5SV','BT5SV','TSM2SV','IPS5SV','MT2SV','P41','XA5SV','ET10SV','RT10','SM10','TR10'];
 
 function getFilteredProducts(cat, searchId, sortId){
+  const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
   let items;
-  if(cat==='bestsellers') items = ALL_PRODUCTS.filter(p=>BESTSELLER_SKUS.includes(p.sku));
+  if(q){
+    // Search ignores tab/type — pull from everything, then match name or SKU.
+    items = ALL_PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q));
+  } else if(cat==='bestsellers') items = ALL_PRODUCTS.filter(p=>BESTSELLER_SKUS.includes(p.sku));
   else if(cat==='all') items = ALL_PRODUCTS.slice();
   else if(productType === 'bundles') items = ALL_PRODUCTS.filter(p=>p.isBundle);
   else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && p.isKit);
   else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && !p.isKit);
   items = items.filter(p => p.isBundle || hasImageOnDisk(p.sku));
-  const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
-  if(q) items = items.filter(p=>p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q));
   const sort = document.getElementById(sortId)?.value||'featured';
   if(sort==='low') items.sort((a,b)=>a.price-b.price);
   else if(sort==='high') items.sort((a,b)=>b.price-a.price);
@@ -7735,9 +7762,15 @@ function getFilteredProducts(cat, searchId, sortId){
 }
 
 function renderHome(){
+  const _q = document.getElementById('home-search')?.value?.trim() || '';
+  let items = getFilteredProducts(homeCategory, 'home-search', 'home-sort');
+  if(_q && items.length){
+    const top = items[0];
+    homeCategory = top.cat || homeCategory;
+    productType = top.isBundle ? 'bundles' : (top.isKit ? 'kits' : 'singles');
+  }
   buildCatTabs('home-cat-tabs', homeCategory, 'setHomeCat');
   const grid = document.getElementById('home-grid');
-  const items = getFilteredProducts(homeCategory, 'home-search', 'home-sort');
   const visible = items.slice(0, homeShown);
   if(visible.length === 0){
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
@@ -7759,9 +7792,17 @@ function showMoreHome(){
 let catCategory = 'weight-loss';
 
 function renderCatalog(){
+  const _q = document.getElementById('cat-search')?.value?.trim() || '';
+  let items = getFilteredProducts(catCategory, 'cat-search', 'cat-sort');
+  if(_q && items.length){
+    // Snap the active tab + product type to match the top result so the user
+    // is "redirected" to the section that product lives in.
+    const top = items[0];
+    catCategory = top.cat || catCategory;
+    productType = top.isBundle ? 'bundles' : (top.isKit ? 'kits' : 'singles');
+  }
   buildCatTabs('cat-cat-tabs', catCategory, 'setCatCat');
   const grid = document.getElementById('cat-grid');
-  const items = getFilteredProducts(catCategory, 'cat-search', 'cat-sort');
   if(items.length === 0){
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div style="font-family:var(--display);font-size:1.1rem;font-weight:800;margin-bottom:6px">No compounds found</div><div style="font-size:0.82rem;color:var(--muted)">Try a different search or category.</div></div>';
   } else {
@@ -9163,7 +9204,9 @@ function cryptoSubmitRecovery(){
    SUBMIT ORDER
    ═════════════════════════════════════════════════════ */
 async function submitOrder(provider){
-  provider = provider || 'stripe';
+  // Default routed by the admin toggle (Settings → Card payment provider).
+  // Falls back to bankful if the boot-time RPC hasn't resolved yet.
+  provider = provider || window._hylPaymentProvider || 'bankful';
   if(cart.size===0){showToast('Add at least one item to continue','error');return;}
   const fieldLabels = {
     'f-fname':  'Please enter your first name',
@@ -9351,7 +9394,12 @@ async function submitOrder(provider){
         return;
       }
       hidePayLoadingToast();
-      showToast('Payment setup failed: ' + (data.error || 'try again'), 'error');
+      // Only show backend error text if it's a customer-actionable message.
+      // Internal errors (Stripe activation, Bankful API faults, etc.) leak
+      // implementation detail — collapse those to a generic toast.
+      const errMsg = String(data.error || '');
+      const customerSafe = /^(Missing required fields|Order already paid|Invalid amount|Total mismatch)/i.test(errMsg);
+      showToast(customerSafe ? errMsg : 'Payment setup failed. Please try another method.', 'error');
       console.error(tag + ' error', data);
     } catch(e){
       hidePayLoadingToast();
