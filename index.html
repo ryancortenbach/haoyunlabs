@@ -3281,7 +3281,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <span class="hyl-rp-final-label">Final total</span>
               <span class="hyl-rp-final-value" id="hyl-rp-final-total">$0.00</span>
             </div>
-            <div class="hyl-rp-secure-line">Secure hosted checkout powered by <span style="color:#635bff;font-weight:700;letter-spacing:-0.01em">Stripe</span>.</div>
+            <div class="hyl-rp-secure-line">Secure hosted checkout powered by <span id="hyl-rp-secure-provider" style="color:#0a0a0a;font-weight:700;letter-spacing:-0.01em">PayByBankful</span>.</div>
             <button class="uv-pay-btn" id="btn-pay" onclick="submitOrder()" type="button">
               <span class="uv-btn-text hyl-pay-label">Pay by Card</span>
               <div class="uv-icon-container">
@@ -4411,6 +4411,21 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // Default to Bankful until the RPC answers, so a slow/failed call never silently routes
 // to Stripe. Result lives on window._hylPaymentProvider for submitOrder() to read.
 window._hylPaymentProvider = 'bankful';
+// Keep the "Secure hosted checkout powered by …" label in sync with the
+// provider. Runs on every provider change (boot RPC resolves, admin
+// toggle, etc.) so the label never lies about who's processing the card.
+window.hylUpdatePaymentBrand = function(){
+  const el = document.getElementById('hyl-rp-secure-provider');
+  if(!el) return;
+  if(window._hylPaymentProvider === 'stripe'){
+    el.textContent = 'Stripe';
+    el.style.color = '#635bff';
+  } else {
+    el.textContent = 'PayByBankful';
+    el.style.color = '#0a0a0a';
+  }
+};
+document.addEventListener('DOMContentLoaded', window.hylUpdatePaymentBrand);
 (async () => {
   try {
     const { data } = await sb.rpc('is_stripe_active');
@@ -4418,6 +4433,7 @@ window._hylPaymentProvider = 'bankful';
   } catch (e) {
     console.warn('[provider] is_stripe_active rpc failed, staying on bankful', e);
   }
+  window.hylUpdatePaymentBrand();
 })();
 
 /* ═════════════════════════════════════════════════════
