@@ -3281,7 +3281,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <span class="hyl-rp-final-label">Final total</span>
               <span class="hyl-rp-final-value" id="hyl-rp-final-total">$0.00</span>
             </div>
-            <div class="hyl-rp-secure-line">Secure hosted checkout powered by <span id="hyl-rp-secure-provider" style="color:#0a0a0a;font-weight:700;letter-spacing:-0.01em">PayByBankful</span>.</div>
+            <div class="hyl-rp-secure-line">Secure hosted checkout powered by <span id="hyl-rp-secure-provider"><img src="media/paybybankful.webp" alt="Bankful" style="height:1.1em;vertical-align:-0.2em;display:inline-block"></span>.</div>
             <button class="uv-pay-btn" id="btn-pay" onclick="submitOrder()" type="button">
               <span class="uv-btn-text hyl-pay-label">Pay by Card</span>
               <div class="uv-icon-container">
@@ -4418,11 +4418,9 @@ window.hylUpdatePaymentBrand = function(){
   const el = document.getElementById('hyl-rp-secure-provider');
   if(!el) return;
   if(window._hylPaymentProvider === 'stripe'){
-    el.textContent = 'Stripe';
-    el.style.color = '#635bff';
+    el.innerHTML = '<span style="color:#635bff;font-weight:700;letter-spacing:-0.01em">Stripe</span>';
   } else {
-    el.textContent = 'PayByBankful';
-    el.style.color = '#0a0a0a';
+    el.innerHTML = '<img src="media/paybybankful.webp" alt="Bankful" style="height:1.1em;vertical-align:-0.2em;display:inline-block">';
   }
 };
 document.addEventListener('DOMContentLoaded', window.hylUpdatePaymentBrand);
