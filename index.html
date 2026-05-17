@@ -3212,11 +3212,11 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         </div><!-- /shipping card -->
         <div class="checkout-card">
           <div class="hyl-rp-eyebrow">Items</div>
-          <div class="hyl-rp-headline" style="margin-top:0">Add items</div>
-          <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:12px">Search by name, SKU, or category, then review the cart below.</div>
+          <div class="hyl-rp-headline" style="margin-top:0">Add Items</div>
+          <div class="hyl-rp-helper" style="margin-top:2px;margin-bottom:4px">Search by category, SKU, or product name, then review the cart below.</div>
+          <div id="hyl-rp-items-subtotal" style="font-size:0.92rem;font-weight:600;color:var(--text);margin-bottom:18px">Subtotal: $0.00</div>
           <!-- Mini search to add more products -->
           <div style="margin-bottom:16px">
-            <label class="form-label" for="order-cat-filter">Category</label>
             <select class="form-input" id="order-cat-filter" onchange="onOrderCatChange()" style="margin-bottom:10px">
               <option value="singles">Singles</option>
               <option value="kits">Kits</option>
@@ -8087,6 +8087,8 @@ function renderCartItems(){
     // "Cart is empty." with a small Shop Catalog CTA. The shipping form,
     // discount field, and totals around it stay rendered.
     el.innerHTML = `<div class="hyl-rp-empty-row">Cart is empty</div>`;
+    const subElEmpty = document.getElementById('hyl-rp-items-subtotal');
+    if(subElEmpty) subElEmpty.textContent = 'Subtotal: $0.00';
     return;
   }
   let html = '';
@@ -8112,6 +8114,9 @@ function renderCartItems(){
     </div>`;
   });
   el.innerHTML = html;
+  // Keep the "Add Items" subtotal line in sync with the cart.
+  const subEl = document.getElementById('hyl-rp-items-subtotal');
+  if(subEl) subEl.textContent = `Subtotal: $${getSubtotal().toFixed(2)}`;
 }
 
 function getProcessingRate(){
