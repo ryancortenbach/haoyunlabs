@@ -11185,5 +11185,61 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   });
 });
 </script>
+<!-- Affiliate "copy code" toast: when arriving via /?copy=CODE&pct=15, auto-copy
+     the code to the clipboard and show a confirmation toast. -->
+<script>
+(function(){
+  try {
+    var p = new URLSearchParams(location.search);
+    var code = (p.get('copy') || '').trim().toUpperCase();
+    if(!code) return;
+    var pct = (p.get('pct') || '').trim();
+    var label = pct ? (pct.replace(/%$/,'') + '% discount copied to clipboard') : (code + ' copied to clipboard');
+
+    function legacyCopy(t){
+      var ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.top='-9999px';
+      document.body.appendChild(ta); ta.select();
+      var ok=false; try{ ok=document.execCommand('copy'); }catch(_){}
+      document.body.removeChild(ta); return ok;
+    }
+    function doCopy(){
+      if(navigator.clipboard && window.isSecureContext){
+        return navigator.clipboard.writeText(code).catch(function(){ legacyCopy(code); });
+      }
+      legacyCopy(code);
+    }
+
+    function showToast(msg){
+      var t=document.createElement('div');
+      t.textContent=msg;
+      t.style.cssText='position:fixed;left:50%;top:24px;transform:translate(-50%,-12px);background:#0A0A0A;color:#fff;padding:14px 22px;border-radius:999px;font-family:var(--display,Oswald),sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;z-index:99999;opacity:0;transition:opacity 220ms ease,transform 220ms ease;box-shadow:0 10px 28px rgba(0,0,0,0.22);pointer-events:none';
+      document.body.appendChild(t);
+      requestAnimationFrame(function(){ t.style.opacity='1'; t.style.transform='translate(-50%,0)'; });
+      setTimeout(function(){ t.style.opacity='0'; t.style.transform='translate(-50%,-12px)'; setTimeout(function(){ t.remove(); }, 280); }, 2400);
+    }
+
+    function clean(){
+      // Replace ?copy=&pct= with ?ref=CODE so the affiliate attribution still works
+      // and the URL no longer triggers a re-toast on refresh.
+      p.delete('copy'); p.delete('pct');
+      if(!p.get('ref')) p.set('ref', code);
+      var q=p.toString();
+      history.replaceState(null,'',location.pathname + (q ? ('?'+q) : '') + (location.hash||''));
+    }
+
+    function run(){
+      doCopy();
+      showToast(label);
+      clean();
+    }
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', run, { once:true });
+    } else {
+      run();
+    }
+  } catch(_) {}
+})();
+</script>
 </body>
 </html>

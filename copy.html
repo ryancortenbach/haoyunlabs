@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Code copied · Hao Yun Labs</title>
+<link rel="icon" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&family=Oswald:wght@500;600;700&family=Roboto:wght@400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#FAFAF7;color:#0A0A0A;font-family:'Instrument Sans','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:100%;max-width:520px;background:#fff;border:1px solid rgba(10,10,10,0.10);border-radius:16px;padding:32px 28px;text-align:center}
+  .brand{font-family:'Instrument Serif',serif;font-size:1.8rem;color:#0A0A0A;line-height:1;margin-bottom:24px}
+  .eyebrow{font-family:'Oswald','Helvetica Neue',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#9A9A98;margin-bottom:10px}
+  .code{font-family:Roboto,'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:44px;line-height:1.05;letter-spacing:-0.02em;font-weight:500;color:#0A0A0A;margin-bottom:10px}
+  .sub{font-size:14px;color:#666;line-height:1.55;margin-bottom:22px}
+  .toast{position:fixed;left:50%;top:24px;transform:translate(-50%,-12px);background:#0A0A0A;color:#fff;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:0.02em;opacity:0;transition:opacity 240ms ease,transform 240ms ease;pointer-events:none;z-index:10;font-family:'Instrument Sans','Helvetica Neue',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.18)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:999px;font-family:'Instrument Sans','Helvetica Neue',sans-serif;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid rgba(10,10,10,0.10);background:rgba(10,10,10,0.04);color:#0A0A0A}
+  .btn.primary{background:#0A0A0A;color:#fff;border-color:#0A0A0A}
+  .btn:active{transform:scale(0.98)}
+  .share-url{display:block;margin:0 auto 22px;padding:12px 14px;background:rgba(10,10,10,0.04);border:1px solid rgba(10,10,10,0.10);border-radius:10px;font-family:'Roboto Mono','SF Mono',Menlo,monospace;font-size:13px;color:#1D4ED8;word-break:break-all;text-decoration:none}
+  .fallback{display:none;margin:14px 0 0;font-size:12px;color:#9A9A98}
+  .fallback.show{display:block}
+</style>
+</head>
+<body>
+  <div class="toast" id="toast">Copied to clipboard</div>
+  <div class="wrap">
+    <div class="card">
+      <div class="brand">Hao Yun Labs</div>
+      <div class="eyebrow">Your affiliate code</div>
+      <div class="code" id="code">KESTREL15</div>
+      <div class="sub">Copied to your clipboard. Paste it anywhere you want to share it.</div>
+      <a class="share-url" id="shareUrl" href="#"></a>
+      <div class="btns">
+        <button class="btn primary" id="copyAgain" type="button">Copy code again</button>
+        <a class="btn" id="shareLink" href="#">Share via email</a>
+      </div>
+      <div class="fallback" id="fallback">Tap "Copy code again" if your browser blocked the auto-copy.</div>
+    </div>
+  </div>
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  var code = (params.get('code') || '').trim().toUpperCase();
+  if(!code){
+    // No code in URL: just show the homepage instead.
+    location.replace('/');
+    return;
+  }
+  var origin = location.origin || 'https://haoyunlabs.com';
+  var shareUrl = origin + '/?ref=' + encodeURIComponent(code);
+  document.getElementById('code').textContent = code;
+  document.title = 'Copied ' + code + ' · Hao Yun Labs';
+  var shareEl = document.getElementById('shareUrl');
+  shareEl.textContent = shareUrl.replace(/^https?:\/\//,'');
+  shareEl.href = shareUrl;
+  var shareLink = document.getElementById('shareLink');
+  shareLink.href = 'mailto:?subject=' + encodeURIComponent('Get a discount at Hao Yun Labs') +
+    '&body=' + encodeURIComponent("Use my code " + code + " at Hao Yun Labs:\n\n" + shareUrl);
+
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  function showToast(msg){
+    toast.textContent = msg || 'Copied to clipboard';
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1800);
+  }
+  function legacyCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly','');
+    ta.style.position='fixed'; ta.style.top='-9999px';
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(_) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function doCopy(){
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(code).then(function(){ showToast('Copied ' + code); return true; },
+        function(){ var ok = legacyCopy(code); if(ok) showToast('Copied ' + code); else document.getElementById('fallback').classList.add('show'); return ok; });
+    } else {
+      var ok = legacyCopy(code);
+      if(ok) showToast('Copied ' + code); else document.getElementById('fallback').classList.add('show');
+      return Promise.resolve(ok);
+    }
+  }
+  document.getElementById('copyAgain').addEventListener('click', doCopy);
+  // Auto-copy on load. Some browsers (Safari iOS) require a user gesture;
+  // the "Copy code again" button is the fallback.
+  doCopy();
+})();
+</script>
+</body>
+</html>
