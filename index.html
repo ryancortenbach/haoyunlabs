@@ -3154,8 +3154,8 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <input class="form-input" type="text" id="f-zip" name="postal-code" autocomplete="postal-code" required maxlength="10" placeholder="ZIP code">
             </div>
             <div>
-              <label class="form-label">Phone</label>
-              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel" placeholder="+1 ...">
+              <label class="form-label">Phone *</label>
+              <input class="form-input" type="tel" id="f-phone" name="tel" autocomplete="tel" placeholder="+1 ..." required>
             </div>
           </div>
         </form>
@@ -5176,21 +5176,21 @@ function getProductImageHTML(p) {
   // Bundle/stack images
   if(p.isBundle){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
-      <img src="media/bundles/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="eager" decoding="async">
+      <img src="media/bundles/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy" decoding="async">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
   // Kit images from Canva bulk renders — render only if file actually exists on disk
   if(p.isKit && hasImageOnDisk(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
-      <img src="media/kits/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="eager" decoding="async">
+      <img src="media/kits/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy" decoding="async">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
   // Real product mockup — render only if file actually exists on disk
   if(VALID_SKUS.has(p.sku) && hasImageOnDisk(p.sku)){
     return `<div class="prod-img" style="background:#fff;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;overflow:hidden">
-      <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="eager" decoding="async">
+      <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:100%;height:100%;object-fit:contain" loading="lazy" decoding="async">
       <div class="quick-view-overlay"><button class="quick-view-btn" onclick="event.stopPropagation();openProduct('${p.sku}')">QUICK VIEW</button></div>
     </div>`;
   }
@@ -8394,7 +8394,7 @@ let selectedCryptoCurrency = null;
 let cryptoPollInterval = null;
 
 function showPaymentStep(){
-  const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-email'];
+  const fields = ['f-fname','f-lname','f-street','f-city','f-state','f-zip','f-phone','f-email'];
   for(const fid of fields){
     const el = document.getElementById(fid);
     if(!el.value.trim()){el.focus();showToast('Please fill in shipping info first','error');return;}
