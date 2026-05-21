@@ -1451,8 +1451,9 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
   input[type="text"],input[type="email"],input[type="tel"],input[type="search"],select,textarea{font-size:16px!important}
   /* Email popup close button */
   #email-popup-card button[onclick*="closeEmailPopup"]{width:44px!important;height:44px!important;top:10px!important;right:10px!important;font-size:1.8rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
-  /* Email popup: top-center on phones (instead of bottom-right) */
-  #email-popup{bottom:auto!important;right:16px!important;left:16px!important;top:max(20px,env(safe-area-inset-top,20px))!important;width:auto!important;max-width:none!important}
+  /* Email popup: centered overlay with safe-area padding on phones */
+  #email-popup{padding:max(20px,env(safe-area-inset-top,20px)) 16px max(20px,env(safe-area-inset-bottom,20px))!important}
+  #email-popup-card{width:auto!important;max-width:100%!important}
   /* Footer email grid */
   .footer,#footer-top{grid-template-columns:1fr!important}
   .footer>div:not(.footer-inner){grid-template-columns:1fr!important}
@@ -1682,22 +1683,11 @@ button.pdp-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .upsell-overlay{position:fixed;bottom:24px;right:24px;z-index:9100;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1);background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;display:block;padding:0}
 @media(max-width:640px){.upsell-overlay{bottom:auto;right:16px;left:16px;top:max(20px,env(safe-area-inset-top,20px));width:auto;max-width:none}}
 .upsell-overlay.open{opacity:1;pointer-events:auto}
-/* When upsell + email popup both open, stack them with a 12px gap instead of overlapping */
-body.upsell-stack-active #email-popup{bottom:calc(24px + var(--upsell-stack-h, 0px) + 12px)!important;transition:bottom 0.45s cubic-bezier(0.22,1,0.36,1),top 0.45s cubic-bezier(0.22,1,0.36,1),opacity 0.4s cubic-bezier(0.22,1,0.36,1)}
-@media(max-width:640px){body.upsell-stack-active #email-popup{bottom:auto!important;top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--upsell-stack-h, 0px) + 12px)!important}}
-/* Toast stays anchored at top. The upsell + email-popup get pushed below it. */
+/* Email popup is now a centered overlay; stack-active rules apply only to the upsell. */
 @media(max-width:640px){
   body.toast-stack-active .upsell-overlay{
     top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--toast-stack-h, 0px) + 12px)!important;
     transition:top 0.45s cubic-bezier(0.22,1,0.36,1);
-  }
-  body.toast-stack-active #email-popup{
-    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--toast-stack-h, 0px) + 12px)!important;
-    bottom:auto!important;
-    transition:top 0.45s cubic-bezier(0.22,1,0.36,1),bottom 0.45s cubic-bezier(0.22,1,0.36,1);
-  }
-  body.toast-stack-active.upsell-stack-active #email-popup{
-    top:calc(max(20px, env(safe-area-inset-top,20px)) + var(--toast-stack-h, 0px) + var(--upsell-stack-h, 0px) + 24px)!important;
   }
   /* When stacked, allow internal scrolling so user can reach all content. */
   .upsell-overlay{max-height:calc(100vh - max(20px, env(safe-area-inset-top,20px)) - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -4194,13 +4184,13 @@ function pcPopulateReorder(){
 </div>
 
 <!-- EMAIL CAPTURE POPUP -->
-<div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
-  <div id="email-popup-card" style="background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
+<div id="email-popup" style="position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
+  <div id="email-popup-card" style="background:rgba(20,20,20,0.92);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;width:460px;max-width:100%;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.45);line-height:1;padding:6px">&times;</button>
     <div style="display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px">Exclusive Access</div>
     <div style="font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery<br>vial</div>
     <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
-    <div style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:18px;line-height:1.5">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
+    <div style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:18px;line-height:1.5">Enter your name and email to receive your single-use vial code. Your free mystery vial offer is valid for 24 hours.</div>
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Name</div>
     <input type="text" id="popup-name" placeholder="Your name" style="width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,0.14);border-radius:999px;font-size:0.88rem;margin-bottom:14px;background:rgba(255,255,255,0.04);color:#fff;font-family:var(--sans);outline:none">
     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Email Address</div>
@@ -9820,30 +9810,90 @@ function closeEmailPopup(){
   if(popup){ popup.style.opacity='0'; popup.style.pointerEvents='none'; }
   sessionStorage.setItem('hyl_popup_shown_session', '1');
 }
+// Whitelist of single-vial SKUs (>= $30 retail) eligible for the popup
+// mystery vial. The client picks one at random and POSTs the SKU to the
+// admin claim endpoint; the server is the source of truth for the actual
+// vial_code (no more local 5-char random codes).
+const POPUP_MYSTERY_VIAL_SKUS = [
+  { sku:'RT10SV',  name:'Retatrutide 10mg',         size:'10mg' },
+  { sku:'SM10SV',  name:'Semaglutide 10mg',         size:'10mg' },
+  { sku:'T10MG',   name:'Tirzepatide 10mg',         size:'10mg' },
+  { sku:'GC50MG',  name:'GHK-Cu 50mg',              size:'50mg' },
+  { sku:'B110MG',  name:'BPC-157 10mg',             size:'10mg' },
+  { sku:'T5TB10MG',name:'TB-500 / Thymosin B4 10mg',size:'10mg' },
+  { sku:'I10MG',   name:'Ipamorelin 10mg',          size:'10mg' },
+];
 async function submitPopupEmail(){
+  const btn = document.querySelector('#email-popup-card button[onclick="submitPopupEmail()"]');
   const name = (document.getElementById('popup-name')?.value||'').trim();
   const email = document.getElementById('popup-email').value.trim();
   if(!name){ showToast('Please enter your name','error'); return; }
-  if(!email || !email.includes('@')){ showToast('Please enter a valid email','error'); return; }
-  const code = Array.from({length:5},()=>'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.random()*36|0]).join('');
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('Please enter a valid email','error'); return; }
+  // Pick a random eligible product from the curated whitelist. Use the
+  // client-side ALL_PRODUCTS array when present to surface the canonical
+  // marketing name; otherwise fall back to the literal whitelist entry.
+  const pick = POPUP_MYSTERY_VIAL_SKUS[Math.floor(Math.random()*POPUP_MYSTERY_VIAL_SKUS.length)];
+  let displayName = pick.name;
+  let displaySize = pick.size;
   try {
-    await hylSubscribe(email, 'popup', { name, code });
-  } catch(e){}
-  // Transform popup into success + Discord invite
-  const popup = document.getElementById('email-popup').querySelector('div');
+    if(typeof ALL_PRODUCTS !== 'undefined'){
+      const match = ALL_PRODUCTS.find(p => p && p.sku === pick.sku);
+      if(match && match.name){
+        displayName = match.name;
+        const m = /(\d+(?:\.\d+)?\s*(?:mg|ml|iu))/i.exec(match.name);
+        if(m && m[1]) displaySize = m[1];
+      }
+    }
+  } catch(_){}
+  // Disable submit while in-flight.
+  if(btn){ btn.disabled = true; btn.textContent = 'Claiming...'; btn.style.opacity = '0.7'; btn.style.cursor = 'wait'; }
+  let vialCode = '';
+  let serverProductName = displayName;
+  let serverProductSize = displaySize;
+  try {
+    const resp = await fetch('https://admin.haoyunlabs.com/api/free-vial/claim', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name, email, product_sku: pick.sku }),
+    });
+    const data = await resp.json().catch(()=>({}));
+    if(!resp.ok || !data || !data.ok || !data.vial_code){
+      if(btn){ btn.disabled = false; btn.textContent = 'Claim Offer'; btn.style.opacity = ''; btn.style.cursor = ''; }
+      const msg = (data && (data.error || data.message)) || 'Something went wrong. Please try again.';
+      showToast(msg, 'error');
+      return;
+    }
+    vialCode = String(data.vial_code);
+    if(data.product_name) serverProductName = String(data.product_name);
+    if(data.product_size) serverProductSize = String(data.product_size);
+  } catch(e){
+    if(btn){ btn.disabled = false; btn.textContent = 'Claim Offer'; btn.style.opacity = ''; btn.style.cursor = ''; }
+    showToast('Network error. Please try again.', 'error');
+    return;
+  }
+  // Fire-and-forget the existing newsletter subscribe so the email still
+  // lands in our marketing list.
+  try { hylSubscribe(email, 'popup', { name, code: vialCode }); } catch(_){}
+  // Transform popup into success + Discord invite. Discord button now
+  // stretches full-card-width per design spec.
+  const popup = document.getElementById('email-popup-card');
+  if(_flipInterval){ clearInterval(_flipInterval); _flipInterval = null; }
+  const safeName = name.split(' ')[0].replace(/[<>&"]/g,'');
+  const safeProduct = String(serverProductName).replace(/[<>&"]/g,'');
   popup.innerHTML = `
     <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Mystery Vial</span>
-    <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;margin:14px 0 6px;line-height:1.2">You're in, ${name.split(' ')[0]}!</div>
-    <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:12px">Your mystery vial code:</div>
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px;text-align:center;font-family:var(--mono);font-size:1.4rem;font-weight:800;letter-spacing:0.2em;margin-bottom:16px">${code}</div>
-    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-bottom:16px;line-height:1.5">Use this code at checkout. Valid for 24 hours. Now join the community:</div>
-    <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="discord-fly-btn" style="display:inline-flex;align-items:center;padding:0.7em 1em 0.7em 0.9em;background:#5865F2;color:#fff;border:none;border-radius:16px;font-size:0.88rem;font-weight:700;cursor:pointer;text-decoration:none;overflow:hidden;transition:all 0.2s;margin:0 auto">
-      <span class="discord-fly-svg" style="display:block;transform-origin:center;transition:transform 0.3s ease-in-out">
+    <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;margin:14px 0 6px;line-height:1.2">You're in, ${safeName}!</div>
+    <div style="font-size:0.78rem;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:10px">You've been assigned <strong style="color:#fff">${safeProduct}</strong>.</div>
+    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:10px">Your single-use vial code:</div>
+    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px;text-align:center;font-family:var(--mono);font-size:1.4rem;font-weight:800;letter-spacing:0.2em;margin-bottom:16px">${vialCode}</div>
+    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-bottom:16px;line-height:1.5">Use this code at checkout. Valid for 24 hours. Confirmation also sent to your email. Now join the community:</div>
+    <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="discord-fly-btn" style="display:flex;width:100%;box-sizing:border-box;align-items:center;justify-content:center;padding:0.85em 1em;background:#5865F2;color:#fff;border:none;border-radius:16px;font-size:0.92rem;font-weight:700;cursor:pointer;text-decoration:none;overflow:hidden;transition:all 0.2s">
+      <span class="discord-fly-svg" style="display:inline-flex;align-items:center;transform-origin:center;transition:transform 0.3s ease-in-out">
         <svg width="20" height="15" viewBox="0 0 71 55" fill="white"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
       </span>
-      <span class="discord-fly-text" style="display:block;margin-left:0.4em;transition:all 0.3s ease-in-out">Join HYL Discord</span>
+      <span class="discord-fly-text" style="display:inline-block;margin-left:0.5em;transition:all 0.3s ease-in-out">Join HYL Discord</span>
     </a>
-    <div onclick="closeEmailPopup()" style="text-align:center;margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Close</div>
+    <div onclick="closeEmailPopup()" style="text-align:center;margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Close</div>
   `;
   // Permanent: subscriber never sees this popup again.
   try { localStorage.setItem('hyl_popup_subscribed', '1'); } catch(_){}
