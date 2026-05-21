@@ -9,88 +9,205 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --bg:#0A0A0A;--card:#111118;--text:#EFEFEC;--mute:#9A9A98;
-    --hair:rgba(255,255,255,0.10);--soft:rgba(255,255,255,0.04);
-    --pill:rgba(255,255,255,0.06);--accent:#fff;
-    --ok:#22C55E;--bad:#EF4444;
-    --sans:'Instrument Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-    --display:'Oswald','Helvetica Neue',sans-serif;
-    --mono:'Roboto Mono','SF Mono',Menlo,Consolas,monospace;
-  }
-  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;min-height:100%}
-  body{display:flex;flex-direction:column;min-height:100vh;line-height:1.5}
-  a{color:inherit}
-  input,button{font:inherit;color:inherit}
-  input{font-size:16px}
-  main{flex:1;width:100%;max-width:640px;margin:0 auto;padding:80px 24px 64px}
-  .eyebrow{font-family:var(--display);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--mute);margin-bottom:18px}
-  h1{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;font-size:clamp(2.4rem,7vw,3.6rem);line-height:1;margin-bottom:20px}
-  .lede{color:var(--mute);font-size:15px;line-height:1.6;margin-bottom:36px;max-width:520px}
-  form{display:flex;flex-direction:column;gap:18px;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:24px;margin-bottom:24px}
-  .field{display:flex;flex-direction:column;gap:8px}
-  label{font-family:var(--display);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--mute)}
-  input[type=email],input[type=text]{
-    background:var(--soft);border:1px solid var(--hair);border-radius:10px;
-    padding:14px 16px;color:var(--text);outline:none;
-    transition:border-color .15s ease,background .15s ease;
-    font-family:var(--mono);font-size:15px;letter-spacing:0.01em;
-  }
-  input[type=email]::placeholder,input[type=text]::placeholder{color:#5d5d5b;font-family:var(--mono)}
-  input[type=email]:focus,input[type=text]:focus{border-color:rgba(255,255,255,0.32);background:rgba(255,255,255,0.06)}
-  button[type=submit]{
-    margin-top:6px;padding:16px 24px;background:var(--accent);color:#0A0A0A;
-    border:none;border-radius:999px;cursor:pointer;
-    font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;
-    transition:opacity .15s ease,transform .1s ease;
-  }
-  button[type=submit]:hover{opacity:0.88}
-  button[type=submit]:active{transform:scale(0.99)}
-  button[type=submit]:disabled{opacity:0.55;cursor:not-allowed}
-  .status{font-family:var(--mono);font-size:13px;line-height:1.6;min-height:1.6em;padding:0 2px}
-  .status.ok{color:var(--ok)}
-  .status.bad{color:var(--bad)}
-  .status.info{color:var(--mute)}
-  .help{font-size:14px;color:var(--mute);line-height:1.6}
-  .help a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
-  .help a:hover{opacity:0.8}
-  footer{border-top:1px solid var(--hair);padding:28px 24px;color:var(--mute);font-size:11px;line-height:1.7;text-align:center}
-  footer .addr{font-family:var(--mono);letter-spacing:0.01em;margin-bottom:6px}
-  footer .legal{font-family:var(--display);font-size:10px;letter-spacing:0.16em;text-transform:uppercase}
-  @media (max-width:520px){
-    main{padding:56px 18px 40px}
-    form{padding:20px}
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--text:#0a0a0a;--muted:#4a4a4a;--soft:#8a8a8a;--stroke:#e8e8e3;
+  --brand:#000;--bg-soft:#fff;
+  --ok:#16a34a;--bad:#dc2626;
+  --mono:'Roboto Mono','SF Mono','Menlo','Consolas',ui-monospace,monospace;
+  --sans:'Instrument Sans','Helvetica Neue',sans-serif;
+  --display:'Oswald','Helvetica Neue',sans-serif;
+}
+html,body{overflow-x:hidden;max-width:100vw;min-height:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;font-size:15px;display:flex;flex-direction:column;min-height:100vh}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+ul{list-style:none}
+input,button,select{font-family:inherit;outline:none;font-size:16px}
+button{cursor:pointer}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;left:0;right:0;z-index:100;background:#fff;border-bottom:1px solid var(--stroke)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;align-items:center;height:64px}
+.nav-brand{cursor:pointer;flex-shrink:0;font-family:'Instrument Serif',serif;font-size:1.3rem;letter-spacing:-0.01em;color:var(--brand)}
+.nav-center{flex:1;display:flex;align-items:center;justify-content:center;gap:28px}
+.nav-center a{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;cursor:pointer;color:var(--muted);transition:color 0.15s;padding:4px 0;position:relative}
+.nav-center a:hover{color:var(--brand)}
+.nav-center a::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1.5px;background:var(--brand);transition:width 0.2s}
+.nav-center a:hover::after{width:100%}
+.nav-right{flex-shrink:0;display:flex;align-items:center;gap:6px}
+.nav-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:none;background:transparent;cursor:pointer;transition:background 0.15s}
+.nav-btn:hover{background:rgba(0,0,0,0.05)}
+.nav-btn svg{width:18px;height:18px;stroke:var(--text);opacity:0.7}
+@media(min-width:821px){
+  .nav-inner{height:84px;max-width:1280px}
+  .nav-brand{font-size:2rem}
+  .nav-center{gap:36px}
+  .nav-center a{font-size:1.05rem;padding:6px 0;letter-spacing:0.12em}
+  .nav-right{gap:8px}
+  .nav-btn{width:52px;height:52px}
+  .nav-btn svg{width:28px;height:28px}
+}
+@media(max-width:820px){
+  .nav-inner{height:64px;padding:0 14px}
+  .nav-brand{font-size:1.55rem}
+  .nav-center{display:none}
+  .nav-right{gap:4px;margin-left:auto}
+  .nav-btn{width:46px;height:46px}
+  .nav-btn svg{width:24px;height:24px;opacity:0.9}
+}
+
+/* ── PAGE ── */
+main.page{flex:1;width:100%;max-width:600px;margin:0 auto;padding:64px 28px 80px;text-align:center}
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:#fff;border:1px solid var(--stroke);border-radius:999px;color:var(--text);font-family:var(--display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;text-decoration:none;margin-bottom:32px;transition:background .15s,border-color .15s}
+.back-btn:hover{background:var(--bg-soft);border-color:var(--text)}
+.eyebrow{font-family:var(--display);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--soft);font-weight:600;margin-bottom:14px}
+h1{font-family:var(--display);font-size:44px;line-height:1.05;letter-spacing:-0.005em;text-transform:uppercase;font-weight:500;color:var(--text);margin:0 0 14px}
+h1 .ital{font-family:'Instrument Serif',serif;font-style:italic;text-transform:none;font-weight:400;letter-spacing:-0.01em}
+.lede{color:var(--muted);font-size:15.5px;line-height:1.6;margin:12px auto 32px;max-width:520px}
+
+/* form card */
+.card{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:28px;text-align:left;margin:0 auto 24px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field-label{display:block;font-family:var(--sans);font-size:12px;font-weight:500;color:var(--muted)}
+.input{width:100%;padding:12px 14px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--sans);font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+.input:focus{border-color:var(--text);box-shadow:0 0 0 3px rgba(0,0,0,0.05)}
+.input::placeholder{color:var(--soft)}
+.input-mono{font-family:var(--mono);letter-spacing:0.02em;text-transform:uppercase}
+.input-mono::placeholder{font-family:var(--mono);text-transform:none;letter-spacing:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 26px;border-radius:999px;border:1px solid var(--text);background:var(--text);color:#fff;font-family:var(--display);font-size:13px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s,opacity .15s;text-decoration:none;width:100%;margin-top:8px}
+.btn:hover{background:#2a2a2a}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+
+.status{font-family:var(--mono);font-size:13px;line-height:1.6;min-height:1.6em;padding:8px 2px 0;text-align:left}
+.status.ok{color:var(--ok)}
+.status.bad{color:var(--bad)}
+.status.info{color:var(--soft)}
+
+.help{font-size:13.5px;color:var(--soft);line-height:1.6;text-align:center;margin-top:20px}
+.help a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.help a:hover{opacity:0.7}
+
+@media(max-width:560px){
+  h1{font-size:36px}
+  main.page{padding:40px 22px 64px}
+  .card{padding:22px}
+}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--stroke);padding:32px 24px;background:#fff}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr) 1.4fr;gap:40px}
+.footer-col-title{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px}
+.footer-col a{display:block;font-size:0.78rem;color:var(--muted);margin-bottom:10px;cursor:pointer;transition:color 0.15s}
+.footer-col a:hover{color:var(--brand)}
+.footer-brand-col{display:flex;flex-direction:column;gap:12px}
+.footer-brand-name{font-family:'Instrument Serif',serif;font-size:1.3rem}
+.footer-brand-desc{font-size:0.75rem;color:var(--muted);line-height:1.6}
+.footer-social{display:flex;gap:12px;margin-top:4px}
+.footer-social a{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;background:#f1f1f1;color:#374151;transition:background .25s, color .25s}
+.footer-social a svg{width:16px;height:16px;color:inherit}
+.footer-social a[href*="discord"]:hover{background:#5865F2;color:#fff}
+.footer-social a:not([href*="discord"]):hover{background:#000;color:#fff}
+.footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--stroke);display:flex;justify-content:space-between;align-items:center;font-size:0.7rem;color:var(--muted);gap:12px}
+@media(max-width:768px){
+  .footer-inner{grid-template-columns:repeat(2,1fr);gap:24px}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+}
 </style>
 </head>
 <body>
-<main>
-  <div class="eyebrow">Order lookup</div>
-  <h1>Order status</h1>
-  <p class="lede">Enter the email you used at checkout and your order number to see current shipping status and tracking.</p>
 
-  <form id="lookup-form" autocomplete="on" novalidate>
-    <div class="field">
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">Hao Yun Labs</a>
+    <div class="nav-center">
+      <a href="/#catalog">Shop</a>
+      <a href="/#research">Research</a>
+      <a href="/coa/">COAs</a>
+      <a href="/#help">Help Center</a>
+      <a href="/jobs.html">Careers</a>
     </div>
-    <div class="field">
-      <label for="order">Order number</label>
-      <input id="order" name="order" type="text" required autocomplete="off" placeholder="HYL-24831" inputmode="text">
+    <div class="nav-right">
+      <button class="nav-btn" onclick="window.location.href='/#catalog'" aria-label="Search">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      </button>
+      <button class="nav-btn" onclick="window.location.href='https://admin.haoyunlabs.com'" aria-label="Account">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      </button>
+      <button class="nav-btn" onclick="window.location.href='/#order'" aria-label="Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M3 4h2.2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.55L21 8H6.2"/></svg>
+      </button>
     </div>
-    <button type="submit" id="submit-btn">Look up order</button>
-    <div id="status" class="status" role="status" aria-live="polite"></div>
-  </form>
+  </div>
+</nav>
+
+<!-- ═══════════════ PAGE ═══════════════ -->
+<main class="page">
+  <a href="/" class="back-btn">&larr;&nbsp; Back</a>
+  <div class="eyebrow">Package Tracking</div>
+  <h1>Where's my <span class="ital">order?</span></h1>
+  <p class="lede">Enter the email you used at checkout and your order number. We'll pull up current shipping status and tracking. No login needed.</p>
+
+  <div class="card">
+    <form id="lookup-form" autocomplete="on" novalidate>
+      <div class="field">
+        <label for="email" class="field-label">Email</label>
+        <input id="email" name="email" type="email" class="input" required autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="order" class="field-label">Order Number</label>
+        <input id="order" name="order" type="text" class="input input-mono" required autocomplete="off" placeholder="HYL-24831" inputmode="text">
+      </div>
+      <button type="submit" id="submit-btn" class="btn">Look Up Order <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
 
   <p class="help">Need help? Email <a href="mailto:support@haoyunlabs.com">support@haoyunlabs.com</a></p>
 </main>
 
-<footer>
-  <div class="addr">Hao Yun Labs · 414 Alder St, Suite 220 · Portland, OR 97214</div>
-  <div class="legal">Research use only. Not for human consumption.</div>
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-col-title">Shop</div>
+      <a href="/#catalog">All Peptides</a>
+      <a href="/#catalog">Weight Loss</a>
+      <a href="/#catalog">Recovery</a>
+      <a href="/#catalog">Longevity</a>
+      <a href="/#catalog">Supplies</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Support</div>
+      <a href="/#help">Help Center</a>
+      <a href="/coa/">COAs</a>
+      <a href="/orders/lookup">Track Order</a>
+      <a href="/#research">Research</a>
+      <a href="/affiliate.html">Affiliates</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Legal</div>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/shipping">Shipping &amp; Returns</a>
+    </div>
+    <div class="footer-brand-col">
+      <div class="footer-brand-name">Hao Yun Labs</div>
+      <div class="footer-brand-desc">Research-grade peptides and supplies. Every compound is HPLC-tested and lot-verified. Certificates of Analysis are available to look up anytime via our COA archive.</div>
+      <div class="footer-social">
+        <a href="https://discord.gg/WDYVkgt5dB" target="_blank" rel="noopener" aria-label="Discord"><svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor" style="stroke:none"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg></a>
+        <a href="mailto:support@haoyunlabs.com" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>For research use only. Not for human consumption.</div>
+    <div>&copy; 2026 Hao Yun Labs. All rights reserved.</div>
+  </div>
 </footer>
 
 <script>
