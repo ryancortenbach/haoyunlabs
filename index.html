@@ -4402,6 +4402,12 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // Boot-time fetch of the card-provider switch (admin Settings → Card payment provider).
 // Default to Bankful until the RPC answers, so a slow/failed call never silently routes
 // to Stripe. Result lives on window._hylPaymentProvider for submitOrder() to read.
+//
+// Iter 159: prefer the new get_card_provider() RPC (returns 'bankful'|'stripe').
+// Falls back to the legacy is_stripe_active() boolean if get_card_provider is
+// somehow unavailable (e.g. cached site hitting an older DB during a deploy
+// window). Either way, any failure leaves the storefront on Bankful — never
+// silently flips to Stripe on a network blip.
 window._hylPaymentProvider = 'bankful';
 // Keep the "Secure hosted checkout powered by …" label in sync with the
 // provider. Runs on every provider change (boot RPC resolves, admin
@@ -4418,10 +4424,21 @@ window.hylUpdatePaymentBrand = function(){
 document.addEventListener('DOMContentLoaded', window.hylUpdatePaymentBrand);
 (async () => {
   try {
-    const { data } = await sb.rpc('is_stripe_active');
-    window._hylPaymentProvider = data === true ? 'stripe' : 'bankful';
+    const { data, error } = await sb.rpc('get_card_provider');
+    if (error) throw error;
+    if (data === 'stripe' || data === 'bankful') {
+      window._hylPaymentProvider = data;
+    } else {
+      throw new Error('unexpected card_provider value: ' + String(data));
+    }
   } catch (e) {
-    console.warn('[provider] is_stripe_active rpc failed, staying on bankful', e);
+    console.warn('[provider] get_card_provider rpc failed, trying legacy is_stripe_active', e);
+    try {
+      const { data: legacy } = await sb.rpc('is_stripe_active');
+      window._hylPaymentProvider = legacy === true ? 'stripe' : 'bankful';
+    } catch (e2) {
+      console.warn('[provider] is_stripe_active also failed, staying on bankful', e2);
+    }
   }
   window.hylUpdatePaymentBrand();
 })();
