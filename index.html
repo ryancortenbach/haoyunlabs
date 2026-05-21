@@ -1451,11 +1451,9 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
   input[type="text"],input[type="email"],input[type="tel"],input[type="search"],select,textarea{font-size:16px!important}
   /* Email popup close button */
   #email-popup-card button[onclick*="closeEmailPopup"]{width:44px!important;height:44px!important;top:10px!important;right:10px!important;font-size:1.8rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
-  /* Email popup: centered overlay with safe-area padding on phones. Product
-     direction (2026-05-20) is centered overlay everywhere — do not revert to
-     corner-toast without explicit sign-off. */
-  #email-popup{padding:max(20px,env(safe-area-inset-top,20px)) 16px max(20px,env(safe-area-inset-bottom,20px))!important}
-  #email-popup-card{width:auto!important;max-width:100%!important}
+  /* Email popup: full-width near top on mobile so safe-area + thumb reach work.
+     Desktop stays bottom-right corner-anchored per product direction. */
+  #email-popup{bottom:auto!important;right:16px!important;left:16px!important;top:max(20px,env(safe-area-inset-top,20px))!important;width:auto!important;max-width:none!important}
   /* Footer email grid */
   .footer,#footer-top{grid-template-columns:1fr!important}
   .footer>div:not(.footer-inner){grid-template-columns:1fr!important}
@@ -4188,8 +4186,8 @@ function pcPopulateReorder(){
 <!-- EMAIL CAPTURE POPUP - centered overlay with dimmed backdrop (do not
      revert to corner-toast layout without explicit user sign-off; centered
      overlay is the current product direction for the mystery-vial promo). -->
-<div id="email-popup" style="position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
-  <div id="email-popup-card" style="background:rgba(20,20,20,0.92);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;width:460px;max-width:100%;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
+<div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
+  <div id="email-popup-card" style="background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
     <button onclick="closeEmailPopup()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.45);line-height:1;padding:6px">&times;</button>
     <div style="display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px">Exclusive Access</div>
     <div style="font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery<br>vial</div>
