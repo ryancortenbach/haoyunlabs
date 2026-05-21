@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Certificate of Analysis · Hao Yun Labs</title>
+<meta name="description" content="Every Hao Yun Labs batch is third-party HPLC tested. Look up any lot's Certificate of Analysis.">
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0A0A0A;color:#EFEFEC;font-family:'Instrument Sans','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:#FFFFFF;text-decoration:underline;text-underline-offset:3px}
+  .wrap{max-width:720px;margin:0 auto;padding:64px 28px 80px}
+  .eyebrow{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9A9A98;margin-bottom:14px}
+  h1{font-family:'Oswald',sans-serif;font-size:56px;line-height:1.05;letter-spacing:0.01em;text-transform:uppercase;font-weight:700;color:#FFFFFF;margin:0 0 18px}
+  p{font-size:15px;line-height:1.6;color:#C7C7C3;margin:0 0 18px}
+  form{margin:32px 0 24px;display:flex;flex-direction:column;gap:14px}
+  label{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#9A9A98}
+  input[type=text]{padding:14px 16px;background:#0F0F14;color:#FFFFFF;border:1px solid rgba(255,255,255,0.12);border-radius:6px;font-family:'Roboto Mono',monospace;font-size:15px;letter-spacing:0.04em}
+  input[type=text]:focus{outline:none;border-color:#FFFFFF}
+  button{padding:14px 22px;background:#FFFFFF;color:#0A0A0A;border:none;border-radius:6px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;cursor:pointer}
+  button:hover{background:#EFEFEC}
+  .lookup-result{margin-top:18px;padding:18px 20px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-family:'Roboto Mono',monospace;font-size:14px;color:#9A9A98;display:none}
+  .lookup-result.show{display:block}
+  .lookup-result.ok{color:#4ADE80}
+  .lookup-result.err{color:#F87171}
+  hr{border:none;border-top:1px solid rgba(255,255,255,0.10);margin:36px 0}
+  h2{font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#FFFFFF;margin:0 0 18px}
+  .lots{display:grid;gap:10px;font-family:'Roboto Mono',monospace;font-size:13px}
+  .lots a{display:flex;justify-content:space-between;padding:12px 14px;border:1px solid rgba(255,255,255,0.10);border-radius:6px;text-decoration:none;color:#EFEFEC}
+  .lots a:hover{border-color:#FFFFFF}
+  .lots span:last-child{color:#9A9A98;font-size:11px;letter-spacing:0.08em;text-transform:uppercase}
+  footer{margin-top:64px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#9A9A98;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Quality &amp; testing</div>
+  <h1>Certificate of Analysis.</h1>
+  <p>Every batch of every product at Hao Yun Labs is third-party HPLC tested. Purity, identity, mass spec, full chain of custody from synthesis to your door. Look up any vial's Certificate of Analysis by lot number.</p>
+
+  <form id="coaForm" onsubmit="lookupCoa(event)">
+    <label for="lot">Lot number</label>
+    <input type="text" id="lot" name="lot" placeholder="e.g. RT10-A03" autocomplete="off" required>
+    <button type="submit">Look up COA</button>
+  </form>
+  <div id="result" class="lookup-result">Looking up lot...</div>
+
+  <hr>
+
+  <h2>Recent batches</h2>
+  <div class="lots">
+    <a href="/coa/A01MG_pages/A01MG_page-0001.pdf"><span>A01MG · Retatrutide 10mg</span><span>Apr 2026</span></a>
+    <a href="mailto:support@haoyunlabs.com?subject=COA%20request"><span>Looking for a different lot?</span><span>Email support</span></a>
+  </div>
+
+  <footer>
+    414 Alder St, Suite 220 · Portland, OR 97214<br>
+    Research use only. Not for human consumption.
+  </footer>
+</div>
+<script>
+function lookupCoa(e){
+  e.preventDefault();
+  var lot = document.getElementById('lot').value.trim().toUpperCase();
+  var res = document.getElementById('result');
+  res.className = 'lookup-result show';
+  res.textContent = 'Looking up ' + lot + '...';
+  // Try direct PDF path first
+  fetch('/coa/' + lot + '.pdf', {method: 'HEAD'}).then(function(r){
+    if(r.ok){
+      window.location.href = '/coa/' + lot + '.pdf';
+    } else {
+      res.className = 'lookup-result show err';
+      res.textContent = 'Lot ' + lot + ' not on file yet. Email support@haoyunlabs.com with the lot and we will send the COA directly.';
+    }
+  }).catch(function(){
+    res.className = 'lookup-result show err';
+    res.textContent = 'Lookup unavailable. Email support@haoyunlabs.com with the lot number.';
+  });
+}
+</script>
+</body>
+</html>

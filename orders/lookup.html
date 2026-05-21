@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Order status · Hao Yun Labs</title>
+<meta name="description" content="Look up your Hao Yun Labs order status by email and order number.">
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0A0A0A;--card:#111118;--text:#EFEFEC;--mute:#9A9A98;
+    --hair:rgba(255,255,255,0.10);--soft:rgba(255,255,255,0.04);
+    --pill:rgba(255,255,255,0.06);--accent:#fff;
+    --ok:#22C55E;--bad:#EF4444;
+    --sans:'Instrument Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+    --display:'Oswald','Helvetica Neue',sans-serif;
+    --mono:'Roboto Mono','SF Mono',Menlo,Consolas,monospace;
+  }
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;min-height:100%}
+  body{display:flex;flex-direction:column;min-height:100vh;line-height:1.5}
+  a{color:inherit}
+  input,button{font:inherit;color:inherit}
+  input{font-size:16px}
+  main{flex:1;width:100%;max-width:640px;margin:0 auto;padding:80px 24px 64px}
+  .eyebrow{font-family:var(--display);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--mute);margin-bottom:18px}
+  h1{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;font-size:clamp(2.4rem,7vw,3.6rem);line-height:1;margin-bottom:20px}
+  .lede{color:var(--mute);font-size:15px;line-height:1.6;margin-bottom:36px;max-width:520px}
+  form{display:flex;flex-direction:column;gap:18px;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:24px;margin-bottom:24px}
+  .field{display:flex;flex-direction:column;gap:8px}
+  label{font-family:var(--display);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--mute)}
+  input[type=email],input[type=text]{
+    background:var(--soft);border:1px solid var(--hair);border-radius:10px;
+    padding:14px 16px;color:var(--text);outline:none;
+    transition:border-color .15s ease,background .15s ease;
+    font-family:var(--mono);font-size:15px;letter-spacing:0.01em;
+  }
+  input[type=email]::placeholder,input[type=text]::placeholder{color:#5d5d5b;font-family:var(--mono)}
+  input[type=email]:focus,input[type=text]:focus{border-color:rgba(255,255,255,0.32);background:rgba(255,255,255,0.06)}
+  button[type=submit]{
+    margin-top:6px;padding:16px 24px;background:var(--accent);color:#0A0A0A;
+    border:none;border-radius:999px;cursor:pointer;
+    font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;
+    transition:opacity .15s ease,transform .1s ease;
+  }
+  button[type=submit]:hover{opacity:0.88}
+  button[type=submit]:active{transform:scale(0.99)}
+  button[type=submit]:disabled{opacity:0.55;cursor:not-allowed}
+  .status{font-family:var(--mono);font-size:13px;line-height:1.6;min-height:1.6em;padding:0 2px}
+  .status.ok{color:var(--ok)}
+  .status.bad{color:var(--bad)}
+  .status.info{color:var(--mute)}
+  .help{font-size:14px;color:var(--mute);line-height:1.6}
+  .help a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+  .help a:hover{opacity:0.8}
+  footer{border-top:1px solid var(--hair);padding:28px 24px;color:var(--mute);font-size:11px;line-height:1.7;text-align:center}
+  footer .addr{font-family:var(--mono);letter-spacing:0.01em;margin-bottom:6px}
+  footer .legal{font-family:var(--display);font-size:10px;letter-spacing:0.16em;text-transform:uppercase}
+  @media (max-width:520px){
+    main{padding:56px 18px 40px}
+    form{padding:20px}
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Order lookup</div>
+  <h1>Order status</h1>
+  <p class="lede">Enter the email you used at checkout and your order number to see current shipping status and tracking.</p>
+
+  <form id="lookup-form" autocomplete="on" novalidate>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+    </div>
+    <div class="field">
+      <label for="order">Order number</label>
+      <input id="order" name="order" type="text" required autocomplete="off" placeholder="HYL-24831" inputmode="text">
+    </div>
+    <button type="submit" id="submit-btn">Look up order</button>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </form>
+
+  <p class="help">Need help? Email <a href="mailto:support@haoyunlabs.com">support@haoyunlabs.com</a></p>
+</main>
+
+<footer>
+  <div class="addr">Hao Yun Labs · 414 Alder St, Suite 220 · Portland, OR 97214</div>
+  <div class="legal">Research use only. Not for human consumption.</div>
+</footer>
+
+<script>
+(function(){
+  var form = document.getElementById('lookup-form');
+  var emailEl = document.getElementById('email');
+  var orderEl = document.getElementById('order');
+  var btn = document.getElementById('submit-btn');
+  var statusEl = document.getElementById('status');
+
+  function setStatus(text, kind){
+    statusEl.textContent = text || '';
+    statusEl.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = (emailEl.value || '').trim();
+    var order = (orderEl.value || '').trim().toUpperCase();
+
+    if(!email || !/.+@.+\..+/.test(email)){
+      setStatus('Enter the email used at checkout.', 'bad');
+      emailEl.focus();
+      return;
+    }
+    if(!order || !/^[A-Z0-9_-]{3,64}$/.test(order)){
+      setStatus('Order numbers look like HYL-24831.', 'bad');
+      orderEl.focus();
+      return;
+    }
+
+    btn.disabled = true;
+    setStatus('Looking up your order...', 'info');
+
+    var endpoint = 'https://admin.haoyunlabs.com/api/orders/lookup';
+    var payload = JSON.stringify({ email: email, order_number: order });
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: payload,
+    }).then(function(res){
+      if(res.status === 404 || res.status === 405){
+        setStatus('Check your inbox at the email used at checkout. We send tracking automatically.', 'info');
+        return null;
+      }
+      if(!res.ok){
+        setStatus('We could not look that up right now. Check your inbox at the email used at checkout. We send tracking automatically.', 'info');
+        return null;
+      }
+      return res.json().catch(function(){ return null; });
+    }).then(function(data){
+      if(!data) return;
+      if(data.tracking_url){
+        setStatus('Found it. Opening tracking...', 'ok');
+        window.location.href = data.tracking_url;
+        return;
+      }
+      if(data.status){
+        setStatus('Order ' + order + ': ' + String(data.status), 'ok');
+        return;
+      }
+      setStatus('Check your inbox at the email used at checkout. We send tracking automatically.', 'info');
+    }).catch(function(){
+      setStatus('Check your inbox at the email used at checkout. We send tracking automatically.', 'info');
+    }).then(function(){
+      btn.disabled = false;
+    });
+  });
+
+  // Pre-fill from query params if forwarded from an email link.
+  try{
+    var p = new URLSearchParams(location.search);
+    var qe = p.get('email'); var qo = p.get('order') || p.get('order_number');
+    if(qe) emailEl.value = qe;
+    if(qo) orderEl.value = String(qo).toUpperCase();
+  }catch(_){}
+})();
+</script>
+</body>
+</html>
