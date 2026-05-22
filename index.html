@@ -1780,7 +1780,7 @@ select.form-input option{color:#000}
 .cart-img-zoom-overlay img{max-width:min(92vw,720px);max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,0.5);transform:scale(0.92);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1)}
 .cart-img-zoom-overlay.open img{transform:scale(1)}
 .cart-img-zoom-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cart-item{background:#fafafa;border:1px solid var(--stroke);border-radius:12px;padding:20px 18px;margin-bottom:12px;
+.cart-item{background:#fff;border:none;border-radius:0;padding:20px 18px;margin-bottom:12px;
   display:flex;justify-content:space-between;align-items:center;gap:14px;
   font-size:0.86rem;
 }
@@ -1794,7 +1794,7 @@ select.form-input option{color:#000}
   font-weight:700;color:var(--text);transition:background .15s ease;
 }
 .qty-btn:hover{background:#f5f5f5}
-.cart-item-qty{font-family:var(--mono);font-size:0.82rem;min-width:28px;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0 4px}
+.cart-item-qty{font-family:var(--mono);font-size:0.92rem;font-weight:800;min-width:28px;text-align:center;display:inline-flex;align-items:center;justify-content:center;padding:0 4px}
 .cart-item-price{font-family:var(--mono);font-weight:700;font-size:0.95rem;margin-left:18px;min-width:72px;text-align:right}
 .cart-item-remove{
   background:none;border:none;font-size:1.3rem;cursor:pointer;color:#666;
@@ -8201,10 +8201,18 @@ function renderReceipt(){
       });
       // Free vial code line item
       if(window._freeVialCode){
+        const fvSku = window._freeVialProductSku || '';
+        const fvName = window._freeVialProductName || 'Free Vial';
+        const fvSize = window._freeVialProductSize ? ` ${window._freeVialProductSize}` : '';
+        const fvDisplayName = (fvName + fvSize).trim();
+        const fvImg = fvSku ? `media/products/${fvSku}.png` : '';
+        const fvImgHtml = fvImg
+          ? '<img src="'+escHtml(fvImg)+'" alt="'+escHtml(fvDisplayName)+'" loading="lazy" onerror="this.style.display=\'none\'">'
+          : '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg>';
         rowsHtml.push(
           '<div class="hyl-rp-row" style="background:#f0fdf4">'
-          + '<div class="rp-img"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg></div>'
-          + '<div class="rp-name"><span class="rp-sku" style="color:#22c55e">FREE VIAL CODE</span><span class="rp-title" style="color:#16a34a">'+escHtml(window._freeVialCode)+'</span></div>'
+          + '<div class="rp-img">'+fvImgHtml+'</div>'
+          + '<div class="rp-name"><span class="rp-sku" style="color:#22c55e">FREE VIAL · '+escHtml(window._freeVialCode)+'</span><span class="rp-title" style="color:#16a34a">'+escHtml(fvDisplayName)+'</span></div>'
           + '<div class="rp-unit" data-label="Unit" style="color:#22c55e">FREE</div>'
           + '<div class="rp-qty" data-label="Qty">1</div>'
           + '<div class="rp-line" data-label="Line" style="color:#22c55e">$0.00</div>'
@@ -8225,7 +8233,11 @@ function renderReceipt(){
       rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label">Discount ('+discountPct+'%)'+savingHint+'</span><span class="rp-tot-val">-$'+disc.toFixed(2)+'</span></div>');
     }
     if(window._freeVialCode){
-      rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label" style="color:#16a34a">Free Vial Code ('+escHtml(window._freeVialCode)+')</span><span class="rp-tot-val" style="color:#16a34a">FREE</span></div>');
+      const fvName = window._freeVialProductName || '';
+      const fvSize = window._freeVialProductSize || '';
+      const fvLbl = (fvName + (fvSize ? ' ' + fvSize : '')).trim();
+      const fvDetail = fvLbl ? fvLbl + ' · ' + window._freeVialCode : window._freeVialCode;
+      rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label" style="color:#16a34a">Free Vial ('+escHtml(fvDetail)+')</span><span class="rp-tot-val" style="color:#16a34a">FREE</span></div>');
     }
     const shipLabel = 'Shipping'+(sub>=250?' (FREE over $250)':'');
     const shipVal = (shipping===0 && sub>0) ? 'FREE' : '$'+shipping.toFixed(2);
@@ -8267,10 +8279,10 @@ function renderReceipt(){
 async function applyCode(){
   const code = document.getElementById('discount-input').value.trim().toUpperCase();
   const msg = document.getElementById('discount-msg');
-  if(!code){discountCode=null;discountPct=0;window._affiliateCode=null;window._freeVialCode=null;window._freeVialCreditId=null;msg.textContent='Discount removed.';msg.className='discount-msg';renderReceipt();return;}
+  if(!code){discountCode=null;discountPct=0;window._affiliateCode=null;window._freeVialCode=null;window._freeVialCreditId=null;window._freeVialProductName=null;window._freeVialProductSize=null;window._freeVialProductSku=null;msg.textContent='Discount removed.';msg.className='discount-msg';renderReceipt();return;}
   // Enforce one-code-at-a-time: remember what was active, clear state, then try to apply new.
   const previousCode = discountCode || window._freeVialCode;
-  discountCode = null; discountPct = 0; window._affiliateCode = null; window._freeVialCode = null; window._freeVialCreditId = null;
+  discountCode = null; discountPct = 0; window._affiliateCode = null; window._freeVialCode = null; window._freeVialCreditId = null; window._freeVialProductName = null; window._freeVialProductSize = null; window._freeVialProductSku = null;
   let foundDiscount = false;
   let _appliedType = null;
   let _appliedPct = 0;
@@ -8312,6 +8324,9 @@ async function applyCode(){
       }
       window._freeVialCode = d.code;
       window._freeVialCreditId = d.free_vial_credit_id;
+      window._freeVialProductName = d.product_name || '';
+      window._freeVialProductSize = d.product_size || '';
+      window._freeVialProductSku = d.product_sku || d.applies_to_sku || '';
       const txt = previousCode && previousCode!==d.code
         ? `Replaced ${previousCode} → Free vial code ${d.code} applied!`
         : `Free vial code ${d.code} applied!`;
