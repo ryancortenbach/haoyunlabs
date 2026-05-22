@@ -2475,6 +2475,8 @@ select.form-input option{color:#000}
      left-align text on mobile instead of centered */
   .big-feature-card div[style*="text-align:center"][style*="align-items:center"]{text-align:left!important;align-items:flex-start!important}
   .big-feature-card .hero-pill-row{justify-content:flex-start!important}
+  /* Top mobile search bar — visible only on mobile */
+  .mobile-top-search{display:block!important;margin:0 0 18px!important;padding:0 4px}
 }
 
 /* ── PAYMENT CONFIRMED ── */
@@ -2869,6 +2871,14 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 
     <!-- Hero headline + CTA buttons removed per Ryan 2026-05-22. -->
     <div class="hero pc-hero" style="padding:148px 0 0"></div>
+
+    <!-- MOBILE-ONLY top search bar (matches ZYL pattern) -->
+    <div class="mobile-top-search" style="display:none;margin:0 0 16px">
+      <div class="zyl-search-wrap" style="position:relative">
+        <input type="text" class="zyl-search-input" placeholder="Search all products" id="mobile-top-search-input" inputmode="search" enterkeyhint="search" autocomplete="off" oninput="onMobileTopSearch(this.value)">
+        <svg class="zyl-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      </div>
+    </div>
 
     <!-- STATS ROW -->
     <!-- stats-row removed per user request -->
@@ -7849,6 +7859,23 @@ function getFilteredProducts(cat, searchId, sortId){
     items.sort((a,b) => bsRank(a.sku) - bsRank(b.sku));
   }
   return items;
+}
+
+function onMobileTopSearch(val){
+  const home = document.getElementById('home-search');
+  if(home){
+    home.value = val;
+    if(typeof renderHome === 'function') renderHome();
+  }
+  const cat = document.getElementById('cat-search');
+  if(cat){ cat.value = val; if(typeof renderCatalog === 'function') renderCatalog(); }
+  if(val.trim().length === 0) return;
+  const target = document.querySelector('#home-product-grid') || document.querySelector('#cat-product-grid') || document.querySelector('.product-grid');
+  if(target){
+    const rect = target.getBoundingClientRect();
+    const top = rect.top + window.scrollY - 80;
+    window.scrollTo({top, behavior:'smooth'});
+  }
 }
 
 function renderHome(){
