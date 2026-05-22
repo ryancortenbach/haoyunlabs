@@ -4189,17 +4189,16 @@ function pcPopulateReorder(){
      overlay is the current product direction for the mystery-vial promo). -->
 <div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
   <div id="email-popup-card" style="background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
-    <button onclick="closeEmailPopup()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:rgba(255,255,255,0.45);line-height:1;padding:6px">&times;</button>
-    <div style="display:inline-block;font-size:0.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:5px 11px;margin-bottom:14px">Exclusive Access</div>
-    <div style="font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;line-height:1.15;margin-bottom:8px">Claim your <span id="popup-flip-container" style="display:inline-flex;overflow:hidden;background:rgba(255,255,255,0.08);border-radius:8px;padding:0 10px;vertical-align:bottom;height:1.3em;align-items:center;transition:width 0.5s cubic-bezier(0.22,1,0.36,1)"><span id="popup-flip-word" style="display:inline-block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease;white-space:nowrap">free</span></span> mystery<br>vial</div>
-    <span id="popup-flip-measure" style="position:absolute;visibility:hidden;font-family:'Instrument Serif',serif;font-size:1.85rem;font-weight:400;white-space:nowrap;padding:0 10px"></span>
-    <div style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:18px;line-height:1.5">Enter your name and email to receive your single-use vial code. Your free mystery vial offer is valid for 24 hours.</div>
-    <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Name</div>
-    <input type="text" id="popup-name" placeholder="Your name" style="width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,0.14);border-radius:999px;font-size:0.88rem;margin-bottom:14px;background:rgba(255,255,255,0.04);color:#fff;font-family:var(--sans);outline:none">
-    <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px">Email Address</div>
-    <input type="email" id="popup-email" placeholder="you@example.com" style="width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,0.14);border-radius:999px;font-size:0.88rem;margin-bottom:18px;background:rgba(255,255,255,0.04);color:#fff;font-family:var(--sans);outline:none">
-    <button onclick="submitPopupEmail()" style="width:100%;padding:14px;background:#fff;color:#111;border:none;border-radius:999px;font-size:0.88rem;font-weight:700;cursor:pointer">Claim Offer</button>
-    <div onclick="closeEmailPopup()" style="margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.55);cursor:pointer;text-decoration:underline;display:inline-block">No thanks</div>
+    <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.6);line-height:1;padding:6px">&times;</button>
+    <div style="display:inline-block;font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:999px;padding:6px 14px;margin-bottom:16px">Exclusive Access</div>
+    <div style="font-family:var(--sans);font-size:1.55rem;font-weight:800;line-height:1.18;margin-bottom:12px;color:#fff;letter-spacing:-0.01em">Join the mailing list for a free mystery vial.</div>
+    <div style="font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.78);margin-bottom:20px;line-height:1.45">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
+    <div style="font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">Name</div>
+    <input type="text" id="popup-name" placeholder="Your name" style="width:100%;box-sizing:border-box;padding:14px 18px;border:1px solid rgba(255,255,255,0.22);border-radius:999px;font-size:0.95rem;margin-bottom:16px;background:transparent;color:#fff;font-family:var(--sans);outline:none">
+    <div style="font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">Email Address</div>
+    <input type="email" id="popup-email" placeholder="you@example.com" style="width:100%;box-sizing:border-box;padding:14px 18px;border:1px solid rgba(255,255,255,0.22);border-radius:999px;font-size:0.95rem;margin-bottom:22px;background:transparent;color:#fff;font-family:var(--sans);outline:none">
+    <button onclick="submitPopupEmail()" style="width:100%;padding:16px;background:#fff;color:#111;border:none;border-radius:999px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity 0.18s" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">Claim Offer</button>
+    <div onclick="closeEmailPopup()" style="margin-top:14px;font-size:0.78rem;color:rgba(255,255,255,0.65);cursor:pointer;text-decoration:underline;text-underline-offset:3px;display:inline-block">No thanks</div>
   </div>
 </div>
 
@@ -8286,11 +8285,13 @@ async function applyCode(){
   let foundDiscount = false;
   let _appliedType = null;
   let _appliedPct = 0;
+  let _lastValidateError = '';
   try {
     const resp = await fetch('https://dicliathtgxtbraerphb.supabase.co/functions/v1/validate-code?code=' + encodeURIComponent(code), {
       headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
     });
     const d = await resp.json();
+    if(d && d.ok === false && d.error) _lastValidateError = String(d.error);
     if(d.ok && d.type === 'discount'){
       discountCode=d.code;discountPct=d.percent_off;
       const txt = previousCode && previousCode!==d.code
@@ -8373,7 +8374,17 @@ async function applyCode(){
     return;
   }
   if(!foundDiscount){
-    msg.textContent = previousCode ? `Invalid code. Previous code (${previousCode}) removed.` : 'Invalid code.';
+    // Surface the real validate-code error (e.g. "code expired", "code exhausted")
+    // so the customer knows the code is dead vs. just unrecognized.
+    let errLabel = 'Invalid code.';
+    if(typeof _lastValidateError === 'string' && _lastValidateError){
+      const e = _lastValidateError.toLowerCase();
+      if(e.includes('expired')) errLabel = 'This code has expired. Mystery vial codes are valid for 24 hours only.';
+      else if(e.includes('exhausted')) errLabel = 'This code has been fully used.';
+      else if(e === 'code not found') errLabel = 'Invalid code.';
+      else errLabel = _lastValidateError.charAt(0).toUpperCase() + _lastValidateError.slice(1);
+    }
+    msg.textContent = previousCode ? `${errLabel} Previous code (${previousCode}) removed.` : errLabel;
     msg.className='discount-msg error';
   } else {
     try { track('apply_code', { code, percent: _appliedPct, type: _appliedType }); } catch(e){}
