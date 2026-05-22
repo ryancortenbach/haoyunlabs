@@ -10830,6 +10830,7 @@ document.addEventListener('DOMContentLoaded', populateCountrySelects);
         o.classList.remove('open');
         const t = o.querySelector('.hyl-cs-trigger'); if(t) t.setAttribute('aria-expanded','false');
       });
+      document.querySelectorAll('.hyl-cs-panel-portaled.open').forEach(p => p.classList.remove('open'));
       // Portal panel to body so it escapes any overflow/stacking context
       if(panel.parentNode !== document.body){
         document.body.appendChild(panel);
