@@ -38,7 +38,7 @@
     }
   }catch(e){}
 })();
-(function(){var B='20260522c1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260522d1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 // Iter 64: validated whitelist on both params. The pre-Iter-64 code stored
 // whatever ?payment= and ?order= the URL carried, then later interpolated
@@ -4230,7 +4230,7 @@ function pcPopulateReorder(){
   <div id="email-popup-card">
     <button class="mv-close" type="button" aria-label="Close" onclick="closeEmailPopup()"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3 L13 13 M13 3 L3 13"/></svg></button>
     <span class="mv-pill">Exclusive Access</span>
-    <h2 id="mv-title" class="mv-title">Join the mailing list for a free mystery vial.</h2>
+    <h2 id="mv-title" class="mv-title">Join the mailing list for a free mystery<br>vial.</h2>
     <p class="mv-subtitle">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</p>
     <form id="mv-form" onsubmit="event.preventDefault();submitPopupEmail();" novalidate>
       <div class="mv-fields">
@@ -10017,8 +10017,8 @@ const POPUP_MYSTERY_VIAL_SKUS = [
 async function submitPopupEmail(){
   const name = (document.getElementById('popup-name')?.value||'').trim();
   const email = (document.getElementById('popup-email')?.value||'').trim();
-  if(!name){ _setMvState('error', { message: 'Please enter your name.' }); return; }
-  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ _setMvState('error', { message: 'Please enter a valid email address.' }); return; }
+  if(!name){ _setMvState('error', { message: 'Please enter your name.', field: 'name' }); return; }
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ _setMvState('error', { message: 'Please enter a valid email address.', field: 'email' }); return; }
   // Pick a random eligible product from the curated whitelist.
   const pick = POPUP_MYSTERY_VIAL_SKUS[Math.floor(Math.random()*POPUP_MYSTERY_VIAL_SKUS.length)];
   _setMvState('submitting');
