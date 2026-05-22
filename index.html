@@ -624,13 +624,12 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* More Details: full-width, black square stroke, arrow tucked tight to the label */
   .product-card .card-details-toggle{
     font-size:0.78rem!important;margin-top:8px!important;font-weight:800!important;
-    display:flex!important;align-items:center!important;justify-content:center!important;
+    display:flex!important;align-items:center!important;justify-content:space-between!important;
     width:100%!important;padding:11px 14px!important;
     border:1px solid #000!important;background:transparent!important;color:#000!important;
-    border-radius:0!important;
-    gap:6px!important;
+    border-radius:0!important;letter-spacing:0.06em!important;text-transform:uppercase!important;
   }
-  .product-card .card-details-toggle .pdp-more-arrow{margin-left:0!important}
+  .product-card .card-details-toggle .pdp-more-arrow{margin-left:0!important;font-style:normal!important}
   .product-card .card-details{display:grid!important}
   /* On mobile, "More Details" navigates to PDP instead of expanding inline */
   .product-card .card-details-toggle.mobile-pdp-link{}
@@ -6981,7 +6980,7 @@ function cardHTML(p){
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
-      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span> <span class="pdp-more-arrow">&rarr;</span></button>
+      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span><span class="pdp-more-arrow">&#9654;</span></button>
       <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
     <div class="card-footer">
@@ -7035,6 +7034,7 @@ function toggleDetails(id, btn){
   const lbl = btn.querySelector('.card-details-label');
   const arr = btn.querySelector('.pdp-more-arrow');
   if(lbl) lbl.textContent = open ? 'Hide Details' : 'More Details';
+
   if(arr) arr.classList.toggle('is-open', open);
 }
 
@@ -7550,8 +7550,8 @@ function openProduct(sku){
         </div>
         <div style="font-size:0.7rem;color:var(--muted);margin-top:10px;line-height:1.5">Use your device share sheet, or copy the direct product link.</div>
       </div>
-      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0 0;display:inline-flex;align-items:center;gap:8px;align-self:flex-start">
-        More Details <span class="pdp-more-arrow is-open">&rarr;</span>
+      <button id="moreDetailsBtn" type="button" onclick="(function(b){const pn=document.getElementById('moreDetailsPanel');const ar=b.querySelector('.pdp-more-arrow');const isOpen=pn.classList.toggle('is-open');ar.classList.toggle('is-open',isOpen);})(this)" style="background:transparent;border:none;color:var(--text);font-weight:800;font-size:0.85rem;cursor:pointer;padding:8px 0 0;display:inline-flex;align-items:center;justify-content:space-between;gap:8px;align-self:stretch;text-transform:uppercase;letter-spacing:0.06em">
+        More Details <span class="pdp-more-arrow is-open">&#9654;</span>
       </button>
       <div id="moreDetailsPanel" class="pdp-more-panel is-open">
         <div class="pdp-more-inner">
