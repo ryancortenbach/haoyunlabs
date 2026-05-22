@@ -1080,8 +1080,8 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   transition:opacity 0.22s ease,transform 0.38s cubic-bezier(0.22,1,0.36,1),visibility 0s linear 0.22s;
   overflow:hidden;
 }
-.hyl-cs.drop-up .hyl-cs-panel{top:auto;bottom:calc(100% + 6px);transform-origin:bottom center;transform:translateY(10px) scale(0.96)}
-.hyl-cs.open .hyl-cs-panel{
+.hyl-cs.drop-up .hyl-cs-panel,.hyl-cs-panel.drop-up{top:auto;bottom:calc(100% + 6px);transform-origin:bottom center;transform:translateY(10px) scale(0.96)}
+.hyl-cs.open .hyl-cs-panel,.hyl-cs-panel.open{
   opacity:1;transform:translateY(0) scale(1);
   pointer-events:auto;visibility:visible;
   transition:opacity 0.2s ease,transform 0.4s cubic-bezier(0.22,1,0.36,1),visibility 0s linear 0s;
@@ -10803,34 +10803,44 @@ document.addEventListener('DOMContentLoaded', populateCountrySelects);
       labelSpan.textContent = opt ? opt.textContent : '';
     }
 
+    function positionPanel(){
+      if(!panel || !panel.classList.contains('hyl-cs-panel-portaled')) return;
+      const rect = trigger.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const dropUp = spaceBelow < 280 && rect.top > spaceBelow;
+      panel.classList.toggle('drop-up', dropUp);
+      panel.style.position = 'fixed';
+      panel.style.zIndex = '99999';
+      panel.style.minWidth = rect.width + 'px';
+      panel.style.maxWidth = 'min(360px, calc(100vw - 24px))';
+      if(dropUp){
+        panel.style.top = 'auto';
+        panel.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+      } else {
+        panel.style.top = (rect.bottom + 6) + 'px';
+        panel.style.bottom = 'auto';
+      }
+      panel.style.left = 'auto';
+      panel.style.right = (window.innerWidth - rect.right) + 'px';
+    }
+
     function open(){
       if(wrap.classList.contains('open')) return;
       document.querySelectorAll('.hyl-cs.open').forEach(o => {
         o.classList.remove('open');
         const t = o.querySelector('.hyl-cs-trigger'); if(t) t.setAttribute('aria-expanded','false');
       });
-      const rect = trigger.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const dropUp = spaceBelow < 280 && rect.top > spaceBelow;
-      wrap.classList.toggle('drop-up', dropUp);
+      // Portal panel to body so it escapes any overflow/stacking context
+      if(panel.parentNode !== document.body){
+        document.body.appendChild(panel);
+        panel.classList.add('hyl-cs-panel-portaled');
+      }
+      panel.classList.add('open');
       wrap.classList.add('open');
       trigger.setAttribute('aria-expanded','true');
-      // Position panel fixed so it escapes any overflow/stacking context
-      requestAnimationFrame(() => {
-        if(!panel) return;
-        panel.style.position = 'fixed';
-        panel.style.zIndex = '99999';
-        panel.style.minWidth = rect.width + 'px';
-        if(dropUp){
-          panel.style.top = 'auto';
-          panel.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
-        } else {
-          panel.style.top = (rect.bottom + 6) + 'px';
-          panel.style.bottom = 'auto';
-        }
-        panel.style.left = 'auto';
-        panel.style.right = (window.innerWidth - rect.right) + 'px';
-      });
+      positionPanel();
+      window.addEventListener('scroll', positionPanel, true);
+      window.addEventListener('resize', positionPanel);
       requestAnimationFrame(() => {
         const sel = scroll.querySelector('.hyl-cs-item.selected');
         if(sel) sel.scrollIntoView({block:'nearest'});
@@ -10839,7 +10849,10 @@ document.addEventListener('DOMContentLoaded', populateCountrySelects);
 
     function close(){
       wrap.classList.remove('open');
+      if(panel) panel.classList.remove('open');
       trigger.setAttribute('aria-expanded','false');
+      window.removeEventListener('scroll', positionPanel, true);
+      window.removeEventListener('resize', positionPanel);
     }
 
     trigger.addEventListener('click', e => {
@@ -10875,8 +10888,12 @@ document.addEventListener('DOMContentLoaded', populateCountrySelects);
 
   document.addEventListener('click', e => {
     document.querySelectorAll('.hyl-cs.open').forEach(o => {
-      if(!o.contains(e.target)){
+      const insideWrap = o.contains(e.target);
+      const portaledPanel = document.querySelector('.hyl-cs-panel-portaled.open');
+      const insidePanel = portaledPanel && portaledPanel.contains(e.target);
+      if(!insideWrap && !insidePanel){
         o.classList.remove('open');
+        if(portaledPanel) portaledPanel.classList.remove('open');
         const t = o.querySelector('.hyl-cs-trigger'); if(t) t.setAttribute('aria-expanded','false');
       }
     });
