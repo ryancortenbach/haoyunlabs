@@ -1451,7 +1451,8 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
   #email-popup-card button[onclick*="closeEmailPopup"]{width:44px!important;height:44px!important;top:10px!important;right:10px!important;font-size:1.8rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
   /* Email popup: full-width near top on mobile so safe-area + thumb reach work.
      Desktop stays bottom-right corner-anchored per product direction. */
-  #email-popup{bottom:auto!important;right:16px!important;left:16px!important;top:max(20px,env(safe-area-inset-top,20px))!important;width:auto!important;max-width:none!important}
+  #email-popup{top:auto!important;right:0!important;left:0!important;bottom:0!important;width:100%!important;max-width:none!important}
+  #email-popup-card{border-radius:18px 18px 0 0!important;padding:18px 18px max(18px,env(safe-area-inset-bottom,18px))!important}
   /* Footer email grid */
   .footer,#footer-top{grid-template-columns:1fr!important}
   .footer>div:not(.footer-inner){grid-template-columns:1fr!important}
@@ -4228,7 +4229,7 @@ function pcPopulateReorder(){
   .mv-mail-link:hover{background:#fff}
   .mv-mail-link:active{transform:translateY(1px)}
   .mv-mail-link svg{width:18px;height:18px;flex-shrink:0}
-  .mv-footer-link{display:inline-block;margin-top:10px;font:600 13px/1 var(--sans);color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer}
+  .mv-footer-link{display:inline-block;margin-top:10px;font:600 13px/1 var(--sans);color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap}
   .mv-footer-link:hover{color:#fff}
   @media(max-width:520px){
     #email-popup-card{padding:18px 18px 12px;border-radius:14px}
