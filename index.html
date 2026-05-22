@@ -786,10 +786,10 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   animation:banner-scroll 216s linear infinite;
   will-change:transform;
 }
-.inline-marquee:hover .banner-track{-webkit-animation-play-state:paused;animation-play-state:paused}
 .inline-marquee .banner-track span{
   white-space:nowrap;padding:8px 48px;
-  font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#4b5563;
+  font-size:0.793rem;letter-spacing:0.04em;text-transform:none;font-weight:400;color:#000;
+  font-family:'Helvetica Neue LT Pro 55 Roman','Helvetica Neue LT Pro','HelveticaNeue','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 .banner-track{
   display:flex;width:max-content;
@@ -1197,6 +1197,7 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
   letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
   transition:all 0.2s;border:1px solid transparent;
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Helvetica Neue LT Pro','HelveticaNeue-BoldCondensed','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 /* PC: show the long body copy + hide the in-card pill row (pills live in the hero) */
 .big-feature-card .body-copy-mobile{display:none}
@@ -9818,7 +9819,7 @@ async function submitOrder(provider){
    MARQUEE
    ═════════════════════════════════════════════════════ */
 function buildMarquee(){
-  const text = 'Free shipping on domestic orders over $250 and international orders over $500  |  HPLC-verified research supplies with secure checkout and streamlined fulfillment  |  HAO YUN LABS';
+  const text = 'Free shipping on domestic orders over $250 and international orders over $500.     HPLC-verified research supplies with secure checkout and streamlined fulfillment.     Hao Yun Labs.';
   const spans = Array(8).fill(`<span>${text}</span>`).join('');
   const track = document.getElementById('banner-track');
   if(track) track.innerHTML = spans;
