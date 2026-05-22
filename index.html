@@ -889,21 +889,30 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   padding:0 0 0 4px;
   -webkit-mask-image:none;mask-image:none;
 }
-.cat-tabs.has-right-overflow,.cat-tabs.has-left-overflow,.cat-tabs.has-left-overflow.has-right-overflow{
-  -webkit-mask-image:none;mask-image:none;
+.cat-tabs.has-right-overflow{
+  -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
+          mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
+}
+.cat-tabs.has-left-overflow{
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 100%);
+          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 100%);
+}
+.cat-tabs.has-left-overflow.has-right-overflow{
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
+          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
 }
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tabs-inner,.type-tabs-inner{
   display:inline-flex;align-items:center;gap:4px;padding:4px;
-  background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:54px;box-sizing:border-box;
-  max-width:1200px;opacity:1;
+  background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:42px;box-sizing:border-box;
+  max-width:1200px;opacity:1;overflow:hidden;
 }
 .cat-tabs-inner{max-width:1200px;opacity:1}
 .cat-tabs-slider{display:none}
 .cat-tab,.type-tab{
   display:inline-flex;align-items:center;justify-content:center;
   text-align:center;white-space:nowrap;position:relative;z-index:1;
-  height:44px;padding:0 20px;line-height:1;font-size:1.1rem;letter-spacing:0.01em;
+  height:34px;padding:0 16px;line-height:1;font-size:0.78rem;letter-spacing:0.02em;
   text-transform:none;font-weight:700;cursor:pointer;
   border:none;background:transparent;color:var(--muted);
   border-radius:999px;
@@ -10802,9 +10811,26 @@ document.addEventListener('DOMContentLoaded', populateCountrySelects);
       });
       const rect = trigger.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
-      wrap.classList.toggle('drop-up', spaceBelow < 280 && rect.top > spaceBelow);
+      const dropUp = spaceBelow < 280 && rect.top > spaceBelow;
+      wrap.classList.toggle('drop-up', dropUp);
       wrap.classList.add('open');
       trigger.setAttribute('aria-expanded','true');
+      // Position panel fixed so it escapes any overflow/stacking context
+      requestAnimationFrame(() => {
+        if(!panel) return;
+        panel.style.position = 'fixed';
+        panel.style.zIndex = '99999';
+        panel.style.minWidth = rect.width + 'px';
+        if(dropUp){
+          panel.style.top = 'auto';
+          panel.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+        } else {
+          panel.style.top = (rect.bottom + 6) + 'px';
+          panel.style.bottom = 'auto';
+        }
+        panel.style.left = 'auto';
+        panel.style.right = (window.innerWidth - rect.right) + 'px';
+      });
       requestAnimationFrame(() => {
         const sel = scroll.querySelector('.hyl-cs-item.selected');
         if(sel) sel.scrollIntoView({block:'nearest'});
