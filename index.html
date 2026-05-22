@@ -38,7 +38,7 @@
     }
   }catch(e){}
 })();
-(function(){var B='20260422a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260522a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 // Iter 64: validated whitelist on both params. The pre-Iter-64 code stored
 // whatever ?payment= and ?order= the URL carried, then later interpolated
@@ -1772,7 +1772,7 @@ select.form-input option{color:#000}
 .form-input:valid:not(:placeholder-shown){border-color:var(--stroke)}
 
 /* ── CART LIST IN CHECKOUT ── */
-.cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:1px solid var(--stroke);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:16px;transition:transform 0.18s ease}
+.cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:16px;transition:transform 0.18s ease}
 .cart-item-img:hover{transform:scale(1.04)}
 .cart-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .cart-img-zoom-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:10500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;cursor:zoom-out;padding:24px}
@@ -2411,7 +2411,7 @@ select.form-input option{color:#000}
 
 .hyl-rp-section-label{font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 .hyl-rp-discount-row{display:flex;gap:8px;align-items:stretch}
-.hyl-rp-discount-input{flex:1;padding:10px 14px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.78rem;font-weight:700;letter-spacing:0.08em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
+.hyl-rp-discount-input{flex:1;padding:10px 14px;border:1px solid var(--stroke);border-radius:10px;font-family:var(--mono);font-size:0.88rem;font-weight:500;letter-spacing:0.04em;background:#fff;color:var(--text);text-transform:uppercase;outline:none;transition:border-color 0.2s}
 .hyl-rp-discount-input::placeholder{color:#9ba3af;font-weight:400;opacity:1}
 .hyl-rp-discount-input:focus{border-color:#000}
 .hyl-rp-discount-btn{padding:0 22px;border:1px solid var(--stroke);background:#fff;color:var(--text);border-radius:10px;font-family:var(--display);font-weight:800;font-size:0.78rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
@@ -3236,7 +3236,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
           <!-- Discount / affiliate code -->
           <div class="hyl-rp-section-label">Discount / Affiliate Code</div>
           <div class="hyl-rp-discount-row">
-            <input class="hyl-rp-discount-input" type="text" placeholder="ENTER CODE (EX: BEN10)" id="discount-input">
+            <input class="hyl-rp-discount-input" type="text" placeholder="ENTER CODE (EX: BEN10)" id="discount-input" onkeydown="if(event.key==='Enter') applyCode()">
             <button class="hyl-rp-discount-btn" onclick="applyCode()">Apply</button>
           </div>
           <div class="hyl-rp-discount-help">Enter a discount / affiliate code and press apply.</div>
@@ -4282,55 +4282,25 @@ function pcPopulateReorder(){
 
 <!-- FOOTER -->
 <footer class="footer">
-  <!-- EMAIL SIGNUP ROW -->
-  <div style="max-width:1200px;margin:0 auto 16px">
-    <div style="font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:12px">Get mystery vials and discounts sent to your inbox.</div>
-    <div style="display:flex;gap:8px;max-width:560px">
-      <input type="email" id="footer-email-main" placeholder="Your email here" style="flex:1;padding:12px 16px;border:1px solid var(--stroke);border-radius:10px;font-size:0.85rem;background:#fff;font-family:var(--sans)">
-      <button onclick="subscribeFooterEmail()" class="footer-join-btn" style="padding:12px 24px;background:#000;color:#fff;border:1px solid #000;border-radius:10px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background .18s,color .18s" onmouseover="this.style.background='#fff';this.style.color='#000'" onmouseout="this.style.background='#000';this.style.color='#fff'">Join now</button>
-    </div>
-    <div id="footer-email-main-msg" style="font-size:0.72rem;margin-top:6px;min-height:1em"></div>
-  </div>
-  <div style="max-width:1200px;margin:0 auto 24px;border-top:1px solid var(--stroke);padding-top:14px">
-    <div style="font-size:0.72rem;color:var(--muted);line-height:1.6">
-      New drops, restocks, and research updates. No spam, unsubscribe anytime. See our <a href="/privacy" style="text-decoration:underline;cursor:pointer">Privacy Policy</a>.
-    </div>
-  </div>
-  <div class="footer-inner">
-    <div class="footer-col">
-      <div class="footer-col-title">Shop</div>
-      <a onclick="goToCategory('weight-loss')">Weight Loss</a>
-      <a onclick="goToCategory('growth-recovery')">Recovery</a>
-      <a onclick="goToCategory('longevity')">Longevity</a>
-      <a onclick="goToCategory('cognitive-sexual')">Cognition</a>
-      <a onclick="goToCategory('supplies')">Supplies</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Support</div>
-      <a onclick="navigate('help')">Help Center</a>
-      <a onclick="navigate('coa')">COAs</a>
-      <a onclick="navigate('tracking')">Track Order</a>
-      <a onclick="navigate('research')">Research</a>
-      <a href="affiliate.html">Affiliates</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Legal</div>
-      <a href="/terms">Terms of Service</a>
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/shipping">Refund Policy</a>
-    </div>
-    <div class="footer-brand-col">
-      <div class="footer-brand-name">Hao Yun Labs</div>
-      <div class="footer-brand-desc">Research-grade peptides and supplies. Every compound is HPLC-tested and lot-verified. Certificates of Analysis are available to look up anytime via our COA archive.</div>
-      <div class="footer-social">
-        <a href="https://discord.gg/WDYVkgt5dB" target="_blank" aria-label="Discord"><svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor" style="stroke:none"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg></a>
-        <a href="mailto:support@haoyunlabs.com" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></a>
+  <div style="max-width:1200px;margin:0 auto">
+    <!-- Support row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-bottom:28px">
+      <div>
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Support</div>
+        <div style="font-size:1.75rem;font-weight:800;color:#111;margin-bottom:8px;line-height:1.15">Need help with an order?</div>
+        <div style="font-size:0.88rem;color:#555;max-width:480px;line-height:1.5">Open Track My Order for a direct status lookup, or email <a href="mailto:support@haoyunlabs.com" style="font-weight:700;color:#111;text-decoration:none">support@haoyunlabs.com</a> for help.</div>
       </div>
+      <button onclick="navigate('tracking')" style="padding:14px 28px;background:#fff;color:#111;border:1.5px solid #d0d0d0;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:border-color 0.15s" onmouseover="this.style.borderColor='#111'" onmouseout="this.style.borderColor='#d0d0d0'">Track My Order</button>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <div>For research use only. Not for human consumption. All products are intended for laboratory use.</div>
-    <div>&copy; 2026 Hao Yun Labs. All rights reserved.</div>
+    <!-- Divider -->
+    <div style="border-top:1px solid var(--stroke)"></div>
+    <!-- Bottom links row -->
+    <div style="display:flex;align-items:center;justify-content:flex-start;gap:28px;flex-wrap:wrap;padding-top:20px">
+      <a href="/terms" style="font-size:0.82rem;font-weight:700;color:#111;text-decoration:none" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">Terms of Service</a>
+      <a href="/privacy" style="font-size:0.82rem;font-weight:700;color:#111;text-decoration:none" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">Privacy Policy</a>
+      <a onclick="navigate('help')" style="font-size:0.82rem;font-weight:700;color:#111;text-decoration:none;cursor:pointer" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">Customer Support</a>
+      <a onclick="navigate('contact')" style="font-size:0.82rem;font-weight:700;color:#111;text-decoration:none;cursor:pointer" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">Contact Us</a>
+    </div>
   </div>
 </footer>
 
