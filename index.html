@@ -38,7 +38,7 @@
     }
   }catch(e){}
 })();
-(function(){var B='20260522a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260522b1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 // Iter 64: validated whitelist on both params. The pre-Iter-64 code stored
 // whatever ?payment= and ?order= the URL carried, then later interpolated
@@ -411,7 +411,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   #screen-home div[style*="repeat(2,1fr)"]{grid-template-columns:1fr!important;gap:8px!important}
   .shop-pill{padding:10px 14px!important;gap:12px!important}
   .shop-pill-name{font-size:0.92rem!important;font-weight:700!important}
-  .shop-pill-img{width:42px!important;height:42px!important;border-radius:10px!important}
+  .shop-pill-img{width:42px!important;height:42px!important;border-radius:0!important}
   .shop-pill-arrow{width:28px!important;height:28px!important}
   .shop-pill-arrow svg{width:13px!important;height:13px!important}
   /* Section title shrink */
@@ -718,7 +718,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* Sticky banner readable */
   .sticky-banner .banner-track span{font-size:0.58rem!important;padding-top:max(5px,env(safe-area-inset-top,5px))!important;color:#fff!important}
   #stats-row{border-radius:16px!important}
-  #screen-home .hero-banner{border-radius:16px}
+  #screen-home .hero-banner{border-radius:0}
 }
 /* HAMBURGER: default hidden, revealed at mobile breakpoint */
 .nav-hamburger{
@@ -845,7 +845,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 /* ── HERO ── */
 .hero{text-align:center;padding:140px 0 40px}
 .hero-banner{
-  width:100%;max-width:700px;margin:0 auto 32px;border-radius:8px;overflow:hidden;
+  width:100%;max-width:700px;margin:0 auto 32px;border-radius:0;overflow:hidden;
 }
 .hero-banner img{width:100%;height:auto;display:block;transition:transform 0.4s ease}
 .hero-banner:hover img{transform:scale(1.02)}
@@ -977,7 +977,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   display:flex;flex-direction:column;
   position:relative;
 }
-.product-card .prod-img{border-radius:var(--radius) var(--radius) 0 0;overflow:hidden}
+.product-card .prod-img{border-radius:0;overflow:hidden}
 .product-card.has-open-select{z-index:200}
 .product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
@@ -1141,7 +1141,7 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
 .skel-hero{height:200px;border-radius:var(--radius);margin-bottom:24px}
 .skel-stat{height:80px;border-radius:var(--radius)}
 .skel-pill{height:48px;border-radius:999px}
-.skel-img{aspect-ratio:1/1;border-radius:var(--radius)}
+.skel-img{aspect-ratio:1/1;border-radius:0}
 
 /* ── QUICK VIEW - removed, using card lift instead ── */
 .product-card .prod-img{position:relative}
@@ -1219,7 +1219,7 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
 /* ── SHOP YOUR WAY PILLS ── */
 .shop-pill{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#fff;border:1px solid var(--stroke);border-radius:999px;cursor:pointer;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
 .shop-pill:hover{background:#fafafa;transform:translateY(-2px)}
-.shop-pill-img{width:64px;height:64px;background:#f5f5f5;border-radius:14px;flex-shrink:0;overflow:hidden;transform:scale(1);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
+.shop-pill-img{width:64px;height:64px;background:#f5f5f5;border-radius:0;flex-shrink:0;overflow:hidden;transform:scale(1);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1)}
 .shop-pill-img img{width:100%;height:100%;object-fit:cover;display:block}
 .shop-pill:hover .shop-pill-img{transform:scale(1)}
 .shop-pill-name{font-size:1.3rem;font-weight:800;flex:1;letter-spacing:0.01em}
@@ -1768,12 +1768,12 @@ select.form-input option{color:#000}
 .form-input:valid:not(:placeholder-shown){border-color:var(--stroke)}
 
 /* ── CART LIST IN CHECKOUT ── */
-.cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:16px;transition:transform 0.18s ease}
+.cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:none;border-radius:0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:16px;transition:transform 0.18s ease}
 .cart-item-img:hover{transform:scale(1.04)}
 .cart-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .cart-img-zoom-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:10500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;cursor:zoom-out;padding:24px}
 .cart-img-zoom-overlay.open{opacity:1}
-.cart-img-zoom-overlay img{max-width:min(92vw,720px);max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,0.5);transform:scale(0.92);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1)}
+.cart-img-zoom-overlay img{max-width:min(92vw,720px);max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:0;box-shadow:0 24px 64px rgba(0,0,0,0.5);transform:scale(0.92);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1)}
 .cart-img-zoom-overlay.open img{transform:scale(1)}
 .cart-img-zoom-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cart-item{background:#fff;border:none;border-bottom:1px solid var(--stroke);border-radius:0;padding:20px 18px;margin-bottom:0;
@@ -2393,7 +2393,7 @@ select.form-input option{color:#000}
 .hyl-rp-row .rp-img{display:none!important}
 .hyl-rp-row:first-child{padding-top:3px}
 .hyl-rp-row:last-child{border-bottom:none}
-.hyl-rp-row .rp-img{grid-row:1/span 4;width:92px;height:100%;border:none;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:115px}
+.hyl-rp-row .rp-img{grid-row:1/span 4;width:92px;height:100%;border:none;border-radius:0;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden;align-self:stretch;min-height:115px}
 .hyl-rp-row .rp-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .hyl-rp-row .rp-name{display:flex;flex-direction:column;gap:1px;min-width:0;margin-bottom:2px}
 .hyl-rp-row .rp-sku{font-family:var(--mono);font-size:0.66rem;font-weight:700;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase}
@@ -2577,7 +2577,7 @@ body.no-nav{padding-top:0 !important}
 .prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 /* ── PRODUCT DETAIL PAGE ── */
 .pdp-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;padding:0 0 32px;align-items:start}
-.pdp-image{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--stroke);min-height:620px;position:relative;isolation:isolate;z-index:1}
+.pdp-image{background:#fff;border-radius:0;overflow:hidden;border:1px solid var(--stroke);min-height:620px;position:relative;isolation:isolate;z-index:1}
 .pdp-image .pdp-slide img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .pdp-info{display:flex;flex-direction:column;gap:12px;background:#fff;border-radius:14px;border:1px solid var(--stroke);padding:24px}
 .pdp-more-panel{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1),margin 0.45s ease}
