@@ -4187,18 +4187,70 @@ function pcPopulateReorder(){
 <!-- EMAIL CAPTURE POPUP - centered overlay with dimmed backdrop (do not
      revert to corner-toast layout without explicit user sign-off; centered
      overlay is the current product direction for the mystery-vial promo). -->
-<div id="email-popup" style="position:fixed;bottom:24px;right:24px;z-index:9000;width:460px;max-width:calc(100vw - 48px);opacity:0;pointer-events:none;transition:opacity 0.4s cubic-bezier(0.22,1,0.36,1)">
-  <div id="email-popup-card" style="background:rgba(20,20,20,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px 22px 22px;text-align:left;position:relative;transform:translateY(20px);transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);box-shadow:0 16px 48px rgba(0,0,0,0.4)">
-    <button onclick="closeEmailPopup()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(255,255,255,0.6);line-height:1;padding:6px">&times;</button>
-    <div style="display:inline-block;font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,0.22);border-radius:999px;padding:6px 14px;margin-bottom:16px">Exclusive Access</div>
-    <div style="font-family:var(--sans);font-size:1.55rem;font-weight:800;line-height:1.18;margin-bottom:12px;color:#fff;letter-spacing:-0.01em">Join the mailing list for a free mystery vial.</div>
-    <div style="font-size:0.86rem;font-weight:600;color:rgba(255,255,255,0.78);margin-bottom:20px;line-height:1.45">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</div>
-    <div style="font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">Name</div>
-    <input type="text" id="popup-name" placeholder="Your name" style="width:100%;box-sizing:border-box;padding:14px 18px;border:1px solid rgba(255,255,255,0.22);border-radius:999px;font-size:0.95rem;margin-bottom:16px;background:transparent;color:#fff;font-family:var(--sans);outline:none">
-    <div style="font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">Email Address</div>
-    <input type="email" id="popup-email" placeholder="you@example.com" style="width:100%;box-sizing:border-box;padding:14px 18px;border:1px solid rgba(255,255,255,0.22);border-radius:999px;font-size:0.95rem;margin-bottom:22px;background:transparent;color:#fff;font-family:var(--sans);outline:none">
-    <button onclick="submitPopupEmail()" style="width:100%;padding:16px;background:#fff;color:#111;border:none;border-radius:999px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity 0.18s" onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">Claim Offer</button>
-    <div onclick="closeEmailPopup()" style="margin-top:14px;font-size:0.78rem;color:rgba(255,255,255,0.65);cursor:pointer;text-decoration:underline;text-underline-offset:3px;display:inline-block">No thanks</div>
+<!-- MYSTERY VIAL POPUP — centered modal, 4 states (idle/submitting/error/success).
+     Mirrors design at /tmp/mystery_vial_design/.../Mystery Vial Popup.html.
+     Posts to /api/free-vial/claim; admin notification + vial email fire server-side. -->
+<style>
+  #email-popup{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s ease;background:radial-gradient(80% 60% at 50% 50%,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.75) 100%);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #email-popup.open{opacity:1;pointer-events:auto}
+  #email-popup-card{position:relative;width:min(640px,100%);max-width:640px;background:rgba(38,38,40,0.78);border:1px solid rgba(255,255,255,0.06);border-radius:22px;padding:36px 36px 28px;color:#f6f4f1;box-shadow:0 30px 80px -20px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04) inset,0 1px 0 rgba(255,255,255,0.08) inset;backdrop-filter:blur(20px) saturate(120%);-webkit-backdrop-filter:blur(20px) saturate(120%);overflow:hidden;transform:translateY(8px) scale(0.985);opacity:0;transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1),opacity 0.32s cubic-bezier(0.2,0.8,0.2,1)}
+  #email-popup.open #email-popup-card{transform:translateY(0) scale(1);opacity:1}
+  #email-popup-card::before{content:"";position:absolute;top:-30%;left:30%;width:60%;height:80%;background:radial-gradient(closest-side,rgba(255,255,255,0.12),transparent 70%);pointer-events:none}
+  .mv-close{position:absolute;top:18px;right:18px;width:32px;height:32px;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;color:#cfccc7;border-radius:8px;transition:background .15s,color .15s}
+  .mv-close:hover{background:rgba(255,255,255,0.08);color:#fff}
+  .mv-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(255,255,255,0.35);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:0.16em;font-weight:600;color:#f6f4f1;text-transform:uppercase}
+  .mv-title{font-family:var(--sans);font-weight:800;font-size:30px;line-height:1.12;letter-spacing:-0.02em;margin:18px 0 14px;text-wrap:balance;color:#f6f4f1}
+  .mv-subtitle{font-family:var(--sans);font-weight:600;font-size:15px;line-height:1.45;margin:0 0 22px;color:#f6f4f1;max-width:44ch}
+  .mv-field{display:block;margin-bottom:16px}
+  .mv-field-label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#b4b0aa;margin-bottom:8px;font-weight:600}
+  .mv-field-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.22);border-radius:14px;padding:14px 16px;color:#f6f4f1;font:500 15px/1.2 var(--sans);transition:border-color .15s,box-shadow .15s;outline:none}
+  .mv-field-input::placeholder{color:rgba(255,255,255,0.4)}
+  .mv-field-input:hover{border-color:rgba(255,255,255,0.32)}
+  .mv-field-input:focus{border-color:rgba(255,255,255,0.55);box-shadow:0 0 0 3px rgba(255,255,255,0.06)}
+  .mv-field-input[aria-invalid="true"]{border-color:#f3b5b5}
+  .mv-error{margin:-6px 4px 14px;font:600 14px/1.2 var(--sans);color:#f3b5b5}
+  .mv-cta{width:100%;padding:18px 20px;background:#fff;color:#111;border:0;border-radius:14px;font:600 17px/1 var(--sans);cursor:pointer;transition:transform .08s,background .15s,color .15s,box-shadow .15s;box-shadow:0 6px 20px -8px rgba(0,0,0,0.5);margin-top:18px}
+  .mv-cta:hover{background:#f1efe9}
+  .mv-cta:active{transform:translateY(1px)}
+  .mv-cta:disabled{background:rgba(220,218,213,0.85);color:#111;cursor:default;box-shadow:none;opacity:1}
+  .mv-cta-loading{display:inline-flex;align-items:center;gap:10px;justify-content:center}
+  .mv-spinner{width:14px;height:14px;border:2px solid rgba(0,0,0,0.2);border-top-color:#111;border-radius:50%;animation:mv-spin .8s linear infinite}
+  @keyframes mv-spin{to{transform:rotate(360deg)}}
+  .mv-success{margin-top:12px;padding:16px 18px;border-radius:14px;border:1px solid #6e9c7c;background:rgba(80,112,88,0.45);color:#ecf3ed;font:700 15px/1.3 var(--sans);display:flex;align-items:center;gap:12px}
+  .mv-success .mv-code{font-family:var(--mono);letter-spacing:0.1em}
+  .mv-success .mv-check{width:18px;height:18px;border-radius:50%;border:1.5px solid #6e9c7c;display:grid;place-items:center;flex:0 0 18px}
+  .mv-footer-link{display:inline-block;margin-top:18px;font:600 14px/1 var(--sans);color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer}
+  .mv-footer-link:hover{color:#fff}
+  @media(max-width:520px){
+    #email-popup-card{padding:28px 22px 22px;border-radius:18px}
+    .mv-title{font-size:24px;margin:14px 0 10px}
+    .mv-subtitle{font-size:14px;margin-bottom:18px}
+    .mv-cta{padding:15px 18px;font-size:15px}
+  }
+</style>
+<div id="email-popup" role="dialog" aria-modal="true" aria-labelledby="mv-title">
+  <div id="email-popup-card">
+    <button class="mv-close" type="button" aria-label="Close" onclick="closeEmailPopup()"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3 L13 13 M13 3 L3 13"/></svg></button>
+    <span class="mv-pill">Exclusive Access</span>
+    <h2 id="mv-title" class="mv-title">Join the mailing list for a free mystery vial.</h2>
+    <p class="mv-subtitle">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</p>
+    <form id="mv-form" onsubmit="event.preventDefault();submitPopupEmail();" novalidate>
+      <label class="mv-field">
+        <span class="mv-field-label">Name</span>
+        <input class="mv-field-input" type="text" id="popup-name" placeholder="Your name" autocomplete="name">
+      </label>
+      <label class="mv-field">
+        <span class="mv-field-label">Email Address</span>
+        <input class="mv-field-input" type="email" id="popup-email" placeholder="you@example.com" autocomplete="email">
+      </label>
+      <div class="mv-error" id="mv-error" role="alert" style="display:none"></div>
+      <button class="mv-cta" type="submit" id="mv-cta">Claim Offer</button>
+      <div class="mv-success" id="mv-success" role="status" style="display:none">
+        <span class="mv-check"><svg viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="#cfe2d3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5 L4 7.5 L8.5 2.5"/></svg></span>
+        <span id="mv-success-text">You're in. Check your inbox for code <span class="mv-code" id="mv-success-code">CODE</span>.</span>
+      </div>
+    </form>
+    <button class="mv-footer-link" type="button" onclick="closeEmailPopup()">No thanks</button>
   </div>
 </div>
 
@@ -9872,46 +9924,56 @@ function lookupCOA(){
   renderCOAArchive();
 }
 
-/* ── EMAIL CAPTURE POPUP ── */
-let _flipInterval=null;
+/* ── MYSTERY VIAL POPUP (mailing-list signup) ── */
 function showEmailPopup(){
   const popup = document.getElementById('email-popup');
-  const card = document.getElementById('email-popup-card');
-  if(popup){ popup.style.opacity='1'; popup.style.pointerEvents='auto'; }
-  if(card) setTimeout(()=>{ card.style.transform='translateY(0)'; },50);
+  if(popup) popup.classList.add('open');
+  // Reset to idle state on open
+  _setMvState('idle');
   try{ _syncUpsellStack(); }catch(e){}
-  // Word flip cycle
-  const words=['free','exclusive','bonus','surprise'];
-  let idx=0;
-  if(_flipInterval) clearInterval(_flipInterval);
-  const measure=document.getElementById('popup-flip-measure');
-  const container=document.getElementById('popup-flip-container');
-  if(measure&&container){measure.textContent=words[0];container.style.width=measure.offsetWidth+'px';}
-  _flipInterval=setInterval(()=>{
-    idx=(idx+1)%words.length;
-    const el=document.getElementById('popup-flip-word');
-    if(!el||!measure||!container){clearInterval(_flipInterval);return;}
-    el.style.transform='translateY(-110%)';el.style.opacity='0';
-    measure.textContent=words[idx];
-    container.style.width=measure.offsetWidth+'px';
-    setTimeout(()=>{
-      el.textContent=words[idx];
-      el.style.transition='none';
-      el.style.transform='translateY(110%)';
-      requestAnimationFrame(()=>{
-        el.style.transition='transform 0.5s cubic-bezier(0.22,1,0.36,1),opacity 0.3s ease';
-        el.style.transform='translateY(0)';el.style.opacity='1';
-      });
-    },300);
-  },3000);
 }
 function closeEmailPopup(){
-  if(_flipInterval){clearInterval(_flipInterval);_flipInterval=null;}
   const popup = document.getElementById('email-popup');
-  const card = document.getElementById('email-popup-card');
-  if(card) card.style.transform='translateY(20px)';
-  if(popup){ popup.style.opacity='0'; popup.style.pointerEvents='none'; }
+  if(popup) popup.classList.remove('open');
   sessionStorage.setItem('hyl_popup_shown_session', '1');
+}
+function _setMvState(state, opts){
+  const cta = document.getElementById('mv-cta');
+  const err = document.getElementById('mv-error');
+  const success = document.getElementById('mv-success');
+  const nameInp = document.getElementById('popup-name');
+  const emailInp = document.getElementById('popup-email');
+  if(!cta) return;
+  if(state === 'idle'){
+    cta.disabled = false;
+    cta.textContent = 'Claim Offer';
+    if(err){ err.style.display='none'; err.textContent=''; }
+    if(success){ success.style.display='none'; }
+    if(emailInp) emailInp.removeAttribute('aria-invalid');
+    if(nameInp) nameInp.disabled = false;
+    if(emailInp) emailInp.disabled = false;
+  } else if(state === 'submitting'){
+    cta.disabled = true;
+    cta.innerHTML = '<span class="mv-cta-loading"><span class="mv-spinner"></span>Submitting&hellip;</span>';
+    if(err){ err.style.display='none'; err.textContent=''; }
+    if(emailInp) emailInp.removeAttribute('aria-invalid');
+  } else if(state === 'error'){
+    cta.disabled = false;
+    cta.textContent = 'Claim Offer';
+    if(err){ err.style.display='block'; err.textContent = (opts && opts.message) || 'Could not submit right now. Please try again.'; }
+    if(emailInp) emailInp.setAttribute('aria-invalid','true');
+  } else if(state === 'success'){
+    cta.disabled = true;
+    cta.textContent = 'Claimed';
+    if(err){ err.style.display='none'; }
+    if(success && opts && opts.code){
+      success.style.display='flex';
+      const codeEl = document.getElementById('mv-success-code');
+      if(codeEl) codeEl.textContent = opts.code;
+    }
+    if(nameInp) nameInp.disabled = true;
+    if(emailInp){ emailInp.disabled = true; emailInp.removeAttribute('aria-invalid'); }
+  }
 }
 // Whitelist of single-vial SKUs (>= $30 retail) eligible for the popup
 // mystery vial. The client picks one at random and POSTs the SKU to the
@@ -9924,32 +9986,14 @@ const POPUP_MYSTERY_VIAL_SKUS = [
   { sku:'CU50SV', name:'GHK-Cu 50mg',      size:'50mg' },
 ];
 async function submitPopupEmail(){
-  const btn = document.querySelector('#email-popup-card button[onclick="submitPopupEmail()"]');
   const name = (document.getElementById('popup-name')?.value||'').trim();
-  const email = document.getElementById('popup-email').value.trim();
-  if(!name){ showToast('Please enter your name','error'); return; }
-  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('Please enter a valid email','error'); return; }
-  // Pick a random eligible product from the curated whitelist. Use the
-  // client-side ALL_PRODUCTS array when present to surface the canonical
-  // marketing name; otherwise fall back to the literal whitelist entry.
+  const email = (document.getElementById('popup-email')?.value||'').trim();
+  if(!name){ _setMvState('error', { message: 'Please enter your name.' }); return; }
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ _setMvState('error', { message: 'Please enter a valid email address.' }); return; }
+  // Pick a random eligible product from the curated whitelist.
   const pick = POPUP_MYSTERY_VIAL_SKUS[Math.floor(Math.random()*POPUP_MYSTERY_VIAL_SKUS.length)];
-  let displayName = pick.name;
-  let displaySize = pick.size;
-  try {
-    if(typeof ALL_PRODUCTS !== 'undefined'){
-      const match = ALL_PRODUCTS.find(p => p && p.sku === pick.sku);
-      if(match && match.name){
-        displayName = match.name;
-        const m = /(\d+(?:\.\d+)?\s*(?:mg|ml|iu))/i.exec(match.name);
-        if(m && m[1]) displaySize = m[1];
-      }
-    }
-  } catch(_){}
-  // Disable submit while in-flight.
-  if(btn){ btn.disabled = true; btn.textContent = 'Claiming...'; btn.style.opacity = '0.7'; btn.style.cursor = 'wait'; }
+  _setMvState('submitting');
   let vialCode = '';
-  let serverProductName = displayName;
-  let serverProductSize = displaySize;
   try {
     const resp = await fetch('https://admin.haoyunlabs.com/api/free-vial/claim', {
       method: 'POST',
@@ -9958,43 +10002,20 @@ async function submitPopupEmail(){
     });
     const data = await resp.json().catch(()=>({}));
     if(!resp.ok || !data || !data.ok || !data.vial_code){
-      if(btn){ btn.disabled = false; btn.textContent = 'Claim Offer'; btn.style.opacity = ''; btn.style.cursor = ''; }
-      const msg = (data && (data.error || data.message)) || 'Something went wrong. Please try again.';
-      showToast(msg, 'error');
+      const msg = (data && (data.error || data.message)) || 'Could not submit right now. Please try again.';
+      _setMvState('error', { message: msg });
       return;
     }
     vialCode = String(data.vial_code);
-    if(data.product_name) serverProductName = String(data.product_name);
-    if(data.product_size) serverProductSize = String(data.product_size);
   } catch(e){
-    if(btn){ btn.disabled = false; btn.textContent = 'Claim Offer'; btn.style.opacity = ''; btn.style.cursor = ''; }
-    showToast('Network error. Please try again.', 'error');
+    _setMvState('error', { message: 'Network error. Please try again.' });
     return;
   }
   // Fire-and-forget the existing newsletter subscribe so the email still
-  // lands in our marketing list.
+  // lands in our marketing list (the server-side claim already triggers
+  // both the customer confirmation + admin alert emails).
   try { hylSubscribe(email, 'popup', { name, code: vialCode }); } catch(_){}
-  // Transform popup into success + Discord invite. Discord button now
-  // stretches full-card-width per design spec.
-  const popup = document.getElementById('email-popup-card');
-  if(_flipInterval){ clearInterval(_flipInterval); _flipInterval = null; }
-  const safeName = name.split(' ')[0].replace(/[<>&"]/g,'');
-  const safeProduct = String(serverProductName).replace(/[<>&"]/g,'');
-  popup.innerHTML = `
-    <span style="display:inline-block;padding:4px 10px;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);border-radius:6px">Mystery Vial</span>
-    <div style="font-family:var(--display);font-size:1.2rem;font-weight:900;margin:14px 0 6px;line-height:1.2">You're in, ${safeName}!</div>
-    <div style="font-size:0.78rem;color:rgba(255,255,255,0.65);line-height:1.5;margin-bottom:10px">You've been assigned <strong style="color:#fff">${safeProduct}</strong>.</div>
-    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:10px">Your single-use vial code:</div>
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px;text-align:center;font-family:var(--mono);font-size:1.4rem;font-weight:800;letter-spacing:0.2em;margin-bottom:16px">${vialCode}</div>
-    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-bottom:16px;line-height:1.5">Use this code at checkout. Valid for 24 hours. Confirmation also sent to your email. Now join the community:</div>
-    <a href="https://discord.gg/WDYVkgt5dB" target="_blank" class="discord-fly-btn" style="display:flex;width:100%;box-sizing:border-box;align-items:center;justify-content:center;padding:0.85em 1em;background:#5865F2;color:#fff;border:none;border-radius:16px;font-size:0.92rem;font-weight:700;cursor:pointer;text-decoration:none;overflow:hidden;transition:all 0.2s">
-      <span class="discord-fly-svg" style="display:inline-flex;align-items:center;transform-origin:center;transition:transform 0.3s ease-in-out">
-        <svg width="20" height="15" viewBox="0 0 71 55" fill="white"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.7 58.7 0 0017.7 9 .2.2 0 00.3-.1 42 42 0 003.6-5.9.2.2 0 00-.1-.3 38.6 38.6 0 01-5.5-2.6.2.2 0 01 0-.4l1.1-.9a.2.2 0 01.2 0 41.9 41.9 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .3 36.3 36.3 0 01-5.5 2.7.2.2 0 00-.1.3 47.2 47.2 0 003.6 5.9.2.2 0 00.3.1A58.5 58.5 0 0070.4 45.7v-.2C72 30.1 68 16.7 60.2 5a.2.2 0 00-.1-.1zM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.8 7.2-6.4 7.2zm23.7 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.2 6.4 7.2c0 4-2.9 7.2-6.4 7.2z"/></svg>
-      </span>
-      <span class="discord-fly-text" style="display:inline-block;margin-left:0.5em;transition:all 0.3s ease-in-out">Join HYL Discord</span>
-    </a>
-    <div onclick="closeEmailPopup()" style="text-align:center;margin-top:12px;font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Close</div>
-  `;
+  _setMvState('success', { code: vialCode });
   // Permanent: subscriber never sees this popup again.
   try { localStorage.setItem('hyl_popup_subscribed', '1'); } catch(_){}
   sessionStorage.setItem('hyl_popup_shown_session', '1');
