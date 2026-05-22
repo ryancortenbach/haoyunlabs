@@ -8204,8 +8204,9 @@ function renderReceipt(){
       if(window._freeVialCode){
         const fvSku = window._freeVialProductSku || '';
         const fvName = window._freeVialProductName || 'Free Vial';
-        const fvSize = window._freeVialProductSize ? ` ${window._freeVialProductSize}` : '';
-        const fvDisplayName = (fvName + fvSize).trim();
+        const fvSize = window._freeVialProductSize || '';
+        // Avoid "Retatrutide 10mg 10mg" if size already appears in the name.
+        const fvDisplayName = (fvSize && !fvName.toLowerCase().includes(fvSize.toLowerCase())) ? `${fvName} ${fvSize}` : fvName;
         const fvImg = fvSku ? `media/products/${fvSku}.png` : '';
         const fvImgHtml = fvImg
           ? '<img src="'+escHtml(fvImg)+'" alt="'+escHtml(fvDisplayName)+'" loading="lazy" onerror="this.style.display=\'none\'">'
@@ -8215,7 +8216,7 @@ function renderReceipt(){
           + '<div class="rp-img">'+fvImgHtml+'</div>'
           + '<div class="rp-name"><span class="rp-sku" style="color:#22c55e">FREE VIAL · '+escHtml(window._freeVialCode)+'</span><span class="rp-title" style="color:#16a34a">'+escHtml(fvDisplayName)+'</span></div>'
           + '<div class="rp-unit" data-label="Unit" style="color:#22c55e">FREE</div>'
-          + '<div class="rp-qty" data-label="Qty">1</div>'
+          + '<div class="rp-qty" data-label="Qty" style="color:#22c55e">1</div>'
           + '<div class="rp-line" data-label="Line" style="color:#22c55e">$0.00</div>'
           + '</div>'
         );
@@ -8236,7 +8237,7 @@ function renderReceipt(){
     if(window._freeVialCode){
       const fvName = window._freeVialProductName || '';
       const fvSize = window._freeVialProductSize || '';
-      const fvLbl = (fvName + (fvSize ? ' ' + fvSize : '')).trim();
+      const fvLbl = (fvSize && !fvName.toLowerCase().includes(fvSize.toLowerCase())) ? (fvName + ' ' + fvSize) : fvName;
       const fvDetail = fvLbl ? fvLbl + ' · ' + window._freeVialCode : window._freeVialCode;
       rows.push('<div class="hyl-rp-totals-row"><span class="rp-tot-label" style="color:#16a34a">Free Vial ('+escHtml(fvDetail)+')</span><span class="rp-tot-val" style="color:#16a34a">FREE</span></div>');
     }
@@ -8325,9 +8326,22 @@ async function applyCode(){
       }
       window._freeVialCode = d.code;
       window._freeVialCreditId = d.free_vial_credit_id;
-      window._freeVialProductName = d.product_name || '';
-      window._freeVialProductSize = d.product_size || '';
-      window._freeVialProductSku = d.product_sku || d.applies_to_sku || '';
+      // Defensive guard: free vial can ONLY ever be GHK-Cu 50mg or Retatrutide 10mg.
+      // If the DB row points to anything else (legacy data), force one of the two.
+      const ALLOWED_FV = { RT10SV:{name:'Retatrutide 10mg',size:'10mg'}, CU50SV:{name:'GHK-Cu 50mg',size:'50mg'} };
+      const dbSku = (d.product_sku || d.applies_to_sku || '').toUpperCase();
+      if(ALLOWED_FV[dbSku]){
+        window._freeVialProductSku = dbSku;
+        window._freeVialProductName = ALLOWED_FV[dbSku].name;
+        window._freeVialProductSize = ALLOWED_FV[dbSku].size;
+      } else {
+        // Deterministic pick from code so the same code always shows the same vial.
+        const hash = [...d.code].reduce((a,c)=>a + c.charCodeAt(0), 0);
+        const fallback = hash % 2 === 0 ? 'RT10SV' : 'CU50SV';
+        window._freeVialProductSku = fallback;
+        window._freeVialProductName = ALLOWED_FV[fallback].name;
+        window._freeVialProductSize = ALLOWED_FV[fallback].size;
+      }
       const txt = previousCode && previousCode!==d.code
         ? `Replaced ${previousCode} → Free vial code ${d.code} applied!`
         : `Free vial code ${d.code} applied!`;
@@ -9889,14 +9903,11 @@ function closeEmailPopup(){
 // mystery vial. The client picks one at random and POSTs the SKU to the
 // admin claim endpoint; the server is the source of truth for the actual
 // vial_code (no more local 5-char random codes).
+// Only GHK-Cu 50mg or Retatrutide 10mg can ever be the free vial.
+// Must match the WHITELIST in admin/src/app/api/free-vial/claim/route.ts.
 const POPUP_MYSTERY_VIAL_SKUS = [
-  { sku:'RT10SV',  name:'Retatrutide 10mg',         size:'10mg' },
-  { sku:'SM10SV',  name:'Semaglutide 10mg',         size:'10mg' },
-  { sku:'T10MG',   name:'Tirzepatide 10mg',         size:'10mg' },
-  { sku:'GC50MG',  name:'GHK-Cu 50mg',              size:'50mg' },
-  { sku:'B110MG',  name:'BPC-157 10mg',             size:'10mg' },
-  { sku:'T5TB10MG',name:'TB-500 / Thymosin B4 10mg',size:'10mg' },
-  { sku:'I10MG',   name:'Ipamorelin 10mg',          size:'10mg' },
+  { sku:'RT10SV', name:'Retatrutide 10mg', size:'10mg' },
+  { sku:'CU50SV', name:'GHK-Cu 50mg',      size:'50mg' },
 ];
 async function submitPopupEmail(){
   const btn = document.querySelector('#email-popup-card button[onclick="submitPopupEmail()"]');
