@@ -896,7 +896,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .cat-tabs-inner,.type-tabs-inner{
   display:inline-flex;align-items:center;gap:4px;padding:4px;
   background:#f4f4f4;border-radius:999px;flex-shrink:0;min-width:0;height:54px;box-sizing:border-box;
-  max-width:1200px;opacity:1;overflow:hidden;
+  max-width:1200px;opacity:1;
 }
 .cat-tabs-inner{max-width:1200px;opacity:1}
 .cat-tabs-slider{display:none}
@@ -1095,7 +1095,7 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .hyl-cs-item-check{opacity:0;display:inline-flex;flex-shrink:0;color:#000;transition:opacity 0.18s}
 .hyl-cs-item.selected .hyl-cs-item-check{opacity:1}
 /* Sort selector pill variant */
-.hyl-cs-sort{display:inline-block;width:auto;min-width:108px}
+.hyl-cs-sort{display:inline-block;width:auto;min-width:108px;position:relative;z-index:9001}
 .hyl-cs-sort .hyl-cs-trigger{padding:0 14px;height:46px;font-size:15px;border-radius:999px;line-height:1;font-weight:500;border:1px solid #ccc!important;box-shadow:0 3px 8px rgba(0,0,0,0.09)!important}
 .hyl-cs-sort .hyl-cs-panel{border-radius:18px;left:auto;right:0;width:max-content;min-width:200px;max-width:calc(100vw - 32px)}
 /* Hidden native select (kept for form submission) */
