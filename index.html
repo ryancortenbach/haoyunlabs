@@ -9819,7 +9819,7 @@ async function submitOrder(provider){
    MARQUEE
    ═════════════════════════════════════════════════════ */
 function buildMarquee(){
-  const text = 'Free shipping on domestic orders over $250 and international orders over $500.     HPLC-verified research supplies with secure checkout and streamlined fulfillment.     Hao Yun Labs.';
+  const text = 'Free shipping on domestic orders over $250 and international orders over $500.     HPLC-verified research supplies with secure checkout and streamlined fulfillment.';
   const spans = Array(8).fill(`<span>${text}</span>`).join('');
   const track = document.getElementById('banner-track');
   if(track) track.innerHTML = spans;
