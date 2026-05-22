@@ -886,20 +886,11 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   display:flex;flex-direction:row;align-items:center;gap:8px;flex-wrap:nowrap;
   position:relative;font-size:0.82rem;flex:1 1 auto;min-width:0;overflow-x:auto;overflow-y:visible;
   scrollbar-width:none;-ms-overflow-style:none;
-  padding:0 8px;
+  padding:0 0 0 4px;
   -webkit-mask-image:none;mask-image:none;
 }
-.cat-tabs.has-right-overflow{
-  -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
-          mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 60px),transparent 100%);
-}
-.cat-tabs.has-left-overflow{
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 100%);
-          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 100%);
-}
-.cat-tabs.has-left-overflow.has-right-overflow{
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
-          mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);
+.cat-tabs.has-right-overflow,.cat-tabs.has-left-overflow,.cat-tabs.has-left-overflow.has-right-overflow{
+  -webkit-mask-image:none;mask-image:none;
 }
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tabs-inner,.type-tabs-inner{
