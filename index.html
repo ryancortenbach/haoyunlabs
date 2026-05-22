@@ -4185,17 +4185,21 @@ function pcPopulateReorder(){
   .mv-close{position:absolute;top:14px;right:14px;width:28px;height:28px;display:grid;place-items:center;background:transparent;border:0;cursor:pointer;color:#cfccc7;border-radius:8px;transition:background .15s,color .15s}
   .mv-close:hover{background:rgba(255,255,255,0.08);color:#fff}
   .mv-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(255,255,255,0.35);border-radius:999px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;font-weight:600;color:#f6f4f1;text-transform:uppercase}
-  .mv-title{font-family:var(--sans);font-weight:800;font-size:21px;line-height:1.18;letter-spacing:-0.02em;margin:10px 0 6px;text-wrap:balance;color:#f6f4f1}
+  .mv-title{font-family:var(--sans);font-weight:900;font-size:23px;line-height:1.14;letter-spacing:-0.025em;margin:10px 0 6px;color:#f6f4f1}
   .mv-subtitle{font-family:var(--sans);font-weight:500;font-size:13px;line-height:1.4;margin:0 0 14px;color:rgba(246,244,241,0.85);max-width:44ch}
+  .mv-fields{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.04);border-radius:14px;padding:14px 14px 8px;margin-bottom:14px}
   .mv-field{display:block;margin-bottom:10px}
-  .mv-field-label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#b4b0aa;margin-bottom:4px;font-weight:600}
-  .mv-field-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.22);border-radius:12px;padding:11px 14px;color:#f6f4f1;font:500 14px/1.2 var(--sans);transition:border-color .15s,box-shadow .15s;outline:none}
+  .mv-fields .mv-field:last-of-type{margin-bottom:0}
+  .mv-field-label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#d8d4cd;margin-bottom:4px;font-weight:800}
+  .mv-field-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.22);border-radius:12px;padding:11px 14px;color:#f6f4f1;font:500 14px/1.2 var(--sans);transition:border-color .15s,box-shadow .15s;outline:none;box-shadow:none}
   .mv-field-input::placeholder{color:rgba(255,255,255,0.4)}
-  .mv-field-input:hover{border-color:rgba(255,255,255,0.32)}
-  .mv-field-input:focus{border-color:rgba(255,255,255,0.55);box-shadow:0 0 0 3px rgba(255,255,255,0.06)}
-  .mv-field-input[aria-invalid="true"]{border-color:rgba(255,255,255,0.22)}
-  .mv-field-input[aria-invalid="true"]:hover{border-color:rgba(255,255,255,0.32)}
-  .mv-field-input[aria-invalid="true"]:focus{border-color:rgba(255,255,255,0.55);box-shadow:0 0 0 3px rgba(255,255,255,0.06)}
+  .mv-field-input:hover{border-color:rgba(255,255,255,0.34);box-shadow:none}
+  .mv-field-input:focus{border-color:rgba(255,255,255,0.55);box-shadow:none}
+  /* Error state: red border persists until the field is fixed. No white/black
+     outline or focus ring takes over while invalid. */
+  .mv-field-input[aria-invalid="true"],
+  .mv-field-input[aria-invalid="true"]:hover,
+  .mv-field-input[aria-invalid="true"]:focus{border-color:#f3b5b5;box-shadow:none}
   .mv-error{margin:-2px 2px 10px;font:600 13px/1.2 var(--sans);color:#f3b5b5}
   .mv-cta{width:100%;padding:13px 18px;background:#fff;color:#111;border:0;border-radius:12px;font:700 15px/1 var(--sans);cursor:pointer;transition:transform .08s,background .15s,color .15s,box-shadow .15s;box-shadow:0 6px 20px -8px rgba(0,0,0,0.5);margin-top:6px}
   .mv-cta:hover{background:#f1efe9}
@@ -4229,15 +4233,17 @@ function pcPopulateReorder(){
     <h2 id="mv-title" class="mv-title">Join the mailing list for a free mystery vial.</h2>
     <p class="mv-subtitle">Enter your name and email to receive your 5-character code. Your free mystery vial offer is valid for 24 hours.</p>
     <form id="mv-form" onsubmit="event.preventDefault();submitPopupEmail();" novalidate>
-      <label class="mv-field">
-        <span class="mv-field-label">Name</span>
-        <input class="mv-field-input" type="text" id="popup-name" placeholder="Your name" autocomplete="name">
-      </label>
-      <label class="mv-field">
-        <span class="mv-field-label">Email Address</span>
-        <input class="mv-field-input" type="email" id="popup-email" placeholder="you@example.com" autocomplete="email">
-      </label>
-      <div class="mv-error" id="mv-error" role="alert" style="display:none"></div>
+      <div class="mv-fields">
+        <label class="mv-field">
+          <span class="mv-field-label">Name</span>
+          <input class="mv-field-input" type="text" id="popup-name" placeholder="Your name" autocomplete="name">
+        </label>
+        <label class="mv-field">
+          <span class="mv-field-label">Email Address</span>
+          <input class="mv-field-input" type="email" id="popup-email" placeholder="you@example.com" autocomplete="email">
+        </label>
+        <div class="mv-error" id="mv-error" role="alert" style="display:none"></div>
+      </div>
       <button class="mv-cta" type="submit" id="mv-cta">Claim Offer</button>
       <div class="mv-success" id="mv-success" role="status" style="display:none">
         <div class="mv-success-header">
@@ -9960,28 +9966,44 @@ function _setMvState(state, opts){
     cta.textContent = 'Claim Offer';
     if(err){ err.style.display='none'; err.textContent=''; }
     if(success){ success.style.display='none'; }
-    if(emailInp) emailInp.removeAttribute('aria-invalid');
-    if(nameInp) nameInp.disabled = false;
-    if(emailInp) emailInp.disabled = false;
+    if(nameInp){ nameInp.disabled = false; nameInp.removeAttribute('aria-invalid'); }
+    if(emailInp){ emailInp.disabled = false; emailInp.removeAttribute('aria-invalid'); }
   } else if(state === 'submitting'){
     cta.disabled = true;
     cta.innerHTML = '<span class="mv-cta-loading"><span class="mv-spinner"></span>Submitting&hellip;</span>';
     if(err){ err.style.display='none'; err.textContent=''; }
+    if(nameInp) nameInp.removeAttribute('aria-invalid');
     if(emailInp) emailInp.removeAttribute('aria-invalid');
   } else if(state === 'error'){
     cta.disabled = false;
     cta.textContent = 'Claim Offer';
     if(err){ err.style.display='block'; err.textContent = (opts && opts.message) || 'Could not submit right now. Please try again.'; }
-    if(emailInp) emailInp.setAttribute('aria-invalid','true');
+    // Only highlight the field that actually failed; clear the other.
+    const field = opts && opts.field;
+    if(nameInp){ if(field === 'name') nameInp.setAttribute('aria-invalid','true'); else nameInp.removeAttribute('aria-invalid'); }
+    if(emailInp){ if(field === 'email' || field == null) emailInp.setAttribute('aria-invalid','true'); else emailInp.removeAttribute('aria-invalid'); }
   } else if(state === 'success'){
     cta.disabled = true;
     cta.textContent = 'Claimed';
     if(err){ err.style.display='none'; }
     if(success) success.style.display='block';
-    if(nameInp) nameInp.disabled = true;
+    if(nameInp){ nameInp.disabled = true; nameInp.removeAttribute('aria-invalid'); }
     if(emailInp){ emailInp.disabled = true; emailInp.removeAttribute('aria-invalid'); }
   }
 }
+// Live-clear the red border as the user types valid input. The error message
+// itself stays until they re-submit so they know what they corrected.
+function _mvLiveValidate(){
+  const nameInp = document.getElementById('popup-name');
+  const emailInp = document.getElementById('popup-email');
+  if(nameInp){
+    nameInp.addEventListener('input', ()=>{ if(nameInp.value.trim()) nameInp.removeAttribute('aria-invalid'); });
+  }
+  if(emailInp){
+    emailInp.addEventListener('input', ()=>{ if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInp.value.trim())) emailInp.removeAttribute('aria-invalid'); });
+  }
+}
+try { _mvLiveValidate(); } catch(_) {}
 // Whitelist of single-vial SKUs (>= $30 retail) eligible for the popup
 // mystery vial. The client picks one at random and POSTs the SKU to the
 // admin claim endpoint; the server is the source of truth for the actual
@@ -11242,31 +11264,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
       grid.appendChild(cell);
       cells[i] = cell;
     }
-    // Ripple - waits for full animation to finish before allowing another
-    let rippleActive = false;
-    document.addEventListener('click', (e) => {
-      if(rippleActive) return;
-      rippleActive = true;
-      const clickCol = Math.floor(e.clientX / cellSize);
-      const clickRow = Math.floor(e.clientY / cellSize);
-      const maxDist = Math.max(cols, rows);
-      let longestTime = 0;
-      for(let i = 0; i < total; i++){
-        const cCol = i % cols;
-        const cRow = (i / cols) | 0;
-        const dist = Math.sqrt((cCol-clickCol)**2 + (cRow-clickRow)**2);
-        if(dist > maxDist) continue;
-        const delay = dist * 50;
-        const dur = 800 + dist * 25;
-        const totalTime = delay + dur;
-        if(totalTime > longestTime) longestTime = totalTime;
-        cells[i].style.animation = 'none';
-        cells[i].offsetHeight;
-        cells[i].style.animation = `cellRipple ${dur}ms ease-out ${delay}ms forwards`;
-      }
-      // Unlock after the last cell finishes
-      setTimeout(() => { rippleActive = false; }, longestTime + 50);
-    });
+    // Click ripple disabled per Ryan 2026-05-22.
   })();
   initEmailPopup();
   initEmailBar();
