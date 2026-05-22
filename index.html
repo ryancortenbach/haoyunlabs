@@ -3214,7 +3214,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <option value="stacks">Stacks</option>
             </select>
             <div class="hyl-rp-helper" style="margin:0 0 8px">Select a category, then search and add items.</div>
-            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onfocus="renderOrderSearch(true)" onclick="renderOrderSearch(true)" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')) el.innerHTML=''; },180)">
+            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')){ el.innerHTML=''; const sug=document.getElementById('order-suggested'); if(sug) sug.innerHTML=''; } },180)">
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
           <div id="cart-items-list"></div>
@@ -8015,21 +8015,19 @@ function renderSuggested(){
         const borderStyle = i===0 ? '2px solid #111' : '1px solid #e0e0e0';
         const borderRadius = '14px';
         return `
-        <div style="display:flex;align-items:stretch;border:${borderStyle};border-radius:${borderRadius};background:#fff;padding:14px 16px;gap:12px">
-          <!-- left: image inline with text -->
-          <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:110px;height:110px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:8px" loading="lazy">
-          <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px">
-            <div style="font-size:0.75rem;color:#999;font-weight:500;letter-spacing:0.04em">${p.sku}</div>
-            <div style="font-size:1.15rem;font-weight:800;line-height:1.2;color:#111">${p.name}</div>
-            <div style="font-size:0.88rem;color:#555">Unit: <span style="text-decoration:line-through;color:#aaa;margin-right:4px">$${origPrice}</span><span style="font-weight:700;color:#111">$${salePrice}</span></div>
+        <div onclick="suggestedAdd('${p.sku}')" style="display:flex;align-items:center;border:${borderStyle};border-radius:10px;background:#fff;padding:8px 10px;gap:10px;cursor:pointer;transition:border-color 0.18s" onmouseover="this.style.borderColor='#111'" onmouseout="this.style.borderColor='${i===0?'#111':'#e0e0e0'}'">
+          <img src="media/products/${p.sku}.png" alt="${p.name}" style="width:54px;height:54px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px" loading="lazy">
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+            <div style="font-size:0.6rem;color:#999;font-weight:500;letter-spacing:0.04em">${p.sku}</div>
+            <div style="font-size:0.82rem;font-weight:800;line-height:1.15;color:#111">${p.name}</div>
+            <div style="font-size:0.66rem;color:#555">Unit: <span style="text-decoration:line-through;color:#aaa;margin-right:3px">$${origPrice}</span><span style="font-weight:700;color:#111">$${salePrice}</span></div>
           </div>
-          <!-- right: prices on top, button below -->
-          <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0;gap:10px">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;flex-shrink:0;gap:6px">
             <div style="text-align:right">
-              <div style="font-size:0.82rem;text-decoration:line-through;color:#aaa;line-height:1.3">$${origPrice}</div>
-              <div style="font-size:1.25rem;font-weight:800;color:#111;line-height:1.2">$${salePrice}</div>
+              <div style="font-size:0.62rem;text-decoration:line-through;color:#aaa;line-height:1.2">$${origPrice}</div>
+              <div style="font-size:0.88rem;font-weight:800;color:#111;line-height:1.1">$${salePrice}</div>
             </div>
-            <button onclick="suggestedAdd('${p.sku}')" style="display:inline-flex;align-items:center;gap:10px;padding:15px 22px;background:#111;color:#fff;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s" onmouseover="this.style.opacity='0.82'" onmouseout="this.style.opacity='1'"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>ADD TO CART</button>
+            <button type="button" onclick="event.stopPropagation();suggestedAdd('${p.sku}')" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;background:#111;color:#fff;border:none;border-radius:6px;font-size:0.62rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s" onmouseover="this.style.opacity='0.82'" onmouseout="this.style.opacity='1'"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>ADD</button>
           </div>
         </div>
       `}).join('')}
@@ -8417,7 +8415,12 @@ function renderOrderSearch(showAll){
   const hasImg = p => p.isBundle || (typeof hasImageOnDisk === 'function' && hasImageOnDisk(p.sku));
   let matches;
   if(!q){
-    if(!showAll){el.innerHTML='';return;}
+    if(!showAll){
+      el.innerHTML='';
+      const sug = document.getElementById('order-suggested');
+      if(sug) sug.innerHTML='';
+      return;
+    }
     matches = ALL_PRODUCTS.filter(p => inCat(p) && hasImg(p) && /\b10\s*(mg|ml)\b/i.test(p.name)).slice(0,8);
     if(!matches.length) matches = ALL_PRODUCTS.filter(p=>inCat(p) && hasImg(p)).slice(0,8);
   } else {
@@ -8459,7 +8462,7 @@ function renderOrderSearch(showAll){
             <div style="font-size:0.82rem;text-decoration:line-through;color:#aaa;line-height:1.3">$${origPrice}</div>
             <div style="font-size:1.25rem;font-weight:800;color:#111;line-height:1.2">$${salePrice}</div>
           </div>
-          <button type="button" onclick="event.stopPropagation();orderSearchAdd('${p.sku}')" style="display:inline-flex;align-items:center;gap:10px;padding:15px 22px;background:#111;color:#fff;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s" onmouseover="this.style.opacity='0.82'" onmouseout="this.style.opacity='1'"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>ADD TO CART</button>
+          <button type="button" onclick="event.stopPropagation();orderSearchAdd('${p.sku}')" style="display:inline-flex;align-items:center;gap:7px;padding:10px 16px;background:#111;color:#fff;border:none;border-radius:8px;font-size:0.78rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s" onmouseover="this.style.opacity='0.82'" onmouseout="this.style.opacity='1'"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2ZM6.31 6l.94 2h10.99c.75 0 1.41.41 1.75 1.03.35.62.34 1.38-.02 1.99l-2.67 4.82A2 2 0 0 1 15.56 17H8.53a2 2 0 0 1-1.77-1.07L3.09 8.45 2.28 6.8A1 1 0 0 0 1.4 6H0V4h1.4c1.14 0 2.17.64 2.68 1.66L4.4 6h1.91Z"/></svg>ADD TO CART</button>
         </div>
       </div>`;
   }).join('')}</div>`;
