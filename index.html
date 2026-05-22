@@ -973,13 +973,13 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .product-card{
   border:1px solid var(--stroke);background:var(--bg);
   border-radius:var(--radius);
-  transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  transition:transform 0.25s cubic-bezier(0.22,1,0.36,1);
   display:flex;flex-direction:column;
   position:relative;
 }
 .product-card .prod-img{border-radius:0;overflow:hidden}
 .product-card.has-open-select{z-index:200}
-.product-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
+.product-card:hover{transform:translateY(-4px)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 0}
 .card-sku{font-family:var(--mono);font-size:0.861rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#444c61}
@@ -2570,11 +2570,7 @@ body.no-nav{padding-top:0 !important}
   padding: 16px;
   gap: 6px;
 }
-.product-card:hover .prod-img svg,
-.product-card:hover .prod-img img {
-  transform: scale(1.04);
-}
-.prod-img svg, .prod-img img { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+.prod-img svg, .prod-img img { transition: transform 0.25s ease-out; }
 /* ── PRODUCT DETAIL PAGE ── */
 .pdp-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;padding:0 0 32px;align-items:start}
 .pdp-image{background:#fff;border-radius:0;overflow:hidden;border:1px solid var(--stroke);min-height:620px;position:relative;isolation:isolate;z-index:1}
