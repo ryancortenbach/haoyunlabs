@@ -973,13 +973,13 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
 .product-card{
   border:1px solid var(--stroke);background:var(--bg);
   border-radius:var(--radius);
-  transition:transform 0.25s cubic-bezier(0.22,1,0.36,1);
+  transition:transform 0.28s cubic-bezier(0.22,1,0.36,1),box-shadow 0.28s cubic-bezier(0.22,1,0.36,1);
   display:flex;flex-direction:column;
   position:relative;
 }
 .product-card .prod-img{border-radius:0;overflow:hidden}
 .product-card.has-open-select{z-index:200}
-.product-card:hover{transform:translateY(-4px)}
+.product-card:hover{transform:translateY(-14px);box-shadow:0 18px 40px rgba(0,0,0,0.12)}
 .product-card.out-of-stock{opacity:0.45;pointer-events:none}
 .card-header{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 0}
 .card-sku{font-family:var(--mono);font-size:0.861rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#444c61}
