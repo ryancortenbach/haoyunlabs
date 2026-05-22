@@ -38,7 +38,7 @@
     }
   }catch(e){}
 })();
-(function(){var B='20260522d1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260522e1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 // Iter 64: validated whitelist on both params. The pre-Iter-64 code stored
 // whatever ?payment= and ?order= the URL carried, then later interpolated
@@ -4187,14 +4187,16 @@ function pcPopulateReorder(){
   .mv-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(255,255,255,0.35);border-radius:999px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;font-weight:600;color:#f6f4f1;text-transform:uppercase}
   .mv-title{font-family:var(--sans);font-weight:900;font-size:23px;line-height:1.14;letter-spacing:-0.025em;margin:10px 0 6px;color:#f6f4f1}
   .mv-subtitle{font-family:var(--sans);font-weight:500;font-size:13px;line-height:1.4;margin:0 0 14px;color:rgba(246,244,241,0.85);max-width:44ch}
-  .mv-fields{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.04);border-radius:14px;padding:14px 14px 8px;margin-bottom:14px}
+  .mv-fields{background:transparent;border:0;padding:0;margin-bottom:6px}
   .mv-field{display:block;margin-bottom:10px}
   .mv-fields .mv-field:last-of-type{margin-bottom:0}
   .mv-field-label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#d8d4cd;margin-bottom:4px;font-weight:800}
-  .mv-field-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.22);border-radius:12px;padding:11px 14px;color:#f6f4f1;font:500 14px/1.2 var(--sans);transition:border-color .15s,box-shadow .15s;outline:none;box-shadow:none}
+  .mv-field-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:11px 14px;color:#f6f4f1;font:500 14px/1.2 var(--sans);transition:border-color .15s,background .15s;outline:none !important;box-shadow:none !important;-webkit-appearance:none;appearance:none}
   .mv-field-input::placeholder{color:rgba(255,255,255,0.4)}
-  .mv-field-input:hover{border-color:rgba(255,255,255,0.34);box-shadow:none}
-  .mv-field-input:focus{border-color:rgba(255,255,255,0.55);box-shadow:none}
+  .mv-field-input:hover{border-color:rgba(255,255,255,0.34)}
+  .mv-field-input:focus,
+  .mv-field-input:focus-visible,
+  .mv-field-input:active{border-color:rgba(255,255,255,0.55);outline:none !important;box-shadow:none !important}
   /* Error state: red border persists until the field is fixed. No white/black
      outline or focus ring takes over while invalid. */
   .mv-field-input[aria-invalid="true"],
