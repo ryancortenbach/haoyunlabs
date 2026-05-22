@@ -8164,7 +8164,7 @@ function renderCartItems(){
     // dashed-border panel inside the line-items area, copy reads
     // "Cart is empty." with a small Shop Catalog CTA. The shipping form,
     // discount field, and totals around it stay rendered.
-    el.innerHTML = `<div class="hyl-rp-empty-row">Cart is empty. Search above to add items.</div>`;
+    el.innerHTML = `<div class="hyl-rp-empty-row">Cart is empty.</div>`;
     const subElEmpty = document.getElementById('hyl-rp-items-subtotal');
     if(subElEmpty) subElEmpty.textContent = 'Subtotal: $0.00';
     return;
@@ -8246,7 +8246,7 @@ function renderReceipt(){
   const itemsEl = document.getElementById('hyl-rp-items');
   if(itemsEl){
     if(cart.size === 0){
-      itemsEl.innerHTML = '<div class="hyl-rp-empty-row">Cart is empty. Search above to add items.</div>';
+      itemsEl.innerHTML = '<div class="hyl-rp-empty-row">Cart is empty.</div>';
     } else {
       const rowsHtml = [];
       cart.forEach((qty, sku) => {
