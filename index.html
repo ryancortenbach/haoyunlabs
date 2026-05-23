@@ -8162,7 +8162,6 @@ function renderSuggested(){
           <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
             <div style="font-size:0.6rem;color:#999;font-weight:500;letter-spacing:0.04em">${p.sku}</div>
             <div style="font-size:0.82rem;font-weight:800;line-height:1.15;color:#111">${p.name}</div>
-            <div style="font-size:0.66rem;color:#555">Unit: <span style="text-decoration:line-through;color:#aaa;margin-right:3px">$${origPrice}</span><span style="font-weight:700;color:#111">$${salePrice}</span></div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;flex-shrink:0;gap:6px">
             <div style="text-align:right">
@@ -8608,15 +8607,14 @@ function renderOrderSearch(showAll){
     const origPrice = (p.price * 2).toFixed(2);
     const salePrice = p.price.toFixed(2);
     const imgHTML = img
-      ? `<img src="${img}" alt="${p.name}" style="width:110px;height:110px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:8px" loading="lazy" onerror="this.style.display='none'">`
-      : `<div style="width:110px;height:110px;flex-shrink:0;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg></div>`;
+      ? `<img src="${img}" alt="${p.name}" style="width:74px;height:74px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:8px" loading="lazy" onerror="this.style.display='none'">`
+      : `<div style="width:74px;height:74px;flex-shrink:0;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 6v3l-2 2v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l-2-2V6"/></svg></div>`;
     return `
       <div onclick="orderSearchAdd('${p.sku}')" style="display:flex;align-items:stretch;border:1px solid #e0e0e0;border-radius:14px;background:#fff;padding:14px 16px;gap:14px;cursor:pointer;transition:border-color 0.18s,box-shadow 0.18s" onmouseover="this.style.borderColor='#111';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)'" onmouseout="this.style.borderColor='#e0e0e0';this.style.boxShadow='none'">
         ${imgHTML}
         <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px">
           <div style="font-size:0.75rem;color:#999;font-weight:500;letter-spacing:0.04em">${_highlight(p.sku, q)}</div>
           <div style="font-size:1.15rem;font-weight:800;line-height:1.2;color:#111">${_highlight(p.name, q)}</div>
-          <div style="font-size:0.88rem;color:#555">Unit: <span style="font-weight:700;color:#111">$${salePrice}</span></div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0;gap:10px">
           <div style="text-align:right">
