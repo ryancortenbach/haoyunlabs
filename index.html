@@ -1820,7 +1820,7 @@ select.form-input option{color:#000}
   .cart-item .cart-item-img{width:64px;height:64px;margin-right:0}
   .cart-item-name{font-size:clamp(0.95rem, 5vw, 1.4rem);line-height:1.15;word-break:break-word;overflow-wrap:anywhere}
 }
-.cart-item:last-child{border-bottom:none}
+.cart-item + .cart-item{border-top:1px solid var(--stroke)}
 .cart-item-info{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
 .cart-item-name{font-weight:700;text-transform:uppercase;font-size:0.92rem;letter-spacing:0.04em;line-height:1.25}
 .cart-item-sku{font-family:var(--mono);font-size:0.74rem;color:var(--muted)}
@@ -8268,7 +8268,7 @@ function renderCartItems(){
             <span class="cart-item-qty">${qty}</span>
             <button class="qty-btn" onclick="setQty('${sku}',1)">+</button>
           </div>
-          <div class="cart-item-price">$${(p.price*qty).toFixed(2)}</div>
+          <div class="cart-item-price"><span style="font-size:0.78rem;text-decoration:line-through;color:#aaa;font-weight:600;margin-right:6px">$${(p.price*2*qty).toFixed(2)}</span>$${(p.price*qty).toFixed(2)}</div>
         </div>
       </div>
     </div>`;
