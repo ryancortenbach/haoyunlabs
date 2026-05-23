@@ -457,11 +457,19 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   /* No tab-row animations. Cat-row stays visible always; pill bg snaps instantly. */
   .cat-tabs .type-tabs-inner{flex-grow:0}
   .cat-tabs .type-tabs-inner .type-tab{flex-grow:0;transition:background 0s,color 0s!important}
-  /* Mobile: disable the right/left fade mask entirely. Clean hard edge looks
-     better than the dark vignette that shows up when content overflows. */
-  .cat-tabs.has-right-overflow,
-  .cat-tabs.has-left-overflow,
-  .cat-tabs.has-left-overflow.has-right-overflow{-webkit-mask-image:none!important;mask-image:none!important}
+  /* Mobile: keep the right/left fade mask so overflowing pills fade out smoothly. */
+  .cat-tabs.has-right-overflow{
+    -webkit-mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 48px),transparent 100%)!important;
+            mask-image:linear-gradient(to right,#000 0,#000 calc(100% - 48px),transparent 100%)!important;
+  }
+  .cat-tabs.has-left-overflow{
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 48px,#000 100%)!important;
+            mask-image:linear-gradient(to right,transparent 0,#000 48px,#000 100%)!important;
+  }
+  .cat-tabs.has-left-overflow.has-right-overflow{
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 48px,#000 calc(100% - 48px),transparent 100%)!important;
+            mask-image:linear-gradient(to right,transparent 0,#000 48px,#000 calc(100% - 48px),transparent 100%)!important;
+  }
   .cat-tabs .type-tabs-inner .type-tab{transition:background 0.18s ease,color 0.18s ease!important}
   .cat-tabs .cat-tab,.cat-tabs .type-tab{display:inline-flex!important;align-items:center;justify-content:center;height:30px!important;padding:0 12px!important;line-height:1!important;font-size:0.72rem!important;border-radius:999px}
   /* Selected/active white pill: same dimensions as the gray pills (no thinning) */
