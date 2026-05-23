@@ -1280,8 +1280,11 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
 .card-3d .card-3d-float-deep{transition:transform 0.15s ease-out}
 .card-3d:hover .card-3d-float-deep{transform:translateZ(60px)}
 
-/* Marquee card content: centered on desktop, left-aligned on mobile. */
-.marquee-card-content{text-align:center;align-items:center}
+/* Marquee card content: left by default; desktop overrides to center via @media below */
+@media(min-width:641px){
+  .marquee-card-content{text-align:center!important;align-items:center!important}
+  .marquee-card-content .hero-pill-row{justify-content:center!important}
+}
 
 /* ── SHIMMER TEXT (Aceternity-style) ── */
 .shimmer-title{
@@ -2957,7 +2960,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div class="banner-track" id="inline-banner-track"></div>
       </div>
       <div style="padding:36px 32px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
-        <div class="marquee-card-content" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="marquee-card-content" style="display:flex;flex-direction:column;justify-content:center;text-align:left;align-items:flex-start">
           <div style="font-family:'DejaVu Sans Mono','DejaVu Sans Mono Book',monospace;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#999;margin-bottom:12px">Research-Grade Peptides</div>
           <div class="shimmer-title" style="font-size:2.08rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
           <div class="body-copy-pc" style="font-size:0.92rem;color:var(--text);font-weight:800;line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px">Research-use-only peptides and compounds with lot-level verification and consistency standards you can trust.</div>
