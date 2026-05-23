@@ -2494,9 +2494,13 @@ select.form-input option{color:#000}
   .hyl-rp-discount-btn{padding:14px 22px;width:100%}
   /* Big feature cards: keep centered by default on mobile.
      Exception: the marquee card (catalog teaser) is left-aligned. */
-  .marquee-card-content,.marquee-card-content *{text-align:left!important}
-  .marquee-card-content{align-items:flex-start!important}
-  .marquee-card-content .hero-pill-row{justify-content:flex-start!important}
+  html body .marquee-card-content,
+  html body .marquee-card-content *,
+  html body div.marquee-card-content,
+  html body div.marquee-card-content > div,
+  html body div.marquee-card-content > div *{text-align:left!important}
+  html body div.marquee-card-content{align-items:flex-start!important;justify-content:flex-start!important}
+  html body div.marquee-card-content .hero-pill-row{justify-content:flex-start!important}
   /* Top mobile search bar — visible only on mobile */
   .mobile-top-search{display:block!important;margin:0 0 18px!important;padding:0 4px}
 }
