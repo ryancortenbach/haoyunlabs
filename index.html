@@ -2578,8 +2578,10 @@ body.no-nav{padding-top:0 !important}
 @media(max-width:768px){.footer-inner{grid-template-columns:repeat(2,1fr);gap:24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
 @media(max-width:768px){
   /* Find My Order + Join Discord cards: stack vertically and span the button full width */
-  body > div > div[style*="border-radius:16px"][style*="display:flex"] .cssbuttons-io,
-  body > div > div[style*="border-radius:16px"][style*="display:flex"] > button{width:100%!important;min-width:0!important}
+  a.cssbuttons-io[aria-label="Join Discord"],
+  button.cssbuttons-io[aria-label="Find My Order"]{width:100%!important;min-width:0!important;flex:1 1 100%!important;display:flex!important;justify-content:center!important}
+  a.cssbuttons-io[aria-label="Join Discord"] > span,
+  button.cssbuttons-io[aria-label="Find My Order"] > span{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px}
 }
 
 /* ── RESPONSIVE ── */
