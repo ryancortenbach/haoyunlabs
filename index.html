@@ -702,8 +702,10 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   .big-feature-card:has(.inline-marquee){padding:0!important}
   .big-feature-card>div[style*="grid-template-columns"]{grid-template-columns:1fr!important;gap:16px!important;padding:24px 20px!important;text-align:center!important;justify-items:center!important}
   .big-feature-card>div:not(.card-3d-wrap){display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;width:100%}
-  .big-feature-card>div[style*="grid-template-columns"]>div:not(.card-3d-wrap){display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;width:100%}
-  .big-feature-card>div[style*="grid-template-columns"]>div:not(.card-3d-wrap)>*{text-align:center!important;align-self:center!important}
+  .big-feature-card>div[style*="grid-template-columns"]>div:not(.card-3d-wrap):not(.marquee-card-content){display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;width:100%}
+  .big-feature-card>div[style*="grid-template-columns"]>div:not(.card-3d-wrap):not(.marquee-card-content)>*{text-align:center!important;align-self:center!important}
+  .big-feature-card>div[style*="grid-template-columns"]>div.marquee-card-content{display:flex!important;flex-direction:column!important;align-items:flex-start!important;text-align:left!important;width:100%}
+  .big-feature-card>div[style*="grid-template-columns"]>div.marquee-card-content>*{text-align:left!important;align-self:flex-start!important}
   .big-feature-card .card-3d-wrap{width:100%!important;aspect-ratio:1/1!important;max-height:none!important}
   .hero-feature-grid{grid-template-columns:1fr!important}
   /* Mobile menu safe areas */
