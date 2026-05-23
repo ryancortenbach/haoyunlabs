@@ -1795,7 +1795,15 @@ select.form-input option{color:#000}
 .form-input:valid:not(:placeholder-shown){border-color:var(--stroke)}
 
 /* ── CART LIST IN CHECKOUT ── */
-.cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:none;border-radius:0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:16px;transition:transform 0.18s ease}
+.cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:none;border-radius:0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:12px;transition:transform 0.18s ease}
+@media(max-width:640px){
+  .cart-item{padding:14px 12px!important;gap:10px!important;font-size:0.82rem!important}
+  .cart-item-img{width:54px!important;height:54px!important;margin-right:10px!important}
+  .cart-item-name{font-size:0.78rem!important;letter-spacing:0!important;line-height:1.2!important;text-transform:none!important;font-weight:800!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}
+  .cart-item-controls{transform:scale(0.85);transform-origin:left center;flex-shrink:0}
+  .cart-item-price{font-size:0.82rem!important;min-width:60px!important;margin-left:6px!important}
+  .cart-item-remove{margin-left:4px!important;font-size:1.1rem!important;padding:0 4px!important}
+}
 .cart-item-img:hover{transform:scale(1.04)}
 .cart-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .cart-img-zoom-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:10500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;cursor:zoom-out;padding:24px}
