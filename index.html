@@ -626,8 +626,9 @@ body:has(#screen-order.active) #vanta-bg{background-image:none}
   }
   .product-card .card-name{padding-right:0!important}
   .product-card .card-name{
-    font-size:1.26rem!important;line-height:1.1!important;font-weight:900!important;
+    font-size:clamp(0.95rem, 5.2vw, 1.5rem)!important;line-height:1.1!important;font-weight:900!important;
     letter-spacing:-0.03em!important;text-transform:uppercase!important;
+    word-break:break-word;overflow-wrap:anywhere;
   }
   /* More Details: full-width, black square stroke, arrow tucked tight to the label */
   .product-card .card-details-toggle{
@@ -1817,7 +1818,7 @@ select.form-input option{color:#000}
 @media(max-width:640px){
   .cart-item{padding:16px 14px;gap:12px}
   .cart-item .cart-item-img{width:64px;height:64px;margin-right:0}
-  .cart-item-name{font-size:0.85rem;word-break:break-word}
+  .cart-item-name{font-size:clamp(0.95rem, 5vw, 1.4rem);line-height:1.15;word-break:break-word;overflow-wrap:anywhere}
 }
 .cart-item:last-child{border-bottom:none}
 .cart-item-info{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -3268,7 +3269,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <option value="stacks">Stacks</option>
             </select>
             <div class="hyl-rp-helper" style="margin:0 0 8px">Select a category, then search and add items.</div>
-            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')){ el.innerHTML=''; if(cart.size > 0 && typeof renderSuggested === 'function') renderSuggested(); } },180)">
+            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')){ el.innerHTML=''; const inp=document.getElementById('order-product-search'); if(inp) inp.value=''; } },180)">
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
           <div id="cart-items-list"></div>
