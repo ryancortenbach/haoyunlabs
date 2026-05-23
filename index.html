@@ -1459,9 +1459,9 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
   #email-popup-card button[onclick*="closeEmailPopup"]{width:44px!important;height:44px!important;top:10px!important;right:10px!important;font-size:1.8rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
   /* Email popup: full-width near top on mobile so safe-area + thumb reach work.
      Desktop stays bottom-right corner-anchored per product direction. */
-  /* Popup pinned to bottom on mobile, extending behind home-indicator safe area */
-  #email-popup{top:auto!important;right:0!important;left:0!important;bottom:-40px!important;padding-bottom:40px!important;width:100%!important;max-width:none!important}
-  #email-popup-card{border-radius:18px 18px 0 0!important;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px))!important;overflow:visible!important}
+  /* Popup floats above the bottom edge on mobile with margins on all sides (matches ZYL) */
+  #email-popup{top:auto!important;right:12px!important;left:12px!important;bottom:max(12px,env(safe-area-inset-bottom,12px))!important;width:auto!important;max-width:none!important;padding:0!important}
+  #email-popup-card{border-radius:18px!important;padding:18px 18px 14px!important;overflow:visible!important}
   /* Shrink content so popup covers less of the page */
   #email-popup-card .mv-title{font-size:18px!important;margin:8px 0 4px!important;line-height:1.15!important}
   #email-popup-card .mv-subtitle{font-size:11.5px!important;margin:0 0 10px!important;line-height:1.35!important}
@@ -4320,7 +4320,7 @@ function pcPopulateReorder(){
         </div>
       </div>
     </form>
-    <div class="mv-footer-wrap" style="display:flex;justify-content:center;width:100%;margin-top:14px"><button class="mv-footer-link" type="button" onclick="closeEmailPopup()" style="margin:0 auto;text-align:center">No thanks</button></div>
+    <div class="mv-footer-wrap" style="display:flex;justify-content:flex-start;width:100%;margin-top:12px"><button class="mv-footer-link" type="button" onclick="closeEmailPopup()">No thanks</button></div>
   </div>
 </div>
 
