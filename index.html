@@ -1797,12 +1797,26 @@ select.form-input option{color:#000}
 /* ── CART LIST IN CHECKOUT ── */
 .cart-item-img{width:72px;height:72px;flex-shrink:0;background:#fff;border:none;border-radius:0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;margin-right:12px;transition:transform 0.18s ease}
 @media(max-width:640px){
-  .cart-item{padding:14px 12px!important;gap:10px!important;font-size:0.82rem!important}
-  .cart-item-img{width:54px!important;height:54px!important;margin-right:10px!important}
-  .cart-item-name{font-size:0.78rem!important;letter-spacing:0!important;line-height:1.2!important;text-transform:none!important;font-weight:800!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}
-  .cart-item-controls{transform:scale(0.85);transform-origin:left center;flex-shrink:0}
-  .cart-item-price{font-size:0.82rem!important;min-width:60px!important;margin-left:6px!important}
-  .cart-item-remove{margin-left:4px!important;font-size:1.1rem!important;padding:0 4px!important}
+  /* Cart item layout: 3-column grid
+       Row 1: [image] [type+sku+name vstack] [X close]
+       Row 2: spans full width: [qty stepper left] [price right] */
+  .cart-item{
+    display:grid!important;
+    grid-template-columns:54px 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:"img info close" "qty qty price";
+    gap:10px 10px!important;
+    align-items:start!important;
+    padding:14px 12px!important;
+    font-size:0.82rem!important;
+  }
+  .cart-item-img{grid-area:img;width:54px!important;height:54px!important;margin:0!important}
+  .cart-item-info{grid-area:info;display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important;align-self:start!important}
+  .cart-item-info > div{order:-1}
+  .cart-item-name{font-size:0.85rem!important;letter-spacing:0!important;line-height:1.2!important;text-transform:none!important;font-weight:800!important;order:0}
+  .cart-item-remove{grid-area:close;align-self:start!important;margin:0!important;font-size:1.2rem!important;padding:0 4px!important}
+  .cart-item-controls{grid-area:qty;justify-self:start!important;margin:0!important}
+  .cart-item-price{grid-area:price;justify-self:end!important;align-self:center!important;margin:0!important;font-size:1rem!important;min-width:0!important;text-align:right!important;font-weight:900!important}
 }
 .cart-item-img:hover{transform:scale(1.04)}
 .cart-item-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
@@ -8242,8 +8256,8 @@ function renderCartItems(){
     html += `<div class="cart-item">
       ${primaryImg ? `<div class="cart-item-img" onclick="openCartImageZoom('${primaryImg}','${p.name.replace(/'/g,"\\'")}')"><img src="${primaryImg}" alt="" loading="lazy" onerror="if(this.src.indexOf('${fallbackImg}')<0){this.src='${fallbackImg}'}else{this.parentElement.style.display='none'}"></div>` : ''}
       <div class="cart-item-info">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span><span class="cart-item-sku">${p.sku}</span></div>
         <div class="cart-item-name">${p.name}</div>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="cart-item-sku">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
       </div>
       <div class="cart-item-controls">
         <button class="qty-btn" onclick="setQty('${sku}',-1)">&minus;</button>
