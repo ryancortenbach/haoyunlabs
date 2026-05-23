@@ -3272,6 +3272,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
             <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')){ el.innerHTML=''; const inp=document.getElementById('order-product-search'); if(inp) inp.value=''; } },180)">
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
+          <hr style="border:none;border-top:1px solid var(--stroke);margin:8px 0 16px">
           <div id="cart-items-list"></div>
         </div><!-- /add items card -->
       </div>
