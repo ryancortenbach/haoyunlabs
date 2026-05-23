@@ -4261,7 +4261,7 @@ function pcPopulateReorder(){
   .mv-mail-link:hover{background:#fff}
   .mv-mail-link:active{transform:translateY(1px)}
   .mv-mail-link svg{width:18px;height:18px;flex-shrink:0}
-  .mv-footer-link{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;margin:14px 0 0;font-family:var(--sans);font-size:13px;font-weight:600;line-height:1;color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap;text-align:center;box-sizing:border-box;-webkit-appearance:none;appearance:none}
+  .mv-footer-link{display:inline-block;margin:0;font-family:var(--sans);font-size:13px;font-weight:600;line-height:1;color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap;-webkit-appearance:none;appearance:none}
   .mv-footer-link:hover{color:#fff}
   @media(max-width:520px){
     #email-popup-card{padding:18px 18px 12px;border-radius:14px}
@@ -4320,7 +4320,7 @@ function pcPopulateReorder(){
         </div>
       </div>
     </form>
-    <button class="mv-footer-link" type="button" onclick="closeEmailPopup()">No thanks</button>
+    <div class="mv-footer-wrap" style="display:block;width:100%;text-align:center;margin-top:14px"><button class="mv-footer-link" type="button" onclick="closeEmailPopup()">No thanks</button></div>
   </div>
 </div>
 
