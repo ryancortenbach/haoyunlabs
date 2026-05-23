@@ -1806,8 +1806,17 @@ select.form-input option{color:#000}
 .cart-img-zoom-overlay.open img{transform:scale(1)}
 .cart-img-zoom-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cart-item{background:#fff;border:none;border-bottom:1px solid var(--stroke);border-radius:0;padding:20px 18px;margin-bottom:0;
-  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
   font-size:0.86rem;
+}
+@media(max-width:640px){
+  .cart-item{display:grid!important;grid-template-columns:auto 1fr auto;grid-template-areas:"img info remove" "img info info" "controls controls price";column-gap:12px;row-gap:10px;padding:16px 14px}
+  .cart-item .cart-item-img{grid-area:img;width:64px;height:64px;margin-right:0}
+  .cart-item .cart-item-info{grid-area:info;min-width:0}
+  .cart-item .cart-item-controls{grid-area:controls;justify-self:start}
+  .cart-item .cart-item-price{grid-area:price;margin-left:0;justify-self:end;align-self:center}
+  .cart-item .cart-item-remove{grid-area:remove;justify-self:end;margin-left:0;align-self:start}
+  .cart-item .cart-item-name{font-size:0.85rem;word-break:break-word}
 }
 .cart-item:last-child{border-bottom:none}
 .cart-item-info{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -8121,9 +8130,12 @@ function suggestedAdd(sku){
 }
 
 function renderSuggested(){
-  let el = document.getElementById('order-suggested');
-  // Only show "You may also like" once the cart has items.
-  if(!cart || cart.size === 0){ if(el) el.innerHTML = ''; return; }
+  const el = document.getElementById('order-suggested');
+  if(el) el.innerHTML = '';
+  return;
+  // eslint-disable-next-line no-unreachable
+  let _el = el;
+  if(!cart || cart.size === 0){ if(_el) _el.innerHTML = ''; return; }
   if(!el){
     const parent = document.getElementById('cart-items-list')?.parentElement;
     if(!parent) return;
