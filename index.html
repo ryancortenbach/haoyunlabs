@@ -4262,6 +4262,15 @@ function pcPopulateReorder(){
     .mv-cta{padding:12px 16px;font-size:14px}
   }
 </style>
+<!-- Mystery vial trigger button (floats bottom-right on mobile, also works on desktop) -->
+<style>
+#mv-trigger{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom,14px));z-index:8500;width:54px;height:54px;border-radius:50%;background:#000;color:#fff;border:1px solid rgba(255,255,255,0.1);box-shadow:0 6px 20px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;transition:transform 0.2s ease,opacity 0.2s ease}
+#mv-trigger:hover{transform:scale(1.06)}
+#mv-trigger:active{transform:scale(0.95)}
+#mv-trigger[hidden]{display:none!important}
+</style>
+<button id="mv-trigger" type="button" aria-label="Open free mystery vial offer" onclick="if(typeof showEmailPopup==='function'){showEmailPopup();}">🎁</button>
+
 <div id="email-popup" role="dialog" aria-modal="true" aria-labelledby="mv-title">
   <div id="email-popup-card">
     <button class="mv-close" type="button" aria-label="Close" onclick="closeEmailPopup()"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3 L13 13 M13 3 L3 13"/></svg></button>
