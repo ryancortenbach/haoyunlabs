@@ -8233,8 +8233,8 @@ function renderCartItems(){
     html += `<div class="cart-item">
       ${primaryImg ? `<div class="cart-item-img" onclick="openCartImageZoom('${primaryImg}','${p.name.replace(/'/g,"\\'")}')"><img src="${primaryImg}" alt="" loading="lazy" onerror="if(this.src.indexOf('${fallbackImg}')<0){this.src='${fallbackImg}'}else{this.parentElement.style.display='none'}"></div>` : ''}
       <div class="cart-item-info">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span><span class="cart-item-sku">${p.sku}</span></div>
         <div class="cart-item-name">${p.name}</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="cart-item-sku">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
       </div>
       <div class="cart-item-controls">
         <button class="qty-btn" onclick="setQty('${sku}',-1)">&minus;</button>
