@@ -2490,11 +2490,11 @@ select.form-input option{color:#000}
   .hyl-rp-discount-row{flex-direction:column;gap:10px}
   .hyl-rp-discount-btn{padding:14px 22px;width:100%}
   /* Big feature cards: keep centered by default on mobile.
-     Exception — the first card (catalog teaser with the marquee on top) is left-aligned. */
-  .marquee-card-content{text-align:left!important;align-items:flex-start!important}
-  .big-feature-card .inline-marquee ~ div .hero-pill-row,
-  .marquee-card-content + * .hero-pill-row,
-  .marquee-card-content .hero-pill-row{justify-content:flex-start!important}
+     Exception: the marquee card (catalog teaser) is left-aligned. */
+  div.marquee-card-content,
+  .big-feature-card div.marquee-card-content{text-align:left!important;align-items:flex-start!important;justify-content:flex-start!important}
+  div.marquee-card-content > *{text-align:left!important}
+  div.marquee-card-content .hero-pill-row{justify-content:flex-start!important}
   /* Top mobile search bar — visible only on mobile */
   .mobile-top-search{display:block!important;margin:0 0 18px!important;padding:0 4px}
 }
@@ -2894,10 +2894,12 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
 
     <!-- MOBILE-ONLY top search bar (matches ZYL pattern) -->
     <div class="mobile-top-search" style="display:none;margin:0 0 16px">
-      <div class="zyl-search-wrap" style="position:relative">
-        <input type="text" class="zyl-search-input" placeholder="Search all products" id="mobile-top-search-input" inputmode="search" enterkeyhint="search" autocomplete="off" oninput="onMobileTopSearch(this.value)">
-        <svg class="zyl-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-      </div>
+      <form class="zyl-search-wrap" style="position:relative" onsubmit="event.preventDefault();onMobileTopSearchSubmit()">
+        <input type="text" class="zyl-search-input" placeholder="Search all products" id="mobile-top-search-input" inputmode="search" enterkeyhint="search" autocomplete="off" oninput="onMobileTopSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();onMobileTopSearchSubmit();}">
+        <button type="button" class="zyl-search-icon" onclick="onMobileTopSearchSubmit()" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:0;padding:0;cursor:pointer;color:#6b6b6b" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+        </button>
+      </form>
     </div>
 
     <!-- STATS ROW -->
@@ -4272,15 +4274,6 @@ function pcPopulateReorder(){
     .mv-cta{padding:12px 16px;font-size:14px}
   }
 </style>
-<!-- Mystery vial trigger button (floats bottom-right on mobile, also works on desktop) -->
-<style>
-#mv-trigger{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom,14px));z-index:8500;width:54px;height:54px;border-radius:50%;background:#000;color:#fff;border:1px solid rgba(255,255,255,0.1);box-shadow:0 6px 20px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;transition:transform 0.2s ease,opacity 0.2s ease}
-#mv-trigger:hover{transform:scale(1.06)}
-#mv-trigger:active{transform:scale(0.95)}
-#mv-trigger[hidden]{display:none!important}
-</style>
-<button id="mv-trigger" type="button" aria-label="Open free mystery vial offer" onclick="if(typeof showEmailPopup==='function'){showEmailPopup();}">🎁</button>
-
 <div id="email-popup" role="dialog" aria-modal="true" aria-labelledby="mv-title">
   <div id="email-popup-card">
     <button class="mv-close" type="button" aria-label="Close" onclick="closeEmailPopup()"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3 L13 13 M13 3 L3 13"/></svg></button>
@@ -4303,23 +4296,9 @@ function pcPopulateReorder(){
       <div class="mv-success" id="mv-success" role="status" style="display:none">
         <div class="mv-success-header">
           <span class="mv-check"><svg viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="#cfe2d3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5 L4 7.5 L8.5 2.5"/></svg></span>
-          <span>You're in. We just emailed your code &mdash; check your inbox.</span>
+          <span>You're in. We just emailed your code, check your inbox.</span>
         </div>
         <div class="mv-success-hint">Tip: if you don't see it, check your <strong>Promotions</strong> or Spam folder.</div>
-        <div class="mv-mail-links">
-          <a href="https://mail.google.com/mail/u/0/#search/from%3Ahello%40haoyunlabs.com" target="_blank" rel="noopener" class="mv-mail-link" aria-label="Open Gmail">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 6.2v11.6c0 .8-.7 1.5-1.5 1.5h-2.6V9.7L12 13.8 6.1 9.7v9.6H3.5c-.8 0-1.5-.7-1.5-1.5V6.2c0-1 1.1-1.6 1.9-1l8.1 5.7 8.1-5.7c.8-.6 1.9 0 1.9 1z" fill="#EA4335"/><path d="M6.1 19.3V9.7L2 6.5v11.3c0 .8.7 1.5 1.5 1.5h2.6z" fill="#34A853"/><path d="M17.9 19.3V9.7L22 6.5v11.3c0 .8-.7 1.5-1.5 1.5h-2.6z" fill="#4285F4"/><path d="M22 6.2c0-1-1.1-1.6-1.9-1L12 10.9 3.9 5.2c-.8-.6-1.9 0-1.9 1L12 13.8l10-7.6z" fill="#FBBC04"/></svg>
-            Gmail
-          </a>
-          <a href="message://" target="_blank" rel="noopener" class="mv-mail-link" aria-label="Open Mail">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="mv-applemail-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#41ccff"/><stop offset="1" stop-color="#108cf6"/></linearGradient></defs><rect x="2" y="5" width="20" height="14" rx="3" fill="url(#mv-applemail-g)"/><path d="M3.4 7.2 12 13.4l8.6-6.2" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Mail
-          </a>
-          <a href="https://mail.yahoo.com/d/search/keyword=hello%40haoyunlabs.com" target="_blank" rel="noopener" class="mv-mail-link" aria-label="Open Yahoo Mail">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" fill="#6001D2"/><path d="M6 8h2.6l1.7 3 1.7-3H14l-3 5v3H9.5v-3L6 8z" fill="#fff"/><circle cx="17.5" cy="13.5" r="0.95" fill="#fff"/><path d="M16.4 11.1l1.1-3.1h1.5l-1.2 3.1z" fill="#fff"/></svg>
-            Yahoo
-          </a>
-        </div>
       </div>
     </form>
     <a href="#" class="mv-footer-link" onclick="event.preventDefault();closeEmailPopup()" style="display:block;text-align:left;margin:12px 0 0;text-decoration:underline;color:#cfccc7;font-size:13px;font-weight:600;line-height:1;white-space:nowrap">No thanks</a>
@@ -7898,13 +7877,20 @@ function onMobileTopSearch(val){
   }
   const cat = document.getElementById('cat-search');
   if(cat){ cat.value = val; if(typeof renderCatalog === 'function') renderCatalog(); }
-  if(val.trim().length === 0) return;
+}
+function onMobileTopSearchSubmit(){
+  const inp = document.getElementById('mobile-top-search-input');
+  if(!inp) return;
+  const val = inp.value.trim();
+  if(val.length === 0) return;
+  onMobileTopSearch(val);
   const target = document.querySelector('#home-product-grid') || document.querySelector('#cat-product-grid') || document.querySelector('.product-grid');
   if(target){
     const rect = target.getBoundingClientRect();
     const top = rect.top + window.scrollY - 80;
     window.scrollTo({top, behavior:'smooth'});
   }
+  inp.blur();
 }
 
 function renderHome(){
@@ -10128,9 +10114,9 @@ async function submitPopupEmail(){
   // Pauses while the popup is hovered/focused so the user has time to tap
   // one of the Gmail/Mail/Yahoo links before it disappears.
   const popupEl = document.getElementById('email-popup');
-  let dismissTimer = setTimeout(()=>{ try { closeEmailPopup(); } catch(_){} }, 3000);
+  let dismissTimer = setTimeout(()=>{ try { closeEmailPopup(); } catch(_){} }, 8000);
   const pause = ()=>{ if(dismissTimer){ clearTimeout(dismissTimer); dismissTimer=null; } };
-  const resume = ()=>{ if(!dismissTimer) dismissTimer = setTimeout(()=>{ try { closeEmailPopup(); } catch(_){} }, 3000); };
+  const resume = ()=>{ if(!dismissTimer) dismissTimer = setTimeout(()=>{ try { closeEmailPopup(); } catch(_){} }, 8000); };
   if(popupEl){
     popupEl.addEventListener('mouseenter', pause, { once:true });
     popupEl.addEventListener('mouseleave', resume, { once:true });
