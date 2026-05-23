@@ -7012,7 +7012,7 @@ function cardHTML(p){
     </div>
     <div class="card-body">
       <div class="card-name">${p.name}</div>
-      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span><span class="pdp-more-arrow">&#9654;</span></button>
+      <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span><span class="pdp-more-arrow" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M2 0 L8 5 L2 10 Z"/></svg></span></button>
       <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
     <div class="card-footer">
