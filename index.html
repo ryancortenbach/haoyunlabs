@@ -2473,10 +2473,10 @@ select.form-input option{color:#000}
   /* Discount/affiliate code: stack input above apply button on mobile */
   .hyl-rp-discount-row{flex-direction:column;gap:10px}
   .hyl-rp-discount-btn{padding:14px 22px;width:100%}
-  /* Big feature cards (Built for Serious Research / Kits / COA / Join Lab):
-     left-align text on mobile instead of centered */
-  .big-feature-card div[style*="text-align:center"][style*="align-items:center"]{text-align:left!important;align-items:flex-start!important}
-  .big-feature-card .hero-pill-row{justify-content:flex-start!important}
+  /* Big feature cards: keep centered by default on mobile.
+     Exception — the first card (catalog teaser with the marquee on top) is left-aligned. */
+  .big-feature-card:has(.inline-marquee) div[style*="text-align:center"][style*="align-items:center"]{text-align:left!important;align-items:flex-start!important}
+  .big-feature-card:has(.inline-marquee) .hero-pill-row{justify-content:flex-start!important}
   /* Top mobile search bar — visible only on mobile */
   .mobile-top-search{display:block!important;margin:0 0 18px!important;padding:0 4px}
 }
