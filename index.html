@@ -1806,17 +1806,18 @@ select.form-input option{color:#000}
 .cart-img-zoom-overlay.open img{transform:scale(1)}
 .cart-img-zoom-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cart-item{background:#fff;border:none;border-bottom:1px solid var(--stroke);border-radius:0;padding:20px 18px;margin-bottom:0;
-  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  display:flex;align-items:flex-start;gap:14px;
   font-size:0.86rem;
 }
+.cart-item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.cart-item-top{display:flex;align-items:flex-start;gap:10px}
+.cart-item-top .cart-item-info{flex:1;min-width:0}
+.cart-item-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cart-item-bottom .cart-item-price{margin-left:0}
 @media(max-width:640px){
-  .cart-item{display:grid!important;grid-template-columns:auto 1fr auto;grid-template-areas:"img info remove" "img info info" "controls controls price";column-gap:12px;row-gap:10px;padding:16px 14px}
-  .cart-item .cart-item-img{grid-area:img;width:64px;height:64px;margin-right:0}
-  .cart-item .cart-item-info{grid-area:info;min-width:0}
-  .cart-item .cart-item-controls{grid-area:controls;justify-self:start}
-  .cart-item .cart-item-price{grid-area:price;margin-left:0;justify-self:end;align-self:center}
-  .cart-item .cart-item-remove{grid-area:remove;justify-self:end;margin-left:0;align-self:start}
-  .cart-item .cart-item-name{font-size:0.85rem;word-break:break-word}
+  .cart-item{padding:16px 14px;gap:12px}
+  .cart-item .cart-item-img{width:64px;height:64px;margin-right:0}
+  .cart-item-name{font-size:0.85rem;word-break:break-word}
 }
 .cart-item:last-child{border-bottom:none}
 .cart-item-info{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -8251,17 +8252,23 @@ function renderCartItems(){
     const fallbackImg = safeSku ? (isKit ? `media/products/${safeSku}.png` : `media/kits/${safeSku}.png`) : '';
     html += `<div class="cart-item">
       ${primaryImg ? `<div class="cart-item-img" onclick="openCartImageZoom('${primaryImg}','${p.name.replace(/'/g,"\\'")}')"><img src="${primaryImg}" alt="" loading="lazy" onerror="if(this.src.indexOf('${fallbackImg}')<0){this.src='${fallbackImg}'}else{this.parentElement.style.display='none'}"></div>` : ''}
-      <div class="cart-item-info">
-        <div class="cart-item-name">${p.name}</div>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="cart-item-sku">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
+      <div class="cart-item-body">
+        <div class="cart-item-top">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${p.name}</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px"><span class="cart-item-sku">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart('${sku}')" title="Remove">&times;</button>
+        </div>
+        <div class="cart-item-bottom">
+          <div class="cart-item-controls">
+            <button class="qty-btn" onclick="setQty('${sku}',-1)">&minus;</button>
+            <span class="cart-item-qty">${qty}</span>
+            <button class="qty-btn" onclick="setQty('${sku}',1)">+</button>
+          </div>
+          <div class="cart-item-price">$${(p.price*qty).toFixed(2)}</div>
+        </div>
       </div>
-      <div class="cart-item-controls">
-        <button class="qty-btn" onclick="setQty('${sku}',-1)">&minus;</button>
-        <span class="cart-item-qty">${qty}</span>
-        <button class="qty-btn" onclick="setQty('${sku}',1)">+</button>
-      </div>
-      <div class="cart-item-price">$${(p.price*qty).toFixed(2)}</div>
-      <button class="cart-item-remove" onclick="removeFromCart('${sku}')" title="Remove">&times;</button>
     </div>`;
   });
   el.innerHTML = html;
