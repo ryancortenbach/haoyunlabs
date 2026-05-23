@@ -2491,8 +2491,10 @@ select.form-input option{color:#000}
   .hyl-rp-discount-btn{padding:14px 22px;width:100%}
   /* Big feature cards: keep centered by default on mobile.
      Exception — the first card (catalog teaser with the marquee on top) is left-aligned. */
-  .big-feature-card:has(.inline-marquee) div[style*="text-align:center"][style*="align-items:center"]{text-align:left!important;align-items:flex-start!important}
-  .big-feature-card:has(.inline-marquee) .hero-pill-row{justify-content:flex-start!important}
+  .marquee-card-content{text-align:left!important;align-items:flex-start!important}
+  .big-feature-card .inline-marquee ~ div .hero-pill-row,
+  .marquee-card-content + * .hero-pill-row,
+  .marquee-card-content .hero-pill-row{justify-content:flex-start!important}
   /* Top mobile search bar — visible only on mobile */
   .mobile-top-search{display:block!important;margin:0 0 18px!important;padding:0 4px}
 }
@@ -2947,7 +2949,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
         <div class="banner-track" id="inline-banner-track"></div>
       </div>
       <div style="padding:36px 32px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center">
-        <div style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
+        <div class="marquee-card-content" style="display:flex;flex-direction:column;justify-content:center;text-align:center;align-items:center">
           <div style="font-family:'DejaVu Sans Mono','DejaVu Sans Mono Book',monospace;font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#999;margin-bottom:12px">Research-Grade Peptides</div>
           <div class="shimmer-title" style="font-size:2.08rem;margin-bottom:14px;letter-spacing:-0.01em;line-height:1.05">Built for Serious Research</div>
           <div class="body-copy-pc" style="font-size:0.92rem;color:var(--text);font-weight:800;line-height:1.6;margin-bottom:14px;letter-spacing:-0.01em;max-width:560px">Research-use-only peptides and compounds with lot-level verification and consistency standards you can trust.</div>
@@ -10002,16 +10004,30 @@ function lookupCOA(){
 }
 
 /* ── MYSTERY VIAL POPUP (mailing-list signup) ── */
+function _syncPopupToKeyboard(){
+  const popup = document.getElementById('email-popup');
+  if(!popup || !popup.classList.contains('open')) return;
+  if(!window.visualViewport){ popup.style.removeProperty('--kb-offset'); return; }
+  const vv = window.visualViewport;
+  const kbHeight = window.innerHeight - vv.height - vv.offsetTop;
+  popup.style.setProperty('--kb-offset', Math.max(0, kbHeight) + 'px');
+}
 function showEmailPopup(){
   const popup = document.getElementById('email-popup');
   if(popup) popup.classList.add('open');
   // Reset to idle state on open
   _setMvState('idle');
   try{ _syncUpsellStack(); }catch(e){}
+  if(window.visualViewport && !window._mvVvBound){
+    window._mvVvBound = true;
+    window.visualViewport.addEventListener('resize', _syncPopupToKeyboard);
+    window.visualViewport.addEventListener('scroll', _syncPopupToKeyboard);
+  }
+  _syncPopupToKeyboard();
 }
 function closeEmailPopup(){
   const popup = document.getElementById('email-popup');
-  if(popup) popup.classList.remove('open');
+  if(popup){ popup.classList.remove('open'); popup.style.removeProperty('--kb-offset'); }
   sessionStorage.setItem('hyl_popup_shown_session', '1');
 }
 function _setMvState(state, opts){
