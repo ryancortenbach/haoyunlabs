@@ -3270,7 +3270,7 @@ if(location.search.indexOf('admin')>=0)document.body.classList.add('admin-enable
               <option value="stacks">Stacks</option>
             </select>
             <div class="hyl-rp-helper" style="margin:0 0 8px">Select a category, then search and add items.</div>
-            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')){ el.innerHTML=''; const sug=document.getElementById('order-suggested'); if(sug) sug.innerHTML=''; } },180)">
+            <input class="form-input" type="text" placeholder="Ex: Retatrutide 10mg" id="order-product-search" oninput="renderOrderSearch()" onblur="setTimeout(()=>{ const el=document.getElementById('order-search-results'); if(el && !el.matches(':hover') && !el.querySelector(':hover')){ el.innerHTML=''; if(cart.size > 0 && typeof renderSuggested === 'function') renderSuggested(); } },180)">
           </div>
           <div id="order-search-results" style="margin-bottom:16px"></div>
           <div id="cart-items-list"></div>
@@ -8266,6 +8266,8 @@ function renderCartItems(){
   // Keep the "Add Items" subtotal line in sync with the cart.
   const subEl = document.getElementById('hyl-rp-items-subtotal');
   if(subEl) subEl.textContent = `Subtotal: $${getSubtotal().toFixed(2)}`;
+  // Always show "You may also like" suggestions when the cart has items.
+  try { if(cart.size > 0 && typeof renderSuggested === 'function') renderSuggested(); } catch(_){}
 }
 
 function getProcessingRate(){
