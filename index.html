@@ -1451,10 +1451,9 @@ select.hyl-cs-hidden{position:absolute!important;width:1px!important;height:1px!
   #email-popup-card button[onclick*="closeEmailPopup"]{width:44px!important;height:44px!important;top:10px!important;right:10px!important;font-size:1.8rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
   /* Email popup: full-width near top on mobile so safe-area + thumb reach work.
      Desktop stays bottom-right corner-anchored per product direction. */
-  #email-popup{top:auto!important;right:0!important;left:0!important;bottom:0!important;width:100%!important;max-width:none!important}
-  #email-popup-card{border-radius:18px 18px 0 0!important;padding:18px 18px max(28px,env(safe-area-inset-bottom,28px))!important;margin-bottom:-1px!important}
-  /* Extend the popup background through the home-indicator safe area */
-  #email-popup-card::after{content:"";position:absolute;left:0;right:0;bottom:-40px;height:40px;background:inherit;backdrop-filter:inherit;-webkit-backdrop-filter:inherit}
+  /* Popup pinned to bottom on mobile, extending behind home-indicator safe area */
+  #email-popup{top:auto!important;right:0!important;left:0!important;bottom:-40px!important;padding-bottom:40px!important;width:100%!important;max-width:none!important}
+  #email-popup-card{border-radius:18px 18px 0 0!important;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px))!important;overflow:visible!important}
   /* Footer email grid */
   .footer,#footer-top{grid-template-columns:1fr!important}
   .footer>div:not(.footer-inner){grid-template-columns:1fr!important}
@@ -4245,7 +4244,7 @@ function pcPopulateReorder(){
   .mv-mail-link:hover{background:#fff}
   .mv-mail-link:active{transform:translateY(1px)}
   .mv-mail-link svg{width:18px;height:18px;flex-shrink:0}
-  .mv-footer-link{display:block;width:100%;margin-top:14px;font:600 13px/1 var(--sans);color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap;text-align:center}
+  .mv-footer-link{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;margin:14px 0 0;font-family:var(--sans);font-size:13px;font-weight:600;line-height:1;color:#cfccc7;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap;text-align:center;box-sizing:border-box;-webkit-appearance:none;appearance:none}
   .mv-footer-link:hover{color:#fff}
   @media(max-width:520px){
     #email-popup-card{padding:18px 18px 12px;border-radius:14px}
