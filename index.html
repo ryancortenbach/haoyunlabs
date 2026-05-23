@@ -8228,9 +8228,11 @@ function renderCartItems(){
     if(!p) return;
     const typeLabel = _orderCatLabelOf(p);
     const safeSku = String(p.sku||'').replace(/[^A-Za-z0-9_-]/g,'');
-    const imgSrc = safeSku ? `media/products/${safeSku}.png` : '';
+    const isKit = (p.cat === 'kits') || /^[A-Z0-9-]+$/.test(safeSku) && !safeSku.endsWith('SV') && !safeSku.endsWith('NS');
+    const primaryImg = safeSku ? (isKit ? `media/kits/${safeSku}.png` : `media/products/${safeSku}.png`) : '';
+    const fallbackImg = safeSku ? (isKit ? `media/products/${safeSku}.png` : `media/kits/${safeSku}.png`) : '';
     html += `<div class="cart-item">
-      ${imgSrc ? `<div class="cart-item-img" onclick="openCartImageZoom('${imgSrc}','${p.name.replace(/'/g,"\\'")}')"><img src="${imgSrc}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
+      ${primaryImg ? `<div class="cart-item-img" onclick="openCartImageZoom('${primaryImg}','${p.name.replace(/'/g,"\\'")}')"><img src="${primaryImg}" alt="" loading="lazy" onerror="if(this.src.indexOf('${fallbackImg}')<0){this.src='${fallbackImg}'}else{this.parentElement.style.display='none'}"></div>` : ''}
       <div class="cart-item-info">
         <div class="cart-item-name">${p.name}</div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="cart-item-sku">${p.sku}</span><span style="display:inline-block;font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);padding:3px 10px;border:1px solid var(--stroke);border-radius:999px;background:#fff">${typeLabel}</span></div>
