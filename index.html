@@ -7,6 +7,82 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
+// TikTok in-app browser block. TT's webview strips cookies, breaks Stripe
+// redirects, blocks third-party scripts. Show a copy-link prompt instead of
+// the live site so users open in real Safari/Chrome. Runs first, before any
+// site code, to avoid even loading the SPA in the TT webview.
+(function(){
+  try{
+    var ua=(navigator.userAgent||'')+' '+(navigator.vendor||'');
+    var isTT=/TikTok|musical_ly|Bytedance|BytedanceWebview|aweme/i.test(ua);
+    if(!isTT) return;
+    // Allow override for debugging: ?tt_bypass=1
+    if(/[?&]tt_bypass=1/.test(location.search)) return;
+    var url='https://haoyunlabs.com'+location.pathname+location.search+location.hash;
+    var html=''
+      +'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+      +'<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
+      +'<title>Open in browser to continue · Hao Yun Labs</title>'
+      +'<style>'
+      +'html,body{margin:0;padding:0;height:100%;background:#0A0A0A;color:#EFEFEC;'
+      +'font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;}'
+      +'.wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;'
+      +'padding:32px 24px;box-sizing:border-box;text-align:center;}'
+      +'.brand{font-family:"Oswald","Helvetica Neue",sans-serif;font-size:11px;letter-spacing:0.22em;'
+      +'text-transform:uppercase;color:#9A9A98;margin-bottom:18px;}'
+      +'h1{font-family:"Oswald","Helvetica Neue",sans-serif;font-size:30px;line-height:1.18;'
+      +'letter-spacing:0.01em;text-transform:uppercase;font-weight:700;color:#EFEFEC;margin:0 0 16px 0;max-width:520px;}'
+      +'p{font-size:15px;line-height:1.55;color:#A4A4A1;margin:0 0 26px 0;max-width:440px;}'
+      +'.urlbox{display:flex;align-items:center;gap:8px;padding:14px 16px;background:#111118;'
+      +'border:1px solid rgba(255,255,255,0.10);border-radius:10px;max-width:90%;width:380px;margin-bottom:18px;}'
+      +'.urlbox code{font-family:"Roboto Mono","SF Mono",Menlo,monospace;font-size:13px;color:#EFEFEC;'
+      +'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:left;}'
+      +'.copybtn{display:inline-block;padding:14px 28px;background:#FFFFFF;color:#0A0A0A;'
+      +'border:none;border-radius:8px;font-family:"Oswald","Helvetica Neue",sans-serif;font-size:14px;'
+      +'font-weight:600;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;width:380px;max-width:90%;'
+      +'box-sizing:border-box;margin-bottom:12px;}'
+      +'.copybtn:active{transform:scale(0.98);}'
+      +'.copybtn.copied{background:#22c55e;color:#0A0A0A;}'
+      +'.hint{font-size:12px;color:#666;margin-top:10px;max-width:380px;line-height:1.55;}'
+      +'.divider{height:1px;background:rgba(255,255,255,0.10);width:380px;max-width:90%;margin:24px 0 20px 0;}'
+      +'.steps{text-align:left;max-width:380px;width:380px;}'
+      +'.step{display:flex;gap:14px;margin-bottom:14px;font-size:13px;color:#A4A4A1;line-height:1.5;}'
+      +'.stepnum{font-family:"Roboto Mono",monospace;font-size:13px;color:#666;flex-shrink:0;}'
+      +'</style></head><body>'
+      +'<div class="wrap">'
+      +'<div class="brand">Hao Yun Labs</div>'
+      +'<h1>TikTok can\'t open this page directly.</h1>'
+      +'<p>Copy and paste the link below into your browser (Safari, Chrome) to continue.</p>'
+      +'<div class="urlbox"><code id="hyl_url"></code></div>'
+      +'<button class="copybtn" id="hyl_copy">Copy link</button>'
+      +'<div class="hint">Then open Safari or Chrome and paste it into the address bar.</div>'
+      +'<div class="divider"></div>'
+      +'<div class="steps">'
+      +'<div class="step"><span class="stepnum">01</span><span>Tap <strong>Copy link</strong> above.</span></div>'
+      +'<div class="step"><span class="stepnum">02</span><span>Tap the <strong>•••</strong> menu in TikTok\'s top corner.</span></div>'
+      +'<div class="step"><span class="stepnum">03</span><span>Choose <strong>Open in browser</strong> (or paste the link in Safari / Chrome).</span></div>'
+      +'</div>'
+      +'</div>'
+      +'<script>'
+      +'(function(){'
+      +'var u='+JSON.stringify(url)+';'
+      +'document.getElementById("hyl_url").textContent=u;'
+      +'var btn=document.getElementById("hyl_copy");'
+      +'btn.addEventListener("click",function(){'
+      +'function done(){btn.textContent="Copied";btn.classList.add("copied");setTimeout(function(){btn.textContent="Copy link";btn.classList.remove("copied");},2200);}'
+      +'if(navigator.clipboard && navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(done,function(){fallback();});}'
+      +'else{fallback();}'
+      +'function fallback(){try{var ta=document.createElement("textarea");ta.value=u;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.focus();ta.select();document.execCommand("copy");document.body.removeChild(ta);done();}catch(e){btn.textContent="Press &amp; hold link";}}'
+      +'});'
+      +'})();'
+      +'<\/script>'
+      +'</body></html>';
+    document.open();
+    document.write(html);
+    document.close();
+    if(window.stop) window.stop();
+  }catch(e){}
+})();
 // Safe localStorage for iOS private browsing
 (function(){try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}catch(e){var s={};window.__origLS=localStorage;Object.defineProperty(window,'localStorage',{get:function(){return{getItem:function(k){return s[k]||null},setItem:function(k,v){s[k]=String(v)},removeItem:function(k){delete s[k]},clear:function(){s={}}}}});}})();
 // Owner opt-out from all analytics. Visit ?hide_me=1 once per device to enable, ?hide_me=0 to clear.
