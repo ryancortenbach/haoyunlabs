@@ -15,7 +15,9 @@
   try{
     var ua=(navigator.userAgent||'')+' '+(navigator.vendor||'');
     var isTT=/TikTok|musical_ly|Bytedance|BytedanceWebview|aweme/i.test(ua);
-    if(!isTT) return;
+    // Force-preview the overlay from any browser via ?tt_preview=1
+    var forcePreview=/[?&]tt_preview=1/.test(location.search);
+    if(!isTT && !forcePreview) return;
     // Allow override for debugging: ?tt_bypass=1
     if(/[?&]tt_bypass=1/.test(location.search)) return;
     var url='https://haoyunlabs.com'+location.pathname+location.search+location.hash;
