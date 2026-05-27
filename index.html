@@ -5364,36 +5364,16 @@ function _compoundKey(p){
 // reorders. `gap` = min positions between same-compound cards.
 function spreadByCompound(items, gap){
   if(!Array.isArray(items) || items.length < 2) return items;
-  const buckets = new Map();
-  for(const p of items){
-    const k = _compoundKey(p);
-    if(!buckets.has(k)) buckets.set(k, []);
-    buckets.get(k).push(p);
-  }
-  const queues = [...buckets.values()];
+  const pool = items.slice();
   const out = [];
   const recent = [];
-  while(out.length < items.length){
-    let placed = false;
-    queues.sort((a,b)=>b.length-a.length);
-    for(const q of queues){
-      if(!q.length) continue;
-      const k = _compoundKey(q[0]);
-      if(recent.includes(k)) continue;
-      out.push(q.shift());
-      recent.push(k);
-      if(recent.length > gap) recent.shift();
-      placed = true;
-      break;
-    }
-    if(!placed){
-      const q = queues.find(x=>x.length);
-      if(!q) break;
-      const k = _compoundKey(q[0]);
-      out.push(q.shift());
-      recent.push(k);
-      if(recent.length > gap) recent.shift();
-    }
+  while(pool.length){
+    let idx = pool.findIndex(p => !recent.includes(_compoundKey(p)));
+    if(idx === -1) idx = 0;
+    const p = pool.splice(idx,1)[0];
+    out.push(p);
+    recent.push(_compoundKey(p));
+    if(recent.length > gap) recent.shift();
   }
   return out;
 }
@@ -7993,6 +7973,15 @@ function setCatCat(cat){
   renderCatalog();
 }
 
+// Explicit top-of-page order — mirrors ZYL's homepage featured layout.
+// Any SKU here that we don't actually carry just gets skipped silently.
+const FEATURED_ORDER = [
+  'RT10SV','CU50SV','RT5SV','TESA10PLUSIP5SV',
+  'TSM10SV','BAC3SV','H24SV','MS10SV',
+  'GTT1SV','IPS5SV','RT15SV','RT20SV',
+  'RT20PLUSTR40SV','MT2SV','BBG70SV','CU100SV',
+];
+
 const BESTSELLER_SKUS = [
   // Retatrutide — all sizes (SV + kits)
   'RT5SV','RT10SV','RT15SV','RT20SV','RT30SV','RT40SV','RT50SV','RT60SV',
@@ -8021,16 +8010,15 @@ function getFilteredProducts(cat, searchId, sortId){
   if(sort==='low') items.sort((a,b)=>a.price-b.price);
   else if(sort==='high') items.sort((a,b)=>b.price-a.price);
   else {
-    // Featured: bestsellers first in their canonical order, then everyone else
-    const bsRank = sku => {
-      const i = BESTSELLER_SKUS.indexOf(sku);
-      return i === -1 ? 9999 : i;
+    // Featured: ZYL-emulating order first, then remaining bestsellers, then the rest.
+    const featRank = sku => {
+      const i = FEATURED_ORDER.indexOf(sku);
+      if(i !== -1) return i;
+      const j = BESTSELLER_SKUS.indexOf(sku);
+      return j === -1 ? 9999 : 1000 + j;
     };
-    items.sort((a,b) => bsRank(a.sku) - bsRank(b.sku));
+    items.sort((a,b) => featRank(a.sku) - featRank(b.sku));
   }
-  // Spread same-compound variants apart: at most one size of a given compound
-  // per 8 consecutive cards (= one per 2 rows at 4-col desktop).
-  if(!q) items = spreadByCompound(items, 7);
   return items;
 }
 
