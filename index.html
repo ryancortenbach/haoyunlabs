@@ -5349,35 +5349,6 @@ const ALL_PRODUCTS = [
   ...CATALOG_SUPPLIES.map(p=>({...p, cat: 'supplies', isKit: false, isBundle: false})),
 ].filter(p => VALID_SKUS.has(p.sku) || p.isBundle);
 
-function _compoundKey(p){
-  if(p.isBundle) return 'B:'+p.sku;
-  const n = (p.name||'').toLowerCase();
-  if(/^(needle|swab|acetic|bacteriostatic|bac water)/i.test(p.name||'')) return 'S:'+n;
-  return (p.isKit?'K:':'I:') + n
-    .replace(/\([^)]*\)/g,'')
-    .replace(/\d+(\.\d+)?\s*(mg|iu|ml|mcg)\b/g,'')
-    .replace(/x\s*\d+\s*vials?/gi,'')
-    .replace(/\s+/g,' ').trim();
-}
-// Spread variants of the same compound apart in the grid so we don't see
-// 6+ Retatrutide sizes in a row. Keeps every SKU as its own card; just
-// reorders. `gap` = min positions between same-compound cards.
-function spreadByCompound(items, gap){
-  if(!Array.isArray(items) || items.length < 2) return items;
-  const pool = items.slice();
-  const out = [];
-  const recent = [];
-  while(pool.length){
-    let idx = pool.findIndex(p => !recent.includes(_compoundKey(p)));
-    if(idx === -1) idx = 0;
-    const p = pool.splice(idx,1)[0];
-    out.push(p);
-    recent.push(_compoundKey(p));
-    if(recent.length > gap) recent.shift();
-  }
-  return out;
-}
-
 /* ═════════════════════════════════════════════════════
    SVG VIAL GENERATOR (no external images needed)
    ═════════════════════════════════════════════════════ */
