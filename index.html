@@ -7261,6 +7261,7 @@ function buildCatTabs(containerId, activeVar, clickFn){
       + `<button class="type-tab" data-type="bundles" onclick="setProductType('bundles')">Bundles</button>`
       + `</div>`;
     const g1 = `<div class="cat-tabs-inner">`
+      + `<button class="cat-tab" data-cat="all" onclick="${clickFn}('all')">All</button>`
       + `<button class="cat-tab" data-cat="weight-loss" onclick="${clickFn}('weight-loss')">Weight Loss</button>`
       + `<button class="cat-tab" data-cat="growth-recovery" onclick="${clickFn}('growth-recovery')">Recovery</button>`
       + `<button class="cat-tab" data-cat="longevity" onclick="${clickFn}('longevity')">Longevity</button>`
@@ -8001,7 +8002,11 @@ function getFilteredProducts(cat, searchId, sortId){
     // Search ignores tab/type — pull from everything, then match name or SKU.
     items = ALL_PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q));
   } else if(cat==='bestsellers') items = ALL_PRODUCTS.filter(p=>BESTSELLER_SKUS.includes(p.sku));
-  else if(cat==='all') items = ALL_PRODUCTS.slice();
+  else if(cat==='all'){
+    if(productType === 'bundles') items = ALL_PRODUCTS.filter(p=>p.isBundle);
+    else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>!p.isBundle && p.isKit);
+    else items = ALL_PRODUCTS.filter(p=>!p.isBundle && !p.isKit);
+  }
   else if(productType === 'bundles') items = ALL_PRODUCTS.filter(p=>p.isBundle);
   else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && p.isKit);
   else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && !p.isKit);
