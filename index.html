@@ -6812,18 +6812,28 @@ function handleRoute(){
             });
           } catch(_){}
         }
-        // Verified. Fire purchase_complete exactly once per order.
-        if(window._hylLastReportedPurchase !== orderNum){
-          try {
+        // Verified. Fire purchase_complete exactly once per order — ever.
+        // Persist via localStorage so a page reload of /#payment-confirmed?order=X
+        // doesn't re-fire. The previous in-memory guard fired again on every reload.
+        try {
+          const REPORTED_KEY = 'hyl_reported_purchases';
+          const raw = localStorage.getItem(REPORTED_KEY) || '[]';
+          let reported = [];
+          try { reported = JSON.parse(raw); } catch(_) { reported = []; }
+          if(!Array.isArray(reported)) reported = [];
+          if(!reported.includes(orderNum)){
             const pp = window._lastPaidInvoice || {};
             track('purchase_complete', {
               order_id: orderNum,
               total: pp.total || null,
               method: pp.network || pp.method || null,
             });
-          } catch(_){}
-          window._hylLastReportedPurchase = orderNum;
-        }
+            reported.push(orderNum);
+            // Keep the list bounded.
+            if(reported.length > 200) reported = reported.slice(-200);
+            localStorage.setItem(REPORTED_KEY, JSON.stringify(reported));
+          }
+        } catch(_){}
       } catch(e){
         console.warn('[payment-confirmed] gate error', e);
         try { showToast('Could not verify order. Try again.', 'error'); } catch(_){}
