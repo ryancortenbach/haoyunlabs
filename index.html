@@ -7686,22 +7686,6 @@ function openProduct(sku){
           </div>
         </div>
       </div>
-      ${(() => {
-        const _vs = getCompoundVariants(p);
-        if(_vs.length <= 1) return '';
-        const _items = _vs.map(v => {
-          const dose = (v.name.match(/\d+(?:\.\d+)?\s*(?:mg|iu|ml|mcg)/i)||[''])[0] || v.sku;
-          const active = v.sku === p.sku;
-          return `<button type="button" class="pdp-size-btn${active?' active':''}" onclick="event.stopPropagation();selectPdpVariant('${v.sku}')" style="padding:12px 6px;border:1px solid ${active?'var(--brand)':'var(--stroke)'};background:${active?'var(--brand)':'var(--bg)'};color:${active?'#fff':'var(--text)'};border-radius:10px;font-size:0.82rem;font-weight:800;letter-spacing:0.02em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.1">
-            <span>${dose}</span>
-            <span style="font-size:0.7rem;font-weight:700;opacity:0.8">$${v.price.toFixed(2)}</span>
-          </button>`;
-        }).join('');
-        return `<div style="margin:6px 0 4px">
-          <div style="font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Size</div>
-          <div class="pdp-size-grid" style="display:grid;grid-template-columns:repeat(${Math.min(_vs.length,5)},minmax(0,1fr));gap:8px">${_items}</div>
-        </div>`;
-      })()}
       <div class="pdp-meta" style="display:flex;flex-direction:column;gap:8px;background:transparent;border:none;border-radius:0;overflow:visible">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fafafa;border:1px solid var(--stroke);border-radius:10px;margin:0">
           <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">SKU</span>
