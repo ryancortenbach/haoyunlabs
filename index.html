@@ -5349,6 +5349,55 @@ const ALL_PRODUCTS = [
   ...CATALOG_SUPPLIES.map(p=>({...p, cat: 'supplies', isKit: false, isBundle: false})),
 ].filter(p => VALID_SKUS.has(p.sku) || p.isBundle);
 
+function _compoundKey(p){
+  if(p.isBundle) return 'B:'+p.sku;
+  const n = (p.name||'').toLowerCase();
+  if(/^(needle|swab|acetic|bacteriostatic|bac water)/i.test(p.name||'')) return 'S:'+n;
+  return (p.isKit?'K:':'I:') + n
+    .replace(/\([^)]*\)/g,'')
+    .replace(/\d+(\.\d+)?\s*(mg|iu|ml|mcg)\b/g,'')
+    .replace(/x\s*\d+\s*vials?/gi,'')
+    .replace(/\s+/g,' ').trim();
+}
+// Spread variants of the same compound apart in the grid so we don't see
+// 6+ Retatrutide sizes in a row. Keeps every SKU as its own card; just
+// reorders. `gap` = min positions between same-compound cards.
+function spreadByCompound(items, gap){
+  if(!Array.isArray(items) || items.length < 2) return items;
+  const buckets = new Map();
+  for(const p of items){
+    const k = _compoundKey(p);
+    if(!buckets.has(k)) buckets.set(k, []);
+    buckets.get(k).push(p);
+  }
+  const queues = [...buckets.values()];
+  const out = [];
+  const recent = [];
+  while(out.length < items.length){
+    let placed = false;
+    queues.sort((a,b)=>b.length-a.length);
+    for(const q of queues){
+      if(!q.length) continue;
+      const k = _compoundKey(q[0]);
+      if(recent.includes(k)) continue;
+      out.push(q.shift());
+      recent.push(k);
+      if(recent.length > gap) recent.shift();
+      placed = true;
+      break;
+    }
+    if(!placed){
+      const q = queues.find(x=>x.length);
+      if(!q) break;
+      const k = _compoundKey(q[0]);
+      out.push(q.shift());
+      recent.push(k);
+      if(recent.length > gap) recent.shift();
+    }
+  }
+  return out;
+}
+
 /* ═════════════════════════════════════════════════════
    SVG VIAL GENERATOR (no external images needed)
    ═════════════════════════════════════════════════════ */
@@ -7979,6 +8028,9 @@ function getFilteredProducts(cat, searchId, sortId){
     };
     items.sort((a,b) => bsRank(a.sku) - bsRank(b.sku));
   }
+  // Spread same-compound variants apart: at most one size of a given compound
+  // per 8 consecutive cards (= one per 2 rows at 4-col desktop).
+  if(!q) items = spreadByCompound(items, 7);
   return items;
 }
 
