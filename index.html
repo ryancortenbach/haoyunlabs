@@ -4418,9 +4418,7 @@ function pcPopulateReorder(){
         <div><div class="upsell-item-name">Alcohol Swabs (100pk)</div><div class="upsell-item-detail">Sterile 70% isopropyl prep pads</div></div>
         <div class="upsell-item-price">$19.00</div>
       </div>
-      <div class="upsell-item" onclick="toggleUpsellItem(this,'BAC3SV')">
-        <div class="upsell-check" id="upsell-check-BAC3SV"></div>
-        <div><div class="upsell-item-name">BAC Water 3ml</div><div class="upsell-item-detail">Bacteriostatic water for reconstitution</div></div>
+      <div><div class="upsell-item-name">BAC Water 3ml</div><div class="upsell-item-detail">Bacteriostatic water for reconstitution</div></div>
         <div class="upsell-item-price">$6.00</div>
       </div>
     </div>
@@ -5154,8 +5152,7 @@ const CATALOG_BUNDLES = [
 const CATALOG_SPRAYS = [];
 
 const CATALOG_SUPPLIES = [
-  { sku:'BAC3SV', name:'Bacteriostatic Water 3ml', price:5, description:'3ml sterile bacteriostatic water - the standard solvent for reconstituting lyophilized peptides. Single-use vial.' },
-  { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:15, description:'10ml bacteriostatic water for multi-vial research setups. 0.9% benzyl alcohol preservative for extended stability after reconstitution.' },
+  { sku:'BAC10SV', name:'Bacteriostatic Water 10ml', price:8, description:'10ml bacteriostatic water for multi-vial research setups. 0.9% benzyl alcohol preservative for extended stability after reconstitution.' },
   { sku:'NEEDLE31G8MM10PK', name:'Insulin Syringes (10 pack)', price:4.99, description:'Box of 10 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
   { sku:'NEEDLE31G8MM100PK', name:'Insulin Syringes (100 pack)', price:29.99, description:'Box of 100 sterile, 31-gauge insulin syringes with a 0.5mL capacity and 5/16" fixed needles. Features MicroPoint technology and a lubricant film coating for a smoother, more comfortable injection experience.' },
   { sku:'SWAB10PK', name:'Alcohol Swabs (10 pack)', price:3.99, description:'Sterile 2-ply alcohol prep pads saturated with 70% isopropyl alcohol for effective antiseptic cleansing of injection sites. Thick, textured material removes oils and residue while remaining durable.' },
@@ -5312,7 +5309,7 @@ const VALID_SKUS = new Set([
   '10AMSV','2S10','2S10SV','2S50','2S50SV','2S5SV','332','332SV','50AMSV','5AM','5AM5SV',
   'ACTH1-39-5MGSV','ADAMAX10SV','ADAMAX5SV','AE1','AE1SV','AHK-CU-100MGSV','AHK-CU-50MGSV','AOD2',
   'AOD2SV','AOD5','AOD5SV','AP10','AP10SV','AP5','AP5SV','AQUA8','AR50','AR50SV','Adamax10','Adamax5',
-  'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC3SV','BAC10SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
+  'B12-1MGMLSV','B7-33-2','B7-33-2SV','BAC10SV','BB10','BB10SV','BB20','BB20SV','BB30SV','BBG70',
   'BBG70SV','BC10','BC10SV','BC2','BC20SV','BC2SV','BC5','BC5SV','BT10','BT10SV','BT5','BT5SV','Bron',
   'BronSV','CARDIO20SV','CARTALAX20SV','CD2','CD2SV','CD5','CD5SV','CND10','CND10SV',
   'CND2','CND2SV','CND5','CND5SV','CORTAGEN20SV','CP10SV','CRYSTAGEN20SV','CU100',
@@ -5447,7 +5444,7 @@ function addToCartQty(sku, qty){
   showToast(p ? `${p.name} x${qty} added` : 'Added to cart', 'success', {action:{label:'View Cart',onClick:()=>navigate('order')}});
   if(p) kl('Added to Cart', { ProductName: p.name, ProductID: p.sku, Price: p.price, Quantity: qty });
   if(p) try { track('add_to_cart', { sku: p.sku, qty, price: p.price }); } catch(e){}
-  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
+  const supplySkus = ['BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
     setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo){ uo.classList.add('open'); setTimeout(_syncUpsellStack, 60); } }, 600);
   }
@@ -5468,7 +5465,7 @@ function addToCart(sku, btn){
   // Animate button: green checkmark then revert
   try { if(typeof flashAddedToCart==='function') flashAddedToCart(btn); } catch(e){}
   // Show supplies upsell if adding a peptide and cart has no supplies yet
-  const supplySkus = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
+  const supplySkus = ['BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   if(!supplySkus.includes(sku)){
     setTimeout(()=>{ const uo=document.getElementById('upsell-overlay'); if(uo){ uo.classList.add('open'); setTimeout(_syncUpsellStack, 60); } }, 600);
   }
@@ -7981,7 +7978,7 @@ function setCatCat(cat){
 // Any SKU here that we don't actually carry just gets skipped silently.
 const FEATURED_ORDER = [
   'RT10SV','CU50SV','RT5SV','TESA10PLUSIP5SV',
-  'TSM10SV','BAC3SV','H24SV','MS10SV',
+  'TSM10SV','H24SV','MS10SV',
   'GTT1SV','IPS5SV','RT15SV','RT20SV',
   'RT20PLUSTR40SV','MT2SV','BBG70SV','CU100SV',
 ];
@@ -8326,7 +8323,7 @@ function renderUpsell(){
     parent.appendChild(el);
   }
   // Show BAC water suggestion if cart has peptides but no BAC water
-  const SUPPLY_SKUS = ['BAC3SV','BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
+  const SUPPLY_SKUS = ['BAC10SV','NEEDLE31G8MM10PK','NEEDLE31G8MM100PK','SWAB10PK','SWAB100PK','ACET06-10ML','ACET1-10ML'];
   const hasBAC = cart.has('BAC10SV') || cart.has('BAC3SV');
   const hasPeptides = cart.size > 0;
   let peptideQty = 0;
