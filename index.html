@@ -7679,7 +7679,7 @@ function openProduct(sku){
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
           ${BESTSELLER_SKUS.includes(p.sku) ? '<span class="badge-bestseller pdp-info-badge" style="font-size:0.66rem;letter-spacing:0.06em;padding:6px 14px;border-radius:999px;font-weight:800;text-transform:uppercase;white-space:nowrap;height:auto;width:auto;min-width:0;line-height:1">Best Seller</span>' : ''}
-          <span class="pdp-badge-purity pdp-info-badge" style="background:#fff;color:var(--text);border:1px solid var(--text);padding:6px 14px;border-radius:999px;font-size:0.66rem;font-weight:800;letter-spacing:0.06em;white-space:nowrap;text-transform:uppercase;height:auto;line-height:1">${purityText}</span>
+          ${/^(NEEDLE|SWAB|ACET|BAC)/i.test(p.sku) ? '' : `<span class="pdp-badge-purity pdp-info-badge" style="background:#fff;color:var(--text);border:1px solid var(--text);padding:6px 14px;border-radius:999px;font-size:0.66rem;font-weight:800;letter-spacing:0.06em;white-space:nowrap;text-transform:uppercase;height:auto;line-height:1">${purityText}</span>`}
           <div style="display:flex;align-items:baseline;gap:8px;justify-content:flex-end;flex-wrap:wrap">
             <div class="pdp-price" id="pdp-price-display" style="font-size:1.7rem;font-weight:900;color:var(--text);font-family:var(--display);line-height:1">$${p.price.toFixed(2)}</div>
             <div class="pdp-price-old" id="pdp-price-old-display" style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:0.92rem;font-weight:700;color:#9b9b9b;text-decoration:line-through;line-height:1">$${(Math.floor(p.price*1.8)-0.01).toFixed(2)}</div>
@@ -7998,7 +7998,17 @@ function setCatCat(cat){
   renderCatalog();
 }
 
-const BESTSELLER_SKUS = ['RT10SV','CU50SV','SM15SV','TR15SV','BC5SV','BT5SV','TSM2SV','IPS5SV','MT2SV','P41','XA5SV','ET10SV','RT10','SM10','TR10'];
+const BESTSELLER_SKUS = [
+  // Retatrutide — all sizes (SV + kits)
+  'RT5SV','RT10SV','RT15SV','RT20SV','RT30SV','RT40SV','RT50SV','RT60SV',
+  'RT5','RT10','RT15','RT20','RT30','RT40','RT50','RT60',
+  // GHK-Cu — all sizes (SV + kits)
+  'CU50SV','CU100SV','CU50','CU100',
+  // Glow (Klow)
+  'KLOW80SV','KLOW80',
+  // Other bestsellers
+  'SM15SV','TR15SV','BC5SV','BT5SV','TSM2SV','IPS5SV','MT2SV','P41','XA5SV','ET10SV','SM10','TR10'
+];
 
 function getFilteredProducts(cat, searchId, sortId){
   const q = document.getElementById(searchId)?.value?.toLowerCase()||'';
