@@ -7203,7 +7203,7 @@ function showSectionSkeletons(){
 /* ═════════════════════════════════════════════════════
    HOME SCREEN
    ═════════════════════════════════════════════════════ */
-let homeCategory = 'weight-loss';
+let homeCategory = 'all';
 let homePageSize = 12;
 let homeShown = 12;
 // Product type toggle: 'singles' | 'kits' | 'bundles'
@@ -7242,8 +7242,8 @@ function setProductType(t){
   productType = _pickValidProductType(activeCat, t);
   // Clicking Bundles resets the category selection back to Weight Loss.
   if(productType === 'bundles'){
-    if(typeof homeCategory !== 'undefined') homeCategory = 'weight-loss';
-    if(typeof catCategory !== 'undefined') catCategory = 'weight-loss';
+    if(typeof homeCategory !== 'undefined') homeCategory = 'all';
+    if(typeof catCategory !== 'undefined') catCategory = 'all';
   }
   homeShown = 12;
   ['home-search','cat-search'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -8079,7 +8079,7 @@ function showMoreHome(){
 /* ═════════════════════════════════════════════════════
    CATALOG SCREEN
    ═════════════════════════════════════════════════════ */
-let catCategory = 'weight-loss';
+let catCategory = 'all';
 
 function renderCatalog(){
   const _q = document.getElementById('cat-search')?.value?.trim() || '';
