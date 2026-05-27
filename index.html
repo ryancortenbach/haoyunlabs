@@ -5350,6 +5350,48 @@ const ALL_PRODUCTS = [
 ].filter(p => VALID_SKUS.has(p.sku) || p.isBundle);
 
 /* ═════════════════════════════════════════════════════
+   COMPOUND GROUPING (one card per compound, size picker in PDP)
+   ═════════════════════════════════════════════════════ */
+function compoundKey(p){
+  // Strip dose + "x N vials" + parenthetical kit qualifier so RT5/RT10/RT15 etc
+  // collapse to a single key. Supplies (BAC water, needles, swabs) keep their full
+  // name so different sizes still appear as distinct cards.
+  if(p.isBundle) return 'B:'+p.sku;
+  const n = (p.name||'').toLowerCase();
+  if(/^(needle|swab|acetic|bacteriostatic|bac water)/i.test(p.name||'')){
+    return 'S:'+n;
+  }
+  return (p.isKit?'K:':'I:') + n
+    .replace(/\([^)]*\)/g,'')
+    .replace(/\d+(\.\d+)?\s*(mg|iu|ml|mcg)\b/g,'')
+    .replace(/x\s*\d+\s*vials?/gi,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function _doseValueFromName(n){
+  const m = (n||'').match(/(\d+(?:\.\d+)?)\s*(mg|iu|ml|mcg)/i);
+  return m ? parseFloat(m[1]) : 0;
+}
+function getCompoundVariants(p){
+  const key = compoundKey(p);
+  return ALL_PRODUCTS
+    .filter(x => x.isKit === p.isKit && x.isBundle === p.isBundle && compoundKey(x) === key && hasImageOnDisk(x.sku))
+    .sort((a,b)=> _doseValueFromName(a.name) - _doseValueFromName(b.name));
+}
+function dedupByCompound(items){
+  // Keep the smallest-dose variant as the representative card (matches the
+  // typical "Starting at $X" ZYL pattern), but expose price range via min price.
+  const groups = new Map();
+  for(const p of items){
+    const k = compoundKey(p);
+    const cur = groups.get(k);
+    if(!cur){ groups.set(k, p); continue; }
+    if(_doseValueFromName(p.name) < _doseValueFromName(cur.name)) groups.set(k, p);
+  }
+  return [...groups.values()];
+}
+
+/* ═════════════════════════════════════════════════════
    SVG VIAL GENERATOR (no external images needed)
    ═════════════════════════════════════════════════════ */
 
@@ -7083,6 +7125,18 @@ function cardHTML(p){
       stockBadge = '<span class="badge-purity" style="background:#fef3c7;color:#92400e;border-color:#fde68a">Low Stock</span>';
     }
   }
+  const _variants = getCompoundVariants(p);
+  const _hasVariants = _variants.length > 1;
+  const _minPrice = _hasVariants ? Math.min(..._variants.map(v=>v.price)) : p.price;
+  const _displayPrice = _hasVariants
+    ? `<span style="font-size:0.7rem;font-weight:700;color:var(--muted);margin-right:4px">From</span>$${_minPrice.toFixed(2)}`
+    : `$${p.price.toFixed(2)}<span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span>`;
+  const _displayName = _hasVariants
+    ? (p.name||'').replace(/\s*\d+(?:\.\d+)?\s*(?:mg|iu|ml|mcg)\b/i,'').replace(/\s*\([^)]*\)\s*$/,'').trim()
+    : p.name;
+  const _sizesBadge = _hasVariants
+    ? `<div style="margin-top:6px;font-size:0.7rem;color:var(--muted);font-weight:700;letter-spacing:0.04em">${_variants.length} sizes available</div>`
+    : '';
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative" data-sku="${p.sku}" data-coa="${coaMatch ? coaMatch.c : ''}">
     ${getProductImageHTML(p)}
     <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:4px;z-index:2;align-items:flex-end">
@@ -7091,11 +7145,11 @@ function cardHTML(p){
       ${showPurity ? `<span class="badge-purity">${purity}% Purity</span>` : ''}
     </div>
     <div class="card-header">
-      <span class="card-sku">${p.sku}</span>
-      <span class="card-price">$${p.price.toFixed(2)}<span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span></span>
+      <span class="card-sku">${_hasVariants ? 'MULTI-SIZE' : p.sku}</span>
+      <span class="card-price">${_displayPrice}</span>
     </div>
     <div class="card-body">
-      <div class="card-name">${p.name}</div>
+      <div class="card-name">${_displayName}${_sizesBadge}</div>
       <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span><span class="pdp-more-arrow" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M2 0 L8 5 L2 10 Z"/></svg></span></button>
       <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
@@ -7632,6 +7686,22 @@ function openProduct(sku){
           </div>
         </div>
       </div>
+      ${(() => {
+        const _vs = getCompoundVariants(p);
+        if(_vs.length <= 1) return '';
+        const _items = _vs.map(v => {
+          const dose = (v.name.match(/\d+(?:\.\d+)?\s*(?:mg|iu|ml|mcg)/i)||[''])[0] || v.sku;
+          const active = v.sku === p.sku;
+          return `<button type="button" class="pdp-size-btn${active?' active':''}" onclick="event.stopPropagation();selectPdpVariant('${v.sku}')" style="padding:12px 6px;border:1px solid ${active?'var(--brand)':'var(--stroke)'};background:${active?'var(--brand)':'var(--bg)'};color:${active?'#fff':'var(--text)'};border-radius:10px;font-size:0.82rem;font-weight:800;letter-spacing:0.02em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.1">
+            <span>${dose}</span>
+            <span style="font-size:0.7rem;font-weight:700;opacity:0.8">$${v.price.toFixed(2)}</span>
+          </button>`;
+        }).join('');
+        return `<div style="margin:6px 0 4px">
+          <div style="font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Size</div>
+          <div class="pdp-size-grid" style="display:grid;grid-template-columns:repeat(${Math.min(_vs.length,5)},minmax(0,1fr));gap:8px">${_items}</div>
+        </div>`;
+      })()}
       <div class="pdp-meta" style="display:flex;flex-direction:column;gap:8px;background:transparent;border:none;border-radius:0;overflow:visible">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fafafa;border:1px solid var(--stroke);border-radius:10px;margin:0">
           <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">SKU</span>
@@ -7889,6 +7959,14 @@ function selectPdpSize(sku, idx){
   });
 }
 
+function selectPdpVariant(sku){
+  if(!sku || sku === window._pdpSku) return;
+  // Re-render PDP for the picked size while preserving scroll position.
+  const y = window.scrollY;
+  openProduct(sku);
+  window.scrollTo(0, y);
+}
+
 function switchPdpTab(tab, el){
   document.querySelectorAll('.pdp-tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
   document.querySelectorAll('.pdp-tab-content').forEach(t=>t.classList.remove('active'));
@@ -7950,6 +8028,9 @@ function getFilteredProducts(cat, searchId, sortId){
   else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && p.isKit);
   else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && !p.isKit);
   items = items.filter(p => p.isBundle || hasImageOnDisk(p.sku));
+  // ZYL-style: collapse size variants into one card per compound. Bundles +
+  // supplies (needles/swabs/BAC water/acetic) are excluded inside compoundKey.
+  if(!q) items = dedupByCompound(items);
   const sort = document.getElementById(sortId)?.value||'featured';
   if(sort==='low') items.sort((a,b)=>a.price-b.price);
   else if(sort==='high') items.sort((a,b)=>b.price-a.price);
