@@ -5350,48 +5350,6 @@ const ALL_PRODUCTS = [
 ].filter(p => VALID_SKUS.has(p.sku) || p.isBundle);
 
 /* ═════════════════════════════════════════════════════
-   COMPOUND GROUPING (one card per compound, size picker in PDP)
-   ═════════════════════════════════════════════════════ */
-function compoundKey(p){
-  // Strip dose + "x N vials" + parenthetical kit qualifier so RT5/RT10/RT15 etc
-  // collapse to a single key. Supplies (BAC water, needles, swabs) keep their full
-  // name so different sizes still appear as distinct cards.
-  if(p.isBundle) return 'B:'+p.sku;
-  const n = (p.name||'').toLowerCase();
-  if(/^(needle|swab|acetic|bacteriostatic|bac water)/i.test(p.name||'')){
-    return 'S:'+n;
-  }
-  return (p.isKit?'K:':'I:') + n
-    .replace(/\([^)]*\)/g,'')
-    .replace(/\d+(\.\d+)?\s*(mg|iu|ml|mcg)\b/g,'')
-    .replace(/x\s*\d+\s*vials?/gi,'')
-    .replace(/\s+/g,' ')
-    .trim();
-}
-function _doseValueFromName(n){
-  const m = (n||'').match(/(\d+(?:\.\d+)?)\s*(mg|iu|ml|mcg)/i);
-  return m ? parseFloat(m[1]) : 0;
-}
-function getCompoundVariants(p){
-  const key = compoundKey(p);
-  return ALL_PRODUCTS
-    .filter(x => x.isKit === p.isKit && x.isBundle === p.isBundle && compoundKey(x) === key && hasImageOnDisk(x.sku))
-    .sort((a,b)=> _doseValueFromName(a.name) - _doseValueFromName(b.name));
-}
-function dedupByCompound(items){
-  // Keep the smallest-dose variant as the representative card (matches the
-  // typical "Starting at $X" ZYL pattern), but expose price range via min price.
-  const groups = new Map();
-  for(const p of items){
-    const k = compoundKey(p);
-    const cur = groups.get(k);
-    if(!cur){ groups.set(k, p); continue; }
-    if(_doseValueFromName(p.name) < _doseValueFromName(cur.name)) groups.set(k, p);
-  }
-  return [...groups.values()];
-}
-
-/* ═════════════════════════════════════════════════════
    SVG VIAL GENERATOR (no external images needed)
    ═════════════════════════════════════════════════════ */
 
