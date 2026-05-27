@@ -7125,18 +7125,6 @@ function cardHTML(p){
       stockBadge = '<span class="badge-purity" style="background:#fef3c7;color:#92400e;border-color:#fde68a">Low Stock</span>';
     }
   }
-  const _variants = getCompoundVariants(p);
-  const _hasVariants = _variants.length > 1;
-  const _minPrice = _hasVariants ? Math.min(..._variants.map(v=>v.price)) : p.price;
-  const _displayPrice = _hasVariants
-    ? `<span style="font-size:0.7rem;font-weight:700;color:var(--muted);margin-right:4px">From</span>$${_minPrice.toFixed(2)}`
-    : `$${p.price.toFixed(2)}<span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span>`;
-  const _displayName = _hasVariants
-    ? (p.name||'').replace(/\s*\d+(?:\.\d+)?\s*(?:mg|iu|ml|mcg)\b/i,'').replace(/\s*\([^)]*\)\s*$/,'').trim()
-    : p.name;
-  const _sizesBadge = _hasVariants
-    ? `<div style="margin-top:6px;font-size:0.7rem;color:var(--muted);font-weight:700;letter-spacing:0.04em">${_variants.length} sizes available</div>`
-    : '';
   return `<div class="product-card" onclick="openProduct('${p.sku}')" style="cursor:pointer;position:relative" data-sku="${p.sku}" data-coa="${coaMatch ? coaMatch.c : ''}">
     ${getProductImageHTML(p)}
     <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:4px;z-index:2;align-items:flex-end">
@@ -7145,11 +7133,11 @@ function cardHTML(p){
       ${showPurity ? `<span class="badge-purity">${purity}% Purity</span>` : ''}
     </div>
     <div class="card-header">
-      <span class="card-sku">${_hasVariants ? 'MULTI-SIZE' : p.sku}</span>
-      <span class="card-price">${_displayPrice}</span>
+      <span class="card-sku">${p.sku}</span>
+      <span class="card-price">$${p.price.toFixed(2)}<span class="card-price-old">$${(Math.floor(p.price * 1.8) - 0.01).toFixed(2)}</span></span>
     </div>
     <div class="card-body">
-      <div class="card-name">${_displayName}${_sizesBadge}</div>
+      <div class="card-name">${p.name}</div>
       <button class="card-details-toggle" onclick="event.stopPropagation();toggleDetails('${detailId}',this)"><span class="card-details-label">More Details</span><span class="pdp-more-arrow" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M2 0 L8 5 L2 10 Z"/></svg></span></button>
       <div class="card-details" id="${detailId}"><div class="card-details-inner">${detailHTML}</div></div>
     </div>
@@ -8022,9 +8010,6 @@ function getFilteredProducts(cat, searchId, sortId){
   else if(productType === 'kits') items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && p.isKit);
   else items = ALL_PRODUCTS.filter(p=>p.cat===cat && !p.isBundle && !p.isKit);
   items = items.filter(p => p.isBundle || hasImageOnDisk(p.sku));
-  // ZYL-style: collapse size variants into one card per compound. Bundles +
-  // supplies (needles/swabs/BAC water/acetic) are excluded inside compoundKey.
-  if(!q) items = dedupByCompound(items);
   const sort = document.getElementById(sortId)?.value||'featured';
   if(sort==='low') items.sort((a,b)=>a.price-b.price);
   else if(sort==='high') items.sort((a,b)=>b.price-a.price);
