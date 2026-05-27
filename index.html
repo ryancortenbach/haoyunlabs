@@ -4628,12 +4628,34 @@ function _hylSid(){
     return sid;
   } catch(e){ return 'sid-anon'; }
 }
+// Detect the platform a visitor is coming from by sniffing the in-app browser's
+// User-Agent. TikTok / IG / Facebook etc. strip referrers when they open links
+// in their internal webview, so referrer-based attribution is mostly useless.
+// UA detection catches the ~70-85% of social traffic that comes through an
+// in-app tap. Cached at module load — UA doesn't change within a session.
+const _hylPlatform = (() => {
+  const ua = (navigator.userAgent || '').toLowerCase();
+  if (/musical_ly|bytedance|ttwebview|tiktok/i.test(ua)) return 'tiktok';
+  if (/instagram/i.test(ua)) return 'instagram';
+  if (/fbav|fban|fb_iab|facebook/i.test(ua)) return 'facebook';
+  if (/twitter|x\-app|twitterandroid/i.test(ua)) return 'twitter';
+  if (/snapchat/i.test(ua)) return 'snapchat';
+  if (/linkedinapp/i.test(ua)) return 'linkedin';
+  if (/pinterest/i.test(ua)) return 'pinterest';
+  if (/reddit/i.test(ua)) return 'reddit';
+  return null;
+})();
+
 function track(event, props){
   try {
     if(window.__hylHideMe || localStorage.getItem('hyl_hide_me')==='1') return;
+    const enriched = Object.assign({}, props || {});
+    // Always attach platform (when detected) so every event — including
+    // page_view, add_to_cart, purchase_complete — carries source attribution.
+    if (_hylPlatform && !enriched.platform) enriched.platform = _hylPlatform;
     const body = {
       event,
-      props: props || {},
+      props: enriched,
       session_id: _hylSid(),
       path: location.pathname + location.search + location.hash,
       ts: new Date().toISOString(),
@@ -10248,7 +10270,7 @@ async function submitPopupEmail(){
     const resp = await fetch('https://admin.haoyunlabs.com/api/free-vial/claim', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, email, product_sku: pick.sku }),
+      body: JSON.stringify({ name, email, product_sku: pick.sku, platform: _hylPlatform || null }),
     });
     const data = await resp.json().catch(()=>({}));
     if(!resp.ok || !data || !data.ok || !data.vial_code){

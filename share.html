@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Share your code · Hao Yun Labs</title>
+<link rel="icon" href="/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&family=Oswald:wght@500;600;700&family=Roboto:wght@400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#FAFAF7;color:#0A0A0A;font-family:'Instrument Sans','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:100%;max-width:520px;background:#fff;border:1px solid rgba(10,10,10,0.10);border-radius:16px;padding:32px 28px;text-align:center}
+  .brand{font-family:'Instrument Serif',serif;font-size:1.8rem;line-height:1;margin-bottom:24px}
+  .eyebrow{font-family:'Oswald','Helvetica Neue',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#9A9A98;margin-bottom:10px}
+  .code{font-family:Roboto,'Helvetica Neue',sans-serif;font-size:44px;line-height:1.05;letter-spacing:-0.02em;font-weight:500;margin-bottom:10px}
+  .sub{font-size:14px;color:#666;line-height:1.55;margin-bottom:20px}
+  .url{display:block;margin:0 auto 22px;padding:12px 14px;background:rgba(10,10,10,0.04);border:1px solid rgba(10,10,10,0.10);border-radius:10px;font-family:'Roboto Mono','SF Mono',Menlo,monospace;font-size:13px;color:#1D4ED8;word-break:break-all;text-decoration:none}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:999px;font-family:'Instrument Sans','Helvetica Neue',sans-serif;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid rgba(10,10,10,0.10);background:rgba(10,10,10,0.04);color:#0A0A0A;min-width:160px}
+  .btn.primary{background:#0A0A0A;color:#fff;border-color:#0A0A0A}
+  .btn:active{transform:scale(0.98)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:8px}
+  .toast{position:fixed;left:50%;top:24px;transform:translate(-50%,-12px);background:#0A0A0A;color:#fff;padding:14px 22px;border-radius:999px;font-family:'Oswald','Helvetica Neue',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;z-index:99999;opacity:0;transition:opacity 220ms ease,transform 220ms ease;box-shadow:0 10px 28px rgba(0,0,0,0.22);pointer-events:none}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="brand">Hao Yun Labs</div>
+      <div class="eyebrow">Share your code</div>
+      <div class="code" id="code">KESTREL15</div>
+      <div class="sub" id="sub">Tap below to share. We copied the link to your clipboard too.</div>
+      <a class="url" id="urlEl" href="#"></a>
+      <div class="row">
+        <button class="btn primary" id="nativeShare" type="button" style="display:none">Share…</button>
+        <button class="btn" id="copyBtn" type="button">Copy link</button>
+      </div>
+      <div class="row" id="fallbacks">
+        <a class="btn" id="smsLink" href="#">Messages</a>
+        <a class="btn" id="mailLink" href="#">Email</a>
+        <a class="btn" id="waLink" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn" id="xLink" href="#" target="_blank" rel="noopener">X / Twitter</a>
+      </div>
+    </div>
+  </div>
+<script>
+(function(){
+  var p = new URLSearchParams(location.search);
+  var code = (p.get('code') || '').trim().toUpperCase();
+  if(!code){ location.replace('/'); return; }
+  var pct = (p.get('pct') || '15').replace(/%$/,'');
+  var origin = location.origin || 'https://haoyunlabs.com';
+  var shareUrl = origin + '/?ref=' + encodeURIComponent(code);
+  var msg = "Use my code " + code + " for " + pct + "% off at Hao Yun Labs: " + shareUrl;
+
+  document.getElementById('code').textContent = code;
+  var urlEl = document.getElementById('urlEl');
+  urlEl.textContent = shareUrl.replace(/^https?:\/\//,'');
+  urlEl.href = shareUrl;
+  document.title = 'Share ' + code + ' · Hao Yun Labs';
+
+  document.getElementById('smsLink').href  = 'sms:?&body=' + encodeURIComponent(msg);
+  document.getElementById('mailLink').href = 'mailto:?subject=' + encodeURIComponent('Get ' + pct + '% off at Hao Yun Labs') + '&body=' + encodeURIComponent(msg);
+  document.getElementById('waLink').href   = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('xLink').href    = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg);
+
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  function showToast(t){ toast.textContent = t; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1800); }
+
+  function legacyCopy(t){ var ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:-9999px'; document.body.appendChild(ta); ta.select(); var ok=false; try{ok=document.execCommand('copy');}catch(_){} document.body.removeChild(ta); return ok; }
+  function doCopy(){
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(shareUrl).then(function(){ showToast('Link copied'); return true; }, function(){ var ok=legacyCopy(shareUrl); if(ok) showToast('Link copied'); return ok; });
+    }
+    var ok = legacyCopy(shareUrl); if(ok) showToast('Link copied'); return Promise.resolve(ok);
+  }
+
+  document.getElementById('copyBtn').addEventListener('click', doCopy);
+
+  if(navigator.share){
+    var btn = document.getElementById('nativeShare');
+    btn.style.display = 'inline-flex';
+    btn.addEventListener('click', function(){
+      navigator.share({ title: 'Hao Yun Labs', text: msg, url: shareUrl }).catch(function(){});
+    });
+  }
+
+  // Auto-copy on load so the URL is ready to paste even if they just close the page.
+  doCopy();
+})();
+</script>
+</body>
+</html>
