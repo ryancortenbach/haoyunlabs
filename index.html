@@ -104,7 +104,7 @@
     }
   }catch(e){}
 })();
-(function(){var B='20260522e1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
+(function(){var B='20260817a1';if(localStorage.getItem('hyl_build')!==B){localStorage.setItem('hyl_build',B);if(location.search.indexOf('_b='+B)<0){location.replace(location.pathname+'?_b='+B+(location.hash||''));}}})();
 // Bankful return handler - detect ?payment=success/failed/pending/cancel
 // Iter 64: validated whitelist on both params. The pre-Iter-64 code stored
 // whatever ?payment= and ?order= the URL carried, then later interpolated
@@ -4535,7 +4535,12 @@ body:has(#mobile-cart-cta.visible) #hyl-email-bar{bottom:calc(92px + max(12px, e
   <div id="hyl-email-bar-msg" class="hyl-eb-msg" style="position:absolute;bottom:-18px;left:18px"></div>
 </div>
 
-<script async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=pk_87626803657fa394fbb4beecd94baa7e4d"></script>
+<!-- Klaviyo onsite loader removed 2026-08-17. This site shared a Klaviyo account
+     (company pk_87626803657fa394fbb4beecd94baa7e4d) with GoApply, so peptide
+     carts, checkouts and orders were billed against the GoApply funnel and
+     mixed peptide buyers into that account's profile list. Peptide data must
+     never reach that account again. HYL analytics continue through the
+     track-event edge function below; nothing else depended on this. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/dist/umd/supabase.min.js"></script>
 <script defer src="https://unpkg.com/@solana/web3.js@1.95.5/lib/index.iife.min.js"></script>
 <!-- QR code generator (~10KB) for EIP-681 / BIP21 / Solana Pay URIs -->
@@ -4601,16 +4606,13 @@ document.addEventListener('DOMContentLoaded', window.hylUpdatePaymentBrand);
 /* ═════════════════════════════════════════════════════
    KLAVIYO EVENT TRACKING
    ═════════════════════════════════════════════════════ */
-function kl(eventName, data) {
-  try {
-    if (window.klaviyo) window.klaviyo.push(['track', eventName, data]);
-  } catch(e){}
-}
-function klIdentify(email) {
-  try {
-    if (window.klaviyo) window.klaviyo.push(['identify', { email }]);
-  } catch(e){}
-}
+/* Disabled 2026-08-17. Both are deliberate no-ops rather than deleted calls:
+   the seven call sites below stay put so the analytics intent is still legible,
+   but nothing leaves the page. Re-enabling means pointing at a Klaviyo account
+   that is NOT the GoApply one, never the shared company id that used to sit in
+   the loader above. */
+function kl(eventName, data) {}
+function klIdentify(email) {}
 
 /* ═════════════════════════════════════════════════════
    HYL ANALYTICS (track-event edge function)
